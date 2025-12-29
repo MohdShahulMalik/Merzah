@@ -33,11 +33,11 @@ pub struct UpdateUser {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize)]
 pub struct CreateUserIdentifier {
     #[serde(flatten)]
     pub identifier: Identifier,
-    pub user_id: RecordId,
+    pub user: RecordId,
 }
 
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
@@ -54,7 +54,17 @@ pub enum Identifier {
 pub struct UserIdentifier {
     #[serde(flatten)]
     pub identifier: Identifier,
-    pub user_id: RecordId,
+    pub user: RecordId,
     pub created_at: Datetime,
     pub updated_at: Datetime,
+}
+
+#[cfg(feature = "ssr")]
+#[derive(Debug, Deserialize)]
+pub struct UserIdentifierWithUser {
+    #[serde(flatten)]
+    pub identifier: Identifier,
+    pub created_at: Datetime,
+    pub updated_at: Datetime,
+    pub user: User,
 }

@@ -151,7 +151,7 @@ pub fn Register() -> impl IntoView {
     }
 }
 
-// TO-DO: make the authenticat method in custom_auth.rs file use FETCH clause to retrieve the user's data in a single query only along with the user_details record
+// TO-DO: make the authenticate method in custom_auth.rs file use FETCH clause to retrieve the user's data in a single query only along with the user_details record
 #[component]
 pub fn Login() -> impl IntoView {
     let (error, set_error) = signal("".to_string());
@@ -221,11 +221,7 @@ pub fn Login() -> impl IntoView {
                     <img class = "w-auto h-16 rounded-full" src = "/assets/logo.png" />
 
                     <div class = "w-full">
-                        <picture>
-                          <source srcset="/assets/logo-text-dark.png" media="(prefers-color-scheme: dark)" />
-                          <source srcset="/assets/logo-text-light.png" media="(prefers-color-scheme: light)" />
-                          <img class = "w-auto h-12" src="/assets/logo-text-light.png" alt="Merzah logo" />
-                        </picture>
+                        <img class = "w-auto h-12" src="/assets/logo-text.png" alt="Merzah <logo>" />
                         <span class = "text-foreground-600">Community Management App</span>
                     </div>
 

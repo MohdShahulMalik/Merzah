@@ -51,8 +51,6 @@ async fn main() -> std::io::Result<()> {
                 }
             })
             .app_data(web::Data::new(leptos_options.to_owned()))
-            // .route("/api/{tail:.*}", leptos_actix::handle_server_fns())
-        //.wrap(middleware::Compress::default())
     })
     .bind(&addr)?
     .run()
@@ -84,7 +82,7 @@ pub fn main() {
     // a client-side main function is required for using `trunk serve`
     // prefer using `cargo leptos serve` instead
     // to run: `trunk serve --open --features csr`
-    use merzeh::app::*;
+    use merzah::app::*;
 
     console_error_panic_hook::set_once();
 

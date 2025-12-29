@@ -18,14 +18,14 @@ use crate::{
 
 static SESSION_DURATION_IN_HOURS: i64 = 1;
 
-pub async fn create_session(user_id: RecordId) -> Result<String> {
+pub async fn create_session(user: RecordId) -> Result<String> {
     let db = get_db();
 
     let session_token = generate_token();
     let expires_at = Datetime::from(Utc::now() + Duration::hours(SESSION_DURATION_IN_HOURS));
 
     let session = CreateSession {
-        user_id,
+        user,
         session_token: session_token.clone(),
         expires_at,
     };
@@ -45,8 +45,8 @@ pub async fn get_user_by_session(session_token: &str) -> Result<User> {
 
     let db = get_db();
 
-    let result_from_sessions_table: Option<Session> = db
-        .query("SELECT * FROM sessions WHERE session_token = $token")
+    let result_from_sessions_table: Option<crate::models::session::SessionWithUser> = db
+        .query("SELECT * FROM sessions WHERE session_token = $token FETCH user")
         .bind(("token", session_token.to_string()))
         .await
         .map_err(|e| SessionError::DatabaseError(Box::new(e)))
@@ -54,17 +54,11 @@ pub async fn get_user_by_session(session_token: &str) -> Result<User> {
         .take(0)?;
 
     if let Some(session) = result_from_sessions_table {
-        if session.expires_at >= Datetime::from(Utc::now()) {
+        if session.expires_at <= Datetime::from(Utc::now()) {
             Err(SessionError::SessionExpired(session.expires_at))?;
         }
 
-        let result_from_user_table = db.select(session.user_id).await?;
-
-        if let Some(user) = result_from_user_table {
-            Ok(user)
-        } else {
-            Err(SessionError::UserNotFound)?
-        }
+        Ok(session.user)
     } else {
         Err(SessionError::SessionNotFound)?
     }
@@ -168,7 +162,7 @@ pub async fn update_session_expiry_and_token(user_id: RecordId) -> Result<String
 pub async fn cleanup_expired_sessions() -> Result<()> {
     let db = get_db();
 
-    db.query("DELETE sessions WHERE expired_at <= time::now()")
+    db.query("DELETE sessions WHERE expires_at <= time::now()")
         .await
         .map_err(|e| SessionError::DatabaseError(Box::new(e)))
         .with_context(|| "Failed to deleted expired sessions")?;

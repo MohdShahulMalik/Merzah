@@ -81,8 +81,8 @@ pub struct MosqueDetails {
     pub id: RecordId,
     pub mosque: RecordId,
     pub admins: Vec<RecordId>,
-    pub jamat_times: RecordId,  // Reference to prayer_times record
-    pub adhan_times: RecordId,  // Reference to prayer_times record
+    pub jamat_times: RecordId,  
+    pub adhan_times: RecordId,  
 }
 
 /// Mosque details with prayer times fetched/inlined

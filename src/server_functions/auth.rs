@@ -125,7 +125,7 @@ pub async fn login(
     }
 
     Ok(ApiResponse {
-        data: Some("The user have been logged in successfully".to_string()),
+        data: Some("The user has been logged in successfully".to_string()),
         error: None,
     })
 }

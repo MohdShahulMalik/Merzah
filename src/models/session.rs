@@ -1,10 +1,11 @@
+use crate::models::user::User;
 use serde::{Deserialize, Serialize};
 use surrealdb::RecordId;
 use surrealdb::sql::Datetime;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateSession {
-    pub user_id: RecordId,
+    pub user: RecordId,
     pub session_token: String,
     pub expires_at: Datetime,
 }
@@ -12,7 +13,16 @@ pub struct CreateSession {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Session {
     pub id: RecordId,
-    pub user_id: RecordId,
+    pub user: RecordId,
+    pub session_token: String,
+    pub expires_at: Datetime,
+    pub created_at: Datetime,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SessionWithUser {
+    pub id: RecordId,
+    pub user: User,
     pub session_token: String,
     pub expires_at: Datetime,
     pub created_at: Datetime,

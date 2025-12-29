@@ -1,7 +1,7 @@
 use crate::database::connection::get_db;
 use crate::errors::auth::AuthError;
 use crate::models::auth::LoginFormData;
-use crate::models::user::{Identifier, User, UserIdentifier};
+use crate::models::user::{ Identifier, User };
 use crate::models::{
     auth::RegistrationFormData,
     user::CreateUser
@@ -45,7 +45,7 @@ pub async fn register_user(form: RegistrationFormData) -> Result<RecordId> {
             LET $created_user = CREATE ONLY users CONTENT $user_data;
 
             CREATE user_identifier CONTENT {
-                user_id: $created_user.id,
+                user: $created_user.id,
                 identifier_type: $identifier_data.identifier_type,
                 identifier_value: $identifier_data.identifier_value
             };
@@ -77,30 +77,20 @@ pub async fn authenticate(form: LoginFormData) -> Result<RecordId> {
         Identifier::Mobile(mobile) => ("mobile", mobile),
     };
 
-    let mut result = db.query("SELECT * FROM user_identifier WHERE identifier_type = $identifier_type AND identifier_value = $identifier_value")
+    let mut result = db.query("SELECT * FROM user_identifier WHERE identifier_type = $identifier_type AND identifier_value = $identifier_value FETCH user")
         .bind(("identifier_type", identifier_type))
         .bind(("identifier_value", identifier_value))
         .await
         .map_err(|e| AuthError::DatabaseError(Box::new(e)))
         .with_context(|| "Failed to get search for the identifier for authentication")?;
 
-    let user_identifier_option: Option<crate::models::user::UserIdentifier> = result.take(0)
+    let user_identifier_with_user_option: Option<crate::models::user::UserIdentifierWithUser> = result.take(0)
         .map_err(|e| AuthError::DatabaseError(Box::new(e)))
         .with_context(|| "failed to get the result for the request user identifier")?;
-    let user_identifier: UserIdentifier =
-        user_identifier_option.ok_or(AuthError::UserNotFound)?;
+    let user_identifier_with_user: crate::models::user::UserIdentifierWithUser =
+        user_identifier_with_user_option.ok_or(AuthError::UserNotFound)?;
 
-    let mut user_result = db
-        .query("SELECT * FROM user WHERE id = $user_id")
-        .bind(("user_id", user_identifier.user_id))
-        .await
-        .map_err(|e| AuthError::DatabaseError(Box::new(e)))
-        .with_context(|| "Failed to get user from user_id")?;
-
-    let requested_user_option: Option<User> = user_result.take(0)
-        .map_err(|e| AuthError::DatabaseError(Box::new(e)))
-        .with_context(|| "failed to get the result for the request user")?;
-    let requested_user: User = requested_user_option.ok_or(AuthError::UserNotFound)?;
+    let requested_user = user_identifier_with_user.user;
 
     let parsed_hash = argon2::password_hash::PasswordHash::new(&requested_user.password_hash)
         .map_err(AuthError::PasswordHashError)?;
