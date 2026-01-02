@@ -5,6 +5,7 @@ use garde::Validate;
 #[cfg(feature = "ssr")]
 use leptos::prelude::expect_context;
 use leptos::prelude::ServerFnError;
+use leptos::server_fn::codec::Json;
 use leptos::*;
 #[cfg(feature = "ssr")]
 use leptos_actix::ResponseOptions;
@@ -22,7 +23,7 @@ use crate::errors::auth::AuthError;
 use crate::models::auth::LoginFormData;
 use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData};
 
-#[server(prefix = "/auth", endpoint = "register")]
+#[server(input=Json, prefix = "/auth", endpoint = "register")]
 pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>, ServerFnError>{
 
     let response_option = expect_context::<ResponseOptions>();
@@ -74,10 +75,10 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
     })
 }
 
-#[server]
+#[server(input=Json, prefix="/auth", endpoint="login")]
 pub async fn login(
     form: LoginFormData,
-) -> Result<ApiResponse<String>, ServerFnError>{
+) -> Result<ApiResponse<String>, ServerFnError> {
     let response_option = expect_context::<ResponseOptions>();
     let user_id = match authenticate(form).await {
         Ok(id) => id,

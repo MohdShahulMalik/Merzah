@@ -19,6 +19,12 @@ pub struct RegistrationFormData {
     pub password: String,
 }
 
+impl RegistrationFormData {
+    pub fn new(name: String, identifier: Identifier, password: String) -> Self {
+        RegistrationFormData { name, identifier, password }
+    }
+}
+
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct LoginFormData {
     #[garde(dive)]

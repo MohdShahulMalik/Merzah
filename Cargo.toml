@@ -87,6 +87,11 @@ codegen-units = 1
 #Skips unwinding for smaller binary size and compatibility with wasm environment
 panic = "abort"
 
+[dev-dependencies]
+testcontainers = "0.26.3"
+testcontainers-modules = { version = "0.14.0", features = ["surrealdb"] }
+uuid = "1.19.0"
+
 [package.metadata.leptos]
 # The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name
 output-name = "merzah"
