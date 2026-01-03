@@ -1,4 +1,3 @@
-use crate::database::connection::get_db;
 use crate::errors::auth::AuthError;
 use crate::models::auth::LoginFormData;
 use crate::models::user::{ Identifier, User };
@@ -13,15 +12,14 @@ use argon2::{
 };
 use garde::Validate;
 use rand::rngs::OsRng;
-use surrealdb::RecordId;
+use surrealdb::{RecordId, Surreal};
+use surrealdb::engine::remote::ws::Client;
 
-pub async fn register_user(form: RegistrationFormData) -> Result<RecordId> {
-    let db = get_db();
-
+pub async fn register_user(form: RegistrationFormData, db: &Surreal<Client>) -> Result<RecordId> {
     form.validate()
         .map_err(AuthError::InvalidData)
         .with_context(|| "The form validation for registration failed")?;
-    form.validate_uniqueness().await?;
+    form.validate_uniqueness(db).await?;
 
     let password_bytes = form.password.as_bytes();
     let salt = SaltString::generate(&mut OsRng);
@@ -42,7 +40,7 @@ pub async fn register_user(form: RegistrationFormData) -> Result<RecordId> {
     let surql = r#"
             BEGIN TRANSACTION;
 
-            LET $created_user = CREATE ONLY users CONTENT $user_data;
+            LET $created_user = (CREATE ONLY users CONTENT $user_data);
 
             CREATE user_identifier CONTENT {
                 user: $created_user.id,
@@ -69,9 +67,7 @@ pub async fn register_user(form: RegistrationFormData) -> Result<RecordId> {
     Ok(user_id)
 }
 
-pub async fn authenticate(form: LoginFormData) -> Result<RecordId> {
-    let db = get_db();
-
+pub async fn authenticate(form: LoginFormData, db: &Surreal<Client>) -> Result<RecordId> {
     let (identifier_type, identifier_value) = match form.identifier {
         Identifier::Email(email) => ("email", email),
         Identifier::Mobile(mobile) => ("mobile", mobile),

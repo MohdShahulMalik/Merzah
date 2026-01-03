@@ -1,11 +1,19 @@
+#[cfg(feature="ssr")]
 use surrealdb::engine::remote::ws::{Client, Ws};
+#[cfg(feature="ssr")]
 use surrealdb::opt::auth::Root;
+#[cfg(feature="ssr")]
 use surrealdb::Surreal;
+#[cfg(feature="ssr")]
 use testcontainers::runners::AsyncRunner;
+#[cfg(feature="ssr")]
 use testcontainers_modules::surrealdb::SurrealDb;
+#[cfg(feature="ssr")]
 use tokio::sync::OnceCell;
+#[cfg(feature="ssr")]
 use uuid::Uuid;
 
+#[cfg(feature="ssr")]
 static DB_CONTAINER: OnceCell<testcontainers::ContainerAsync<SurrealDb>> = OnceCell::const_new();
 
 pub async fn get_test_db() -> Surreal<Client> {

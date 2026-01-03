@@ -7,7 +7,9 @@ use crate::errors::auth::AuthError;
 #[cfg(feature = "ssr")]
 use anyhow::{Result, anyhow};
 #[cfg(feature = "ssr")]
-use crate::database::connection::get_db;
+use surrealdb::Surreal;
+#[cfg(feature = "ssr")]
+use surrealdb::engine::remote::ws::Client;
 
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct RegistrationFormData {
@@ -35,18 +37,16 @@ pub struct LoginFormData {
 
 #[cfg(feature = "ssr")]
 impl RegistrationFormData {
-    pub async fn validate_uniqueness(&self) -> Result<()> {
-        let db = get_db();
-        
-        let (field, value) = match &self.identifier {
+    pub async fn validate_uniqueness(&self, db: &Surreal<Client>) -> Result<()> {
+        let (identifier_type, identifier_value) = match &self.identifier {
             Identifier::Email(email) => ("email", email.to_string()),
             Identifier::Mobile(mobile) => ("mobile", mobile.to_string()),
         };
 
-        let query_str = format!("SELECT * FROM user WHERE {} = $value", field);
         let mut result = db
-            .query(&query_str)
-            .bind(("value", value))
+            .query("SELECT * FROM user_identifier WHERE identifier_type = $type AND identifier_value = $value")
+            .bind(("type", identifier_type))
+            .bind(("value", identifier_value))
             .await
             .map_err(|e| AuthError::DatabaseError(Box::new(e)))?;
 
@@ -55,7 +55,7 @@ impl RegistrationFormData {
             .map_err(|_| anyhow!("Failed to parse query result"))?;
 
         if !res.is_empty() {
-            Err(AuthError::NotUniqueError(field.to_string()))?
+            Err(AuthError::NotUniqueError(identifier_type.to_string()))?
         } else {
             Ok(())
         }

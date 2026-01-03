@@ -10,7 +10,7 @@ async fn main() -> std::io::Result<()> {
     use merzah::app::*;
     use merzah::database::connection::init_db;
 
-    init_db().await;
+    let db = init_db().await;
 
     let conf = get_configuration(None).unwrap();
     let addr = conf.leptos_options.site_addr;
@@ -51,6 +51,7 @@ async fn main() -> std::io::Result<()> {
                 }
             })
             .app_data(web::Data::new(leptos_options.to_owned()))
+            .app_data(web::Data::new(db.clone()))
     })
     .bind(&addr)?
     .run()

@@ -1,13 +1,26 @@
+#[cfg(feature = "ssr")]
 use std::net::TcpListener;
 
+#[cfg(feature = "ssr")]
 use actix_files::Files;
+#[cfg(feature = "ssr")]
 use actix_web::dev::Server;
+#[cfg(feature = "ssr")]
 use actix_web::{web, App, HttpServer};
-use leptos::{ config::ConfFile };
+#[cfg(feature = "ssr")]
+use leptos::config::ConfFile;
+#[cfg(feature = "ssr")]
 use leptos::prelude::*;
+#[cfg(feature = "ssr")]
 use leptos_actix::{generate_route_list, LeptosRoutes};
+#[cfg(feature = "ssr")]
 use leptos_meta::MetaTags;
+#[cfg(feature = "ssr")]
+use surrealdb::Surreal;
+#[cfg(feature = "ssr")]
+use surrealdb::engine::remote::ws::Client;
 
+#[cfg(feature = "ssr")]
 use crate::app::App;
 
 pub mod app;
@@ -24,7 +37,8 @@ pub mod components;
 
 pub mod server_functions;
 
-fn run(addr: TcpListener, conf: ConfFile) -> std::io::Result<Server> {
+#[cfg(feature = "ssr")]
+fn run(addr: TcpListener, conf: ConfFile, db: Surreal<Client>) -> std::io::Result<Server> {
     let server = HttpServer::new(move || {
         // Generate the list of routes in your Leptos App
         let routes = generate_route_list(App);
@@ -59,6 +73,7 @@ fn run(addr: TcpListener, conf: ConfFile) -> std::io::Result<Server> {
                 }
             })
             .app_data(web::Data::new(leptos_options.to_owned()))
+            .app_data(web::Data::new(db.clone()))
     })
     .listen(addr)?
     .run();
@@ -78,15 +93,16 @@ async fn favicon(
     ))?)
 }
 
-pub fn spawn_app() -> String {
+#[cfg(feature = "ssr")]
+pub fn spawn_app(db: Surreal<Client>) -> String {
     let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind to a available port");
     let port = listener
         .local_addr()
         .expect("Failed to get the port binded for the test")
         .port();
-    let conf = get_configuration(None).unwrap();
+    let conf = get_configuration(Some("Cargo.toml")).unwrap();
 
-    let server = run(listener, conf).expect("Failed to bind the address");
+    let server = run(listener, conf, db).expect("Failed to bind the address");
     let _ = tokio::spawn(server);
 
     format!("http://127.0.0.1:{}", port)

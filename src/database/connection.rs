@@ -1,13 +1,10 @@
 use dotenvy::dotenv;
-use once_cell::sync::OnceCell;
 use std::env;
 use surrealdb::engine::remote::ws::{Client, Ws};
 use surrealdb::opt::auth::Root;
 use surrealdb::Surreal;
 
-static DB: OnceCell<Surreal<Client>> = OnceCell::new();
-
-pub async fn init_db() {
+pub async fn init_db() -> Surreal<Client> {
     dotenv().ok();
 
     let db_url = env::var("SURREAL_URL").expect("SURREAL_URL must be set");
@@ -33,10 +30,8 @@ pub async fn init_db() {
         .use_db(&db_name)
         .await
         .expect("Failed to use namespace or database");
-    DB.set(db).unwrap();
+    
+    db
 }
 
-pub fn get_db() -> &'static Surreal<Client> {
-    DB.get().expect("Database not initialized")
-}
 

@@ -49,11 +49,11 @@ pub enum Identifier {
     Mobile(#[garde(pattern(r"^[+]?[(]?[0-9]{1,4}[)]?[- .]?[(]?[0-9]{1,4}[)]?[- .]?[0-9]{4,10}$"))] String),
 }
 
-#[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[cfg(feature="ssr")]
+#[derive(Debug, Deserialize)]
 pub struct UserIdentifier {
-    #[serde(flatten)]
-    pub identifier: Identifier,
+    pub identifier_type: String,
+    pub identifier_value: String,
     pub user: RecordId,
     pub created_at: Datetime,
     pub updated_at: Datetime,
@@ -62,8 +62,8 @@ pub struct UserIdentifier {
 #[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize)]
 pub struct UserIdentifierWithUser {
-    #[serde(flatten)]
-    pub identifier: Identifier,
+    pub identifier_type: String,
+    pub identifier_value: String,
     pub created_at: Datetime,
     pub updated_at: Datetime,
     pub user: User,

@@ -3,11 +3,11 @@ use anyhow::{Context, Result};
 use chrono::{Duration, Utc};
 use leptos::prelude::expect_context;
 use leptos_actix::ResponseOptions;
-use surrealdb::RecordId;
+use surrealdb::{RecordId, Surreal};
+use surrealdb::engine::remote::ws::Client;
 use surrealdb::sql::Datetime;
 
 use crate::{
-    database::connection::get_db,
     errors::session::SessionError,
     models::{
         session::{CreateSession, Session, UpdateSession},
@@ -18,9 +18,7 @@ use crate::{
 
 static SESSION_DURATION_IN_HOURS: i64 = 1;
 
-pub async fn create_session(user: RecordId) -> Result<String> {
-    let db = get_db();
-
+pub async fn create_session(user: RecordId, db: &Surreal<Client>) -> Result<String> {
     let session_token = generate_token();
     let expires_at = Datetime::from(Utc::now() + Duration::hours(SESSION_DURATION_IN_HOURS));
 
@@ -40,10 +38,8 @@ pub async fn create_session(user: RecordId) -> Result<String> {
     Ok(session_token)
 }
 
-pub async fn get_user_by_session(session_token: &str) -> Result<User> {
+pub async fn get_user_by_session(session_token: &str, db: &Surreal<Client>) -> Result<User> {
     validate_session_token(session_token)?;
-
-    let db = get_db();
 
     let result_from_sessions_table: Option<crate::models::session::SessionWithUser> = db
         .query("SELECT * FROM sessions WHERE session_token = $token FETCH user")
@@ -64,10 +60,8 @@ pub async fn get_user_by_session(session_token: &str) -> Result<User> {
     }
 }
 
-pub async fn delete_session(session_token: &str) -> Result<()> {
+pub async fn delete_session(session_token: &str, db: &Surreal<Client>) -> Result<()> {
     validate_session_token(session_token)?;
-
-    let db = get_db();
 
     db.query("DELETE sessions WHERE session_token = $token")
         .bind(("token", session_token.to_string()))
@@ -78,8 +72,7 @@ pub async fn delete_session(session_token: &str) -> Result<()> {
     Ok(())
 }
 
-pub async fn update_session_token(user_id: RecordId) -> Result<String> {
-    let db = get_db();
+pub async fn update_session_token(user_id: RecordId, db: &Surreal<Client>) -> Result<String> {
     let new_session_token = generate_token();
 
     let updated_session = UpdateSession {
@@ -97,9 +90,7 @@ pub async fn update_session_token(user_id: RecordId) -> Result<String> {
     Ok(new_session_token)
 }
 
-pub async fn update_session_expiry(user_id: RecordId) -> Result<()> {
-    let db = get_db();
-
+pub async fn update_session_expiry(user_id: RecordId, db: &Surreal<Client>) -> Result<()> {
     let session: Option<Session> = db
         .select(user_id.clone())
         .await
@@ -126,9 +117,7 @@ pub async fn update_session_expiry(user_id: RecordId) -> Result<()> {
     Ok(())
 }
 
-pub async fn update_session_expiry_and_token(user_id: RecordId) -> Result<String> {
-    let db = get_db();
-
+pub async fn update_session_expiry_and_token(user_id: RecordId, db: &Surreal<Client>) -> Result<String> {
     let session: Option<Session> = db
         .select(user_id.clone())
         .await
@@ -159,9 +148,7 @@ pub async fn update_session_expiry_and_token(user_id: RecordId) -> Result<String
     Ok(new_session_token)
 }
 
-pub async fn cleanup_expired_sessions() -> Result<()> {
-    let db = get_db();
-
+pub async fn cleanup_expired_sessions(db: &Surreal<Client>) -> Result<()> {
     db.query("DELETE sessions WHERE expires_at <= time::now()")
         .await
         .map_err(|e| SessionError::DatabaseError(Box::new(e)))
