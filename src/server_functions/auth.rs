@@ -145,7 +145,62 @@ pub async fn login(
     }
 }
 
-#[server(input=Json, prefix="/auth", endpoint="login")]
+#[server(input=Json, prefix="/auth", endpoint="logout")]
 pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
-    
+    #[cfg(feature = "ssr")]
+    {
+        use actix_web::{http::StatusCode, web, HttpRequest};
+        use leptos::prelude::expect_context;
+        use leptos_actix::ResponseOptions;
+        use surrealdb::Surreal;
+        use surrealdb::engine::remote::ws::Client;
+        use tracing::error;
+        use crate::auth::session::{delete_session, remove_session_cookie};
+
+        let response_option = expect_context::<ResponseOptions>();
+
+        let req = match leptos_actix::extract::<HttpRequest>().await {
+            Ok(req) => req,
+            Err(e) => {
+                error!(?e, "Failed to extract request");
+                response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+                return Ok(ApiResponse::error("Internal server error".to_string()));
+            }
+        };
+
+        let session_token = match req.cookie("__Host-session") {
+            Some(cookie) => cookie.value().to_string(),
+            None => {
+                response_option.set_status(StatusCode::UNAUTHORIZED);
+                return Ok(ApiResponse::error("You are not logged in".to_string()));
+            }
+        };
+
+        let db = match leptos_actix::extract::<web::Data<Surreal<Client>>>().await {
+            Ok(db) => db,
+            Err(e) => {
+                error!(?e, "Failed to extract database connection");
+                response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+                return Ok(ApiResponse::error("Internal server error".to_string()));
+            }
+        };
+
+        if let Err(e) = delete_session(&session_token, &db).await {
+            error!(?e, "Failed to delete session");
+            response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse::error("Failed to logout".to_string()));
+        }
+
+        if let Err(e) = remove_session_cookie() {
+            error!(?e, "Failed to remove session cookie");
+            response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse::error("Failed to logout".to_string()));
+        }
+
+        Ok(ApiResponse::data("Successfully logged out the user".to_string()))
+    }
+    #[cfg(not(feature = "ssr"))]
+    {
+        unreachable!()
+    }
 }
