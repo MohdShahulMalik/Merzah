@@ -1,5 +1,5 @@
 use leptos::prelude::ServerFnError;
-use leptos::server_fn::codec::Json;
+use leptos::server_fn::codec::{DeleteUrl, Json};
 use leptos::*;
 use crate::models::auth::LoginFormData;
 use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData};
@@ -145,7 +145,7 @@ pub async fn login(
     }
 }
 
-#[server(input=Json, prefix="/auth", endpoint="logout")]
+#[server(input=DeleteUrl, output=Json, prefix="/auth", endpoint="logout")]
 pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
     #[cfg(feature = "ssr")]
     {
