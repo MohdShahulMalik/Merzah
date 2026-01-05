@@ -73,7 +73,7 @@ pub async fn authenticate(form: LoginFormData, db: &Surreal<Client>) -> Result<R
         Identifier::Mobile(mobile) => ("mobile", mobile),
     };
 
-    let mut result = db.query("SELECT * FROM user_identifier WHERE identifier_type = $identifier_type AND identifier_value = $identifier_value FETCH user")
+    let mut result = db.query("SELECT * FROM user_identifier WHERE identifier_value = $identifier_value FETCH user")
         .bind(("identifier_type", identifier_type))
         .bind(("identifier_value", identifier_value))
         .await

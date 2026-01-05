@@ -181,20 +181,20 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
             Err(e) => {
                 error!(?e, "Failed to extract database connection");
                 response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-                return Ok(ApiResponse::error("Internal server error".to_string()));
+                return Ok(ApiResponse::error("Internal server error due to not getting db connection".to_string()));
             }
         };
 
         if let Err(e) = delete_session(&session_token, &db).await {
             error!(?e, "Failed to delete session");
             response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-            return Ok(ApiResponse::error("Failed to logout".to_string()));
+            return Ok(ApiResponse::error("Failed to delete the session cokkie from the server".to_string()));
         }
 
         if let Err(e) = remove_session_cookie() {
             error!(?e, "Failed to remove session cookie");
             response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-            return Ok(ApiResponse::error("Failed to logout".to_string()));
+            return Ok(ApiResponse::error("Failed to remove session cookie".to_string()));
         }
 
         Ok(ApiResponse::data("Successfully logged out the user".to_string()))

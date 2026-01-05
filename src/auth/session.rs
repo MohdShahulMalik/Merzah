@@ -42,8 +42,8 @@ pub async fn get_user_by_session(session_token: &str, db: &Surreal<Client>) -> R
     validate_session_token(session_token)?;
 
     let result_from_sessions_table: Option<crate::models::session::SessionWithUser> = db
-        .query("SELECT * FROM sessions WHERE session_token = $token FETCH user")
-        .bind(("token", session_token.to_string()))
+        .query("SELECT * FROM sessions WHERE session_token = $val FETCH user")
+        .bind(("val", session_token.to_string()))
         .await
         .map_err(|e| SessionError::DatabaseError(Box::new(e)))
         .with_context(|| "Failed to fetch the session details")?
@@ -63,8 +63,8 @@ pub async fn get_user_by_session(session_token: &str, db: &Surreal<Client>) -> R
 pub async fn delete_session(session_token: &str, db: &Surreal<Client>) -> Result<()> {
     validate_session_token(session_token)?;
 
-    db.query("DELETE sessions WHERE session_token = $token")
-        .bind(("token", session_token.to_string()))
+    db.query("DELETE sessions WHERE session_token = $val")
+        .bind(("val", session_token.to_string()))
         .await
         .map_err(|e| SessionError::DatabaseError(Box::new(e)))
         .with_context(|| "Failed to delete the session ")?;

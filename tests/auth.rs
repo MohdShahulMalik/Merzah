@@ -107,3 +107,81 @@ async fn register_server_fn_successfully_register_a_user(
         session_result.take(0).expect("Failed to parse sessions");
     assert!(!sessions.is_empty(), "{}", error_msg);
 }
+
+#[tokio::test]
+async fn logout_server_fn_successfully_logs_out_user() {
+    let client = Client::new();
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let register_url = format!("{}/auth/register", addr);
+    let logout_url = format!("{}/auth/logout", addr);
+
+    let form = RegistrationFormData::new(
+        "Logout User".to_string(),
+        Identifier::Email("logout@example.com".to_string()),
+        "password123".to_string(),
+    );
+    let body = Form { form };
+
+    // 1. Register
+    let response = client
+        .post(&register_url)
+        .json(&body)
+        .send()
+        .await
+        .expect("Failed to register");
+
+    assert!(response.status().is_success());
+
+    // 2. Extract Cookie
+    let cookie_header = response
+        .headers()
+        .get("set-cookie")
+        .expect("Missing Set-Cookie header in registration response");
+    
+    let cookie_str = cookie_header.to_str().expect("Failed to convert cookie to string");
+    // Extract name=value part (strip attributes like Path, HttpOnly)
+    let session_cookie = cookie_str.split(';').next().expect("Failed to parse cookie");
+
+    // 3. Call Logout
+    let response = client
+        .post(&logout_url)
+        .header("Cookie", session_cookie)
+        .header("Content-Type", "application/json")
+        .body("{}")
+        .send()
+        .await
+        .expect("Failed to call logout");
+
+    if !response.status().is_success() {
+        let response_status = response.status();
+        let text = response.text().await.unwrap_or_default();
+        panic!("Logout failed. Status: {}, Body: {}", response_status, text);
+    }
+
+    let api_response = response
+        .json::<ApiResponse<String>>()
+        .await
+        .expect("Failed to deserialize logout response");
+
+    assert_eq!(api_response.data, Some("Successfully logged out the user".to_string()));
+    assert!(api_response.error.is_none());
+
+    // 4. Verify Session Deleted
+    let mut result = db
+        .query("SELECT * FROM user_identifier WHERE identifier_value = 'logout@example.com'")
+        .await
+        .expect("Failed to query user");
+    
+    let user_identifier: Option<merzah::models::user::UserIdentifier> = result.take(0).expect("Failed to parse user");
+    let user_id = user_identifier.expect("User not found").user;
+
+    let mut session_result = db
+        .query("SELECT * FROM sessions WHERE user = $user")
+        .bind(("user", user_id))
+        .await
+        .expect("Failed to query sessions");
+    
+    let sessions: Option<merzah::models::session::Session> = session_result.take(0).unwrap();
+    assert!(sessions.is_none(), "Session should have been deleted");
+}
