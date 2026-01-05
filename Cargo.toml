@@ -45,6 +45,7 @@ web-sys = { version = "0.3.82", features = [
     "Coordinates",
 ] }
 leptos-leaflet = "0.10.2"
+leptos-state = { version = "1.0.1", features = ["ssr", "serde", "serde_json"] }
 
 [features]
 csr = ["leptos/csr"]

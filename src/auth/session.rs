@@ -178,6 +178,20 @@ pub fn set_session_cookie(
     Ok(())
 }
 
+pub fn remove_session_cookie() -> Result<()> {
+    let response = expect_context::<ResponseOptions>();
+
+    let cookie = "__Host-session=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0";
+
+    response.insert_header(
+        SET_COOKIE,
+        HeaderValue::from_str(cookie)
+            .with_context(|| "Failed to set cookies for session removal")?
+    );
+    
+    Ok(())
+}
+
 pub fn validate_session_token(token: &str) -> Result<(), SessionError> {
     if token.is_empty() {
         Err(SessionError::InvalidToken)?

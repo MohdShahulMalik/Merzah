@@ -5,7 +5,7 @@ use crate::models::auth::LoginFormData;
 use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData};
 
 #[server(input=Json, prefix = "/auth", endpoint = "register")]
-pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>, ServerFnError>{
+pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>, ServerFnError> {
     #[cfg(feature = "ssr")]
     {
         use actix_web::{http::StatusCode, web};
@@ -143,4 +143,9 @@ pub async fn login(
             error: None,
         })
     }
+}
+
+#[server(input=Json, prefix="/auth", endpoint="login")]
+pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
+    
 }

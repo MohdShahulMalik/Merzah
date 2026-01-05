@@ -21,11 +21,6 @@ pub struct RegistrationFormData {
     pub password: String,
 }
 
-impl RegistrationFormData {
-    pub fn new(name: String, identifier: Identifier, password: String) -> Self {
-        RegistrationFormData { name, identifier, password }
-    }
-}
 
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct LoginFormData {
@@ -37,6 +32,11 @@ pub struct LoginFormData {
 
 #[cfg(feature = "ssr")]
 impl RegistrationFormData {
+
+    pub fn new(name: String, identifier: Identifier, password: String) -> Self {
+        RegistrationFormData { name, identifier, password }
+    }
+
     pub async fn validate_uniqueness(&self, db: &Surreal<Client>) -> Result<()> {
         let (identifier_type, identifier_value) = match &self.identifier {
             Identifier::Email(email) => ("email", email.to_string()),

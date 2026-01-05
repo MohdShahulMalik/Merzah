@@ -1,8 +1,11 @@
 mod common;
 use common::get_test_db;
+use merzah::{
+    models::{api_responses::ApiResponse, auth::RegistrationFormData, user::Identifier},
+    spawn_app,
+};
 use reqwest::Client;
 use rstest::rstest;
-use merzah::{models::{api_responses::ApiResponse, auth::RegistrationFormData, user::Identifier}, spawn_app};
 use serde::Serialize;
 
 #[derive(Serialize)]
@@ -11,8 +14,9 @@ struct Form {
 }
 
 #[rstest]
+#[case::mobile("Armaan Ali".to_string(), Identifier::Mobile("+91 1234567890".to_string()), "thisisasecret".to_string(), Some("The user have been registered successfully".to_string()), "Payload with Identifier Type mobile")]
+#[case::email("Armaan Ali".to_string(), Identifier::Email("armaanali@gmail.com".to_string()), "thisisasecret".to_string(), Some("The user have been registered successfully".to_string()), "Payload with Identifier Type email")]
 #[tokio::test]
-#[case("Armaan Ali".to_string(), Identifier::Mobile("+91 1234567890".to_string()), "thisisasecret".to_string(), Some("The user have been registered successfully".to_string()), "Payload with Identifier Type mobile")]
 async fn register_server_fn_successfully_register_a_user(
     #[case] name: String,
     #[case] identifier: Identifier,
@@ -25,10 +29,9 @@ async fn register_server_fn_successfully_register_a_user(
     let addr = spawn_app(db.clone());
     let relative_addr = format!("{}/auth/register", addr);
 
-    // let name = "Armaan Ali".to_string();
-    // let identifier = Identifier::Mobile("+91 1234567890".to_string());
-    // let password = "secret".to_string();
-    let body = Form{form: RegistrationFormData::new(name.clone(), identifier.clone(), password.clone())};
+    let body = Form {
+        form: RegistrationFormData::new(name.clone(), identifier.clone(), password.clone()),
+    };
 
     let response = client
         .post(relative_addr)
@@ -40,7 +43,10 @@ async fn register_server_fn_successfully_register_a_user(
     if !response.status().is_success() {
         let status = response.status();
         let text = response.text().await.unwrap_or_default();
-        println!("Request failed. Status: {}, Body: {}", status, text);
+        println!(
+            "Request failed for {}. Status: {}, Body: {}",
+            payload_info, status, text
+        );
         panic!("Expected successful response status");
     }
 
@@ -64,14 +70,23 @@ async fn register_server_fn_successfully_register_a_user(
     let mut result = db
         .query("SELECT * FROM user_identifier WHERE identifier_type = $type AND identifier_value = $val FETCH user")
         .bind(("type", id_type))
-        .bind(("val", id_value))
+        .bind(("val", id_value.clone()))
         .await
         .expect("Failed to query user identifier");
 
-    let user_identifier_with_user: Option<merzah::models::user::UserIdentifierWithUser> = result.take(0).expect("Failed to parse user identifier");
-    assert!(user_identifier_with_user.is_some(), "User identifier record should exist");
-    
-    let user: merzah::models::user::User = user_identifier_with_user.unwrap().user;
+    let error_msg = format!(
+        "User identifier record should exist, payload info: {}",
+        payload_info
+    );
+    let user_identifier_with_user: Option<merzah::models::user::UserIdentifierWithUser> =
+        result.take(0).expect("Failed to parse user identifier");
+    assert!(user_identifier_with_user.is_some(), "{}", error_msg);
+
+    let user_identifier_with_user = user_identifier_with_user.unwrap();
+    assert_eq!(user_identifier_with_user.identifier_type, id_type);
+    assert_eq!(user_identifier_with_user.identifier_value, id_value);
+
+    let user: merzah::models::user::User = user_identifier_with_user.user;
     let user_id = user.id;
 
     // 2. Verify User exists and has correct name
@@ -83,7 +98,12 @@ async fn register_server_fn_successfully_register_a_user(
         .bind(("user", user_id))
         .await
         .expect("Failed to query sessions");
-    
-    let sessions: Vec<merzah::models::session::Session> = session_result.take(0).expect("Failed to parse sessions");
-    assert!(!sessions.is_empty(), "A session should be created for the registered user");
+
+    let error_msg = format!(
+        "A session should be created for the registered user, payload info: {}",
+        payload_info
+    );
+    let sessions: Vec<merzah::models::session::Session> =
+        session_result.take(0).expect("Failed to parse sessions");
+    assert!(!sessions.is_empty(), "{}", error_msg);
 }

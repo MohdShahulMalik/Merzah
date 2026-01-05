@@ -1,5 +1,5 @@
 use garde::Validate;
-use leptos::{html, prelude::*, reactive::spawn_local};
+use leptos::{ html, prelude::*, reactive::spawn_local };
 use leptos_router::components::A;
 
 use crate::models::{auth::{LoginFormData, RegistrationFormData}, user::Identifier};
