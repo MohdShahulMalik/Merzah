@@ -1,5 +1,6 @@
 use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
 use crate::models::{api_responses::ApiResponse, mosque::{Mosque, MosquesResponse}};
+use geo::Point;
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(
@@ -22,7 +23,7 @@ pub async fn add_mosques_of_region(
             (
                 node["amenity"="place_of_worship"]["religion"="muslim"]["building"="mosque"]({},{},{},{});
                 way["amenity"="place_of_worship"]["religion"="muslim"]["building"="mosque"]({},{},{},{});
-            )
+            );
             out center;"#,
         south, west, north, east,
         south, west, north, east
@@ -54,7 +55,7 @@ pub async fn add_mosques_of_region(
                     },
                     _ => return None,
                 };
-                let location = Geometry::Point((lon, lat).into());
+                let location = Geometry::Point(Point::new(lon, lat));
                 let (name, city, street) = elem.tags
                     .map(|tags| (
                         tags.name,
@@ -72,7 +73,8 @@ pub async fn add_mosques_of_region(
                 })
             }).collect();
 
-        db.create::<Option<Mosque>>("mosques")
+        //NOTE: I previously used .create() here and that's is wrong as it just expect us to push a single record to the db while .insert() handles pushing bulk record
+        db.insert::<Vec<Mosque>>("mosques")
             .content(mosques)
             .await?;
 
