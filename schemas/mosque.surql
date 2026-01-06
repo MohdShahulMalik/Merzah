@@ -1,9 +1,9 @@
 DEFINE TABLE IF NOT EXISTS mosques SCHEMAFULL;
 
-DEFINE FIELD IF NOT EXISTS name ON mosques TYPE string;
+DEFINE FIELD IF NOT EXISTS name ON mosques TYPE option<string>;
 DEFINE FIELD IF NOT EXISTS location ON mosques TYPE geometry<point>;
-DEFINE FIELD IF NOT EXISTS street ON mosques TYPE string;
-DEFINE FIELD IF NOT EXISTS city ON mosques TYPE string;
+DEFINE FIELD IF NOT EXISTS street ON mosques TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS city ON mosques TYPE option<string>;
 DEFINE FIELD IF NOT EXISTS created_at ON mosques TYPE datetime DEFAULT time::now();
 DEFINE FIELD IF NOT EXISTS updated_at ON mosques TYPE datetime DEFAULT time::now();
 

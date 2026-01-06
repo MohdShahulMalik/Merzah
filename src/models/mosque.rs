@@ -10,7 +10,7 @@ use chrono::NaiveTime;
 pub struct Mosque {
     #[cfg(feature = "ssr")]
     pub id: RecordId,
-    pub name: String,
+    pub name: Option<String>,
     #[cfg(feature = "ssr")]
     pub location: Geometry,
     pub street: Option<String>,

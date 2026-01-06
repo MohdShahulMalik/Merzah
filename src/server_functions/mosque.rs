@@ -1,7 +1,7 @@
-use leptos::{prelude::ServerFnError, *};
+use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
 use crate::models::{api_responses::ApiResponse, mosque::{Mosque, MosquesResponse}};
 
-#[server(prefix = "/mosque", endpoint = "fetch-through-region")]
+#[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(
     south: f64,
     west: f64,
@@ -55,14 +55,20 @@ pub async fn add_mosques_of_region(
                     _ => return None,
                 };
                 let location = Geometry::Point((lon, lat).into());
-                let tags = elem.tags?;
+                let (name, city, street) = elem.tags
+                    .map(|tags| (
+                        tags.name,
+                        tags.street,
+                        tags.city,
+                    ))
+                    .unwrap_or((None, None, None));
 
                 Some(Mosque {
                     id: RecordId::from(("mosques", elem.id)),
-                    name: tags.name.unwrap_or_else(|| "Unnamed Mosque".to_string()),
+                    name,
                     location,
-                    street: tags.street,
-                    city: tags.city,
+                    street,
+                    city,
                 })
             }).collect();
 
@@ -82,8 +88,8 @@ pub async fn add_mosques_of_region(
     }
 }
 
-#[server(prefix = "/mosque", endpoint = "fetch-mosques-from-region")]
-pub async fn fetch_mosques_from_region(lat: f64, lon: f64) -> Result<ApiResponse<Vec<Mosque>>, ServerFnError> {
+#[server(prefix = "/mosque", endpoint = "fetch-mosques-for-location")]
+pub async fn fetch_mosques_for_location(lat: f64, lon: f64) -> Result<ApiResponse<Vec<Mosque>>, ServerFnError> {
     #[cfg(feature = "ssr")]
     {
         use surrealdb::Surreal;
@@ -94,7 +100,7 @@ pub async fn fetch_mosques_from_region(lat: f64, lon: f64) -> Result<ApiResponse
         let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
         let point = Geometry::Point((lon, lat).into());
         
-        let radius_in_meters = 10000;
+        let radius_in_meters = 5000;
         let query = r#"
             SELECT * FROM mosques
             WHERE geo::distance(location, $point) < $radius
