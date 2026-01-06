@@ -1,5 +1,4 @@
-mod common;
-use common::get_test_db;
+use crate::common::get_test_db;
 use merzah::auth::custom_auth::register_user;
 use merzah::auth::session::{create_session, delete_session, get_user_by_session};
 use merzah::models::{auth::RegistrationFormData, user::Identifier};

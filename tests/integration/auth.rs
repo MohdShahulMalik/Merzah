@@ -1,5 +1,4 @@
-mod common;
-use common::get_test_db;
+use crate::common::get_test_db;
 use merzah::{
     models::{api_responses::ApiResponse, auth::{LoginFormData, RegistrationFormData}, user::Identifier},
     spawn_app,
