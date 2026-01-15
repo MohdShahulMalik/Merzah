@@ -1,6 +1,9 @@
+#[cfg(feature = "ssr")]
 use surrealdb::sql::Datetime;
+#[cfg(feature = "ssr")]
 use thiserror::Error;
 
+#[cfg(feature = "ssr")]
 #[derive(Debug, Error)]
 pub enum SessionError {
     #[error("Session has been expired at: {0}")]

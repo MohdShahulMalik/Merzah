@@ -1,5 +1,7 @@
+#[cfg(feature = "ssr")]
 use thiserror::Error;
 
+#[cfg(feature = "ssr")]
 #[derive(Debug, Error)]
 pub enum AuthError {
     #[error("The form data provided is invalid")]
@@ -20,4 +22,3 @@ pub enum AuthError {
     #[error("Requested user was not found")]
     UserNotFound,
 }
-

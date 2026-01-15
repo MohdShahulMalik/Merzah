@@ -49,7 +49,7 @@ pub enum Identifier {
     Mobile(#[garde(pattern(r"^[+]?[(]?[0-9]{1,4}[)]?[- .]?[(]?[0-9]{1,4}[)]?[- .]?[0-9]{4,10}$"))] String),
 }
 
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize)]
 pub struct UserIdentifier {
     pub identifier_type: String,

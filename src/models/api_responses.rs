@@ -17,3 +17,12 @@ impl<T> ApiResponse<T> {
         Self {data: None, error: Some(error)}
     }
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct MosqueApiResponse {
+    pub location: (f64, f64),
+    pub name: Option<String>,
+    pub street: Option<String>,
+    pub city: Option<String>,
+}
+

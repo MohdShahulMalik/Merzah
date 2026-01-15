@@ -1,6 +1,6 @@
 use crate::common::get_test_db;
 use merzah::{
-    models::{api_responses::ApiResponse, mosque::Mosque},
+    models::api_responses::{ApiResponse, MosqueApiResponse},
     spawn_app,
 };
 use reqwest::Client;
@@ -69,13 +69,13 @@ async fn add_and_fetch_mosques() {
         panic!("Fetch mosques failed. Status: {}, Body: {}", status, text);
     }
 
-    let api_response = response.json::<ApiResponse<Vec<Mosque>>>().await.expect("Failed to deserialize");
+    let api_response = response.json::<ApiResponse<Vec<MosqueApiResponse>>>().await.expect("Failed to deserialize");
     let mosques = api_response.data.expect("No data returned");
     
     assert!(!mosques.is_empty(), "Should have found mosques in Dearborn");
     
     // Debug print found mosques
     for mosque in &mosques {
-        println!("Found mosque: {:?}", mosque.name);
+        println!("Found mosque: {:?}", mosque);
     }
 }

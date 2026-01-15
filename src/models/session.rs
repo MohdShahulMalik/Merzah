@@ -1,8 +1,12 @@
 use crate::models::user::User;
 use serde::{Deserialize, Serialize};
+
+#[cfg(feature = "ssr")]
 use surrealdb::RecordId;
+#[cfg(feature = "ssr")]
 use surrealdb::sql::Datetime;
 
+#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateSession {
     pub user: RecordId,
@@ -10,6 +14,7 @@ pub struct CreateSession {
     pub expires_at: Datetime,
 }
 
+#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Session {
     pub id: RecordId,
@@ -19,6 +24,7 @@ pub struct Session {
     pub created_at: Datetime,
 }
 
+#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SessionWithUser {
     pub id: RecordId,
@@ -28,6 +34,7 @@ pub struct SessionWithUser {
     pub created_at: Datetime,
 }
 
+#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UpdateSession {
     #[serde(skip_serializing_if = "Option::is_none")]
