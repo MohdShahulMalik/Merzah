@@ -125,12 +125,14 @@ pub async fn add_mosques_of_region(
     let insert_query = "INSERT INTO mosques $mosques";
 
     //NOTE: I previously used .create() here and that's is wrong as it just expect us to push a single record to the db while .insert() handles pushing bulk record
+    let num_mosques = mosques.len();
+
     db.query(insert_query)
-        .bind(("mosques", mosques.clone()))
+        .bind(("mosques", mosques))
         .await?;
 
     Ok(ApiResponse {
-        data: Some(format!("Added {} mosques for the region {} {} {} {} successfully", mosques.len(), south, west, north, east)),
+        data: Some(format!("Added {} mosques for the region {} {} {} {} successfully", num_mosques, south, west, north, east)),
         error: None,
     })
 }
