@@ -10,7 +10,7 @@ use crate::models::api_responses::MosqueApiResponse;
 
 #[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
-pub struct MosqueRecord {
+pub struct NewMosqueRecord {
     pub id: RecordId,
     pub name: Option<String>,
     pub location: Geometry,
@@ -91,10 +91,8 @@ pub struct Tags {
 
 /// Prayer times stored in the database as strings ("HH:MM:SS" format)
 /// Use this for creating/updating prayer_times records
-#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct PrayerTimes {
-    pub id: RecordId,
     pub fajr: NaiveTime,
     pub dhuhr: NaiveTime,
     pub asr: NaiveTime,
@@ -103,46 +101,20 @@ pub struct PrayerTimes {
     pub jummah: NaiveTime,
 }
 
-/// For creating new prayer times records (without id)
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CreatePrayerTimes {
-    pub fajr: NaiveTime,
-    pub dhuhr: NaiveTime,
-    pub asr: NaiveTime,
-    pub maghrib: NaiveTime,
-    pub isha: NaiveTime,
-    pub jummah: NaiveTime,
+#[cfg(feature="ssr")]
+#[derive(Debug, Serialize)]
+pub struct MosquePrayerTimes {
+    pub adhan_time: Option<PrayerTimes>,
+    pub jamat_time: Option<PrayerTimes>,
+    
 }
 
-/// Mosque details with references to prayer_times records
-#[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
-pub struct MosqueDetails {
-    pub id: RecordId,
-    pub mosque: RecordId,
-    pub admins: Vec<RecordId>,
-    pub jamat_times: RecordId,  
-    pub adhan_times: RecordId,  
-}
-
-/// Mosque details with prayer times fetched/inlined
-/// Use this when querying with FETCH jamat_times, adhan_times
-#[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
-pub struct MosqueDetailsWithTimes {
-    pub id: RecordId,
-    pub mosque: RecordId,
-    pub admins: Vec<RecordId>,
-    pub jamat_times: PrayerTimes,
-    pub adhan_times: PrayerTimes,
-}
-
-/// For creating new mosque details
-#[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CreateMosqueDetails {
-    pub mosque: RecordId,
-    pub admins: Vec<RecordId>,
-    pub jamat_times: RecordId,
-    pub adhan_times: RecordId,
+#[derive(Debug, Deserialize)]
+pub struct MosqueData {
+    pub name: Option<String>,
+    pub location: Geometry,
+    pub street: Option<String>,
+    pub city: Option<String>,
+    pub adhan_time: Option<PrayerTimes>,
+    pub jamat_time: Option<PrayerTimes>,
 }

@@ -8,7 +8,7 @@ use surrealdb::{RecordId, Surreal, engine::remote::ws::Client, sql::Geometry};
 #[cfg(feature = "ssr")]
 use actix_web::web;
 #[cfg(feature = "ssr")]
-use crate::models::mosque::{MosqueRecord, MosquesResponse, MosqueDbRes};
+use crate::models::mosque::{NewMosqueRecord, MosquesResponse, MosqueDbRes};
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(
@@ -94,7 +94,7 @@ pub async fn add_mosques_of_region(
     };
     let data: MosquesResponse = response.json().await?;
 
-    let mosques: Vec<MosqueRecord> = data.elements
+    let mosques: Vec<NewMosqueRecord> = data.elements
         .into_iter()
         .filter_map(|elem| {
             let (lat, lon) = match elem.element_type.as_str() {
@@ -114,7 +114,7 @@ pub async fn add_mosques_of_region(
                 ))
                 .unwrap_or((None, None, None));
 
-            Some(MosqueRecord {
+            Some(NewMosqueRecord {
                 id: RecordId::from(("mosques", elem.id)),
                 name,
                 location,
