@@ -126,7 +126,7 @@ pub async fn add_mosques_of_region(
 
     //NOTE: I previously used .create() here and that's is wrong as it just expect us to push a single record to the db while .insert() handles pushing bulk record
     db.query(insert_query)
-        .bind(("mosques", &mosques))
+        .bind(("mosques", mosques.clone()))
         .await?;
 
     Ok(ApiResponse {
