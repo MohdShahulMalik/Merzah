@@ -1,5 +1,5 @@
-use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
-use crate::models::api_responses::{ApiResponse, MosqueApiResponse};
+use leptos::{prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, *};
+use crate::models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::MosquePrayerTimes};
 
 #[cfg(feature = "ssr")]
 use tracing::error;
@@ -8,7 +8,7 @@ use surrealdb::{RecordId, Surreal, engine::remote::ws::Client, sql::Geometry};
 #[cfg(feature = "ssr")]
 use actix_web::web;
 #[cfg(feature = "ssr")]
-use crate::models::mosque::{NewMosqueRecord, MosquesResponse, MosqueDbRes};
+use crate::models::mosque::{NewMosqueRecord, MosquesResponse, MosqueDbRes, UpdatedMosqueRecord};
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(
@@ -62,6 +62,7 @@ pub async fn add_mosques_of_region(
                             let status = res.status();
                             let body = res.text().await.unwrap_or_else(|_| "Could not read error body".to_string());
                             let err_msg = format!("Endpoint {} returned {}, body: {}", endpoint, status, body);
+
                             error!("{}", err_msg);
                             last_error = Some(err_msg);
                             if status.is_server_error() && attempts < max_attempts {
@@ -74,6 +75,7 @@ pub async fn add_mosques_of_region(
                     Err(e) => {
                         let err_msg = format!("Endpoint {} failed: {}", endpoint, e);
                         error!("{}", err_msg);
+
                         last_error = Some(err_msg);
                         if attempts < max_attempts {
                             tokio::time::sleep(std::time::Duration::from_secs(1)).await;
@@ -83,6 +85,7 @@ pub async fn add_mosques_of_region(
                     }
                 }
         }
+
         if response.is_some() {
             break;
         }
@@ -90,7 +93,7 @@ pub async fn add_mosques_of_region(
 
     let response = match response {
         Some(res) => res,
-        None => return Err(ServerFnError::ServerError(format!("All Overpass API endpoints failed. Last error: {:?}", last_error))),
+        None => return Err(ServerFnError::ServerError(format!("All Overpass API endpoints failed. Last error: {}", last_error.unwrap()))),
     };
     let data: MosquesResponse = response.json().await?;
 
@@ -122,10 +125,10 @@ pub async fn add_mosques_of_region(
                 city,
             })
         }).collect();
-    let insert_query = "INSERT INTO mosques $mosques";
 
-    //NOTE: I previously used .create() here and that's is wrong as it just expect us to push a single record to the db while .insert() handles pushing bulk record
     let num_mosques = mosques.len();
+
+    let insert_query = "INSERT INTO mosques $mosques";
 
     db.query(insert_query)
         .bind(("mosques", mosques))
@@ -137,7 +140,7 @@ pub async fn add_mosques_of_region(
     })
 }
 
-#[server(prefix = "/mosque", endpoint = "fetch-mosques-for-location")]
+#[server(input = Json, output = Json, prefix = "/mosque", endpoint = "fetch-mosques-for-location")]
 pub async fn fetch_mosques_for_location(lat: f64, lon: f64) -> Result<ApiResponse<Vec<MosqueApiResponse>>, ServerFnError> {
     let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
     let point = Geometry::Point((lon, lat).into());
@@ -159,4 +162,16 @@ pub async fn fetch_mosques_for_location(lat: f64, lon: f64) -> Result<ApiRespons
         data: Some(mosques.into_iter().map(|m| m.from()).collect()),
         error: None,
     })
+}
+
+#[server(input = PatchJson, output = Json, prefix = "/mosque", endpoint = "update-adhan-jamat-times")]
+pub async fn update_adhan_jamat_times(mosque_id: RecordId, prayer_times: MosquePrayerTimes) ->
+    Result<ApiResponse<String>, ServerFnError> {
+    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
+
+    db.update::<Option<UpdatedMosqueRecord>>(mosque_id)
+        .merge(prayer_times)
+        .await?;
+    
+    Ok(ApiResponse::data("Successfully updated jamat and adhan times".to_string()))
 }

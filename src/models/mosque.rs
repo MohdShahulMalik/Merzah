@@ -29,6 +29,19 @@ pub struct MosqueDbRes {
     pub city: Option<String>,
 }
 
+#[cfg(feature="ssr")]
+#[derive(Debug, Deserialize)]
+pub struct UpdatedMosqueRecord {
+    pub id: RecordId,
+    #[cfg_attr(feature = "ssr", serde(deserialize_with = "deserialize_surreal_point"))]
+    pub location: (f64, f64),
+    pub name: Option<String>,
+    pub street: Option<String>,
+    pub city: Option<String>,
+    pub adhan_times: PrayerTimes,
+    pub jamat_times: PrayerTimes,
+}
+
 #[cfg(feature = "ssr")]
 fn deserialize_surreal_point<'de, D>(deserializer: D) -> Result<(f64, f64), D::Error>
 where
@@ -54,7 +67,13 @@ where
 #[cfg(feature = "ssr")]
 impl MosqueDbRes {
     pub fn from(self) -> MosqueApiResponse {
-        MosqueApiResponse { location: self.location, name: self.name, street: self.street, city: self.city }
+        MosqueApiResponse { 
+            id: self.id.to_string(),
+            location: self.location, 
+            name: self.name, 
+            street: self.street, 
+            city: self.city 
+        }
     }
 }
 
@@ -91,7 +110,7 @@ pub struct Tags {
 
 /// Prayer times stored in the database as strings ("HH:MM:SS" format)
 /// Use this for creating/updating prayer_times records
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PrayerTimes {
     pub fajr: NaiveTime,
     pub dhuhr: NaiveTime,
@@ -101,20 +120,20 @@ pub struct PrayerTimes {
     pub jummah: NaiveTime,
 }
 
-#[cfg(feature="ssr")]
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MosquePrayerTimes {
-    pub adhan_time: Option<PrayerTimes>,
-    pub jamat_time: Option<PrayerTimes>,
+    pub adhan_times: Option<PrayerTimes>,
+    pub jamat_times: Option<PrayerTimes>,
     
 }
 
+#[cfg(feature="ssr")]
 #[derive(Debug, Deserialize)]
 pub struct MosqueData {
     pub name: Option<String>,
     pub location: Geometry,
     pub street: Option<String>,
     pub city: Option<String>,
-    pub adhan_time: Option<PrayerTimes>,
-    pub jamat_time: Option<PrayerTimes>,
+    pub adhan_times: Option<PrayerTimes>,
+    pub jamat_times: Option<PrayerTimes>,
 }

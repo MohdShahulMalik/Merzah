@@ -58,7 +58,7 @@ async fn add_and_fetch_mosques() {
     
     // Trying form urlencoded first as it is the default for server functions without input=Json
     let response = client.post(&fetch_url)
-        .form(&fetch_params)
+        .json(&fetch_params)
         .send()
         .await
         .expect("Failed to execute fetch_mosques_for_location");

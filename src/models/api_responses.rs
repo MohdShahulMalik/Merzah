@@ -18,8 +18,9 @@ impl<T> ApiResponse<T> {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub struct MosqueApiResponse {
+    pub id: String,
     pub location: (f64, f64),
     pub name: Option<String>,
     pub street: Option<String>,
