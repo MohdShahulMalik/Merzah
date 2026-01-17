@@ -7,7 +7,6 @@ DEFINE FIELD IF NOT EXISTS city ON mosques TYPE option<string>;
 
 DEFINE FIELD IF NOT EXISTS adhan_times ON mosques TYPE option<object>;
 DEFINE FIELD IF NOT EXISTS adhan_times.fajr ON mosques TYPE string;
-DEFINE FIELD IF NOT EXISTS adhan_times.sunrise ON mosques TYPE string;
 DEFINE FIELD IF NOT EXISTS adhan_times.dhuhr ON mosques TYPE string;
 DEFINE FIELD IF NOT EXISTS adhan_times.asr ON mosques TYPE string;
 DEFINE FIELD IF NOT EXISTS adhan_times.maghrib ON mosques TYPE string;
