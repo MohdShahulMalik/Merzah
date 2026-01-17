@@ -8,7 +8,7 @@ use actix_web::dev::Server;
 #[cfg(feature = "ssr")]
 use actix_web::{web, App, HttpServer};
 #[cfg(feature = "ssr")]
-use leptos::config::ConfFile;
+use leptos::config::{get_configuration, ConfFile};
 #[cfg(feature = "ssr")]
 use leptos::prelude::*;
 #[cfg(feature = "ssr")]
@@ -103,7 +103,7 @@ pub fn spawn_app(db: Surreal<Client>) -> String {
     let conf = get_configuration(Some("Cargo.toml")).unwrap();
 
     let server = run(listener, conf, db).expect("Failed to bind the address");
-    let _ = tokio::spawn(server);
+    let _handle = tokio::spawn(server);
 
     format!("http://127.0.0.1:{}", port)
 }

@@ -3,6 +3,7 @@ use leptos::server_fn::codec::{DeleteUrl, Json};
 use leptos::*; 
 use crate::models::auth::LoginFormData;
 use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData};
+#[cfg(feature = "ssr")]
 use garde::Validate;
 
 #[cfg(feature = "ssr")]
