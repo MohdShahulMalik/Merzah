@@ -6,11 +6,12 @@ use surrealdb::RecordId;
 use surrealdb::sql::Geometry;
 use chrono::NaiveTime;
 
+#[cfg(feature = "ssr")]
 use crate::models::api_responses::MosqueApiResponse;
 
 #[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
-pub struct NewMosqueRecord {
+pub struct MosqueFromOverpass {
     pub id: RecordId,
     pub name: Option<String>,
     pub location: Geometry,
@@ -20,7 +21,7 @@ pub struct NewMosqueRecord {
 
 #[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize, Serialize)]
-pub struct MosqueDbRes {
+pub struct MosqueSearchResult {
     pub id: RecordId,
     #[cfg_attr(feature = "ssr", serde(deserialize_with = "deserialize_surreal_point"))]
     pub location: (f64, f64),
@@ -31,7 +32,7 @@ pub struct MosqueDbRes {
 
 #[cfg(feature="ssr")]
 #[derive(Debug, Deserialize)]
-pub struct UpdatedMosqueRecord {
+pub struct MosqueRecord {
     pub id: RecordId,
     #[cfg_attr(feature = "ssr", serde(deserialize_with = "deserialize_surreal_point"))]
     pub location: (f64, f64),
@@ -65,7 +66,7 @@ where
 }
 
 #[cfg(feature = "ssr")]
-impl MosqueDbRes {
+impl MosqueSearchResult {
     pub fn from(self) -> MosqueApiResponse {
         MosqueApiResponse { 
             id: self.id.to_string(),
@@ -78,7 +79,7 @@ impl MosqueDbRes {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct MosquesResponse {
+pub struct OverpassResponse {
     pub elements: Vec<MosqueElement>,
 }
 
@@ -121,15 +122,15 @@ pub struct PrayerTimes {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct MosquePrayerTimes {
+pub struct PrayerTimesUpdate {
     pub adhan_times: Option<PrayerTimes>,
     pub jamat_times: Option<PrayerTimes>,
-    
 }
 
 #[cfg(feature="ssr")]
 #[derive(Debug, Deserialize)]
 pub struct MosqueData {
+    pub id: String,
     pub name: Option<String>,
     pub location: Geometry,
     pub street: Option<String>,

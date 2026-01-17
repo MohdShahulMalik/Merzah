@@ -1,5 +1,5 @@
 use leptos::{prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, *};
-use crate::models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::MosquePrayerTimes};
+use crate::models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate};
 
 #[cfg(feature = "ssr")]
 use tracing::error;
@@ -8,7 +8,7 @@ use surrealdb::{RecordId, Surreal, engine::remote::ws::Client, sql::Geometry};
 #[cfg(feature = "ssr")]
 use actix_web::web;
 #[cfg(feature = "ssr")]
-use crate::models::mosque::{NewMosqueRecord, MosquesResponse, MosqueDbRes, UpdatedMosqueRecord};
+use crate::models::mosque::{MosqueFromOverpass, OverpassResponse, MosqueSearchResult, MosqueRecord};
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(
@@ -95,9 +95,9 @@ pub async fn add_mosques_of_region(
         Some(res) => res,
         None => return Err(ServerFnError::ServerError(format!("All Overpass API endpoints failed. Last error: {}", last_error.unwrap()))),
     };
-    let data: MosquesResponse = response.json().await?;
+    let data: OverpassResponse = response.json().await?;
 
-    let mosques: Vec<NewMosqueRecord> = data.elements
+    let mosques: Vec<MosqueFromOverpass> = data.elements
         .into_iter()
         .filter_map(|elem| {
             let (lat, lon) = match elem.element_type.as_str() {
@@ -117,7 +117,7 @@ pub async fn add_mosques_of_region(
                 ))
                 .unwrap_or((None, None, None));
 
-            Some(NewMosqueRecord {
+            Some(MosqueFromOverpass {
                 id: RecordId::from(("mosques", elem.id)),
                 name,
                 location,
@@ -156,7 +156,7 @@ pub async fn fetch_mosques_for_location(lat: f64, lon: f64) -> Result<ApiRespons
         .bind(("radius", radius_in_meters))
         .await?;
 
-    let mosques: Vec<MosqueDbRes> = result.take(0)?;
+    let mosques: Vec<MosqueSearchResult> = result.take(0)?;
 
     Ok(ApiResponse {
         data: Some(mosques.into_iter().map(|m| m.from()).collect()),
@@ -165,11 +165,16 @@ pub async fn fetch_mosques_for_location(lat: f64, lon: f64) -> Result<ApiRespons
 }
 
 #[server(input = PatchJson, output = Json, prefix = "/mosque", endpoint = "update-adhan-jamat-times")]
-pub async fn update_adhan_jamat_times(mosque_id: RecordId, prayer_times: MosquePrayerTimes) ->
+pub async fn update_adhan_jamat_times(mosque_id: String, prayer_times: PrayerTimesUpdate) ->
     Result<ApiResponse<String>, ServerFnError> {
     let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
 
-    db.update::<Option<UpdatedMosqueRecord>>(mosque_id)
+    let mosque_id: RecordId = match mosque_id.parse() {
+        Ok(id) => id,
+        Err(e) => return Err(ServerFnError::ServerError(format!("Invalid mosque ID: {}", e))),
+    };
+
+    db.update::<Option<MosqueRecord>>(mosque_id)
         .merge(prayer_times)
         .await?;
     

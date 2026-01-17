@@ -1,10 +1,14 @@
 use crate::common::get_test_db;
 use merzah::{
-    models::api_responses::{ApiResponse, MosqueApiResponse},
+    models::{
+        api_responses::{ApiResponse, MosqueApiResponse},
+        mosque::{PrayerTimes, PrayerTimesUpdate},
+    },
     spawn_app,
 };
 use reqwest::Client;
 use serde::Serialize;
+use chrono::NaiveTime;
 
 #[derive(Serialize)]
 struct AddMosqueParams {
