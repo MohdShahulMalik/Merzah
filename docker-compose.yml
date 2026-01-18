@@ -1,11 +1,18 @@
 services:
+  init-permissions:
+      image: busybox
+      volumes:
+        - surreal_data:/data
+      # 65532 is the internal ID used by the SurrealDB image
+      command: chown -R 65532:65532 /data
+
   surrealdb:
     image: surrealdb/surrealdb:latest
     container_name: surrealdb
     ports:
       - "${SURREAL_PORT}:8000"
     volumes:
-      - ./surreal_data:/data
+      - surreal_data:/data
     
     environment:
       - SURREAL_USER=${SURREAL_USER}
