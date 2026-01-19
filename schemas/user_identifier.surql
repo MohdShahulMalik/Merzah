@@ -1,6 +1,6 @@
 DEFINE TABLE IF NOT EXISTS user_identifier SCHEMAFULL;
 
-DEFINE FIELD IF NOT EXISTS user ON user_identifier TYPE record<users>;
+DEFINE FIELD IF NOT EXISTS user ON user_identifier TYPE record<users> ASSERT $value != NONE;
 DEFINE FIELD IF NOT EXISTS identifier_type ON user_identifier TYPE string ASSERT $value IN ['email', 'mobile'];
 DEFINE FIELD IF NOT EXISTS identifier_value ON user_identifier TYPE string;
 DEFINE FIELD IF NOT EXISTS created_at ON user_identifier TYPE datetime DEFAULT time::now();

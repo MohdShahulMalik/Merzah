@@ -1,5 +1,7 @@
-use leptos::{prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, *};
-use crate::models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate};
+use actix_web::http::StatusCode;
+use leptos::{prelude::{expect_context, ServerFnError}, server_fn::codec::{Json, PatchJson}, *};
+use leptos_actix::ResponseOptions;
+use crate::models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate, user::User};
 
 #[cfg(feature = "ssr")]
 use tracing::error;
@@ -165,9 +167,40 @@ pub async fn fetch_mosques_for_location(lat: f64, lon: f64) -> Result<ApiRespons
 }
 
 #[server(input = PatchJson, output = Json, prefix = "/mosque", endpoint = "update-adhan-jamat-times")]
-pub async fn update_adhan_jamat_times(mosque_id: String, prayer_times: PrayerTimesUpdate) ->
+pub async fn update_adhan_jamat_times(user_id: String, mosque_id: String, prayer_times: PrayerTimesUpdate) ->
     Result<ApiResponse<String>, ServerFnError> {
     let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
+    let response_options = expect_context::<ResponseOptions>();
+
+    let user_id: RecordId = match user_id.parse() {
+        Ok(id) => id,
+        Err(e) => {
+            error!(?e, "Failed to parse user_id");
+            return Err(ServerFnError::ServerError("Failed to parse user_id".to_string()));
+        }
+    };
+
+    let check_user_id_response_result = db.query("SELECT id FROM $user_id WHERE ->handles->mosques CONTAINS $mosque_id")
+        .bind(("user_id", user_id))
+        .bind(("mosque_id", mosque_id.clone()))
+        .await;
+
+    if let Err(error) = check_user_id_response_result {
+        error!(?error, "Failed to fetch the data from db to check user_id");
+        return Err(ServerFnError::ServerError("Failed to fetch the data from db to check the user_id".to_string()));
+    }else {
+        let mut check_user_id_response = check_user_id_response_result?;
+        let check_user_id: Option<RecordId> = check_user_id_response.take(0)?;
+        match check_user_id {
+            Some(_) => (),
+            None => {
+                error!("The user trying to update mosque info is not an admin of that mosque");
+                response_options.set_status(StatusCode::UNAUTHORIZED);
+                return Ok(ApiResponse::error("The user trying to update mosque info is not an admin of that mosque".to_string()));
+            }
+        }
+        
+    }
 
     let mosque_id: RecordId = match mosque_id.parse() {
         Ok(id) => id,
@@ -179,4 +212,37 @@ pub async fn update_adhan_jamat_times(mosque_id: String, prayer_times: PrayerTim
         .await?;
     
     Ok(ApiResponse::data("Successfully updated jamat and adhan times".to_string()))
+}
+
+pub async fn add_admin(mosque_supervisor: String, mosque_admin: String, mosque_id: String) -> Result<ApiResponse<String>, ServerFnError> {
+    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
+    let response_options = expect_context::<ResponseOptions>();
+
+    let mosque_supervisor: RecordId = match mosque_supervisor.parse() {
+        Ok(id) => id,
+        Err(e) => {
+            error!(?e, "Failed to parse mosque_supervisor");
+            return Err(ServerFnError::ServerError("Failed to parse mosque_supervisor".to_string()));
+        }
+    };
+
+    let check_mosque_supervisor_id_response_result = db.select(mosque_supervisor)
+        .await;
+
+    if let Err(error) = check_mosque_supervisor_id_response_result {
+        error!(?error, "Failed to fetch the data from db to check mosque_supervisor");
+        return Err(ServerFnError::ServerError("Failed to fetch the data from db to check the mosque_supervisor".to_string()));
+    }else {
+        let check_mosque_supervisor_id: Option<User> = check_mosque_supervisor_id_response_result?;
+        match check_mosque_supervisor_id {
+            Some(_) => (),
+            None => {
+                error!("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor");
+                response_options.set_status(StatusCode::UNAUTHORIZED);
+                return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor".to_string()));
+            }
+        }
+    }
+
+    Ok(ApiResponse::data("Elevated the user to a mosque_admin".to_string()))
 }

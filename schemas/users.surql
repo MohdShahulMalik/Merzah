@@ -3,7 +3,7 @@ DEFINE TABLE IF NOT EXISTS users SCHEMAFULL;
 DEFINE FIELD IF NOT EXISTS password_hash ON users TYPE string
 	ASSERT string::len($value) > 0;
 DEFINE FIELD IF NOT EXISTS role ON users TYPE string
-	ASSERT $value IN ['app_admin', 'educator', 'regular']
+	ASSERT $value IN ['app_admin', 'mosque_supervisor', 'education_supervisor','educator', 'regular']
 	DEFAULT 'regular';
 DEFINE FIELD IF NOT EXISTS display_name ON users TYPE string;
 DEFINE FIELD IF NOT EXISTS created_at ON users TYPE datetime DEFAULT time::now();
