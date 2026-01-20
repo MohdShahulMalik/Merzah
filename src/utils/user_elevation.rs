@@ -8,7 +8,7 @@ pub async fn elevate_user(
     user_being_elevated_id: RecordId,
     elevation_degree: String,
     db: &Surreal<Client>
-) -> Result<()> {
+) -> Result<String> {
     // 1. Check if the requester (admin) exists
     let admin_check: Option<User> = db.select(app_admin)
         .await
@@ -38,12 +38,12 @@ pub async fn elevate_user(
         Err(UserElevationError::AlreadyElevated("mosque supervisor".to_string()))?
     }
 
-    user_being_elevated.elevate_to(elevation_degree);
+    user_being_elevated.elevate_to(elevation_degree.clone());
 
     db.update::<Option<User>>(user_being_elevated.id.clone()) // Clone ID so struct isn't partially moved
         .content(user_being_elevated)         // Move the struct
         .await
         .map_err(UserElevationError::DatabaseError)?;
     
-    Ok(())
+    Ok(format!("Elevated the user to {elevation_degree}"))
 }

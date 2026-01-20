@@ -214,6 +214,7 @@ pub async fn update_adhan_jamat_times(user_id: String, mosque_id: String, prayer
     Ok(ApiResponse::data("Successfully updated jamat and adhan times".to_string()))
 }
 
+#[server(input = Json, output = Json, prefix = "/mosque", endpoint = "add-admin")]
 pub async fn add_admin(
     mosque_supervisor: String,
     mosque_admin: String,
@@ -230,19 +231,41 @@ pub async fn add_admin(
         }
     };
 
+    let mosque_admin: RecordId = match mosque_admin.parse() {
+        Ok(id) => id,
+        Err(e) => {
+            error!(?e, "Failed to parse mosque_admin");
+            return Err(ServerFnError::ServerError("Failed to parse mosque_admin".to_string()));
+        }
+    };
+
+    let mosque_id: RecordId = match mosque_id.parse() {
+        Ok(id) => id,
+        Err(e) => {
+            error!(?e, "Failed to parse mosque_id");
+            return Err(ServerFnError::ServerError("Failed to parse mosque_id".to_string()));
+        }
+    };
+
     let check_mosque_supervisor_id_response_result = db.select(mosque_supervisor.clone())
         .await;
 
     if let Err(error) = check_mosque_supervisor_id_response_result {
         error!(?error, "Failed to fetch the data from db to check mosque_supervisor");
         return Err(ServerFnError::ServerError("Failed to fetch the data from db to check the mosque_supervisor".to_string()));
-    }else {
+    } else {
         let check_mosque_supervisor_id: Option<User> = check_mosque_supervisor_id_response_result?;
         match check_mosque_supervisor_id {
-            Some(_) => (),
+            Some(user) => {
+                if !user.is_mosque_supervisor() {
+                    error!("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor");
+                    response_options.set_status(StatusCode::UNAUTHORIZED);
+                    return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor".to_string()));
+                }
+            },
             None => {
-                error!("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor");
-                response_options.set_status(StatusCode::UNAUTHORIZED);
+                error!("The mosque supervisor trying to elevate permission doesn't exists");
+                response_options.set_status(StatusCode::NOT_FOUND);
                 return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor".to_string()));
             }
         }

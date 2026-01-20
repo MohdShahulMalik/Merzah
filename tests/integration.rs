@@ -3,3 +3,5 @@ mod common;
 mod auth;
 #[path = "integration/mosque.rs"]
 mod mosque;
+#[path = "integration/mosque_admin.rs"]
+mod mosque_admin;
