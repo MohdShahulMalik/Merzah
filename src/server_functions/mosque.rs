@@ -226,7 +226,7 @@ pub async fn add_admin(mosque_supervisor: String, mosque_admin: String, mosque_i
         }
     };
 
-    let check_mosque_supervisor_id_response_result = db.select(mosque_supervisor)
+    let check_mosque_supervisor_id_response_result = db.select(mosque_supervisor.clone())
         .await;
 
     if let Err(error) = check_mosque_supervisor_id_response_result {
@@ -241,6 +241,24 @@ pub async fn add_admin(mosque_supervisor: String, mosque_admin: String, mosque_i
                 response_options.set_status(StatusCode::UNAUTHORIZED);
                 return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor".to_string()));
             }
+        }
+    }
+
+    let relation_query = r#"
+        RELATE $mosque_admin -> handles -> $mosque
+            SET granted_by = $mosque_supervisor 
+    "#;
+    let elevation_result = db.query(relation_query)
+        .bind(("mosque_admin", mosque_admin))
+        .bind(("mosque", mosque_id))
+        .bind(("mosque_supervisor", mosque_supervisor))
+        .await;
+
+    match elevation_result {
+        Ok(_) => (),
+        Err(error) => {
+            error!(?error, "Failed to elevate the user to a mosque admin due to db error");
+            return Err(ServerFnError::ServerError("Failed to elevate the user to a mosque admin due to db error".to_string()))
         }
     }
 
