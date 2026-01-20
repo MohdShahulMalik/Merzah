@@ -214,7 +214,11 @@ pub async fn update_adhan_jamat_times(user_id: String, mosque_id: String, prayer
     Ok(ApiResponse::data("Successfully updated jamat and adhan times".to_string()))
 }
 
-pub async fn add_admin(mosque_supervisor: String, mosque_admin: String, mosque_id: String) -> Result<ApiResponse<String>, ServerFnError> {
+pub async fn add_admin(
+    mosque_supervisor: String,
+    mosque_admin: String,
+    mosque_id: String
+) -> Result<ApiResponse<String>, ServerFnError> {
     let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
     let response_options = expect_context::<ResponseOptions>();
 

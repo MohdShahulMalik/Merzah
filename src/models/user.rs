@@ -23,6 +23,28 @@ pub struct User {
 }
 
 #[cfg(feature = "ssr")]
+impl User {
+    pub fn is_admin(&self) -> bool {
+        self.role == "app_admin"
+    }
+
+    pub fn is_mosque_supervisor(&self) -> bool {
+        self.role == "mosque_supervisor"
+    }
+
+    pub fn elevate_to(&mut self, elevation_degree: String) {
+        self.role = elevation_degree;
+        self.refresh_updated_at();
+    }
+
+    pub fn refresh_updated_at(&mut self) {
+        use chrono::Utc;
+
+        self.updated_at = Utc::now().into();
+    }
+}
+
+#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UpdateUser {
     #[serde(skip_serializing_if = "Option::is_none")]
