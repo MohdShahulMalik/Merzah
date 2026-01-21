@@ -1,7 +1,7 @@
 use surrealdb::{engine::remote::ws::Client, RecordId, Surreal};
 use anyhow::Result;
 
-use crate::{errors::user_elevation::UserElevationError, models::user::User};
+use crate::{errors::user_elevation::UserElevationError, models::user::{UpdateUser, User}};
 
 pub async fn elevate_user(
     app_admin: RecordId,
@@ -41,7 +41,7 @@ pub async fn elevate_user(
     user_being_elevated.elevate_to(elevation_degree.clone());
 
     db.update::<Option<User>>(user_being_elevated.id.clone()) // Clone ID so struct isn't partially moved
-        .content(user_being_elevated)         // Move the struct
+        .merge::<UpdateUser>(user_being_elevated.into())      // Move the struct
         .await
         .map_err(UserElevationError::DatabaseError)?;
     

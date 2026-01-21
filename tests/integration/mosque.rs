@@ -24,6 +24,13 @@ struct FetchMosqueParams {
     lon: f64,
 }
 
+#[derive(Serialize)]
+struct AddAdminParam {
+    mosque_supervisor: String,
+    requested_user: String,
+    mosque_id: String,
+}
+
 #[tokio::test]
 async fn add_and_fetch_mosques() {
     let db = get_test_db().await;
@@ -128,6 +135,11 @@ async fn update_mosque_prayer_times() {
 
     // 3. Update Prayer Times
     let update_url = format!("{}/mosque/update-adhan-jamat-times", addr);
+
+    // TODO: Update the rest of the test
+     
+    // let app_admin = db.create("users")
+    //     .content(C)
     
     let fajr = NaiveTime::from_hms_opt(5, 30, 0).unwrap();
     let dhuhr = NaiveTime::from_hms_opt(13, 30, 0).unwrap();

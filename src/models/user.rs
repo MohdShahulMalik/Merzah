@@ -45,6 +45,28 @@ impl User {
 }
 
 #[cfg(feature = "ssr")]
+impl From<User> for UpdateUser {
+    fn from(user: User) -> Self {
+        UpdateUser {
+            display_name: Some(user.display_name),
+            role: Some(user.role),
+            updated_at: user.updated_at,
+        }
+    }
+}
+
+#[cfg(feature = "ssr")]
+impl From<&User> for UpdateUser {
+    fn from(user: &User) -> Self {
+        UpdateUser {
+            display_name: Some(user.display_name.clone()),
+            role: Some(user.role.clone()),
+            updated_at: user.updated_at.clone(),
+        }
+    }
+}
+
+#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UpdateUser {
     #[serde(skip_serializing_if = "Option::is_none")]

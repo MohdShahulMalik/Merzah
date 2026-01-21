@@ -167,30 +167,30 @@ pub async fn fetch_mosques_for_location(lat: f64, lon: f64) -> Result<ApiRespons
 }
 
 #[server(input = PatchJson, output = Json, prefix = "/mosque", endpoint = "update-adhan-jamat-times")]
-pub async fn update_adhan_jamat_times(user_id: String, mosque_id: String, prayer_times: PrayerTimesUpdate) ->
+pub async fn update_adhan_jamat_times(mosque_admin: String, mosque_id: String, prayer_times: PrayerTimesUpdate) ->
     Result<ApiResponse<String>, ServerFnError> {
     let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
     let response_options = expect_context::<ResponseOptions>();
 
-    let user_id: RecordId = match user_id.parse() {
+    let mosque_admin: RecordId = match mosque_admin.parse() {
         Ok(id) => id,
         Err(e) => {
-            error!(?e, "Failed to parse user_id");
-            return Err(ServerFnError::ServerError("Failed to parse user_id".to_string()));
+            error!(?e, "Failed to parse mosque_admin");
+            return Err(ServerFnError::ServerError("Failed to parse mosque_admin".to_string()));
         }
     };
 
-    let check_user_id_response_result = db.query("SELECT id FROM $user_id WHERE ->handles->mosques CONTAINS $mosque_id")
-        .bind(("user_id", user_id))
+    let check_user_id_response_result = db.query("SELECT id FROM $mosque_admin WHERE ->handles->mosques CONTAINS $mosque_id")
+        .bind(("mosque_admin", mosque_admin))
         .bind(("mosque_id", mosque_id.clone()))
         .await;
 
     if let Err(error) = check_user_id_response_result {
-        error!(?error, "Failed to fetch the data from db to check user_id");
-        return Err(ServerFnError::ServerError("Failed to fetch the data from db to check the user_id".to_string()));
+        error!(?error, "Failed to fetch the data from db to check mosque_admin");
+        return Err(ServerFnError::ServerError("Failed to fetch the data from db to check the mosque_admin".to_string()));
     }else {
         let mut check_user_id_response = check_user_id_response_result?;
-        let check_user_id: Option<RecordId> = check_user_id_response.take(0)?;
+        let check_user_id: Option<User> = check_user_id_response.take(0)?;
         match check_user_id {
             Some(_) => (),
             None => {
