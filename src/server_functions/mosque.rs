@@ -1,7 +1,7 @@
 use actix_web::http::StatusCode;
 use leptos::{prelude::{expect_context, ServerFnError}, server_fn::codec::{Json, PatchJson}, *};
 use leptos_actix::ResponseOptions;
-use crate::models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate, user::User};
+use crate::{models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate, user::User}, utils::user_elevation::elevate_user, errors::user_elevation::UserElevationError};
 
 #[cfg(feature = "ssr")]
 use tracing::error;
@@ -290,4 +290,66 @@ pub async fn add_admin(
     }
 
     Ok(ApiResponse::data("Elevated the user to a requested_user".to_string()))
+}
+
+#[server(input = Json, output = Json, prefix = "/mosque", endpoint = "elevate-user-to-mosque-supervisor")]
+pub async fn elevate_user_to_mosque_supervisor(app_admin_id: String, user_id: String) -> Result<ApiResponse<String>, ServerFnError> {
+    let response_option = expect_context::<ResponseOptions>();
+
+    let app_admin_id: RecordId = match app_admin_id.parse() {
+        Ok(id) => id,
+        Err(error) => {
+            error!(?error, "Failed to parse app_admin_id");
+            return Err(ServerFnError::ServerError("Failed to parse the app admin's id".to_string()))
+        }
+    };
+
+    let user_id: RecordId = match user_id.parse() {
+        Ok(id) => id,
+        Err(error) => {
+            error!(?error, "Failed to parse user_id");
+            response_option.set_status(StatusCode::NOT_FOUND);
+            return Err(ServerFnError::ServerError("Failed to parse the requested users's id".to_string()))
+        }
+    };
+
+    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
+
+    let result = elevate_user(app_admin_id, user_id, "mosque_supervisor".to_string(), &db).await;
+
+    let elevation_error = match result {
+        Ok(success_msg) => return Ok(ApiResponse::data(success_msg)),
+        Err(e) => e,
+    };
+
+    let (status, msg) = match elevation_error {
+        UserElevationError::Unauthorized => (
+            StatusCode::UNAUTHORIZED,
+            "You are not authorized to perform this action".to_string(),
+        ),
+        UserElevationError::AdminNotFound => (
+            StatusCode::UNAUTHORIZED,
+            "Admin user not found".to_string(),
+        ),
+        UserElevationError::TargetUserNotFound => (
+            StatusCode::NOT_FOUND,
+            "User to elevate not found".to_string(),
+        ),
+        UserElevationError::AlreadyElevated(role) => (
+            StatusCode::CONFLICT,
+            format!("User is already a {}", role),
+        ),
+        UserElevationError::SelfElevationNotAllowed => (
+            StatusCode::BAD_REQUEST,
+            "You cannot elevate yourself".to_string(),
+        ),
+        UserElevationError::DatabaseError(db_err) => {
+            error!(?db_err, "Database error during user elevation");
+            return Err(ServerFnError::ServerError("Internal server error during elevation".to_string()));
+        }
+    };
+
+    error!("User elevation failed: {}", msg);
+    response_option.set_status(status);
+    Ok(ApiResponse::error(msg))
 }

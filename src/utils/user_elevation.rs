@@ -1,5 +1,4 @@
 use surrealdb::{engine::remote::ws::Client, RecordId, Surreal};
-use anyhow::Result;
 
 use crate::{errors::user_elevation::UserElevationError, models::user::{UpdateUser, User}};
 
@@ -8,7 +7,7 @@ pub async fn elevate_user(
     user_being_elevated_id: RecordId,
     elevation_degree: String,
     db: &Surreal<Client>
-) -> Result<String> {
+) -> Result<String, UserElevationError> {
     // 1. Check if the requester (admin) exists
     let admin_check: Option<User> = db.select(app_admin)
         .await
@@ -17,7 +16,7 @@ pub async fn elevate_user(
     // 2. Verify admin privileges
     match admin_check {
         Some(admin) => {
-            if !admin.is_admin() {
+            if !admin.is_app_admin() {
                 Err(UserElevationError::Unauthorized)?;
             }
         },
@@ -31,7 +30,7 @@ pub async fn elevate_user(
 
     let mut user_being_elevated = match check_user_being_elevated {
         Some(user) => user,
-        None => return Err(UserElevationError::TargetUserNotFound.into()),
+        None => return Err(UserElevationError::TargetUserNotFound),
     };
 
     if user_being_elevated.is_mosque_supervisor() {

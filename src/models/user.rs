@@ -24,7 +24,7 @@ pub struct User {
 
 #[cfg(feature = "ssr")]
 impl User {
-    pub fn is_admin(&self) -> bool {
+    pub fn is_app_admin(&self) -> bool {
         self.role == "app_admin"
     }
 
