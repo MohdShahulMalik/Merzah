@@ -217,7 +217,7 @@ pub async fn update_adhan_jamat_times(user_id: String, mosque_id: String, prayer
 #[server(input = Json, output = Json, prefix = "/mosque", endpoint = "add-admin")]
 pub async fn add_admin(
     mosque_supervisor: String,
-    mosque_admin: String,
+    requested_user: String,
     mosque_id: String
 ) -> Result<ApiResponse<String>, ServerFnError> {
     let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
@@ -231,11 +231,11 @@ pub async fn add_admin(
         }
     };
 
-    let mosque_admin: RecordId = match mosque_admin.parse() {
+    let requested_user: RecordId = match requested_user.parse() {
         Ok(id) => id,
         Err(e) => {
-            error!(?e, "Failed to parse mosque_admin");
-            return Err(ServerFnError::ServerError("Failed to parse mosque_admin".to_string()));
+            error!(?e, "Failed to parse requested_user");
+            return Err(ServerFnError::ServerError("Failed to parse requested_user".to_string()));
         }
     };
 
@@ -272,11 +272,11 @@ pub async fn add_admin(
     }
 
     let relation_query = r#"
-        RELATE $mosque_admin -> handles -> $mosque
+        RELATE $requested_user -> handles -> $mosque
             SET granted_by = $mosque_supervisor 
     "#;
     let elevation_result = db.query(relation_query)
-        .bind(("mosque_admin", mosque_admin))
+        .bind(("requested_user", requested_user))
         .bind(("mosque", mosque_id))
         .bind(("mosque_supervisor", mosque_supervisor))
         .await;
@@ -289,5 +289,5 @@ pub async fn add_admin(
         }
     }
 
-    Ok(ApiResponse::data("Elevated the user to a mosque_admin".to_string()))
+    Ok(ApiResponse::data("Elevated the user to a requested_user".to_string()))
 }

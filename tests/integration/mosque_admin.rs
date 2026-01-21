@@ -15,7 +15,7 @@ use merzah::auth::custom_auth::register_user;
 #[derive(Serialize)]
 struct AddAdminPayload {
     mosque_supervisor: String,
-    mosque_admin: String,
+    requested_user: String,
     mosque_id: String,
 }
 
@@ -87,7 +87,7 @@ async fn test_add_admin_endpoint(
     let mosque_id = "mosques:test_mosque_1";
     let payload = AddAdminPayload {
         mosque_supervisor: supervisor.id.to_string(),
-        mosque_admin: new_admin.id.to_string(),
+        requested_user: new_admin.id.to_string(),
         mosque_id: mosque_id.to_string(),
     };
 
@@ -106,7 +106,7 @@ async fn test_add_admin_endpoint(
 
     if should_succeed {
         assert!(api_response.error.is_none(), "Expected success but got error: {:?}", api_response.error);
-        assert_eq!(api_response.data, Some("Elevated the user to a mosque_admin".to_string()));
+        assert_eq!(api_response.data, Some("Elevated the user to a requested_user".to_string()));
 
         // Verify Relation in DB
         let relation_query = "SELECT * FROM handles WHERE in = $user AND out = $mosque";
