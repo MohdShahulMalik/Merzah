@@ -2,13 +2,14 @@ use crate::common::get_test_db;
 use merzah::{
     models::{
         api_responses::{ApiResponse, MosqueApiResponse},
-        mosque::{PrayerTimes, PrayerTimesUpdate},
+        mosque::{PrayerTimes, PrayerTimesUpdate}, user::{CreateUser, User},
     },
     spawn_app,
 };
 use reqwest::Client;
 use serde::Serialize;
 use chrono::NaiveTime;
+use surrealdb::{Datetime, RecordId};
 
 #[derive(Serialize)]
 struct AddMosqueParams {
@@ -136,10 +137,19 @@ async fn update_mosque_prayer_times() {
     // 3. Update Prayer Times
     let update_url = format!("{}/mosque/update-adhan-jamat-times", addr);
 
-    // TODO: Update the rest of the test
-     
-    // let app_admin = db.create("users")
-    //     .content(C)
+    let app_admin: Option<User> = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", "admin")),
+            created_at: Datetime::default(),
+            display_name: "Admin".to_string(),
+            password_hash: "somehash".to_string(),
+            role: "app_admin".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create an app admin");
+
+    // TODO: Write rest of the test after creating a new endpoint for elevating to a mosque_supervisor
     
     let fajr = NaiveTime::from_hms_opt(5, 30, 0).unwrap();
     let dhuhr = NaiveTime::from_hms_opt(13, 30, 0).unwrap();
