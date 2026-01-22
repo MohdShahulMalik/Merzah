@@ -16,13 +16,13 @@ Transform Merzah into a real-time community hub by centralizing mosque activitie
 ### Phase 1: The Foundation (Favorites & Taxonomy)
 - **Database:**
     - Define `favorites` relation (`users` -> `mosques`).
-    - Define `event_categories` (Prayer, Education, Social, Professional, Fundraiser).
 - **Logic:** 
     - Implement "Toggle Favorite" API and frontend button.
 
 ### Phase 2: Event Core (CRUD & Recurrence)
 - **Database:**
     - Create `events` table with fields for title, description, category, and timing.
+    - Define `event_categories` (Prayer, Education, Social, Professional, Fundraiser) field.
     - Implement "Simple Recurrence": Daily, Weekly, Monthly.
 - **Admin UI:**
     - Dashboard for mosque admins to manage their event listings.
