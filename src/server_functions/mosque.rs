@@ -1,7 +1,7 @@
 use actix_web::http::StatusCode;
 use leptos::{prelude::{expect_context, ServerFnError}, server_fn::codec::{Json, PatchJson}, *};
 use leptos_actix::ResponseOptions;
-use crate::{models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate, user::User}, utils::user_elevation::elevate_user, errors::user_elevation::UserElevationError};
+use crate::{errors::user_elevation::UserElevationError, models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate, user::User}, utils::user_elevation::elevate_user};
 
 #[cfg(feature = "ssr")]
 use tracing::error;
@@ -167,8 +167,11 @@ pub async fn fetch_mosques_for_location(lat: f64, lon: f64) -> Result<ApiRespons
 }
 
 #[server(input = PatchJson, output = Json, prefix = "/mosque", endpoint = "update-adhan-jamat-times")]
-pub async fn update_adhan_jamat_times(mosque_admin: String, mosque_id: String, prayer_times: PrayerTimesUpdate) ->
-    Result<ApiResponse<String>, ServerFnError> {
+pub async fn update_adhan_jamat_times(
+    mosque_admin: String,
+    mosque_id: String,
+    prayer_times: PrayerTimesUpdate
+) -> Result<ApiResponse<String>, ServerFnError> {
     let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
     let response_options = expect_context::<ResponseOptions>();
 
@@ -180,26 +183,38 @@ pub async fn update_adhan_jamat_times(mosque_admin: String, mosque_id: String, p
         }
     };
 
-    let check_user_id_response_result = db.query("SELECT id FROM $mosque_admin WHERE ->handles->mosques CONTAINS $mosque_id")
-        .bind(("mosque_admin", mosque_admin))
-        .bind(("mosque_id", mosque_id.clone()))
-        .await;
+    let potential_app_admin_option: Option<User> = db.select(mosque_admin.clone()).await?;
+    let potential_app_admin: User = match potential_app_admin_option {
+        Some(admin) => admin,
+        None =>  {
+            error!("The mosque_admin trying to elevate the permission is not found");
+            response_options.set_status(StatusCode::UNAUTHORIZED);
+            return Ok(ApiResponse::error("The mosque admin was not found".to_string()));
+        }
+    };
 
-    if let Err(error) = check_user_id_response_result {
-        error!(?error, "Failed to fetch the data from db to check mosque_admin");
-        return Err(ServerFnError::ServerError("Failed to fetch the data from db to check the mosque_admin".to_string()));
-    }else {
-        let mut check_user_id_response = check_user_id_response_result?;
-        let check_user_id: Option<User> = check_user_id_response.take(0)?;
-        match check_user_id {
-            Some(_) => (),
-            None => {
-                error!("The user trying to update mosque info is not an admin of that mosque");
-                response_options.set_status(StatusCode::UNAUTHORIZED);
-                return Ok(ApiResponse::error("The user trying to update mosque info is not an admin of that mosque".to_string()));
+    if !potential_app_admin.is_app_admin() {
+        
+        let check_mosque_admin_id_result = db.query("SELECT id FROM $mosque_admin WHERE ->handles->mosques CONTAINS $mosque_id")
+            .bind(("mosque_admin", mosque_admin))
+            .bind(("mosque_id", mosque_id.clone()))
+            .await;
+
+        if let Err(error) = check_mosque_admin_id_result {
+            error!(?error, "Failed to fetch the data from db to check mosque_admin");
+            return Err(ServerFnError::ServerError("Failed to fetch the data from db to check the mosque_admin".to_string()));
+        }else {
+            let mut check_mosque_admin_id = check_mosque_admin_id_result?;
+            let check_user_id: Option<RecordId> = check_mosque_admin_id.take(0)?;
+            match check_user_id {
+                Some(_) => (),
+                None => {
+                    error!("The user trying to update mosque info is not an admin of that mosque");
+                    response_options.set_status(StatusCode::UNAUTHORIZED);
+                    return Ok(ApiResponse::error("The user trying to update mosque info is not an admin of that mosque".to_string()));
+                }
             }
         }
-        
     }
 
     let mosque_id: RecordId = match mosque_id.parse() {
@@ -253,14 +268,16 @@ pub async fn add_admin(
     if let Err(error) = check_mosque_supervisor_id_response_result {
         error!(?error, "Failed to fetch the data from db to check mosque_supervisor");
         return Err(ServerFnError::ServerError("Failed to fetch the data from db to check the mosque_supervisor".to_string()));
+
     } else {
         let check_mosque_supervisor_id: Option<User> = check_mosque_supervisor_id_response_result?;
         match check_mosque_supervisor_id {
             Some(user) => {
-                if !user.is_mosque_supervisor() {
-                    error!("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor");
+                if !user.is_mosque_supervisor() && !user.is_app_admin(){
+
+                    error!("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin");
                     response_options.set_status(StatusCode::UNAUTHORIZED);
-                    return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor".to_string()));
+                    return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin".to_string()));
                 }
             },
             None => {

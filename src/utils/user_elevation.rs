@@ -8,12 +8,11 @@ pub async fn elevate_user(
     elevation_degree: String,
     db: &Surreal<Client>
 ) -> Result<String, UserElevationError> {
-    // 1. Check if the requester (admin) exists
+
     let admin_check: Option<User> = db.select(app_admin)
         .await
         .map_err(UserElevationError::DatabaseError)?;
 
-    // 2. Verify admin privileges
     match admin_check {
         Some(admin) => {
             if !admin.is_app_admin() {

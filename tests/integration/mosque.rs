@@ -2,7 +2,7 @@ use crate::common::get_test_db;
 use merzah::{
     models::{
         api_responses::{ApiResponse, MosqueApiResponse},
-        mosque::{PrayerTimes, PrayerTimesUpdate}, user::{CreateUser, User},
+        mosque::{PrayerTimes, PrayerTimesUpdate}, user::User,
     },
     spawn_app,
 };
@@ -92,6 +92,19 @@ async fn add_and_fetch_mosques() {
     }
 }
 
+#[derive(Serialize)]
+struct ElevateSupervisorParams {
+    app_admin_id: String,
+    user_id: String,
+}
+
+#[derive(Serialize)]
+struct UpdatePrayerTimesParams {
+    mosque_admin: String,
+    mosque_id: String,
+    prayer_times: PrayerTimesUpdate,
+}
+
 #[tokio::test]
 async fn update_mosque_prayer_times() {
     let db = get_test_db().await;
@@ -134,10 +147,8 @@ async fn update_mosque_prayer_times() {
     let mosques = api_response.data.expect("No data returned");
     let mosque_id = mosques.first().expect("No mosques found").id.clone();
 
-    // 3. Update Prayer Times
-    let update_url = format!("{}/mosque/update-adhan-jamat-times", addr);
 
-    let app_admin: Option<User> = db.create("users")
+    let app_admin: User = db.create("users")
         .content(User {
             id: RecordId::from(("users", "admin")),
             created_at: Datetime::default(),
@@ -147,10 +158,81 @@ async fn update_mosque_prayer_times() {
             updated_at: Datetime::default(),
         })
         .await
-        .expect("Failed to create an app admin");
+        .expect("Failed to create an app admin") 
+        .expect("The user doesn't exists");
 
-    // TODO: Write rest of the test after creating a new endpoint for elevating to a mosque_supervisor
-    
+    let supervisor_user: User = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", "supervisor")),
+            created_at: Datetime::default(),
+            display_name: "Supervisor".to_string(),
+            password_hash: "somehash".to_string(),
+            role: "regular".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create supervisor user")
+        .expect("The user doesn't exists");
+
+    let mosque_admin_user: User = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", "mosque_admin")),
+            created_at: Datetime::default(),
+            display_name: "Mosque Admin".to_string(),
+            password_hash: "somehash".to_string(),
+            role: "regular".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create mosque admin user")
+        .expect("The user doesn't exists");
+
+    // 3. Elevate supervisor
+    let elevate_supervisor_url = format!("{}/mosque/elevate-user-to-mosque-supervisor", addr);
+    let elevate_params = ElevateSupervisorParams {
+        app_admin_id: app_admin.id.to_string(),
+        user_id: supervisor_user.id.to_string(),
+    };
+
+    let response = client.post(&elevate_supervisor_url)
+        .json(&elevate_params)
+        .send()
+        .await
+        .expect("Failed to execute elevate-user-to-mosque-supervisor");
+
+    if !response.status().is_success() {
+        let status = response.status();
+        let text = response.text().await.unwrap_or_default();
+        panic!("Elevate supervisor failed. Status: {}, Body: {}", status, text);
+    }
+    let elevate_response = response.json::<ApiResponse<String>>().await.expect("Failed to deserialize elevate response");
+    assert_eq!(elevate_response.data, Some("Elevated the user to mosque_supervisor".to_string()));
+
+    // 4. Assign mosque admin
+    let add_admin_url = format!("{}/mosque/add-admin", addr);
+    let add_admin_params = AddAdminParam {
+        mosque_supervisor: supervisor_user.id.to_string(),
+        requested_user: mosque_admin_user.id.to_string(),
+        mosque_id: mosque_id.to_string(),
+    };
+
+    let response = client.post(&add_admin_url)
+        .json(&add_admin_params)
+        .send()
+        .await
+        .expect("Failed to execute add-admin");
+
+    if !response.status().is_success() {
+        let status = response.status();
+        let text = response.text().await.unwrap_or_default();
+        panic!("Add admin failed. Status: {}, Body: {}", status, text);
+    }
+    let add_admin_response = response.json::<ApiResponse<String>>().await.expect("Failed to deserialize add admin response");
+    assert_eq!(add_admin_response.data, Some("Elevated the user to a requested_user".to_string()));
+
+    // 5. Update Prayer Times
+    let update_url = format!("{}/mosque/update-adhan-jamat-times", addr);
+
     let fajr = NaiveTime::from_hms_opt(5, 30, 0).unwrap();
     let dhuhr = NaiveTime::from_hms_opt(13, 30, 0).unwrap();
     let asr = NaiveTime::from_hms_opt(17, 0, 0).unwrap();
@@ -162,13 +244,14 @@ async fn update_mosque_prayer_times() {
         fajr, dhuhr, asr, maghrib, isha, jummah
     };
 
-    let update_params = serde_json::json!({
-        "mosque_id": mosque_id,
-        "prayer_times": PrayerTimesUpdate {
+    let update_params = UpdatePrayerTimesParams {
+        mosque_admin: mosque_admin_user.id.to_string(),
+        mosque_id: mosque_id.to_string(),
+        prayer_times: PrayerTimesUpdate {
             adhan_times: Some(new_times.clone()),
             jamat_times: Some(new_times),
-        }
-    });
+        },
+    };
 
     let response = client.patch(&update_url)
         .json(&update_params)
