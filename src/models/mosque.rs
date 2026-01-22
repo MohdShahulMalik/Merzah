@@ -39,8 +39,8 @@ pub struct MosqueRecord {
     pub name: Option<String>,
     pub street: Option<String>,
     pub city: Option<String>,
-    pub adhan_times: PrayerTimes,
-    pub jamat_times: PrayerTimes,
+    pub adhan_times: Option<PrayerTimes>,
+    pub jamat_times: Option<PrayerTimes>,
 }
 
 #[cfg(feature = "ssr")]

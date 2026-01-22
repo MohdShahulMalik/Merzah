@@ -175,6 +175,11 @@ pub async fn update_adhan_jamat_times(
     let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
     let response_options = expect_context::<ResponseOptions>();
 
+    let mosque_id: RecordId = match mosque_id.parse() {
+        Ok(id) => id,
+        Err(e) => return Err(ServerFnError::ServerError(format!("Invalid mosque ID: {}", e))),
+    };
+
     let mosque_admin: RecordId = match mosque_admin.parse() {
         Ok(id) => id,
         Err(e) => {
@@ -195,18 +200,18 @@ pub async fn update_adhan_jamat_times(
 
     if !potential_app_admin.is_app_admin() {
         
-        let check_mosque_admin_id_result = db.query("SELECT id FROM $mosque_admin WHERE ->handles->mosques CONTAINS $mosque_id")
+        let is_admin_query_result = db.query("SELECT * FROM $mosque_admin->handles->mosques WHERE id = $mosque_id")
             .bind(("mosque_admin", mosque_admin))
             .bind(("mosque_id", mosque_id.clone()))
             .await;
 
-        if let Err(error) = check_mosque_admin_id_result {
+        if let Err(error) = is_admin_query_result {
             error!(?error, "Failed to fetch the data from db to check mosque_admin");
             return Err(ServerFnError::ServerError("Failed to fetch the data from db to check the mosque_admin".to_string()));
         }else {
-            let mut check_mosque_admin_id = check_mosque_admin_id_result?;
-            let check_user_id: Option<RecordId> = check_mosque_admin_id.take(0)?;
-            match check_user_id {
+            let mut is_admin_query_response = is_admin_query_result?;
+            let is_admin_if_mosque_exists: Option<MosqueRecord> = is_admin_query_response.take(0)?;
+            match is_admin_if_mosque_exists {
                 Some(_) => (),
                 None => {
                     error!("The user trying to update mosque info is not an admin of that mosque");
@@ -217,10 +222,6 @@ pub async fn update_adhan_jamat_times(
         }
     }
 
-    let mosque_id: RecordId = match mosque_id.parse() {
-        Ok(id) => id,
-        Err(e) => return Err(ServerFnError::ServerError(format!("Invalid mosque ID: {}", e))),
-    };
 
     db.update::<Option<MosqueRecord>>(mosque_id)
         .merge(prayer_times)
