@@ -7,13 +7,9 @@ use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData};
 use garde::Validate;
 
 #[cfg(feature = "ssr")]
-use actix_web::{http::StatusCode, web, HttpRequest};
+use actix_web::{http::StatusCode, HttpRequest};
 #[cfg(feature = "ssr")]
-use leptos::prelude::expect_context;
-#[cfg(feature = "ssr")]
-use leptos_actix::ResponseOptions;
-#[cfg(feature = "ssr")]
-use surrealdb::{Surreal, engine::remote::ws::Client};
+use crate::utils::server_context::get_server_context;
 #[cfg(feature = "ssr")]
 use tracing::error;
 #[cfg(feature = "ssr")]
@@ -25,8 +21,10 @@ use crate::errors::auth::AuthError;
 
 #[server(input=Json, prefix = "/auth", endpoint = "register")]
 pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>, ServerFnError> {
-    let response_option = expect_context::<ResponseOptions>();
-    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
+    let (response_option, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
 
     let validation_result = form.validate();
 
@@ -79,8 +77,10 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
 pub async fn login(
     form: LoginFormData,
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let response_option = expect_context::<ResponseOptions>();
-    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
+    let (response_option, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
 
     let user_id = match authenticate(form, &db).await {
         Ok(id) => id,
@@ -135,7 +135,10 @@ pub async fn login(
 
 #[server(input=DeleteUrl, output=Json, prefix="/auth", endpoint="logout")]
 pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
-    let response_option = expect_context::<ResponseOptions>();
+    let (response_option, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
 
     let req = match leptos_actix::extract::<HttpRequest>().await {
         Ok(req) => req,
@@ -151,15 +154,6 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
         None => {
             response_option.set_status(StatusCode::UNAUTHORIZED);
             return Ok(ApiResponse::error("You are not logged in".to_string()));
-        }
-    };
-
-    let db = match leptos_actix::extract::<web::Data<Surreal<Client>>>().await {
-        Ok(db) => db,
-        Err(e) => {
-            error!(?e, "Failed to extract database connection");
-            response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-            return Ok(ApiResponse::error("Internal server error due to not getting db connection".to_string()));
         }
     };
 

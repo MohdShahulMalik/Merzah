@@ -1,14 +1,11 @@
 use actix_web::http::StatusCode;
-use leptos::{prelude::{expect_context, ServerFnError}, server_fn::codec::{Json, PatchJson}, *};
-use leptos_actix::ResponseOptions;
-use crate::{errors::user_elevation::UserElevationError, models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate, user::User}, utils::user_elevation::elevate_user};
+use leptos::{prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, *};
+use crate::{errors::user_elevation::UserElevationError, models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate, user::User}, utils::{user_elevation::elevate_user, parsing::parse_record_id, server_context::get_server_context}};
 
 #[cfg(feature = "ssr")]
 use tracing::error;
 #[cfg(feature = "ssr")]
-use surrealdb::{RecordId, Surreal, engine::remote::ws::Client, sql::Geometry};
-#[cfg(feature = "ssr")]
-use actix_web::web;
+use surrealdb::{RecordId, sql::Geometry};
 #[cfg(feature = "ssr")]
 use crate::models::mosque::{MosqueFromOverpass, OverpassResponse, MosqueSearchResult, MosqueRecord};
 
@@ -19,7 +16,10 @@ pub async fn add_mosques_of_region(
     north: f64,
     east: f64,
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
+    let (_, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
 
     let query = format!(
         r#"[out:json][timeout:30];
@@ -144,7 +144,10 @@ pub async fn add_mosques_of_region(
 
 #[server(input = Json, output = Json, prefix = "/mosque", endpoint = "fetch-mosques-for-location")]
 pub async fn fetch_mosques_for_location(lat: f64, lon: f64) -> Result<ApiResponse<Vec<MosqueApiResponse>>, ServerFnError> {
-    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
+    let (_, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(ApiResponse { data: None, error: e.error }),
+    };
     let point = Geometry::Point((lon, lat).into());
     
     let radius_in_meters = 5000;
@@ -172,20 +175,19 @@ pub async fn update_adhan_jamat_times(
     mosque_id: String,
     prayer_times: PrayerTimesUpdate
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
-    let response_options = expect_context::<ResponseOptions>();
-
-    let mosque_id: RecordId = match mosque_id.parse() {
-        Ok(id) => id,
-        Err(e) => return Err(ServerFnError::ServerError(format!("Invalid mosque ID: {}", e))),
+    let (response_options, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
     };
 
-    let mosque_admin: RecordId = match mosque_admin.parse() {
+    let mosque_id: RecordId = match parse_record_id(&mosque_id, "mosque_id") {
         Ok(id) => id,
-        Err(e) => {
-            error!(?e, "Failed to parse mosque_admin");
-            return Err(ServerFnError::ServerError("Failed to parse mosque_admin".to_string()));
-        }
+        Err(e) => return Ok(e),
+    };
+
+    let mosque_admin: RecordId = match parse_record_id(&mosque_admin, "mosque_admin") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
     };
 
     let potential_app_admin_option: Option<User> = db.select(mosque_admin.clone()).await?;
@@ -236,31 +238,24 @@ pub async fn add_admin(
     requested_user: String,
     mosque_id: String
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
-    let response_options = expect_context::<ResponseOptions>();
-
-    let mosque_supervisor: RecordId = match mosque_supervisor.parse() {
-        Ok(id) => id,
-        Err(e) => {
-            error!(?e, "Failed to parse mosque_supervisor");
-            return Err(ServerFnError::ServerError("Failed to parse mosque_supervisor".to_string()));
-        }
+    let (response_options, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
     };
 
-    let requested_user: RecordId = match requested_user.parse() {
+    let mosque_supervisor: RecordId = match parse_record_id(&mosque_supervisor, "mosque_supervisor") {
         Ok(id) => id,
-        Err(e) => {
-            error!(?e, "Failed to parse requested_user");
-            return Err(ServerFnError::ServerError("Failed to parse requested_user".to_string()));
-        }
+        Err(e) => return Ok(e),
     };
 
-    let mosque_id: RecordId = match mosque_id.parse() {
+    let requested_user: RecordId = match parse_record_id(&requested_user, "requested_user") {
         Ok(id) => id,
-        Err(e) => {
-            error!(?e, "Failed to parse mosque_id");
-            return Err(ServerFnError::ServerError("Failed to parse mosque_id".to_string()));
-        }
+        Err(e) => return Ok(e),
+    };
+
+    let mosque_id: RecordId = match parse_record_id(&mosque_id, "mosque_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
     };
 
     let check_mosque_supervisor_id_response_result = db.select(mosque_supervisor.clone())
@@ -312,26 +307,20 @@ pub async fn add_admin(
 
 #[server(input = Json, output = Json, prefix = "/mosque", endpoint = "elevate-user-to-mosque-supervisor")]
 pub async fn elevate_user_to_mosque_supervisor(app_admin_id: String, user_id: String) -> Result<ApiResponse<String>, ServerFnError> {
-    let response_option = expect_context::<ResponseOptions>();
-
-    let app_admin_id: RecordId = match app_admin_id.parse() {
-        Ok(id) => id,
-        Err(error) => {
-            error!(?error, "Failed to parse app_admin_id");
-            return Err(ServerFnError::ServerError("Failed to parse the app admin's id".to_string()))
-        }
+    let (response_option, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
     };
 
-    let user_id: RecordId = match user_id.parse() {
+    let app_admin_id: RecordId = match parse_record_id(&app_admin_id, "app_admin_id") {
         Ok(id) => id,
-        Err(error) => {
-            error!(?error, "Failed to parse user_id");
-            response_option.set_status(StatusCode::NOT_FOUND);
-            return Err(ServerFnError::ServerError("Failed to parse the requested users's id".to_string()))
-        }
+        Err(e) => return Ok(e),
     };
 
-    let db = leptos_actix::extract::<web::Data<Surreal<Client>>>().await?;
+    let user_id: RecordId = match parse_record_id(&user_id, "user_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
 
     let result = elevate_user(app_admin_id, user_id, "mosque_supervisor".to_string(), &db).await;
 
