@@ -360,3 +360,45 @@ pub async fn elevate_user_to_mosque_supervisor(app_admin_id: String, user_id: St
     response_option.set_status(status);
     Ok(ApiResponse::error(msg))
 }
+
+#[server(input = Json, output = Json, prefix = "/mosque", endpoint = "add-favorite")]
+pub async fn add_favorite(
+    user_id: String,
+    mosque_id: String,
+) -> Result<ApiResponse<String>, ServerFnError>{
+    let user_id = match parse_record_id(&user_id, "user_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    let mosque_id = match parse_record_id(&mosque_id, "mosque_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    let (response_options, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+
+    let favorite_query = r#"
+        RELATE $user_id -> favorited -> $mosque_id;
+        "#;
+
+    let result = db.query(favorite_query)
+        .bind(("user_id", user_id))
+        .bind(("mosque_id", mosque_id))
+        .await;
+
+    match result {
+        Ok(_) => (),
+        Err(e) => {
+            error!(?e, "Database error");
+            response_options.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse::error("Failed to favorite a mosque".to_string()));
+        }
+    }
+    
+    Ok(ApiResponse::data("Successfully added the mosque to user's favorite list".to_string()))
+}
+
