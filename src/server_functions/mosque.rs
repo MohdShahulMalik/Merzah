@@ -12,7 +12,7 @@ use crate::{
 use actix_web::http::StatusCode;
 use leptos::{
     prelude::ServerFnError,
-    server_fn::codec::{Json, PatchJson},
+    server_fn::codec::{Json, PatchJson, DeleteUrl},
     *,
 };
 
@@ -462,4 +462,43 @@ pub async fn add_favorite(
     Ok(ApiResponse::data(
         "Successfully added the mosque to user's favorite list".to_string(),
     ))
+}
+
+#[server(input = DeleteUrl, output = Json, prefix = "/mosque", endpoint = "/remove-favorite")]
+pub async fn remove_favorite(
+    user_id: String,
+    mosque_id: String,
+) -> Result<ApiResponse<String>, ServerFnError>{
+    let user_id = match parse_record_id(&user_id, "user_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    let mosque_id = match parse_record_id(&mosque_id, "mosque_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    let (response_options, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+
+    let remove_favorite_query = "DELETE favorited WHERE in = $user_id AND out = $mosque_id";
+    
+    let result = db.query(remove_favorite_query)
+        .bind(("user_id", user_id))
+        .bind(("mosque_id", mosque_id))
+        .await;
+
+    match result {
+        Ok(_) => (),
+        Err(e) => {
+            error!(?e, "Failed to remove favorited mosque for the user");
+            response_options.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse::error("Failed to remove favorited mosque for the user".to_string()))
+        }
+    }
+
+    Ok(ApiResponse::data("Successfully removed the mosque from favorite list of the user".to_string()))    
 }
