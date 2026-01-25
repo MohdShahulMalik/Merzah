@@ -32,6 +32,24 @@ struct AddAdminParam {
     mosque_id: String,
 }
 
+#[derive(Serialize)]
+struct FavoriteParams {
+    user_id: String,
+    mosque_id: String,
+}
+
+#[derive(serde::Deserialize)]
+struct Favorited {
+    #[allow(dead_code)]
+    id: RecordId,
+    #[serde(rename = "in")]
+    #[allow(dead_code)]
+    user: RecordId,
+    #[serde(rename = "out")]
+    #[allow(dead_code)]
+    mosque: RecordId,
+}
+
 #[tokio::test]
 async fn add_and_fetch_mosques() {
     let db = get_test_db().await;
@@ -267,4 +285,120 @@ async fn update_mosque_prayer_times() {
     
     let update_response = response.json::<ApiResponse<String>>().await.expect("Failed to deserialize update response");
     assert_eq!(update_response.data, Some("Successfully updated jamat and adhan times".to_string()));
+}
+
+#[tokio::test]
+async fn favorite_and_unfavorite_mosques() {
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let client = Client::new();
+
+    // 1. Add Mosques (Mandawali, Delhi area - high density)
+    let add_url = format!("{}/mosques/add-mosque-of-region", addr);
+    let add_params = AddMosqueParams {
+        south: 28.61,
+        west: 77.28,
+        north: 28.64,
+        east: 77.31,
+    };
+    client.post(&add_url).json(&add_params).send().await.expect("Failed to add mosques");
+
+    // 2. Setup User
+    let user: User = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", "fan_user")),
+            created_at: Datetime::default(),
+            display_name: "Fan User".to_string(),
+            password_hash: "hash".to_string(),
+            role: "regular".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create user")
+        .expect("User not returned");
+
+    // 3. Fetch Mosques
+    let fetch_url = format!("{}/mosque/fetch-mosques-for-location", addr);
+    let fetch_params = FetchMosqueParams {
+        lat: 28.625,
+        lon: 77.295,
+    };
+    let response = client.post(&fetch_url)
+        .json(&fetch_params)
+        .send()
+        .await
+        .expect("Failed to fetch");
+
+    let api_response = response.json::<ApiResponse<Vec<MosqueApiResponse>>>().await.expect("Failed to deserialize");
+    let mosques = api_response.data.expect("No mosques data");
+    
+    assert!(mosques.len() >= 3, "Need at least 3 mosques for this test");
+
+    // 4. Favorite first 3 mosques
+    let add_fav_url = format!("{}/mosque/add-favorite", addr);
+    let mosques_to_fav = &mosques[0..3];
+    
+    for mosque in mosques_to_fav {
+        let params = FavoriteParams {
+            user_id: user.id.to_string(),
+            mosque_id: mosque.id.to_string(),
+        };
+        let res = client.post(&add_fav_url)
+            .json(&params)
+            .send()
+            .await
+            .expect("Failed to send fav");
+
+        if !res.status().is_success() {
+             let text = res.text().await.unwrap_or_default();
+             panic!("Failed to favorite mosque {}: {}", mosque.id, text);
+        }
+    }
+
+    // Verify favorites exist in DB
+    // Querying the 'favorited' relation table
+    let relations: Vec<Favorited> = db.query("SELECT * FROM favorited WHERE in = $user")
+         .bind(("user", user.id.clone()))
+         .await
+         .expect("Query failed")
+         .take(0)
+         .expect("Take failed");
+    assert_eq!(relations.len(), 3, "Should have 3 favorites");
+
+    // 5. Remove 2 favorites
+    // Note: The server function is defined with endpoint="/remove-favorite"
+    // Leptos/Actix usually normalize this to /mosque/remove-favorite
+    let remove_fav_base_url = format!("{}/mosque/remove-favorite", addr); 
+    
+    let mosques_to_remove = &mosques[0..2];
+    for mosque in mosques_to_remove {
+        // DeleteUrl expects params in query string
+        let params = [
+            ("user_id", user.id.to_string()),
+            ("mosque_id", mosque.id.to_string()),
+        ];
+        
+        let res = client.delete(&remove_fav_base_url)
+            .query(&params)
+            .send()
+            .await
+            .expect("Failed to send unfav");
+
+        if !res.status().is_success() {
+            let status = res.status();
+            let text = res.text().await.unwrap_or_default();
+            panic!("Remove favorite failed. Status: {}, Body: {}", status, text);
+        }
+
+        assert!(res.status().is_success(), "Failed to remove favorite for mosque {}", mosque.id);
+    }
+
+    // 6. Verify removals
+    let relations_after: Vec<Favorited> = db.query("SELECT * FROM favorited WHERE in = $user")
+         .bind(("user", user.id.clone()))
+         .await
+         .expect("Query failed")
+         .take(0)
+         .expect("Take failed");
+    assert_eq!(relations_after.len(), 1, "Should have 1 favorite left");
 }

@@ -1,20 +1,20 @@
+#[cfg(feature = "ssr")]
 use crate::{
     errors::user_elevation::UserElevationError,
-    models::{
-        api_responses::{ApiResponse, MosqueApiResponse},
-        mosque::PrayerTimesUpdate,
-        user::User,
-    },
+    models::user::User,
     utils::{
         parsing::parse_record_id, server_context::get_server_context, user_elevation::elevate_user,
     },
 };
+#[cfg(feature = "ssr")]
 use actix_web::http::StatusCode;
 use leptos::{
     prelude::ServerFnError,
     server_fn::codec::{Json, PatchJson, DeleteUrl},
     *,
 };
+
+use crate::models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate};
 
 #[cfg(feature = "ssr")]
 use crate::models::mosque::{

@@ -55,7 +55,7 @@ async fn create_user(
 }
 
 #[rstest]
-#[case::success("mosque_supervisor", true, None)]
+#[case::is_supervisor("mosque_supervisor", true, None)]
 #[case::not_supervisor("regular", false, Some("not a mosque_supervisor"))]
 #[tokio::test]
 async fn test_add_admin_endpoint(

@@ -3,5 +3,5 @@ mod common;
 mod auth;
 #[path = "unit/session.rs"]
 mod session;
-#[path = "unit/mosque_admin.rs"]
-mod mosque_admin;
+#[path = "unit/user_elevation.rs"]
+mod user_elevation;
