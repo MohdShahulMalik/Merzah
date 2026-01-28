@@ -1,30 +1,51 @@
-use serde::{ Deserialize, Serialize, Serializer, Deserializer };
-use chrono::{ DateTime, NaiveDateTime, TimeZone, Utc };
+use serde::{Deserialize, Serialize};
+use chrono::{DateTime, FixedOffset};
+#[cfg(feature = "ssr")]
+use surrealdb::RecordId;
 
+use crate::models::mosque::MosqueData;
+
+// TODO: Add relevant only categories please
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum EventCategory {
+    Prayer,
+    Education,
+    Social,
+    Professional,
+    Fundraiser
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Event {
+    pub title: String,
+    pub description: String,
+    pub category: EventCategory,
+    pub date: DateTime<FixedOffset>,
+    pub mosque: MosqueData,
+    pub speaker: Option<String>,
+}
+
+// TODO: Add data validation please
+#[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Events {
-    title: String,
-    description: String,
-    category: String,
-    #[serde(
-        serialize_with = "to_surreal_datetime",
-        deserialize_with = "from_surreal_datetime"
-    )]
-    date: NaiveDateTime,
+pub struct CreateEvent {
+    pub title: String,
+    pub description: String,
+    pub category: EventCategory,
+    pub date: DateTime<FixedOffset>,
+    pub mosque: RecordId,
+    pub speaker: Option<String>,
 }
 
-fn to_surreal_datetime<S>(date: &NaiveDateTime, s: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    let datetime = Utc.from_utc_datetime(date);
-    datetime.serialize(s)
-}
-
-fn from_surreal_datetime<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let dt = DateTime::<Utc>::deserialize(deserializer)?;
-    Ok(dt.naive_utc())
+// TODO: Add data validation please
+#[cfg(feature = "ssr")]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UpdateEvent {
+    pub title: Option<String>,
+    pub description: Option<String>,
+    pub category: Option<EventCategory>,
+    pub date: Option<DateTime<FixedOffset>>,
+    pub mosque: Option<RecordId>,
+    pub speaker: Option<String>,
 }
