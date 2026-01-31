@@ -18,6 +18,7 @@ pub enum EventCategory {
 
 #[derive(Debug, Deserialize)]
 pub struct Event {
+    pub id: String,
     pub title: String,
     pub description: String,
     pub category: EventCategory,
@@ -28,7 +29,7 @@ pub struct Event {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Validate, Deserialize, Serialize)]
+#[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct CreateEvent {
     #[garde(length(min = 2, max = 100))]
     pub title: String,

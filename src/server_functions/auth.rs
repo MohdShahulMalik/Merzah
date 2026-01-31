@@ -9,7 +9,7 @@ use garde::Validate;
 #[cfg(feature = "ssr")]
 use actix_web::{http::StatusCode, HttpRequest};
 #[cfg(feature = "ssr")]
-use crate::utils::server_context::get_server_context;
+use crate::utils::ssr::get_server_context;
 #[cfg(feature = "ssr")]
 use tracing::error;
 #[cfg(feature = "ssr")]

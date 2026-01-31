@@ -16,3 +16,5 @@
         .await
         .expect("failed to fetch");```
 
+## Intructions When Asked A Question
+ - DON'T go and just start changing or writting code in the codebase, use every other tool that the write tool and just answer the question properly!

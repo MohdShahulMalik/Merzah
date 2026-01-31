@@ -3,7 +3,7 @@ use crate::{
     errors::user_elevation::UserElevationError,
     models::user::User,
     utils::{
-        parsing::parse_record_id, server_context::get_server_context, user_elevation::elevate_user,
+        parsing::parse_record_id, ssr::get_server_context, user_elevation::elevate_user,
     },
 };
 #[cfg(feature = "ssr")]
@@ -162,7 +162,7 @@ pub async fn add_mosques_of_region(
     })
 }
 
-#[server(input = Json, output = Json, prefix = "/mosque", endpoint = "fetch-mosques-for-location")]
+#[server(input = Json, output = Json, prefix = "/mosques", endpoint = "fetch-mosques-for-location")]
 pub async fn fetch_mosques_for_location(
     lat: f64,
     lon: f64,
@@ -198,7 +198,7 @@ pub async fn fetch_mosques_for_location(
     })
 }
 
-#[server(input = PatchJson, output = Json, prefix = "/mosque", endpoint = "update-adhan-jamat-times")]
+#[server(input = PatchJson, output = Json, prefix = "/mosques", endpoint = "update-adhan-jamat-times")]
 pub async fn update_adhan_jamat_times(
     mosque_admin: String,
     mosque_id: String,
@@ -273,7 +273,7 @@ pub async fn update_adhan_jamat_times(
     ))
 }
 
-#[server(input = Json, output = Json, prefix = "/mosque", endpoint = "add-admin")]
+#[server(input = Json, output = Json, prefix = "/mosques", endpoint = "add-admin")]
 pub async fn add_admin(
     mosque_supervisor: String,
     requested_user: String,
@@ -359,7 +359,7 @@ pub async fn add_admin(
     ))
 }
 
-#[server(input = Json, output = Json, prefix = "/mosque", endpoint = "elevate-user-to-mosque-supervisor")]
+#[server(input = Json, output = Json, prefix = "/mosques", endpoint = "elevate-user-to-mosque-supervisor")]
 pub async fn elevate_user_to_mosque_supervisor(
     app_admin_id: String,
     user_id: String,
@@ -418,7 +418,7 @@ pub async fn elevate_user_to_mosque_supervisor(
     Ok(ApiResponse::error(msg))
 }
 
-#[server(input = Json, output = Json, prefix = "/mosque", endpoint = "add-favorite")]
+#[server(input = Json, output = Json, prefix = "/mosques", endpoint = "add-favorite")]
 pub async fn add_favorite(
     user_id: String,
     mosque_id: String,
@@ -464,7 +464,7 @@ pub async fn add_favorite(
     ))
 }
 
-#[server(input = DeleteUrl, output = Json, prefix = "/mosque", endpoint = "/remove-favorite")]
+#[server(input = DeleteUrl, output = Json, prefix = "/mosques", endpoint = "/remove-favorite")]
 pub async fn remove_favorite(
     user_id: String,
     mosque_id: String,

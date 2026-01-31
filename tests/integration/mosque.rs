@@ -80,7 +80,7 @@ async fn add_and_fetch_mosques() {
 
     // 2. Fetch Mosques
     // Center point roughly in the middle
-    let fetch_url = format!("{}/mosque/fetch-mosques-for-location", addr);
+    let fetch_url = format!("{}/mosques/fetch-mosques-for-location", addr);
     let fetch_params = FetchMosqueParams {
         lat: 42.335,
         lon: -83.22,
@@ -147,7 +147,7 @@ async fn update_mosque_prayer_times() {
     assert!(response.status().is_success(), "Failed to add mosques");
 
     // 2. Fetch Mosques to get an ID
-    let fetch_url = format!("{}/mosque/fetch-mosques-for-location", addr);
+    let fetch_url = format!("{}/mosques/fetch-mosques-for-location", addr);
     let fetch_params = FetchMosqueParams {
         lat: 42.335,
         lon: -83.22,
@@ -206,7 +206,7 @@ async fn update_mosque_prayer_times() {
         .expect("The user doesn't exists");
 
     // 3. Elevate supervisor
-    let elevate_supervisor_url = format!("{}/mosque/elevate-user-to-mosque-supervisor", addr);
+    let elevate_supervisor_url = format!("{}/mosques/elevate-user-to-mosque-supervisor", addr);
     let elevate_params = ElevateSupervisorParams {
         app_admin_id: app_admin.id.to_string(),
         user_id: supervisor_user.id.to_string(),
@@ -227,7 +227,7 @@ async fn update_mosque_prayer_times() {
     assert_eq!(elevate_response.data, Some("Elevated the user to mosque_supervisor".to_string()));
 
     // 4. Assign mosque admin
-    let add_admin_url = format!("{}/mosque/add-admin", addr);
+    let add_admin_url = format!("{}/mosques/add-admin", addr);
     let add_admin_params = AddAdminParam {
         mosque_supervisor: supervisor_user.id.to_string(),
         requested_user: mosque_admin_user.id.to_string(),
@@ -249,7 +249,7 @@ async fn update_mosque_prayer_times() {
     assert_eq!(add_admin_response.data, Some("Elevated the user to a requested_user".to_string()));
 
     // 5. Update Prayer Times
-    let update_url = format!("{}/mosque/update-adhan-jamat-times", addr);
+    let update_url = format!("{}/mosques/update-adhan-jamat-times", addr);
 
     let fajr = NaiveTime::from_hms_opt(5, 30, 0).unwrap();
     let dhuhr = NaiveTime::from_hms_opt(13, 30, 0).unwrap();
@@ -318,7 +318,7 @@ async fn favorite_and_unfavorite_mosques() {
         .expect("User not returned");
 
     // 3. Fetch Mosques
-    let fetch_url = format!("{}/mosque/fetch-mosques-for-location", addr);
+    let fetch_url = format!("{}/mosques/fetch-mosques-for-location", addr);
     let fetch_params = FetchMosqueParams {
         lat: 28.625,
         lon: 77.295,
@@ -335,7 +335,7 @@ async fn favorite_and_unfavorite_mosques() {
     assert!(mosques.len() >= 3, "Need at least 3 mosques for this test");
 
     // 4. Favorite first 3 mosques
-    let add_fav_url = format!("{}/mosque/add-favorite", addr);
+    let add_fav_url = format!("{}/mosques/add-favorite", addr);
     let mosques_to_fav = &mosques[0..3];
     
     for mosque in mosques_to_fav {
@@ -368,7 +368,7 @@ async fn favorite_and_unfavorite_mosques() {
     // 5. Remove 2 favorites
     // Note: The server function is defined with endpoint="/remove-favorite"
     // Leptos/Actix usually normalize this to /mosque/remove-favorite
-    let remove_fav_base_url = format!("{}/mosque/remove-favorite", addr); 
+    let remove_fav_base_url = format!("{}/mosques/remove-favorite", addr); 
     
     let mosques_to_remove = &mosques[0..2];
     for mosque in mosques_to_remove {
