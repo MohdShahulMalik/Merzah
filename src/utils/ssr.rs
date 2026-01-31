@@ -31,3 +31,80 @@ pub async fn get_server_context() -> Result<(ResponseOptions, Surreal<Client>), 
     
     Ok((response_options, db.get_ref().clone()))
 }
+
+#[cfg(feature = "ssr")]
+pub struct ServerResponse {
+    options: ResponseOptions,
+}
+
+#[cfg(feature = "ssr")]
+impl ServerResponse {
+    pub fn new(options: ResponseOptions) -> Self {
+        Self { options }
+    }
+
+    pub fn ok<T>(&self, data: T) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::OK);
+        ApiResponse::data(data)
+    }
+
+    pub fn created<T>(&self, data: T) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::CREATED);
+        ApiResponse::data(data)
+    }
+
+    pub fn accepted<T>(&self, data: T) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::ACCEPTED);
+        ApiResponse::data(data)
+    }
+
+    pub fn no_content<T>(&self, data: T) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::NO_CONTENT);
+        ApiResponse::data(data)
+    }
+
+    pub fn bad_request<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::BAD_REQUEST);
+        ApiResponse::error(error)
+    }
+
+    pub fn unauthorized<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::UNAUTHORIZED);
+        ApiResponse::error(error)
+    }
+
+    pub fn forbidden<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::FORBIDDEN);
+        ApiResponse::error(error)
+    }
+
+    pub fn not_found<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::NOT_FOUND);
+        ApiResponse::error(error)
+    }
+
+    pub fn method_not_allowed<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::METHOD_NOT_ALLOWED);
+        ApiResponse::error(error)
+    }
+
+    pub fn unprocessable_entity<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::UNPROCESSABLE_ENTITY);
+        ApiResponse::error(error)
+    }
+
+    pub fn internal_server_error<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+        ApiResponse::error(error)
+    }
+    
+    pub fn conflict<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::CONFLICT);
+        ApiResponse::error(error)
+    }
+
+    pub fn service_unavailable<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::SERVICE_UNAVAILABLE);
+        ApiResponse::error(error)
+    }
+}
