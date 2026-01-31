@@ -1,3 +1,5 @@
+#[cfg(feature = "ssr")]
+use garde::Validate;
 use serde::{Deserialize, Serialize};
 use chrono::{DateTime, FixedOffset};
 #[cfg(feature = "ssr")]
@@ -9,10 +11,8 @@ use crate::models::mosque::MosqueData;
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum EventCategory {
-    Prayer,
-    Education,
-    Social,
-    Professional,
+    Deen,
+    Dunya,
     Fundraiser
 }
 
@@ -22,30 +22,41 @@ pub struct Event {
     pub description: String,
     pub category: EventCategory,
     pub date: DateTime<FixedOffset>,
+    // This field is for using the FETCH clause
     pub mosque: MosqueData,
     pub speaker: Option<String>,
 }
 
-// TODO: Add data validation please
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Validate, Deserialize, Serialize)]
 pub struct CreateEvent {
+    #[garde(length(min = 2, max = 100))]
     pub title: String,
+    #[garde(length(min = 10, max = 1000))]
     pub description: String,
+    #[garde(skip)]
     pub category: EventCategory,
+    #[garde(skip)]
     pub date: DateTime<FixedOffset>,
+    #[garde(skip)]
     pub mosque: RecordId,
+    #[garde(length(min = 2, max = 100))]
     pub speaker: Option<String>,
 }
 
-// TODO: Add data validation please
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Validate)]
 pub struct UpdateEvent {
+    #[garde(inner(length(min = 2, max = 100)))]
     pub title: Option<String>,
+    #[garde(inner(length(min = 10, max = 1000)))]
     pub description: Option<String>,
+    #[garde(skip)]
     pub category: Option<EventCategory>,
+    #[garde(skip)]
     pub date: Option<DateTime<FixedOffset>>,
+    #[garde(skip)]
     pub mosque: Option<RecordId>,
+    #[garde(inner(length(min = 2, max = 100)))]
     pub speaker: Option<String>,
 }
