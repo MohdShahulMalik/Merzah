@@ -46,8 +46,8 @@ pub struct CreateEvent {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize, Validate)]
-pub struct UpdateEvent {
+#[derive(Debug, Serialize, Deserialize, Validate, Clone)]
+pub struct UpdatedEvent {
     #[garde(inner(length(min = 2, max = 100)))]
     pub title: Option<String>,
     #[garde(inner(length(min = 10, max = 1000)))]

@@ -1,9 +1,9 @@
 use garde::Validate;
-use leptos::{ server_fn::codec::Json, prelude::ServerFnError, * };
+use leptos::{ prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, * };
 
 use tracing::error;
 
-use crate::models::{api_responses::ApiResponse, events::{ CreateEvent, Event }};
+use crate::models::{api_responses::ApiResponse, events::{ CreateEvent, Event, UpdatedEvent }};
 use crate::utils::ssr::{ServerResponse, get_server_context};
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
@@ -43,4 +43,16 @@ pub async fn add_event(event: CreateEvent) -> Result<ApiResponse<String>, Server
     };
 
     Ok(responder.created("Successfully created the event record Alhadulillah!".to_string()))
+}
+
+// TODO: Complete this endpoint
+#[server(input = PatchJson, output = Json, prefix = "/mosques/events", endpoint = "/update-event")]
+pub async fn update_event(updated_event: UpdatedEvent) -> Result<ApiResponse<String>, ServerFnError> {
+    let (response_options, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(err) => return Ok(err),
+    };
+    let responder = ServerResponse::new(response_options);
+    
+    Ok(responder.ok("successfully updated the event record".to_string()))
 }
