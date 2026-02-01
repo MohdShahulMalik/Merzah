@@ -48,16 +48,22 @@ pub struct CreateEvent {
 #[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize, Validate, Clone)]
 pub struct UpdatedEvent {
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(inner(length(min = 2, max = 100)))]
     pub title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(inner(length(min = 10, max = 1000)))]
     pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(skip)]
     pub category: Option<EventCategory>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(skip)]
     pub date: Option<DateTime<FixedOffset>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(skip)]
     pub mosque: Option<RecordId>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(inner(length(min = 2, max = 100)))]
     pub speaker: Option<String>,
 }
