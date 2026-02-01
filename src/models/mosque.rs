@@ -7,7 +7,7 @@ use surrealdb::sql::Geometry;
 use chrono::NaiveTime;
 
 #[cfg(feature = "ssr")]
-use crate::models::api_responses::MosqueApiResponse;
+use crate::models::api_responses::MosqueResponse;
 
 #[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
@@ -67,8 +67,8 @@ where
 
 #[cfg(feature = "ssr")]
 impl MosqueSearchResult {
-    pub fn from(self) -> MosqueApiResponse {
-        MosqueApiResponse { 
+    pub fn from(self) -> MosqueResponse {
+        MosqueResponse { 
             id: self.id.to_string(),
             location: self.location, 
             name: self.name, 

@@ -1,7 +1,7 @@
 use crate::common::get_test_db;
 use merzah::{
     models::{
-        api_responses::{ApiResponse, MosqueApiResponse},
+        api_responses::{ApiResponse, MosqueResponse},
         mosque::{PrayerTimes, PrayerTimesUpdate}, user::User,
     },
     spawn_app,
@@ -99,7 +99,7 @@ async fn add_and_fetch_mosques() {
         panic!("Fetch mosques failed. Status: {}, Body: {}", status, text);
     }
 
-    let api_response = response.json::<ApiResponse<Vec<MosqueApiResponse>>>().await.expect("Failed to deserialize");
+    let api_response = response.json::<ApiResponse<Vec<MosqueResponse>>>().await.expect("Failed to deserialize");
     let mosques = api_response.data.expect("No data returned");
     
     assert!(!mosques.is_empty(), "Should have found mosques in Dearborn");
@@ -161,7 +161,7 @@ async fn update_mosque_prayer_times() {
 
     assert!(response.status().is_success(), "Failed to fetch mosques");
 
-    let api_response = response.json::<ApiResponse<Vec<MosqueApiResponse>>>().await.expect("Failed to deserialize");
+    let api_response = response.json::<ApiResponse<Vec<MosqueResponse>>>().await.expect("Failed to deserialize");
     let mosques = api_response.data.expect("No data returned");
     let mosque_id = mosques.first().expect("No mosques found").id.clone();
 
@@ -329,7 +329,7 @@ async fn favorite_and_unfavorite_mosques() {
         .await
         .expect("Failed to fetch");
 
-    let api_response = response.json::<ApiResponse<Vec<MosqueApiResponse>>>().await.expect("Failed to deserialize");
+    let api_response = response.json::<ApiResponse<Vec<MosqueResponse>>>().await.expect("Failed to deserialize");
     let mosques = api_response.data.expect("No mosques data");
     
     assert!(mosques.len() >= 3, "Need at least 3 mosques for this test");

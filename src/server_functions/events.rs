@@ -75,3 +75,5 @@ pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Resu
     
     Ok(responder.ok("successfully updated the event record".to_string()))
 }
+
+// TODO: Think about implementing fetching events of the favorite mosques of a user

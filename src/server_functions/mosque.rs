@@ -14,7 +14,7 @@ use leptos::{
     *,
 };
 
-use crate::models::{api_responses::{ApiResponse, MosqueApiResponse}, mosque::PrayerTimesUpdate};
+use crate::models::{api_responses::{ApiResponse, MosqueResponse}, mosque::PrayerTimesUpdate};
 
 #[cfg(feature = "ssr")]
 use crate::models::mosque::{
@@ -166,7 +166,7 @@ pub async fn add_mosques_of_region(
 pub async fn fetch_mosques_for_location(
     lat: f64,
     lon: f64,
-) -> Result<ApiResponse<Vec<MosqueApiResponse>>, ServerFnError> {
+) -> Result<ApiResponse<Vec<MosqueResponse>>, ServerFnError> {
     let (_, db) = match get_server_context().await {
         Ok(ctx) => ctx,
         Err(e) => {

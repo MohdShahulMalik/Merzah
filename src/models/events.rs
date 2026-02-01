@@ -16,7 +16,7 @@ pub enum EventCategory {
     Fundraiser
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Event {
     pub id: String,
     pub title: String,
@@ -28,7 +28,6 @@ pub struct Event {
     pub speaker: Option<String>,
 }
 
-#[cfg(feature = "ssr")]
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct CreateEvent {
     #[garde(length(min = 2, max = 100))]
@@ -45,7 +44,6 @@ pub struct CreateEvent {
     pub speaker: Option<String>,
 }
 
-#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize, Validate, Clone)]
 pub struct UpdatedEvent {
     #[serde(skip_serializing_if = "Option::is_none")]
