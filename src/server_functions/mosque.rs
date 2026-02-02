@@ -4,6 +4,7 @@ use crate::{
     models::user::User,
     utils::{
         parsing::parse_record_id, ssr::get_server_context, user_elevation::elevate_user,
+        user_elevation::verify_mosque_admin_or_app_admin,
     },
 };
 #[cfg(feature = "ssr")]
@@ -219,49 +220,24 @@ pub async fn update_adhan_jamat_times(
         Err(e) => return Ok(e),
     };
 
-    let potential_app_admin_option: Option<User> = db.select(mosque_admin.clone()).await?;
-    let potential_app_admin: User = match potential_app_admin_option {
-        Some(admin) => admin,
-        None => {
-            error!("The mosque_admin trying to elevate the permission is not found");
-            response_options.set_status(StatusCode::UNAUTHORIZED);
-            return Ok(ApiResponse::error(
+    if let Err(e) = verify_mosque_admin_or_app_admin(mosque_admin.clone(), mosque_id.clone(), &db).await {
+        let (status, msg) = match e {
+            UserElevationError::Unauthorized => (
+                StatusCode::UNAUTHORIZED,
+                "The user trying to update mosque info is not an admin of that mosque".to_string(),
+            ),
+            UserElevationError::AdminNotFound => (
+                StatusCode::UNAUTHORIZED,
                 "The mosque admin was not found".to_string(),
-            ));
-        }
-    };
-
-    if !potential_app_admin.is_app_admin() {
-        let is_admin_query_result = db
-            .query("SELECT * FROM $mosque_admin->handles->mosques WHERE id = $mosque_id")
-            .bind(("mosque_admin", mosque_admin))
-            .bind(("mosque_id", mosque_id.clone()))
-            .await;
-
-        if let Err(error) = is_admin_query_result {
-            error!(
-                ?error,
-                "Failed to fetch the data from db to check mosque_admin"
-            );
-            return Err(ServerFnError::ServerError(
-                "Failed to fetch the data from db to check the mosque_admin".to_string(),
-            ));
-        } else {
-            let mut is_admin_query_response = is_admin_query_result?;
-            let is_admin_if_mosque_exists: Option<MosqueRecord> =
-                is_admin_query_response.take(0)?;
-            match is_admin_if_mosque_exists {
-                Some(_) => (),
-                None => {
-                    error!("The user trying to update mosque info is not an admin of that mosque");
-                    response_options.set_status(StatusCode::UNAUTHORIZED);
-                    return Ok(ApiResponse::error(
-                        "The user trying to update mosque info is not an admin of that mosque"
-                            .to_string(),
-                    ));
-                }
-            }
-        }
+            ),
+            _ => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Failed to verify admin permissions".to_string(),
+            ),
+        };
+        error!("{}", msg);
+        response_options.set_status(status);
+        return Ok(ApiResponse::error(msg));
     }
 
     db.update::<Option<MosqueRecord>>(mosque_id)

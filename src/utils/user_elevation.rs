@@ -1,6 +1,6 @@
 use surrealdb::{engine::remote::ws::Client, RecordId, Surreal};
 
-use crate::{errors::user_elevation::UserElevationError, models::user::{UpdateUser, User}};
+use crate::{errors::user_elevation::UserElevationError, models::user::{UpdateUser, User}, models::mosque::MosqueRecord};
 
 pub async fn elevate_user(
     app_admin: RecordId,
@@ -44,4 +44,36 @@ pub async fn elevate_user(
         .map_err(UserElevationError::DatabaseError)?;
     
     Ok(format!("Elevated the user to {elevation_degree}"))
+}
+
+pub async fn verify_mosque_admin_or_app_admin(
+    admin_user_id: RecordId,
+    mosque_id: RecordId,
+    db: &Surreal<Client>,
+) -> Result<(), UserElevationError> {
+    let admin_user: Option<User> = db.select(admin_user_id.clone()).await
+        .map_err(UserElevationError::DatabaseError)?;
+
+    let admin_user = match admin_user {
+        Some(user) => user,
+        None => return Err(UserElevationError::AdminNotFound),
+    };
+
+    if admin_user.is_app_admin() {
+        return Ok(());
+    }
+
+    let is_admin_query = r#"SELECT * FROM $mosque_admin->handles->mosques WHERE id = $mosque_id"#;
+    let query_result = db.query(is_admin_query)
+        .bind(("mosque_admin", admin_user_id))
+        .bind(("mosque_id", mosque_id))
+        .await
+        .map_err(UserElevationError::DatabaseError)?;
+
+    let mosque_record: Option<MosqueRecord> = query_result.take(0)?;
+
+    match mosque_record {
+        Some(_) => Ok(()),
+        None => Err(UserElevationError::Unauthorized),
+    }
 }

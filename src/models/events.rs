@@ -5,8 +5,6 @@ use chrono::{DateTime, FixedOffset};
 #[cfg(feature = "ssr")]
 use surrealdb::RecordId;
 
-use crate::models::mosque::MosqueData;
-
 // TODO: Add relevant only categories please
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
@@ -23,8 +21,6 @@ pub struct Event {
     pub description: String,
     pub category: EventCategory,
     pub date: DateTime<FixedOffset>,
-    // This field is for using the FETCH clause
-    pub mosque: MosqueData,
     pub speaker: Option<String>,
 }
 

@@ -8,12 +8,22 @@ use crate::{models::{api_responses::ApiResponse, events::{ CreateEvent, Event, U
 use crate::utils::ssr::{ServerResponse, get_server_context};
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
-pub async fn add_event(event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
+pub async fn add_event(user_id: String, mosque_id: String, event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
     let (response_options, db) = match get_server_context().await {
         Ok(ctx) => ctx,
         Err(error) => return Ok(error),
     };
     let responder = ServerResponse::new(response_options);
+
+    let user_id: RecordId = match parse_record_id(&user_id, "user_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    let mosque_id: RecordId = match parse_record_id(&mosque_id, "mosque_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
 
     let validation_result = event.validate();
     if let Err(err) = validation_result {
@@ -30,8 +40,8 @@ pub async fn add_event(event: CreateEvent) -> Result<ApiResponse<String>, Server
     let create_result: Result<Option<Event>, surrealdb::Error> =
         db.create("events").content(event).await;
 
-    match create_result {
-        Ok(Some(_)) => (),
+    let event: Event = match create_result {
+        Ok(Some(ev)) => ev,
         Ok(None) => {
             return Ok(responder.not_found(
                 "Some db error occured: query successfully executed but no record was created"
