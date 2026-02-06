@@ -119,3 +119,38 @@ pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Resu
     
     Ok(responder.ok("successfully updated the event record".to_string()))
 }
+
+#[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "/fetch-users-favorite-mosques-events")]
+pub async fn fetch_users_favorite_mosques_events(user_id: String) -> Result<ApiResponse<Vec<Event>>, ServerFnError> {
+    let (response_options, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(err) => return Ok(err),
+    };
+    let responder = ServerResponse::new(response_options);
+
+    let user_id: RecordId = match parse_record_id(&user_id, "user_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    let query = r#"
+        SELECT ->favorited->mosques->hosts->events.* AS events
+        FROM $user_id;
+    "#;
+
+    let result = db.query(query)
+        .bind(("user_id", user_id))
+        .await;
+
+    let events_result: Result<Vec<Event>, surrealdb::Error> = match result {
+        Ok(response) => response.take(0),
+        Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
+    };
+
+    let events: Vec<Event> = match events_result {
+        Ok(events) => events,
+        Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured while parsing the query result: {err}"))),
+    };
+
+    Ok(responder.ok(events))
+}
