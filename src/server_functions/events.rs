@@ -53,6 +53,23 @@ pub async fn add_event(user_id: String, mosque_id: String, event: CreateEvent) -
         }
     };
 
+    let host_query = r#"RELATE $mosque_id -> hosts -> $event_id
+        SET created_by = $user_id
+    "#;
+
+    let host_result = db.query(host_query)
+        .bind(("mosque_id", mosque_id))
+        .bind(("event_id", event.id.clone()))
+        .bind(("user_id", user_id))
+        .await;
+
+    match host_result {
+        Ok(_) => (),
+        Err(err) => {
+            return Ok(responder.internal_server_error(format!("Some db error occured while creating the relationship between the event and the mosque: {err}")));
+        },
+    }
+
     Ok(responder.created("Successfully created the event record Alhadulillah!".to_string()))
 }
 
@@ -69,7 +86,7 @@ pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Resu
     };
     let responder = ServerResponse::new(response_options);
 
-    let update_result = db.update::<Option<Event>>(event_id)
+    let update_result = db.update::<Option<Event>>(event_id.clone())
         .merge(updated_event)
         .await;
 
@@ -82,8 +99,23 @@ pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Resu
             return Ok(responder.internal_server_error(format!("Some db error occured: {err}")));
         }
     }
+
+    let update_hosts_query = r#"
+        UPDATE hosts
+        SET updated_at = time::now()
+        WHERE out = $event_id;
+    "#;
+
+    let update_hosts_result = db.query(update_hosts_query)
+        .bind(("event_id", event_id.clone()))
+        .await;
+
+    match update_hosts_result {
+        Ok(_) => (),
+        Err(err) => {
+            return Ok(responder.internal_server_error(format!("Some db error occured while updating the related hosts records: {err}")));
+        },
+    }
     
     Ok(responder.ok("successfully updated the event record".to_string()))
 }
-
-// TODO: Think about implementing fetching events of the favorite mosques of a user
