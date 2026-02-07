@@ -2,7 +2,7 @@ use leptos::prelude::ServerFnError;
 use leptos::server_fn::codec::{DeleteUrl, Json};
 use leptos::*; 
 use crate::models::auth::LoginFormData;
-use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData};
+use crate::models::{api_responses::ApiResponse, auth::{RegistrationFormData, Platform}};
 #[cfg(feature = "ssr")]
 use garde::Validate;
 
@@ -45,7 +45,7 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
         return Ok(ApiResponse { data: None, error: Some(format!("{}", error))});
     } 
 
-    let registration_result = register_user(form, &db).await;
+    let registration_result = register_user(form.clone(), &db).await;
 
     if let Err(error) = registration_result {
         error!(?error, "Failed to register the user");  
@@ -60,17 +60,25 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
     }
 
     let session_token = session_creation_result.ok().unwrap();
-    let cookie_creation_result = set_session_cookie(&session_token);
+    
+    if let Platform::Web = form.platform {
+        let cookie_creation_result = set_session_cookie(&session_token);
 
-    if let Err(error) = cookie_creation_result {
-        error!(?error);
-        return Err(ServerFnError::ServerError("Failed to create appropriate cookies after registration".to_string()));
+        if let Err(error) = cookie_creation_result {
+            error!(?error);
+            return Err(ServerFnError::ServerError("Failed to create appropriate cookies after registration".to_string()));
+        }
+
+        Ok(ApiResponse {
+            data: Some("The user has been registered successfully".to_string()),
+            error: None,
+        })
+    } else {
+        Ok(ApiResponse {
+            data: Some(session_token),
+            error: None,
+        })
     }
-
-    Ok(ApiResponse {
-        data: Some("The user have been registered successfully".to_string()),
-        error: None,
-    })
 }
 
 #[server(input=Json, prefix="/auth", endpoint="login")]
@@ -82,7 +90,7 @@ pub async fn login(
         Err(e) => return Ok(e),
     };
 
-    let user_id = match authenticate(form, &db).await {
+    let user_id = match authenticate(form.clone(), &db).await {
         Ok(id) => id,
         Err(error) => {
             if let Some(auth_error) = error.downcast_ref::<AuthError>() {
@@ -119,18 +127,26 @@ pub async fn login(
     }
 
     let session_token = session_creation_result.ok().unwrap();
-    let cookie_creation_result = set_session_cookie(&session_token);
+    
+    if let Platform::Web = form.platform {
+        let cookie_creation_result = set_session_cookie(&session_token);
 
-    if let Err(error) = cookie_creation_result {
-        error!(?error);
-        response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-        return Ok(ApiResponse { data: None, error: Some("Failed to set session cookie.".to_string())});
+        if let Err(error) = cookie_creation_result {
+            error!(?error);
+            response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse { data: None, error: Some("Failed to set session cookie.".to_string())});
+        }
+
+        Ok(ApiResponse {
+            data: Some("The user has been logged in successfully".to_string()),
+            error: None,
+        })
+    } else {
+        Ok(ApiResponse {
+            data: Some(session_token),
+            error: None,
+        })
     }
-
-    Ok(ApiResponse {
-        data: Some("The user has been logged in successfully".to_string()),
-        error: None,
-    })
 }
 
 #[server(input=DeleteUrl, output=Json, prefix="/auth", endpoint="logout")]
@@ -149,24 +165,34 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
         }
     };
 
-    let session_token = match req.cookie("__Host-session") {
-        Some(cookie) => cookie.value().to_string(),
-        None => {
+    let session_token = if let Some(cookie) = req.cookie("__Host-session") {
+        cookie.value().to_string()
+    } else if let Some(auth_header) = req.headers().get("Authorization") {
+        let auth_str = auth_header.to_str().unwrap_or("");
+        if auth_str.starts_with("Bearer ") {
+            auth_str.trim_start_matches("Bearer ").to_string()
+        } else {
             response_option.set_status(StatusCode::UNAUTHORIZED);
             return Ok(ApiResponse::error("You are not logged in".to_string()));
         }
+    } else {
+        response_option.set_status(StatusCode::UNAUTHORIZED);
+        return Ok(ApiResponse::error("You are not logged in".to_string()));
     };
 
     if let Err(e) = delete_session(&session_token, &db).await {
         error!(?e, "Failed to delete session");
         response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-        return Ok(ApiResponse::error("Failed to delete the session cokkie from the server".to_string()));
+        return Ok(ApiResponse::error("Failed to delete the session from the server".to_string()));
     }
 
-    if let Err(e) = remove_session_cookie() {
-        error!(?e, "Failed to remove session cookie");
-        response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-        return Ok(ApiResponse::error("Failed to remove session cookie".to_string()));
+    // Only attempt to remove cookie if it was present
+    if req.cookie("__Host-session").is_some() {
+        if let Err(e) = remove_session_cookie() {
+            error!(?e, "Failed to remove session cookie");
+            response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse::error("Failed to remove session cookie".to_string()));
+        }
     }
 
     Ok(ApiResponse::data("Successfully logged out the user".to_string()))

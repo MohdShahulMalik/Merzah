@@ -11,6 +11,8 @@ use actix_web::{web, http::StatusCode};
 use tracing::error;
 #[cfg(feature = "ssr")]
 use crate::auth::session::get_user_by_session;
+#[cfg(feature = "ssr")]
+use crate::models::user::User;
 
 #[cfg(feature = "ssr")]
 pub async fn get_server_context<T>() -> Result<(ResponseOptions, Surreal<Client>), ApiResponse<T>> {
@@ -35,7 +37,7 @@ pub async fn get_server_context<T>() -> Result<(ResponseOptions, Surreal<Client>
 }
 
 #[cfg(feature = "ssr")]
-pub async fn get_authenticated_user<T>() -> Result<(ResponseOptions, Surreal<Client>, crate::models::user::User), ApiResponse<T>> {
+pub async fn get_authenticated_user<T>() -> Result<(ResponseOptions, Surreal<Client>, User), ApiResponse<T>> {
     let (response_options, db) = get_server_context::<T>().await?;
     
     let req = match leptos_actix::extract::<actix_web::HttpRequest>().await {
@@ -47,12 +49,19 @@ pub async fn get_authenticated_user<T>() -> Result<(ResponseOptions, Surreal<Cli
         }
     };
 
-    let session_token = match req.cookie("__Host-session") {
-        Some(cookie) => cookie.value().to_string(),
-        None => {
+    let session_token = if let Some(cookie) = req.cookie("__Host-session") {
+        cookie.value().to_string()
+    } else if let Some(auth_header) = req.headers().get("Authorization") {
+        let auth_str = auth_header.to_str().unwrap_or("");
+        if auth_str.starts_with("Bearer ") {
+            auth_str.trim_start_matches("Bearer ").to_string()
+        } else {
             response_options.set_status(StatusCode::UNAUTHORIZED);
             return Err(ApiResponse::error("You are not logged in".to_string()));
         }
+    } else {
+        response_options.set_status(StatusCode::UNAUTHORIZED);
+        return Err(ApiResponse::error("You are not logged in".to_string()));
     };
 
     let user = match get_user_by_session(&session_token, &db).await {

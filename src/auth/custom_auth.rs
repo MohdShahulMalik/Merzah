@@ -1,6 +1,6 @@
 use crate::errors::auth::AuthError;
 use crate::models::auth::LoginFormData;
-use crate::models::user::{ Identifier, User };
+use crate::models::user::{Identifier, User, UserIdentifierWithUser};
 use crate::models::{
     auth::RegistrationFormData,
     user::CreateUser
@@ -71,6 +71,7 @@ pub async fn authenticate(form: LoginFormData, db: &Surreal<Client>) -> Result<R
     let (identifier_type, identifier_value) = match form.identifier {
         Identifier::Email(email) => ("email", email),
         Identifier::Mobile(mobile) => ("mobile", mobile),
+        Identifier::Workos(_) => return Err(anyhow!(AuthError::UserNotFound)),
     };
 
     let mut result = db.query("SELECT * FROM user_identifier WHERE identifier_value = $identifier_value FETCH user")
@@ -80,10 +81,10 @@ pub async fn authenticate(form: LoginFormData, db: &Surreal<Client>) -> Result<R
         .map_err(|e| AuthError::DatabaseError(Box::new(e)))
         .with_context(|| "Failed to get search for the identifier for authentication")?;
 
-    let user_identifier_with_user_option: Option<crate::models::user::UserIdentifierWithUser> = result.take(0)
+    let user_identifier_with_user_option: Option<UserIdentifierWithUser> = result.take(0)
         .map_err(|e| AuthError::DatabaseError(Box::new(e)))
         .with_context(|| "failed to get the result for the request user identifier")?;
-    let user_identifier_with_user: crate::models::user::UserIdentifierWithUser =
+    let user_identifier_with_user: UserIdentifierWithUser =
         user_identifier_with_user_option.ok_or(AuthError::UserNotFound)?;
 
     let requested_user = user_identifier_with_user.user;

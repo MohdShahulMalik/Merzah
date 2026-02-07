@@ -2,7 +2,7 @@ use garde::Validate;
 use leptos::{ html, prelude::*, reactive::spawn_local };
 use leptos_router::components::A;
 
-use crate::models::{auth::{LoginFormData, RegistrationFormData}, user::Identifier};
+use crate::models::{auth::{LoginFormData, RegistrationFormData, Platform}, user::Identifier};
 use crate::server_functions::auth::{login, register};
 
 #[component]
@@ -46,6 +46,7 @@ pub fn Register() -> impl IntoView {
             name: name_value,
             identifier,
             password: password_value,
+            platform: Platform::Web,
         };
 
         if let Err(report) = registration_form.validate() {
@@ -188,6 +189,7 @@ pub fn Login() -> impl IntoView {
         let login_form = LoginFormData {
             identifier,
             password: password_value,
+            platform: Platform::Web,
         };
 
         if let Err(report) = login_form.validate() {

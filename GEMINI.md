@@ -155,6 +155,7 @@ In short, **Merzah** is conceived as a comprehensive ecosystem: a place where a 
         .send()
         .await
         .expect("failed to fetch");```
+ - NEVER use types like this `crate::models::user::User`, always use the type after importing it at the top.
 
 ## Intructions When Asked A Question
  - DON'T go and just start changing or writting code in the codebase, use every other tool that the write tool and just answer the question properly!

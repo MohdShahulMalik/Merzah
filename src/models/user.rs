@@ -91,6 +91,8 @@ pub enum Identifier {
     Email(#[garde(email)] String),
     #[serde(rename = "mobile")]
     Mobile(#[garde(pattern(r"^[+]?[(]?[0-9]{1,4}[)]?[- .]?[(]?[0-9]{1,4}[)]?[- .]?[0-9]{4,10}$"))] String),
+    #[serde(rename = "workos")]
+    Workos(#[garde(skip)] String),
 }
 
 #[cfg(feature = "ssr")]

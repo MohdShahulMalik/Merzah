@@ -11,6 +11,14 @@ use surrealdb::Surreal;
 #[cfg(feature = "ssr")]
 use surrealdb::engine::remote::ws::Client;
 
+#[derive(Debug, Deserialize, Serialize, Clone, Copy, PartialEq)]
+pub enum Platform {
+    #[serde(rename = "web")]
+    Web,
+    #[serde(rename = "mobile")]
+    Mobile,
+}
+
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct RegistrationFormData {
     #[garde(length(min = 2, max = 100))]
@@ -19,6 +27,8 @@ pub struct RegistrationFormData {
     pub identifier: Identifier,
     #[garde(length(min = 8))]
     pub password: String,
+    #[garde(skip)]
+    pub platform: Platform,
 }
 
 
@@ -28,19 +38,22 @@ pub struct LoginFormData {
     pub identifier: Identifier,
     #[garde(length(min = 8))]
     pub password: String,
+    #[garde(skip)]
+    pub platform: Platform,
 }
 
 #[cfg(feature = "ssr")]
 impl RegistrationFormData {
 
-    pub fn new(name: String, identifier: Identifier, password: String) -> Self {
-        RegistrationFormData { name, identifier, password }
+    pub fn new(name: String, identifier: Identifier, password: String, platform: Platform) -> Self {
+        RegistrationFormData { name, identifier, password, platform }
     }
 
     pub async fn validate_uniqueness(&self, db: &Surreal<Client>) -> Result<()> {
         let (identifier_type, identifier_value) = match &self.identifier {
             Identifier::Email(email) => ("email", email.to_string()),
             Identifier::Mobile(mobile) => ("mobile", mobile.to_string()),
+            Identifier::Workos(_) => return Err(anyhow!("WorkOS identifiers cannot be manually registered")),
         };
 
         let mut result = db
