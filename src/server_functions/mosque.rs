@@ -1,9 +1,8 @@
 #[cfg(feature = "ssr")]
 use crate::{
     errors::user_elevation::UserElevationError,
-    models::user::User,
     utils::{
-        parsing::parse_record_id, ssr::get_server_context, user_elevation::elevate_user,
+        parsing::parse_record_id, ssr::get_authenticated_user, ssr::get_server_context, user_elevation::elevate_user,
         user_elevation::verify_mosque_admin_or_app_admin,
     },
 };
@@ -33,10 +32,16 @@ pub async fn add_mosques_of_region(
     north: f64,
     east: f64,
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let (_, db) = match get_server_context().await {
+    let (response_options, db, user) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
+
+    if !user.is_app_admin() {
+        error!("Unauthorized attempt to add mosques of region by user {}", user.id);
+        response_options.set_status(StatusCode::UNAUTHORIZED);
+        return Ok(ApiResponse::error("Only app admins can add mosques of region".to_string()));
+    }
 
     let query = format!(
         r#"[out:json][timeout:30];
@@ -168,7 +173,7 @@ pub async fn fetch_mosques_for_location(
     lat: f64,
     lon: f64,
 ) -> Result<ApiResponse<Vec<MosqueResponse>>, ServerFnError> {
-    let (_, db) = match get_server_context().await {
+    let (_, db) = match get_server_context::<Vec<MosqueResponse>>().await {
         Ok(ctx) => ctx,
         Err(e) => {
             return Ok(ApiResponse {
@@ -201,11 +206,10 @@ pub async fn fetch_mosques_for_location(
 
 #[server(input = PatchJson, output = Json, prefix = "/mosques", endpoint = "update-adhan-jamat-times")]
 pub async fn update_adhan_jamat_times(
-    mosque_admin: String,
     mosque_id: String,
     prayer_times: PrayerTimesUpdate,
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let (response_options, db) = match get_server_context().await {
+    let (response_options, db, mosque_admin) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
@@ -215,12 +219,7 @@ pub async fn update_adhan_jamat_times(
         Err(e) => return Ok(e),
     };
 
-    let mosque_admin: RecordId = match parse_record_id(&mosque_admin, "mosque_admin") {
-        Ok(id) => id,
-        Err(e) => return Ok(e),
-    };
-
-    if let Err(e) = verify_mosque_admin_or_app_admin(mosque_admin.clone(), mosque_id.clone(), &db).await {
+    if let Err(e) = verify_mosque_admin_or_app_admin(mosque_admin.id, mosque_id.clone(), &db).await {
         let (status, msg) = match e {
             UserElevationError::Unauthorized => (
                 StatusCode::UNAUTHORIZED,
@@ -251,18 +250,11 @@ pub async fn update_adhan_jamat_times(
 
 #[server(input = Json, output = Json, prefix = "/mosques", endpoint = "add-admin")]
 pub async fn add_admin(
-    mosque_supervisor: String,
     requested_user: String,
     mosque_id: String,
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let (response_options, db) = match get_server_context().await {
+    let (response_options, db, mosque_supervisor) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
-        Err(e) => return Ok(e),
-    };
-
-    let mosque_supervisor: RecordId = match parse_record_id(&mosque_supervisor, "mosque_supervisor")
-    {
-        Ok(id) => id,
         Err(e) => return Ok(e),
     };
 
@@ -276,34 +268,13 @@ pub async fn add_admin(
         Err(e) => return Ok(e),
     };
 
-    let check_mosque_supervisor_id_response_result = db.select(mosque_supervisor.clone()).await;
-
-    if let Err(error) = check_mosque_supervisor_id_response_result {
+    if !mosque_supervisor.is_mosque_supervisor() && !mosque_supervisor.is_app_admin() {
         error!(
-            ?error,
-            "Failed to fetch the data from db to check mosque_supervisor"
+            "The user {} trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin",
+            mosque_supervisor.id
         );
-        return Err(ServerFnError::ServerError(
-            "Failed to fetch the data from db to check the mosque_supervisor".to_string(),
-        ));
-    } else {
-        let check_mosque_supervisor_id: Option<User> = check_mosque_supervisor_id_response_result?;
-        match check_mosque_supervisor_id {
-            Some(user) => {
-                if !user.is_mosque_supervisor() && !user.is_app_admin() {
-                    error!(
-                        "The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin"
-                    );
-                    response_options.set_status(StatusCode::UNAUTHORIZED);
-                    return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin".to_string()));
-                }
-            }
-            None => {
-                error!("The mosque supervisor trying to elevate permission doesn't exists");
-                response_options.set_status(StatusCode::NOT_FOUND);
-                return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor".to_string()));
-            }
-        }
+        response_options.set_status(StatusCode::UNAUTHORIZED);
+        return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin".to_string()));
     }
 
     let relation_query = r#"
@@ -314,7 +285,7 @@ pub async fn add_admin(
         .query(relation_query)
         .bind(("requested_user", requested_user))
         .bind(("mosque", mosque_id))
-        .bind(("mosque_supervisor", mosque_supervisor))
+        .bind(("mosque_supervisor", mosque_supervisor.id))
         .await;
 
     match elevation_result {
@@ -337,16 +308,10 @@ pub async fn add_admin(
 
 #[server(input = Json, output = Json, prefix = "/mosques", endpoint = "elevate-user-to-mosque-supervisor")]
 pub async fn elevate_user_to_mosque_supervisor(
-    app_admin_id: String,
     user_id: String,
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let (response_option, db) = match get_server_context().await {
+    let (response_option, db, app_admin) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
-        Err(e) => return Ok(e),
-    };
-
-    let app_admin_id: RecordId = match parse_record_id(&app_admin_id, "app_admin_id") {
-        Ok(id) => id,
         Err(e) => return Ok(e),
     };
 
@@ -355,7 +320,7 @@ pub async fn elevate_user_to_mosque_supervisor(
         Err(e) => return Ok(e),
     };
 
-    let result = elevate_user(app_admin_id, user_id, "mosque_supervisor".to_string(), &db).await;
+    let result = elevate_user(app_admin.id, user_id, "mosque_supervisor".to_string(), &db).await;
 
     let elevation_error = match result {
         Ok(success_msg) => return Ok(ApiResponse::data(success_msg)),
@@ -396,21 +361,15 @@ pub async fn elevate_user_to_mosque_supervisor(
 
 #[server(input = Json, output = Json, prefix = "/mosques", endpoint = "add-favorite")]
 pub async fn add_favorite(
-    user_id: String,
     mosque_id: String,
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let user_id = match parse_record_id(&user_id, "user_id") {
-        Ok(id) => id,
+    let (response_options, db, user) = match get_authenticated_user::<String>().await {
+        Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
 
     let mosque_id = match parse_record_id(&mosque_id, "mosque_id") {
         Ok(id) => id,
-        Err(e) => return Ok(e),
-    };
-
-    let (response_options, db) = match get_server_context().await {
-        Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
 
@@ -420,7 +379,7 @@ pub async fn add_favorite(
 
     let result = db
         .query(favorite_query)
-        .bind(("user_id", user_id))
+        .bind(("user_id", user.id))
         .bind(("mosque_id", mosque_id))
         .await;
 
@@ -442,11 +401,10 @@ pub async fn add_favorite(
 
 #[server(input = DeleteUrl, output = Json, prefix = "/mosques", endpoint = "/remove-favorite")]
 pub async fn remove_favorite(
-    user_id: String,
     mosque_id: String,
 ) -> Result<ApiResponse<String>, ServerFnError>{
-    let user_id = match parse_record_id(&user_id, "user_id") {
-        Ok(id) => id,
+    let (response_options, db, user) = match get_authenticated_user::<String>().await {
+        Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
 
@@ -455,15 +413,10 @@ pub async fn remove_favorite(
         Err(e) => return Ok(e),
     };
 
-    let (response_options, db) = match get_server_context().await {
-        Ok(ctx) => ctx,
-        Err(e) => return Ok(e),
-    };
-
     let remove_favorite_query = "DELETE favorited WHERE in = $user_id AND out = $mosque_id";
     
     let result = db.query(remove_favorite_query)
-        .bind(("user_id", user_id))
+        .bind(("user_id", user.id))
         .bind(("mosque_id", mosque_id))
         .await;
 

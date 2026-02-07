@@ -5,20 +5,15 @@ use surrealdb::RecordId;
 use tracing::error;
 
 use crate::{models::{api_responses::ApiResponse, events::{ CreateEvent, Event, UpdatedEvent }}, utils::parsing::parse_record_id};
-use crate::utils::ssr::{ServerResponse, get_server_context};
+use crate::utils::ssr::{ServerResponse, get_authenticated_user};
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
-pub async fn add_event(user_id: String, mosque_id: String, event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
-    let (response_options, db) = match get_server_context().await {
+pub async fn add_event(mosque_id: String, event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
+    let (response_options, db, user) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(error) => return Ok(error),
     };
     let responder = ServerResponse::new(response_options);
-
-    let user_id: RecordId = match parse_record_id(&user_id, "user_id") {
-        Ok(id) => id,
-        Err(e) => return Ok(e),
-    };
 
     let mosque_id: RecordId = match parse_record_id(&mosque_id, "mosque_id") {
         Ok(id) => id,
@@ -60,7 +55,7 @@ pub async fn add_event(user_id: String, mosque_id: String, event: CreateEvent) -
     let host_result = db.query(host_query)
         .bind(("mosque_id", mosque_id))
         .bind(("event_id", event.id.clone()))
-        .bind(("user_id", user_id))
+        .bind(("user_id", user.id))
         .await;
 
     match host_result {
@@ -75,7 +70,7 @@ pub async fn add_event(user_id: String, mosque_id: String, event: CreateEvent) -
 
 #[server(input = PatchJson, output = Json, prefix = "/mosques/events", endpoint = "/update-event")]
 pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Result<ApiResponse<String>, ServerFnError> {
-    let (response_options, db) = match get_server_context().await {
+    let (response_options, db, _user) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(err) => return Ok(err),
     };
@@ -121,24 +116,19 @@ pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Resu
 }
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "/fetch-users-favorite-mosques-events")]
-pub async fn fetch_users_favorite_mosques_events(user_id: String) -> Result<ApiResponse<Vec<Event>>, ServerFnError> {
-    let (response_options, db) = match get_server_context::<Vec<Event>>().await {
+pub async fn fetch_users_favorite_mosques_events() -> Result<ApiResponse<Vec<Event>>, ServerFnError> {
+    let (response_options, db, user) = match get_authenticated_user::<Vec<Event>>().await {
         Ok(ctx) => ctx,
         Err(err) => return Ok(err),
     };
     let responder = ServerResponse::new(response_options);
-
-    let user_id: RecordId = match parse_record_id::<Vec<Event>>(&user_id, "user_id") {
-        Ok(id) => id,
-        Err(e) => return Ok(e),
-    };
 
     let query = r#"
         $user_id ->favorited->mosques->hosts->events.*
     "#;
 
     let result = db.query(query)
-        .bind(("user_id", user_id))
+        .bind(("user_id", user.id))
         .await;
 
     let events_result: Result<Vec<Event>, surrealdb::Error> = match result {

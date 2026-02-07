@@ -9,6 +9,8 @@ use surrealdb::{Surreal, engine::remote::ws::Client};
 use actix_web::{web, http::StatusCode};
 #[cfg(feature = "ssr")]
 use tracing::error;
+#[cfg(feature = "ssr")]
+use crate::auth::session::get_user_by_session;
 
 #[cfg(feature = "ssr")]
 pub async fn get_server_context<T>() -> Result<(ResponseOptions, Surreal<Client>), ApiResponse<T>> {
@@ -30,6 +32,39 @@ pub async fn get_server_context<T>() -> Result<(ResponseOptions, Surreal<Client>
     };
     
     Ok((response_options, db.get_ref().clone()))
+}
+
+#[cfg(feature = "ssr")]
+pub async fn get_authenticated_user<T>() -> Result<(ResponseOptions, Surreal<Client>, crate::models::user::User), ApiResponse<T>> {
+    let (response_options, db) = get_server_context::<T>().await?;
+    
+    let req = match leptos_actix::extract::<actix_web::HttpRequest>().await {
+        Ok(req) => req,
+        Err(e) => {
+            error!(?e, "Failed to extract request");
+            response_options.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Err(ApiResponse::error("Internal Server Error".to_string()));
+        }
+    };
+
+    let session_token = match req.cookie("__Host-session") {
+        Some(cookie) => cookie.value().to_string(),
+        None => {
+            response_options.set_status(StatusCode::UNAUTHORIZED);
+            return Err(ApiResponse::error("You are not logged in".to_string()));
+        }
+    };
+
+    let user = match get_user_by_session(&session_token, &db).await {
+        Ok(user) => user,
+        Err(e) => {
+            error!(?e, "Failed to get user by session");
+            response_options.set_status(StatusCode::UNAUTHORIZED);
+            return Err(ApiResponse::error("Invalid or expired session".to_string()));
+        }
+    };
+
+    Ok((response_options, db, user))
 }
 
 #[cfg(feature = "ssr")]
