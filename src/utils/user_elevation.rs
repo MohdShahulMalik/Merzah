@@ -64,7 +64,7 @@ pub async fn verify_mosque_admin_or_app_admin(
     }
 
     let is_admin_query = r#"SELECT * FROM $mosque_admin->handles->mosques WHERE id = $mosque_id"#;
-    let query_result = db.query(is_admin_query)
+    let mut query_result = db.query(is_admin_query)
         .bind(("mosque_admin", admin_user_id))
         .bind(("mosque_id", mosque_id))
         .await

@@ -11,7 +11,7 @@ use actix_web::{web, http::StatusCode};
 use tracing::error;
 
 #[cfg(feature = "ssr")]
-pub async fn get_server_context() -> Result<(ResponseOptions, Surreal<Client>), ApiResponse<String>> {
+pub async fn get_server_context<T>() -> Result<(ResponseOptions, Surreal<Client>), ApiResponse<T>> {
     let response_options = match use_context::<ResponseOptions>() {
         Some(ro) => ro,
         None => {

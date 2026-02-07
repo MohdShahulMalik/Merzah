@@ -10,7 +10,7 @@ use actix_web::http::StatusCode;
 use leptos::prelude::expect_context;
 
 #[cfg(feature = "ssr")]
-pub fn parse_record_id(id: &str, field_name: &str) -> Result<RecordId, ApiResponse<String>> {
+pub fn parse_record_id<T>(id: &str, field_name: &str) -> Result<RecordId, ApiResponse<T>> {
     id.parse().map_err(|e| {
         tracing::error!(?e, "Failed to parse {}", field_name);
         
