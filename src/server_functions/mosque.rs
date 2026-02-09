@@ -37,7 +37,7 @@ pub async fn add_mosques_of_region(
         Err(e) => return Ok(e),
     };
 
-    if !user.is_app_admin() {
+    if !user.is_app_admin() && !user.is_mosque_supervisor() {
         error!("Unauthorized attempt to add mosques of region by user {}", user.id);
         response_options.set_status(StatusCode::UNAUTHORIZED);
         return Ok(ApiResponse::error("Only app admins can add mosques of region".to_string()));

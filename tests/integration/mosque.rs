@@ -1,8 +1,7 @@
-use crate::common::get_test_db;
+use crate::{auth::RegisterationFormWrapper, common::get_test_db};
 use merzah::{
     models::{
-        api_responses::{ApiResponse, MosqueResponse},
-        mosque::{PrayerTimes, PrayerTimesUpdate}, user::User,
+        api_responses::{ApiResponse, MosqueResponse}, auth::{Platform, RegistrationFormData}, mosque::{PrayerTimes, PrayerTimesUpdate}, user::{Identifier, User}
     },
     spawn_app,
 };
@@ -56,6 +55,36 @@ async fn add_and_fetch_mosques() {
     let addr = spawn_app(db.clone());
     let client = Client::new();
 
+    let register_url = format!("{}/auth/register", addr);
+
+    let form = RegistrationFormData::new(
+        "Logout User".to_string(),
+        Identifier::Email("logout@example.com".to_string()),
+        "password123".to_string(),
+        Platform::Web,
+    );
+    let body = RegisterationFormWrapper { form };
+
+    // 1. Register
+    let response = client
+        .post(&register_url)
+        .json(&body)
+        .send()
+        .await
+        .expect("Failed to register");
+
+    assert!(response.status().is_success());
+
+    // 2. Extract Cookie
+    let cookie_header = response
+        .headers()
+        .get("set-cookie")
+        .expect("Missing Set-Cookie header in registration response");
+    
+    let cookie_str = cookie_header.to_str().expect("Failed to convert cookie to string");
+    // Extract name=value part (strip attributes like Path, HttpOnly)
+    let session_cookie = cookie_str.split(';').next().expect("Failed to parse cookie");
+
     // 1. Add Mosques (Dearborn, MI area - small box containing Islamic Center of America)
     // Coords approx: 42.337, -83.223
     let add_url = format!("{}/mosques/add-mosque-of-region", addr);
@@ -68,6 +97,7 @@ async fn add_and_fetch_mosques() {
 
     let response = client.post(&add_url)
         .json(&add_params)
+        .header("Cookie", session_cookie)
         .send()
         .await
         .expect("Failed to execute add_mosques_of_region");

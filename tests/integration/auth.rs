@@ -1,6 +1,6 @@
 use crate::common::get_test_db;
 use merzah::{
-    models::{api_responses::ApiResponse, auth::{LoginFormData, RegistrationFormData}, user::Identifier},
+    models::{api_responses::ApiResponse, auth::{LoginFormData, RegistrationFormData, Platform}, user::Identifier},
     spawn_app,
 };
 use reqwest::Client;
@@ -8,8 +8,8 @@ use rstest::rstest;
 use serde::Serialize;
 
 #[derive(Serialize)]
-struct RegisterationFormWrapper {
-    form: RegistrationFormData,
+pub struct RegisterationFormWrapper {
+    pub form: RegistrationFormData,
 }
 
 #[derive(Serialize)]
@@ -35,7 +35,7 @@ async fn register_server_fn_successfully_register_a_user(
     let relative_addr = format!("{}/auth/register", addr);
 
     let body = RegisterationFormWrapper {
-        form: RegistrationFormData::new(name.clone(), identifier.clone(), password.clone()),
+        form: RegistrationFormData::new(name.clone(), identifier.clone(), password.clone(), Platform::Web),
     };
 
     let response = client
@@ -69,6 +69,7 @@ async fn register_server_fn_successfully_register_a_user(
     let (id_type, id_value) = match identifier {
         Identifier::Email(e) => ("email", e),
         Identifier::Mobile(m) => ("mobile", m),
+        Identifier::Workos(_) => todo!(),
     };
 
     // 1. Verify User Identifier exists
@@ -125,6 +126,7 @@ async fn logout_server_fn_successfully_logs_out_user() {
         "Logout User".to_string(),
         Identifier::Email("logout@example.com".to_string()),
         "password123".to_string(),
+        Platform::Web,
     );
     let body = RegisterationFormWrapper { form };
 
@@ -210,6 +212,7 @@ async fn login_server_fn_successfully_logs_in_user() {
         name.clone(),
         Identifier::Email(email.clone()),
         password.clone(),
+        Platform::Web,
     );
     let reg_body = RegisterationFormWrapper { form: reg_form };
 
@@ -256,6 +259,7 @@ async fn login_server_fn_successfully_logs_in_user() {
     let login_form = LoginFormData {
         identifier: Identifier::Email(email.clone()),
         password: password.clone(),
+        platform: Platform::Web,
     };
     let login_body = LoginFormWrapper { form: login_form };
 
