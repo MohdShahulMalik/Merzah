@@ -306,3 +306,91 @@ async fn login_server_fn_successfully_logs_in_user() {
     assert!(!sessions.is_empty(), "A session should exist for the logged in user");
     assert_eq!(sessions.len(), 1_usize);
 }
+
+#[tokio::test]
+async fn mobile_auth_flow_works_correctly() {
+    let client = Client::new();
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let register_url = format!("{}/auth/register", addr);
+    let login_url = format!("{}/auth/login", addr);
+    let logout_url = format!("{}/auth/logout", addr);
+
+    let name = "Mobile User".to_string();
+    let email = "mobile@example.com".to_string();
+    let password = "password123".to_string();
+
+    // 1. Register as Mobile
+    let reg_form = RegistrationFormData::new(
+        name.clone(),
+        Identifier::Email(email.clone()),
+        password.clone(),
+        Platform::Mobile,
+    );
+    let reg_body = RegisterationFormWrapper { form: reg_form };
+
+    let response = client
+        .post(&register_url)
+        .json(&reg_body)
+        .send()
+        .await
+        .expect("Failed to register");
+
+    assert!(response.status().is_success());
+    assert!(response.headers().get("set-cookie").is_none(), "Mobile registration should not set cookies");
+
+    let api_response = response
+        .json::<ApiResponse<String>>()
+        .await
+        .expect("Failed to deserialize response");
+    
+    let session_token = api_response.data.expect("Mobile registration should return session token");
+    assert!(!session_token.is_empty());
+
+    // 2. Logout using the token
+    let response = client
+        .delete(&logout_url)
+        .header("Authorization", format!("Bearer {}", session_token))
+        .send()
+        .await
+        .expect("Failed to logout");
+
+    assert!(response.status().is_success());
+
+    // 3. Login as Mobile
+    let login_form = LoginFormData {
+        identifier: Identifier::Email(email.clone()),
+        password: password.clone(),
+        platform: Platform::Mobile,
+    };
+    let login_body = LoginFormWrapper { form: login_form };
+
+    let response = client
+        .post(&login_url)
+        .json(&login_body)
+        .send()
+        .await
+        .expect("Failed to login");
+
+    assert!(response.status().is_success());
+    assert!(response.headers().get("set-cookie").is_none(), "Mobile login should not set cookies");
+
+    let api_response = response
+        .json::<ApiResponse<String>>()
+        .await
+        .expect("Failed to deserialize response");
+    
+    let new_session_token = api_response.data.expect("Mobile login should return session token");
+    assert!(!new_session_token.is_empty());
+    assert_ne!(session_token, new_session_token, "New session token should be different");
+
+    // 4. Verify Session exists in DB
+    let mut session_result = db
+        .query("SELECT * FROM sessions WHERE token = $token")
+        .bind(("token", new_session_token))
+        .await
+        .expect("Failed to query sessions");
+    
+    let sessions: Vec<merzah::models::session::Session> = session_result.take(0).expect("Failed to parse sessions");
+    assert_eq!(sessions.len(), 1);
+}
