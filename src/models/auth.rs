@@ -32,6 +32,7 @@ pub struct RegistrationFormData {
 }
 
 
+
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct LoginFormData {
     #[garde(dive)]

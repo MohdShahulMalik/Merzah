@@ -1,6 +1,7 @@
 use crate::common::get_test_db;
 use merzah::auth::custom_auth::register_user;
 use merzah::models::{auth::RegistrationFormData, user::Identifier};
+use merzah::models::auth::Platform;
 
 #[tokio::test]
 async fn test_register_user_success() -> anyhow::Result<()> {
@@ -10,7 +11,7 @@ async fn test_register_user_success() -> anyhow::Result<()> {
     let identifier = Identifier::Email("unit_test@example.com".to_string());
     let password = "password123".to_string();
     
-    let form = RegistrationFormData::new(name.clone(), identifier.clone(), password.clone());
+    let form = RegistrationFormData::new(name.clone(), identifier.clone(), password.clone(), Platform::Web);
     
     let user_id = register_user(form, &db).await?;
     
@@ -29,8 +30,8 @@ async fn test_register_user_duplicate_fail() -> anyhow::Result<()> {
     let identifier = Identifier::Email("duplicate@example.com".to_string());
     let password = "password123".to_string();
     
-    let form1 = RegistrationFormData::new(name.clone(), identifier.clone(), password.clone());
-    let form2 = RegistrationFormData::new(name.clone(), identifier.clone(), password.clone()); // Same identifier
+    let form1 = RegistrationFormData::new(name.clone(), identifier.clone(), password.clone(), Platform::Web);
+    let form2 = RegistrationFormData::new(name.clone(), identifier.clone(), password.clone(), Platform::Web);
     
     // First registration
     register_user(form1, &db).await?;

@@ -38,7 +38,10 @@ pub async fn create_session(user: RecordId, db: &Surreal<Client>) -> Result<Stri
     Ok(session_token)
 }
 
-pub async fn get_user_by_session(session_token: &str, db: &Surreal<Client>) -> Result<User> {
+pub async fn get_user_by_session(
+    session_token: &str,
+    db: &Surreal<Client>
+) -> Result<User> {
     validate_session_token(session_token)?;
 
     let result_from_sessions_table: Option<crate::models::session::SessionWithUser> = db
@@ -62,6 +65,25 @@ pub async fn get_user_by_session(session_token: &str, db: &Surreal<Client>) -> R
 
 pub async fn delete_session(session_token: &str, db: &Surreal<Client>) -> Result<()> {
     validate_session_token(session_token)?;
+
+    let response: Option<Session> = db.query("SELECT * FROM sessions WHERE session_token = $val LIMIT 1")
+        .bind(("val", session_token.to_string()))
+        .await
+        .map_err(|e| SessionError::DatabaseError(Box::new(e)))
+        .with_context(|| "Failed to fetch the session to delete")?
+        .take(0)?;
+
+    if response.is_none() {
+        Err(SessionError::SessionNotFound)?
+    }
+
+    let session = response.unwrap();
+
+    let is_expired = session.expires_at <= Datetime::from(Utc::now());
+
+    if is_expired {
+        Err(SessionError::SessionExpired(session.expires_at))?
+    }
 
     db.query("DELETE sessions WHERE session_token = $val")
         .bind(("val", session_token.to_string()))

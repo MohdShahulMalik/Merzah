@@ -2,6 +2,7 @@ use crate::common::get_test_db;
 use merzah::auth::custom_auth::register_user;
 use merzah::auth::session::{create_session, delete_session, get_user_by_session};
 use merzah::models::{auth::RegistrationFormData, user::Identifier};
+use merzah::models::auth::Platform;
 
 #[tokio::test]
 async fn test_delete_session_success() -> anyhow::Result<()> {
@@ -11,7 +12,7 @@ async fn test_delete_session_success() -> anyhow::Result<()> {
     let name = "Session Test User".to_string();
     let identifier = Identifier::Email("session_test@example.com".to_string());
     let password = "password123".to_string();
-    let form = RegistrationFormData::new(name, identifier, password);
+    let form = RegistrationFormData::new(name, identifier, password, Platform::Web);
     let user_id = register_user(form, &db).await?;
 
     // 2. Create Session

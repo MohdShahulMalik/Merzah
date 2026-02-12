@@ -19,8 +19,8 @@ struct LoginFormWrapper {
 
 
 #[rstest]
-#[case::mobile("Armaan Ali".to_string(), Identifier::Mobile("+91 1234567890".to_string()), "thisisasecret".to_string(), Some("The user have been registered successfully".to_string()), "Payload with Identifier Type mobile")]
-#[case::email("Armaan Ali".to_string(), Identifier::Email("armaanali@gmail.com".to_string()), "thisisasecret".to_string(), Some("The user have been registered successfully".to_string()), "Payload with Identifier Type email")]
+#[case::mobile("Armaan Ali".to_string(), Identifier::Mobile("+91 1234567890".to_string()), "thisisasecret".to_string(), Some("The user has been registered successfully".to_string()), "Payload with Identifier Type mobile")]
+#[case::email("Armaan Ali".to_string(), Identifier::Email("armaanali@gmail.com".to_string()), "thisisasecret".to_string(), Some("The user has been registered successfully".to_string()), "Payload with Identifier Type email")]
 #[tokio::test]
 async fn register_server_fn_successfully_register_a_user(
     #[case] name: String,
@@ -386,11 +386,213 @@ async fn mobile_auth_flow_works_correctly() {
 
     // 4. Verify Session exists in DB
     let mut session_result = db
-        .query("SELECT * FROM sessions WHERE token = $token")
-        .bind(("token", new_session_token))
+        .query("SELECT * FROM sessions WHERE session_token = $t")
+        .bind(("t", new_session_token))
         .await
         .expect("Failed to query sessions");
     
     let sessions: Vec<merzah::models::session::Session> = session_result.take(0).expect("Failed to parse sessions");
     assert_eq!(sessions.len(), 1);
+}
+
+#[derive(Debug, Clone, Copy)]
+enum AuthMethod {
+    Web,
+    Mobile,
+}
+
+async fn extract_session(response: reqwest::Response, auth_method: AuthMethod) -> String {
+    match auth_method {
+        AuthMethod::Web => {
+            let cookie_header = response
+                .headers()
+                .get("set-cookie")
+                .expect("Missing Set-Cookie header")
+                .to_str()
+                .expect("Failed to convert cookie to string");
+            cookie_header.split(';').next().expect("Failed to parse cookie").to_string()
+        }
+        AuthMethod::Mobile => {
+            let api_response: ApiResponse<String> = response
+                .json()
+                .await
+                .expect("Failed to deserialize response");
+            api_response.data.expect("Mobile auth should return session token")
+        }
+    }
+}
+
+fn get_auth_header(session: &str, auth_method: AuthMethod) -> Option<(String, String)> {
+    match auth_method {
+        AuthMethod::Web => None,
+        AuthMethod::Mobile => Some(("Authorization".to_string(), format!("Bearer {}", session))),
+    }
+}
+
+#[rstest]
+#[case::web(AuthMethod::Web)]
+#[case::mobile(AuthMethod::Mobile)]
+#[tokio::test]
+async fn test_authenticated_user_can_logout_with_any_method(
+    #[case] auth_method: AuthMethod,
+) {
+    let client = Client::new();
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let register_url = format!("{}/auth/register", addr);
+    let logout_url = format!("{}/auth/logout", addr);
+
+    let email = format!("logout_{}_@example.com", uuid::Uuid::new_v4());
+    let platform = match auth_method {
+        AuthMethod::Web => Platform::Web,
+        AuthMethod::Mobile => Platform::Mobile,
+    };
+
+    let form = RegistrationFormData::new(
+        "Logout Test User".to_string(),
+        Identifier::Email(email),
+        "password123".to_string(),
+        platform,
+    );
+    let body = RegisterationFormWrapper { form };
+
+    let register_response = client
+        .post(&register_url)
+        .json(&body)
+        .send()
+        .await
+        .expect("Failed to register");
+
+    assert!(register_response.status().is_success());
+
+    let session = extract_session(register_response, auth_method).await;
+
+    let mut logout_req = client
+        .delete(&logout_url)
+        .header("Content-Type", "application/json")
+        .body("{}");
+
+    if let Some((name, value)) = get_auth_header(&session, auth_method) {
+        logout_req = logout_req.header(name, value);
+    } else {
+        logout_req = logout_req.header("Cookie", session);
+    }
+
+    let logout_response = logout_req
+        .send()
+        .await
+        .expect("Failed to call logout");
+
+    assert!(logout_response.status().is_success(), 
+        "Logout should succeed with {:?}. Status: {:?}", 
+        auth_method, logout_response.status());
+
+    let api_response: ApiResponse<String> = logout_response
+        .json()
+        .await
+        .expect("Failed to deserialize logout response");
+
+    assert_eq!(api_response.data, Some("Successfully logged out the user".to_string()));
+    assert!(api_response.error.is_none());
+}
+
+#[rstest]
+#[case::web(AuthMethod::Web, "cookie")]
+#[case::mobile(AuthMethod::Mobile, "bearer token")]
+#[tokio::test]
+async fn test_unauthenticated_request_returns_401(
+    #[case] auth_method: AuthMethod,
+    #[case] _description: &str,
+) {
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let client = Client::new();
+    let logout_url = format!("{}/auth/logout", addr);
+
+    let mut req = client
+        .delete(&logout_url)
+        .header("Content-Type", "application/json")
+        .body("{}");
+
+    match auth_method {
+        AuthMethod::Web => {
+            use http::header;
+
+            req = req.header(header::COOKIE, "__Host-session=abcdefghijklmnopqrstuvwxyz1234567890abcd");
+        }
+        AuthMethod::Mobile => {
+            req = req.header("Authorization", "Bearer abcdefghijklmnopqrstuvwxyz1234567890abcd");
+        }
+    }
+
+    let response = req
+        .send()
+        .await
+        .expect("Failed to call logout");
+
+    let status = response.status().as_u16();
+
+    let error = response
+        .json::<ApiResponse<String>>()
+        .await
+        .unwrap_or(ApiResponse::error("you are not logged in".to_string()))
+        .error
+        .unwrap_or_default();
+
+    assert_eq!(status, 401, 
+        "Unauthenticated {:?} request should return 401, error: {error}", 
+        auth_method,);
+}
+
+#[rstest]
+#[case::web(AuthMethod::Web)]
+#[case::mobile(AuthMethod::Mobile)]
+#[tokio::test]
+async fn test_auth_flow_registration_returns_correct_response_for_platform(
+    #[case] auth_method: AuthMethod,
+) {
+    let client = Client::new();
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let register_url = format!("{}/auth/register", addr);
+
+    let email = format!("platform_test_{}@example.com", uuid::Uuid::new_v4());
+    let platform = match auth_method {
+        AuthMethod::Web => Platform::Web,
+        AuthMethod::Mobile => Platform::Mobile,
+    };
+
+    let form = RegistrationFormData::new(
+        "Platform Test User".to_string(),
+        Identifier::Email(email),
+        "password123".to_string(),
+        platform,
+    );
+    let body = RegisterationFormWrapper { form };
+
+    let response = client
+        .post(&register_url)
+        .json(&body)
+        .send()
+        .await
+        .expect("Failed to register");
+
+    assert!(response.status().is_success());
+
+    match auth_method {
+        AuthMethod::Web => {
+            assert!(response.headers().get("set-cookie").is_some(), 
+                "Web registration should set cookies");
+        }
+        AuthMethod::Mobile => {
+            assert!(response.headers().get("set-cookie").is_none(), 
+                "Mobile registration should not set cookies");
+            let api_response: ApiResponse<String> = response
+                .json()
+                .await
+                .expect("Failed to deserialize");
+            assert!(api_response.data.is_some(), 
+                "Mobile registration should return session token");
+        }
+    }
 }

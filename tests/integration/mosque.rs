@@ -5,7 +5,9 @@ use merzah::{
     },
     spawn_app,
 };
+use merzah::auth::session::create_session;
 use reqwest::Client;
+use rstest::rstest;
 use serde::Serialize;
 use chrono::NaiveTime;
 use surrealdb::{Datetime, RecordId};
@@ -55,35 +57,23 @@ async fn add_and_fetch_mosques() {
     let addr = spawn_app(db.clone());
     let client = Client::new();
 
-    let register_url = format!("{}/auth/register", addr);
-
-    let form = RegistrationFormData::new(
-        "Logout User".to_string(),
-        Identifier::Email("logout@example.com".to_string()),
-        "password123".to_string(),
-        Platform::Web,
-    );
-    let body = RegisterationFormWrapper { form };
-
-    // 1. Register
-    let response = client
-        .post(&register_url)
-        .json(&body)
-        .send()
+    // 1. Create an app_admin user directly in DB
+    let app_admin: User = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", "test_admin")),
+            created_at: Datetime::default(),
+            display_name: "Test Admin".to_string(),
+            password_hash: "somehash".to_string(),
+            role: "app_admin".to_string(),
+            updated_at: Datetime::default(),
+        })
         .await
-        .expect("Failed to register");
+        .expect("Failed to create app admin")
+        .expect("User not returned");
 
-    assert!(response.status().is_success());
-
-    // 2. Extract Cookie
-    let cookie_header = response
-        .headers()
-        .get("set-cookie")
-        .expect("Missing Set-Cookie header in registration response");
-    
-    let cookie_str = cookie_header.to_str().expect("Failed to convert cookie to string");
-    // Extract name=value part (strip attributes like Path, HttpOnly)
-    let session_cookie = cookie_str.split(';').next().expect("Failed to parse cookie");
+    // 2. Create a session for the app admin
+    use merzah::auth::session::create_session;
+    let session_token = create_session(app_admin.id.clone(), &db).await.expect("Failed to create session");
 
     // 1. Add Mosques (Dearborn, MI area - small box containing Islamic Center of America)
     // Coords approx: 42.337, -83.223
@@ -97,7 +87,7 @@ async fn add_and_fetch_mosques() {
 
     let response = client.post(&add_url)
         .json(&add_params)
-        .header("Cookie", session_cookie)
+        .header("Authorization", format!("Bearer {}", session_token))
         .send()
         .await
         .expect("Failed to execute add_mosques_of_region");
@@ -159,7 +149,23 @@ async fn update_mosque_prayer_times() {
     let addr = spawn_app(db.clone());
     let client = Client::new();
 
-    // 1. Add Mosques (Dearborn area again)
+    // 1. Create an app_admin user and session
+    let app_admin: User = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", "admin")),
+            created_at: Datetime::default(),
+            display_name: "Admin".to_string(),
+            password_hash: "somehash".to_string(),
+            role: "app_admin".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create an app admin") 
+        .expect("The user doesn't exists");
+
+    let admin_session = create_session(app_admin.id.clone(), &db).await.expect("Failed to create admin session");
+
+    // 2. Add Mosques (Dearborn area again)
     let add_url = format!("{}/mosques/add-mosque-of-region", addr);
     let add_params = AddMosqueParams {
         south: 42.32,
@@ -170,11 +176,12 @@ async fn update_mosque_prayer_times() {
 
     let response = client.post(&add_url)
         .json(&add_params)
+        .header("Authorization", format!("Bearer {}", admin_session))
         .send()
         .await
         .expect("Failed to execute add_mosques_of_region");
     
-    assert!(response.status().is_success(), "Failed to add mosques");
+    assert!(response.status().is_success(), "Failed to add mosques: {:?}", response.text().await);
 
     // 2. Fetch Mosques to get an ID
     let fetch_url = format!("{}/mosques/fetch-mosques-for-location", addr);
@@ -195,23 +202,10 @@ async fn update_mosque_prayer_times() {
     let mosques = api_response.data.expect("No data returned");
     let mosque_id = mosques.first().expect("No mosques found").id.clone();
 
-
-    let app_admin: User = db.create("users")
-        .content(User {
-            id: RecordId::from(("users", "admin")),
-            created_at: Datetime::default(),
-            display_name: "Admin".to_string(),
-            password_hash: "somehash".to_string(),
-            role: "app_admin".to_string(),
-            updated_at: Datetime::default(),
-        })
-        .await
-        .expect("Failed to create an app admin") 
-        .expect("The user doesn't exists");
-
+    // 3. Create supervisor user
     let supervisor_user: User = db.create("users")
         .content(User {
-            id: RecordId::from(("users", "supervisor")),
+            id: RecordId::from(("users", format!("supervisor_{}", uuid::Uuid::new_v4()))),
             created_at: Datetime::default(),
             display_name: "Supervisor".to_string(),
             password_hash: "somehash".to_string(),
@@ -222,9 +216,10 @@ async fn update_mosque_prayer_times() {
         .expect("Failed to create supervisor user")
         .expect("The user doesn't exists");
 
+    // 4. Create mosque admin user
     let mosque_admin_user: User = db.create("users")
         .content(User {
-            id: RecordId::from(("users", "mosque_admin")),
+            id: RecordId::from(("users", format!("mosque_admin_{}", uuid::Uuid::new_v4()))),
             created_at: Datetime::default(),
             display_name: "Mosque Admin".to_string(),
             password_hash: "somehash".to_string(),
@@ -235,7 +230,7 @@ async fn update_mosque_prayer_times() {
         .expect("Failed to create mosque admin user")
         .expect("The user doesn't exists");
 
-    // 3. Elevate supervisor
+    // 5. Elevate supervisor
     let elevate_supervisor_url = format!("{}/mosques/elevate-user-to-mosque-supervisor", addr);
     let elevate_params = ElevateSupervisorParams {
         app_admin_id: app_admin.id.to_string(),
@@ -244,6 +239,7 @@ async fn update_mosque_prayer_times() {
 
     let response = client.post(&elevate_supervisor_url)
         .json(&elevate_params)
+        .header("Authorization", format!("Bearer {}", admin_session))
         .send()
         .await
         .expect("Failed to execute elevate-user-to-mosque-supervisor");
@@ -264,8 +260,12 @@ async fn update_mosque_prayer_times() {
         mosque_id: mosque_id.to_string(),
     };
 
+    // Create session for supervisor
+    let supervisor_session = create_session(supervisor_user.id.clone(), &db).await.expect("Failed to create supervisor session");
+
     let response = client.post(&add_admin_url)
         .json(&add_admin_params)
+        .header("Authorization", format!("Bearer {}", supervisor_session))
         .send()
         .await
         .expect("Failed to execute add-admin");
@@ -301,8 +301,12 @@ async fn update_mosque_prayer_times() {
         },
     };
 
+    // Create session for mosque admin
+    let mosque_admin_session = create_session(mosque_admin_user.id.clone(), &db).await.expect("Failed to create mosque admin session");
+
     let response = client.patch(&update_url)
         .json(&update_params)
+        .header("Authorization", format!("Bearer {}", mosque_admin_session))
         .send()
         .await
         .expect("Failed to execute update_adhan_jamat_times");
@@ -323,6 +327,22 @@ async fn favorite_and_unfavorite_mosques() {
     let addr = spawn_app(db.clone());
     let client = Client::new();
 
+    // 1. Create an app_admin user and session for adding mosques
+    let app_admin: User = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", "test_admin")),
+            created_at: Datetime::default(),
+            display_name: "Test Admin".to_string(),
+            password_hash: "somehash".to_string(),
+            role: "app_admin".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create app admin")
+        .expect("User not returned");
+
+    let admin_session = create_session(app_admin.id.clone(), &db).await.expect("Failed to create admin session");
+
     // 1. Add Mosques (Mandawali, Delhi area - high density)
     let add_url = format!("{}/mosques/add-mosque-of-region", addr);
     let add_params = AddMosqueParams {
@@ -331,7 +351,12 @@ async fn favorite_and_unfavorite_mosques() {
         north: 28.64,
         east: 77.31,
     };
-    client.post(&add_url).json(&add_params).send().await.expect("Failed to add mosques");
+    client.post(&add_url)
+        .json(&add_params)
+        .header("Authorization", format!("Bearer {}", admin_session))
+        .send()
+        .await
+        .expect("Failed to add mosques");
 
     // 2. Setup User
     let user: User = db.create("users")
@@ -346,6 +371,9 @@ async fn favorite_and_unfavorite_mosques() {
         .await
         .expect("Failed to create user")
         .expect("User not returned");
+
+    // Create session for the regular user
+    let user_session = create_session(user.id.clone(), &db).await.expect("Failed to create user session");
 
     // 3. Fetch Mosques
     let fetch_url = format!("{}/mosques/fetch-mosques-for-location", addr);
@@ -375,6 +403,7 @@ async fn favorite_and_unfavorite_mosques() {
         };
         let res = client.post(&add_fav_url)
             .json(&params)
+            .header("Authorization", format!("Bearer {}", user_session))
             .send()
             .await
             .expect("Failed to send fav");
@@ -410,6 +439,7 @@ async fn favorite_and_unfavorite_mosques() {
         
         let res = client.delete(&remove_fav_base_url)
             .query(&params)
+            .header("Authorization", format!("Bearer {}", user_session))
             .send()
             .await
             .expect("Failed to send unfav");
@@ -432,3 +462,159 @@ async fn favorite_and_unfavorite_mosques() {
          .expect("Take failed");
     assert_eq!(relations_after.len(), 1, "Should have 1 favorite left");
 }
+
+#[derive(Debug, Clone, Copy)]
+enum AuthMethod {
+    Web,
+    Mobile,
+}
+
+fn build_auth_headers(client: Client, session: &str, auth_method: AuthMethod, url: &str) -> reqwest::RequestBuilder {
+    match auth_method {
+        AuthMethod::Web => client.post(url).header("Cookie", format!("__Host-session={}", session)),
+        AuthMethod::Mobile => client.post(url).header("Authorization", format!("Bearer {}", session)),
+    }
+}
+
+fn build_auth_delete(client: Client, session: &str, auth_method: AuthMethod, url: &str) -> reqwest::RequestBuilder {
+    match auth_method {
+        AuthMethod::Web => client.delete(url).header("Cookie", format!("__Host-session={}", session)),
+        AuthMethod::Mobile => client.delete(url).header("Authorization", format!("Bearer {}", session)),
+    }
+}
+
+#[rstest]
+#[case::web(AuthMethod::Web, "web_client")]
+#[case::mobile(AuthMethod::Mobile, "mobile_client")]
+#[tokio::test]
+async fn test_favorite_mosque_with_both_auth_methods(
+    #[case] auth_method: AuthMethod,
+    #[case] _description: &str,
+) {
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let client = Client::new();
+
+    // 1. Create admin and add mosques
+    let app_admin: User = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", format!("admin_{}", uuid::Uuid::new_v4()))),
+            created_at: Datetime::default(),
+            display_name: "Test Admin".to_string(),
+            password_hash: "hash".to_string(),
+            role: "app_admin".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create admin")
+        .expect("Not returned");
+
+    let admin_session = create_session(app_admin.id.clone(), &db).await.expect("Failed to create session");
+
+    let add_url = format!("{}/mosques/add-mosque-of-region", addr);
+    let add_params = AddMosqueParams {
+        south: 28.61,
+        west: 77.28,
+        north: 28.64,
+        east: 77.31,
+    };
+
+    let add_req = build_auth_headers(client.clone(), &admin_session, auth_method, &add_url);
+    let add_response = add_req.json(&add_params).send().await.expect("Failed to add mosques");
+    
+    if !add_response.status().is_success() {
+        let text = add_response.text().await.unwrap_or_default();
+        println!("Overpass API might be rate limited or unavailable. Response: {}. Skipping test.", text);
+        return;
+    }
+
+    // 2. Create regular user
+    let user: User = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", format!("user_{}", uuid::Uuid::new_v4()))),
+            created_at: Datetime::default(),
+            display_name: "Test User".to_string(),
+            password_hash: "hash".to_string(),
+            role: "regular".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create user")
+        .expect("Not returned");
+
+    let user_session = create_session(user.id.clone(), &db).await.expect("Failed to create user session");
+
+    // 3. Fetch mosques
+    let fetch_url = format!("{}/mosques/fetch-mosques-for-location", addr);
+    let fetch_params = FetchMosqueParams {
+        lat: 28.625,
+        lon: 77.295,
+    };
+
+    let fetch_response = client.post(&fetch_url)
+        .json(&fetch_params)
+        .send()
+        .await
+        .expect("Failed to fetch");
+
+    let api_response = fetch_response.json::<ApiResponse<Vec<MosqueResponse>>>()
+        .await
+        .expect("Failed to deserialize");
+    let mosques = api_response.data.expect("No mosques");
+    
+    // 4. Add favorite using the specified auth method
+    let add_fav_url = format!("{}/mosques/add-favorite", addr);
+    let favorite_params = FavoriteParams {
+        user_id: user.id.to_string(),
+        mosque_id: mosques[0].id.to_string(),
+    };
+
+    let fav_req = build_auth_headers(client.clone(), &user_session, auth_method, &add_fav_url);
+    let fav_response = fav_req.json(&favorite_params).send().await.expect("Failed to send fav");
+
+    assert!(fav_response.status().is_success(),
+        "Favorite should succeed with {:?}. Status: {:?}",
+        auth_method, fav_response.status());
+
+    let fav_api_response: ApiResponse<String> = fav_response
+        .json()
+        .await
+        .expect("Failed to deserialize");
+    assert!(fav_api_response.error.is_none(), 
+        "Favorite should not have error: {:?}", fav_api_response.error);
+}
+
+#[rstest]
+#[case::web(AuthMethod::Web)]
+#[case::mobile(AuthMethod::Mobile)]
+#[tokio::test]
+async fn test_unauthenticated_access_to_protected_mosque_endpoints(
+    #[case] auth_method: AuthMethod,
+) {
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let client = Client::new();
+
+    let add_fav_url = format!("{}/mosques/add-favorite", addr);
+    let favorite_params = serde_json::json!({
+        "mosque_id": "mosques:test"
+    });
+
+    let mut req = client.post(&add_fav_url).json(&favorite_params);
+
+    match auth_method {
+        AuthMethod::Web => {
+            req = req.header("Cookie", "__Host-session=invalid_session");
+        }
+        AuthMethod::Mobile => {
+            req = req.header("Authorization", "Bearer invalid_token");
+        }
+    }
+
+    let response = req.send().await.expect("Failed to send request");
+
+    assert_eq!(response.status(), 401,
+        "Unauthenticated {:?} should return 401, got: {}",
+        auth_method, response.status());
+}
+

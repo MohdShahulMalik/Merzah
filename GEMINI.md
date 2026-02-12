@@ -148,7 +148,7 @@ In short, **Merzah** is conceived as a comprehensive ecosystem: a place where a 
  ## Intructions For Checking Code Correctness
   - NEVER use plain ```cargo check``` instead combine it with with features flag like ```cargo check --features ssr```
 
- ## Intructions For Code Edits
+ ## Intructions For Code Edits (That Apply to Tests Editing and Writting As Well)
   - Don't do unnecessary code edits that are not asked to do. If you think that a particular edit is necessary but is not asked to do then just simple ask me if I want to make you that edit as if you combine the unnecessary edits with the ones that were asked to do then it's not possible for me to reject that edit and then I will end up with some cascaded unnecessary edit.
   - NEVER write builder patterns like this ```let response = client.post(&fetch_url).json(&fetch_params).send().await.expect("Failed to fetch");``` instead write them like this ```let response = client.post(&fetch_url)
         .json(&fetch_params)

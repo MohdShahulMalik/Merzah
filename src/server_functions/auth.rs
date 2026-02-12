@@ -17,6 +17,8 @@ use crate::auth::custom_auth::{authenticate, register_user};
 #[cfg(feature = "ssr")]
 use crate::auth::session::{create_session, delete_session, remove_session_cookie, set_session_cookie};
 #[cfg(feature = "ssr")]
+use crate::errors::session::SessionError;
+#[cfg(feature = "ssr")]
 use crate::errors::auth::AuthError;
 
 #[server(input=Json, prefix = "/auth", endpoint = "register")]
@@ -182,6 +184,31 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
 
     if let Err(e) = delete_session(&session_token, &db).await {
         error!(?e, "Failed to delete session");
+        let session_error_option = e.downcast_ref::<SessionError>();
+        if let Some(session_error) = session_error_option {
+            match session_error {
+                SessionError::SessionExpired(_) => {
+                    response_option.set_status(StatusCode::UNAUTHORIZED);
+                    return Ok(ApiResponse::error("Your session has expired".to_string()));
+                }
+                SessionError::SessionNotFound => {
+                    response_option.set_status(StatusCode::UNAUTHORIZED);
+                    return Ok(ApiResponse::error("Session not found".to_string()));
+                }
+                SessionError::InvalidToken => {
+                    response_option.set_status(StatusCode::UNAUTHORIZED);
+                    return Ok(ApiResponse::error("Invalid session token".to_string()));
+                }
+                SessionError::UserNotFound => {
+                    response_option.set_status(StatusCode::UNAUTHORIZED);
+                    return Ok(ApiResponse::error("User not found for this session".to_string()));
+                }
+                SessionError::DatabaseError(err) => {
+                    response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+                    return Ok(ApiResponse::error(format!("Database error occurred: {}", err)));
+                }
+            }
+        }
         response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
         return Ok(ApiResponse::error("Failed to delete the session from the server".to_string()));
     }

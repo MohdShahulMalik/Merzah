@@ -1,7 +1,7 @@
 use crate::common::get_test_db;
 use merzah::{
     models::{
-        auth::RegistrationFormData,
+        auth::{RegistrationFormData, Platform},
         user::{Identifier, User},
     },
     utils::user_elevation::elevate_user,
@@ -29,6 +29,7 @@ async fn create_user(
         name.to_string(),
         Identifier::Email(unique_email),
         "password".to_string(),
+        Platform::Web,
     );
     let user_id = register_user(form, db).await.expect("Failed to register user");
 

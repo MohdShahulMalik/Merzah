@@ -1,16 +1,19 @@
 use crate::common::get_test_db;
-use surrealdb::{sql::Geometry, RecordId};
 use merzah::{
     models::{
-        api_responses::ApiResponse, auth::RegistrationFormData, mosque::{MosqueFromOverpass, MosqueSearchResult}, user::{Identifier, User}
+        api_responses::ApiResponse,
+        auth::{RegistrationFormData, Platform},
+        mosque::{MosqueFromOverpass, MosqueSearchResult},
+        user::{Identifier, User},
     },
     spawn_app,
 };
+use merzah::auth::custom_auth::register_user;
+use merzah::auth::session::create_session;
 use reqwest::Client;
 use rstest::rstest;
 use serde::{Deserialize, Serialize};
-use surrealdb::{engine::remote::ws::Client as SurrealClient, Surreal};
-use merzah::auth::custom_auth::register_user;
+use surrealdb::{sql::Geometry, RecordId, Surreal, engine::remote::ws::Client as SurrealClient};
 
 #[derive(Serialize)]
 struct AddAdminPayload {
@@ -24,7 +27,7 @@ struct Role{
     role: String,
 }
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize, Serialize)]
 struct Handle {
     granted_by: RecordId,
 }
@@ -34,12 +37,13 @@ async fn create_user(
     name: &str,
     email: &str,
     role: Option<&str>,
-) -> User {
+) -> (User, String) {
     let unique_email = format!("{}_{}", uuid::Uuid::new_v4(), email);
     let form = RegistrationFormData::new(
         name.to_string(),
         Identifier::Email(unique_email),
         "password".to_string(),
+        Platform::Web,
     );
     let user_id = register_user(form, db).await.expect("Failed to register user");
 
@@ -51,7 +55,10 @@ async fn create_user(
             .expect("Failed to set role");
     }
 
-    db.select(user_id).await.expect("User not found").unwrap()
+    let user = db.select(user_id.clone()).await.expect("User not found").unwrap();
+    let session_token = create_session(user_id, db).await.expect("Failed to create session");
+    
+    (user, session_token)
 }
 
 #[rstest]
@@ -68,11 +75,11 @@ async fn test_add_admin_endpoint(
     let db = get_test_db().await;
     let addr = spawn_app(db.clone());
     let client = Client::new();
-    let url = format!("{}/mosque/add-admin", addr);
+    let url = format!("{}/mosques/add-admin", addr);
 
     // Setup Data
-    let supervisor = create_user(&db, "Supervisor", "super@test.com", Some(supervisor_role)).await;
-    let new_admin = create_user(&db, "New Admin", "admin@test.com", Some("regular")).await;
+    let (supervisor, supervisor_session) = create_user(&db, "Supervisor", "super@test.com", Some(supervisor_role)).await;
+    let (new_admin, _) = create_user(&db, "New Admin", "admin@test.com", Some("regular")).await;
     
     // Create a dummy mosque
     let _: Option<MosqueSearchResult> = db.create("mosques").content(MosqueFromOverpass{
@@ -93,6 +100,7 @@ async fn test_add_admin_endpoint(
 
     let response = client
         .post(&url)
+        .header("Authorization", format!("Bearer {}", supervisor_session))
         .json(&payload)
         .send()
         .await

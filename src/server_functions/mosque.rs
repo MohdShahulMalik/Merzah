@@ -190,13 +190,13 @@ pub async fn fetch_mosques_for_location(
         WHERE geo::distance(location, $point) < $radius
         ORDER BY distance ASC
     "#;
-    let mut result = db
+    let mut response = db
         .query(query)
         .bind(("point", point))
         .bind(("radius", radius_in_meters))
         .await?;
 
-    let mosques: Vec<MosqueSearchResult> = result.take(0)?;
+    let mosques: Vec<MosqueSearchResult> = response.take(0)?;
 
     Ok(ApiResponse {
         data: Some(mosques.into_iter().map(|m| m.from()).collect()),
