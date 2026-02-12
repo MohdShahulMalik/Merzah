@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::models::{mosque::PrayerTimes, user::{UserIdentifierOnClient, UserOnClient}};
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ApiResponse<T = String>{
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -25,4 +27,10 @@ pub struct MosqueResponse {
     pub name: Option<String>,
     pub street: Option<String>,
     pub city: Option<String>,
+    pub adhan_times: Option<PrayerTimes>,
+    pub jamat_times: Option<PrayerTimes>,
+    pub imam: UserOnClient,
+    pub muazzin: UserOnClient,
+    pub imam_contact: Vec<UserIdentifierOnClient>,
+    pub muazzin_contact: Vec<UserIdentifierOnClient>,
 }

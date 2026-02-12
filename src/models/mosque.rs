@@ -8,6 +8,8 @@ use chrono::NaiveTime;
 
 #[cfg(feature = "ssr")]
 use crate::models::api_responses::MosqueResponse;
+#[cfg(feature = "ssr")]
+use crate::models::user::User;
 
 #[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
@@ -28,6 +30,10 @@ pub struct MosqueSearchResult {
     pub name: Option<String>,
     pub street: Option<String>,
     pub city: Option<String>,
+    pub adhan_times: Option<PrayerTimes>,
+    pub jamat_times: Option<PrayerTimes>,
+    pub imam: User,
+    pub muazzin: User,
 }
 
 #[cfg(feature="ssr")]
@@ -73,7 +79,13 @@ impl MosqueSearchResult {
             location: self.location, 
             name: self.name, 
             street: self.street, 
-            city: self.city 
+            city: self.city, 
+            adhan_times: self.adhan_times,
+            jamat_times: self.jamat_times,
+            imam: self.imam.into(),
+            muazzin: self.muazzin.into(),
+            imam_contact: vec![],
+            muazzin_contact: vec![],
         }
     }
 }
@@ -111,7 +123,7 @@ pub struct Tags {
 
 /// Prayer times stored in the database as strings ("HH:MM:SS" format)
 /// Use this for creating/updating prayer_times records
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct PrayerTimes {
     pub fajr: NaiveTime,
     pub dhuhr: NaiveTime,

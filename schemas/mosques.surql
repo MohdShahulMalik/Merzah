@@ -5,6 +5,9 @@ DEFINE FIELD IF NOT EXISTS location ON mosques TYPE geometry<point>;
 DEFINE FIELD IF NOT EXISTS street ON mosques TYPE option<string>;
 DEFINE FIELD IF NOT EXISTS city ON mosques TYPE option<string>;
 
+DEFINE FIELD IF NOT EXISTS imam ON mosques TYPE option<record<users>>;
+DEFINE FIELD IF NOT EXISTS muazzin ON mosques TYPE option<record<users>>;
+
 DEFINE FIELD IF NOT EXISTS adhan_times ON mosques TYPE option<object>;
 DEFINE FIELD IF NOT EXISTS adhan_times.fajr ON mosques TYPE string;
 DEFINE FIELD IF NOT EXISTS adhan_times.dhuhr ON mosques TYPE string;

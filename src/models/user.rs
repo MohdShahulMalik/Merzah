@@ -44,6 +44,13 @@ impl User {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub struct UserOnClient {
+    pub id: String,
+    pub display_name: String,
+    pub role: String,
+}
+
 #[cfg(feature = "ssr")]
 impl From<User> for UpdateUser {
     fn from(user: User) -> Self {
@@ -51,6 +58,17 @@ impl From<User> for UpdateUser {
             display_name: Some(user.display_name),
             role: Some(user.role),
             updated_at: user.updated_at,
+        }
+    }
+}
+
+#[cfg(feature = "ssr")]
+impl From<User> for UserOnClient {
+    fn from(user: User) -> Self {
+        UserOnClient {
+            id: user.id.to_string(),
+            display_name: user.display_name,
+            role: user.role,
         }
     }
 }
@@ -103,6 +121,12 @@ pub struct UserIdentifier {
     pub user: RecordId,
     pub created_at: Datetime,
     pub updated_at: Datetime,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+pub struct UserIdentifierOnClient {
+    pub identifier_type: String,
+    pub identifier_value: String,
 }
 
 #[cfg(feature = "ssr")]
