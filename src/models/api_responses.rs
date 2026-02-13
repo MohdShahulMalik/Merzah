@@ -29,8 +29,8 @@ pub struct MosqueResponse {
     pub city: Option<String>,
     pub adhan_times: Option<PrayerTimes>,
     pub jamat_times: Option<PrayerTimes>,
-    pub imam: UserOnClient,
-    pub muazzin: UserOnClient,
+    pub imam: Option<UserOnClient>,
+    pub muazzin: Option<UserOnClient>,
     pub imam_contact: Vec<UserIdentifierOnClient>,
     pub muazzin_contact: Vec<UserIdentifierOnClient>,
 }

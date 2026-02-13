@@ -32,8 +32,8 @@ pub struct MosqueSearchResult {
     pub city: Option<String>,
     pub adhan_times: Option<PrayerTimes>,
     pub jamat_times: Option<PrayerTimes>,
-    pub imam: User,
-    pub muazzin: User,
+    pub imam: Option<User>,
+    pub muazzin: Option<User>,
 }
 
 #[cfg(feature="ssr")]
@@ -74,6 +74,9 @@ where
 #[cfg(feature = "ssr")]
 impl MosqueSearchResult {
     pub fn from(self) -> MosqueResponse {
+        let imam = self.imam.map(|imam| imam.into());
+        let muazzin = self.muazzin.map(|muazzin| muazzin.into());
+
         MosqueResponse { 
             id: self.id.to_string(),
             location: self.location, 
@@ -82,10 +85,10 @@ impl MosqueSearchResult {
             city: self.city, 
             adhan_times: self.adhan_times,
             jamat_times: self.jamat_times,
-            imam: self.imam.into(),
-            muazzin: self.muazzin.into(),
             imam_contact: vec![],
             muazzin_contact: vec![],
+            imam,
+            muazzin,
         }
     }
 }

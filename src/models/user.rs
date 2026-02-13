@@ -129,6 +129,15 @@ pub struct UserIdentifierOnClient {
     pub identifier_value: String,
 }
 
+impl UserIdentifierOnClient {
+    pub fn new(identifier_type: String, identifier_value: String) -> Self {
+        UserIdentifierOnClient {
+            identifier_type,
+            identifier_value,
+        }
+    }
+}
+
 #[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize)]
 pub struct UserIdentifierWithUser {
