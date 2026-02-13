@@ -1,7 +1,7 @@
 use crate::{auth::RegisterationFormWrapper, common::get_test_db};
 use merzah::{
     models::{
-        api_responses::{ApiResponse, MosqueResponse}, auth::{Platform, RegistrationFormData}, mosque::{PrayerTimes, PrayerTimesUpdate}, user::{Identifier, User}
+        api_responses::{ApiResponse, MosqueResponse}, auth::{Platform, RegistrationFormData}, mosque::{PrayerTimes, PrayerTimesUpdate, MosqueRecord, MosqueSearchResult}, user::{Identifier, User}
     },
     spawn_app,
 };
@@ -10,7 +10,7 @@ use reqwest::Client;
 use rstest::rstest;
 use serde::Serialize;
 use chrono::NaiveTime;
-use surrealdb::{Datetime, RecordId};
+use surrealdb::{Datetime, RecordId, sql::Geometry};
 
 #[derive(Serialize)]
 struct AddMosqueParams {
@@ -39,6 +39,24 @@ struct FavoriteParams {
     mosque_id: String,
 }
 
+#[derive(Serialize)]
+struct UpdatePersonnelParams {
+    person_type: String,
+    person_id: String,
+    mosque_id: String,
+}
+
+#[derive(Serialize)]
+struct CreateMosque {
+    pub location: Geometry,
+    pub name: String,
+}
+
+#[derive(Serialize)]
+struct AddFavoriteParams {
+    pub mosque_id: String,
+}
+
 #[derive(serde::Deserialize)]
 struct Favorited {
     #[allow(dead_code)]
@@ -49,6 +67,168 @@ struct Favorited {
     #[serde(rename = "out")]
     #[allow(dead_code)]
     mosque: RecordId,
+}
+
+#[rstest]
+#[case::app_admin("app_admin", false, 200)]
+#[case::mosque_admin("regular", true, 200)]
+#[case::unauthorized_user("regular", false, 401)]
+#[tokio::test]
+async fn test_update_mosque_personnel(
+    #[case] role: &str,
+    #[case] is_admin_of_mosque: bool,
+    #[case] expected_status: u16,
+) {
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let client = Client::new();
+
+    // 1. Create a mosque
+    let mosque: MosqueRecord = db.create("mosques")
+        .content(CreateMosque {
+            location: Geometry::Point((0.0, 0.0).into()),
+            name: "Test Mosque".to_string(),
+        })
+        .await
+        .expect("Failed to create mosque")
+        .expect("Not returned");
+
+    // 2. Create the acting user
+    let user_id = RecordId::from(("users", format!("user_{}", uuid::Uuid::new_v4())));
+    let user: User = db.create(user_id.clone())
+        .content(User {
+            id: user_id.clone(),
+            created_at: Datetime::default(),
+            display_name: "Acting User".to_string(),
+            password_hash: "hash".to_string(),
+            role: role.to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create user")
+        .expect("Not returned");
+
+    // 3. If mosque admin, relate user to mosque
+    if is_admin_of_mosque {
+        db.query("RELATE $user -> handles -> $mosque SET granted_by = $user")
+            .bind(("user", user.id.clone()))
+            .bind(("mosque", mosque.id.clone()))
+            .await
+            .expect("Failed to relate");
+    }
+/*
+Running tests/integration.rs (target/debug/deps/integration-d7d297805f91e71a)
+running 3 tests
+test mosque::test_update_mosque_personnel::case_3_unauthorized_user ... ok
+test mosque::test_update_mosque_personnel::case_1_app_admin ... FAILED
+test mosque::test_update_mosque_personnel::case_2_mosque_admin ... FAILED
+
+failures:
+
+---- mosque::test_update_mosque_personnel::case_1_app_admin stdout ----
+
+thread 'mosque::test_update_mosque_personnel::case_1_app_admin' panicked at tests/integration/mosque.rs:156:77:
+Failed to select: Db(Serialization("failed to deserialize; expected an object-like struct named $surrealdb::private::sql::Thing, found Id::String(\"imam_user\")"))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- mosque::test_update_mosque_personnel::case_2_mosque_admin stdout ----
+
+thread 'mosque::test_update_mosque_personnel::case_2_mosque_admin' panicked at tests/integration/mosque.rs:156:77:
+Failed to select: Db(Serialization("failed to deserialize; expected an object-like struct named $surrealdb::private::sql::Thing, found Id::String(\"imam_user\")"))
+
+failures:
+    mosque::test_update_mosque_personnel::case_1_app_admin
+    mosque::test_update_mosque_personnel::case_2_mosque_admin
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 21 filtered out; finished in 1.82s */
+
+    let session = create_session(user.id.clone(), &db).await.expect("Failed to create session");
+
+    // 4. Create a personnel user to assign
+    let imam_id = RecordId::from(("users", "imam_user"));
+    let _: User = db.create(imam_id.clone())
+        .content(User {
+            id: imam_id.clone(),
+            created_at: Datetime::default(),
+            display_name: "Imam User".to_string(),
+            password_hash: "hash".to_string(),
+            role: "regular".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create imam")
+        .expect("Not returned");
+
+    // 5. Attempt update
+    let update_url = format!("{}/mosques/update-personnel", addr);
+    let params = UpdatePersonnelParams {
+        person_type: "imam".to_string(),
+        person_id: imam_id.to_string(),
+        mosque_id: mosque.id.to_string(),
+    };
+
+    let response = client.patch(&update_url)
+        .json(&params)
+        .header("Authorization", format!("Bearer {}", session))
+        .send()
+        .await
+        .expect("Failed to send update");
+
+    assert_eq!(response.status().as_u16(), expected_status);
+
+    // 6. If success, verify in DB
+    if expected_status == 200 {
+        let updated_mosque: Option<MosqueSearchResult> = db.query("SELECT * FROM mosques WHERE id = $mosque_id LIMIT 1 FETCH imam, muazzin")
+            .bind(("mosque_id", mosque.id))
+            .await
+            .expect("Failed to select")
+            .take(0)
+            .expect("Take failed");
+
+        let updated_mosque = updated_mosque.expect("Mosque not found");
+
+        assert_eq!(updated_mosque.imam.map(|u| u.id), Some(imam_id));
+    }
+}
+
+#[tokio::test]
+async fn update_mosque_personnel_invalid_type() {
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let client = Client::new();
+
+    // 1. Create app admin
+    let app_admin: User = db.create("users")
+        .content(User {
+            id: RecordId::from(("users", "app_admin")),
+            created_at: Datetime::default(),
+            display_name: "App Admin".to_string(),
+            password_hash: "hash".to_string(),
+            role: "app_admin".to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create app admin")
+        .expect("Not returned");
+
+    let admin_session = create_session(app_admin.id.clone(), &db).await.expect("Failed to create session");
+
+    // 2. Attempt update with invalid type
+    let update_url = format!("{}/mosques/update-personnel", addr);
+    let params = UpdatePersonnelParams {
+        person_type: "invalid_type".to_string(),
+        person_id: "users:any".to_string(),
+        mosque_id: "mosques:any".to_string(),
+    };
+
+    let response = client.patch(&update_url)
+        .json(&params)
+        .header("Authorization", format!("Bearer {}", admin_session))
+        .send()
+        .await
+        .expect("Failed to send update");
+
+    assert_eq!(response.status(), 400);
 }
 
 #[tokio::test]
@@ -561,6 +741,8 @@ async fn test_favorite_mosque_with_both_auth_methods(
         .await
         .expect("Failed to deserialize");
     let mosques = api_response.data.expect("No mosques");
+
+    assert_eq!(mosques.len(), 3, "Should have exactly 3 mosques for this test");
     
     // 4. Add favorite using the specified auth method
     let add_fav_url = format!("{}/mosques/add-favorite", addr);
@@ -596,9 +778,9 @@ async fn test_unauthenticated_access_to_protected_mosque_endpoints(
     let client = Client::new();
 
     let add_fav_url = format!("{}/mosques/add-favorite", addr);
-    let favorite_params = serde_json::json!({
-        "mosque_id": "mosques:test"
-    });
+    let favorite_params = AddFavoriteParams {
+        mosque_id: "mosques:test".to_string(),
+    };
 
     let mut req = client.post(&add_fav_url).json(&favorite_params);
 
