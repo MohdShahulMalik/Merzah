@@ -24,6 +24,10 @@ use crate::models::mosque::{
 use surrealdb::{RecordId, sql::Geometry};
 #[cfg(feature = "ssr")]
 use tracing::error;
+#[cfg(feature = "ssr")]
+use std::collections::{HashSet, HashMap};
+#[cfg(feature = "ssr")]
+use crate::models::user::{UserIdentifier, UserIdentifierOnClient};
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(
@@ -189,6 +193,7 @@ pub async fn fetch_mosques_for_location(
         SELECT *, geo::distance(location, $point) AS distance FROM mosques
         WHERE geo::distance(location, $point) < $radius
         ORDER BY distance ASC
+        FETCH imam, muazzin
     "#;
     let mut response = db
         .query(query)
@@ -197,9 +202,49 @@ pub async fn fetch_mosques_for_location(
         .await?;
 
     let mosques: Vec<MosqueSearchResult> = response.take(0)?;
+    
+    // 1. Collect unique user IDs for bulk identifier fetch
+    let mut user_ids = HashSet::new();
+    for mosque in &mosques {
+        user_ids.insert(mosque.imam.id.to_string());
+        user_ids.insert(mosque.muazzin.id.to_string());
+    }
+
+    // 2. Bulk fetch identifiers
+    let user_ids_vec: Vec<String> = user_ids.into_iter().collect();
+    let mut ident_res = db.query("SELECT * FROM user_identifier WHERE user IN $user_ids")
+        .bind(("user_ids", user_ids_vec))
+        .await?;
+    let identifiers: Vec<UserIdentifier> = ident_res.take(0)?;
+
+    // 3. Map identifiers by User ID
+    let mut id_to_contacts: HashMap<RecordId, Vec<UserIdentifierOnClient>> = HashMap::new();
+    for ident in identifiers {
+        id_to_contacts.entry(ident.user).or_default().push(UserIdentifierOnClient {
+            identifier_type: ident.identifier_type,
+            identifier_value: ident.identifier_value,
+        });
+    }
+
+    // 4. Assemble final MosqueResponse
+    let mosque_responses = mosques.into_iter().map(|m| {
+        let imam_id = m.imam.id.clone();
+        let muazzin_id = m.muazzin.id.clone();
+        let mut res = m.from();
+        
+        if let Some(contacts) = id_to_contacts.get(&imam_id) {
+            res.imam_contact = contacts.clone();
+        }
+        
+        if let Some(contacts) = id_to_contacts.get(&muazzin_id) {
+            res.muazzin_contact = contacts.clone();
+        }
+        
+        res
+    }).collect();
 
     Ok(ApiResponse {
-        data: Some(mosques.into_iter().map(|m| m.from()).collect()),
+        data: Some(mosque_responses),
         error: None,
     })
 }
