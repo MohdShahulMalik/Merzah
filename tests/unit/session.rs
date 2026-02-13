@@ -43,15 +43,13 @@ async fn test_delete_session_invalid_token_format() -> anyhow::Result<()> {
 }
 
 #[tokio::test]
-async fn test_delete_session_non_existent_token() -> anyhow::Result<()> {
+async fn test_delete_non_existent_session_token_should_be_successful() -> anyhow::Result<()> {
     let db = get_test_db().await;
     // A valid formatted token (40-50 chars, alphanumeric/dash/underscore) that doesn't exist
     let fake_token = "a".repeat(45); 
     
-    // This should succeed (idempotent delete) because the query just deletes nothing
-    // BUT validate_session_token passes.
     let result = delete_session(&fake_token, &db).await;
-    assert!(result.is_ok());
+    assert!(result.is_err());
     
     Ok(())
 }
