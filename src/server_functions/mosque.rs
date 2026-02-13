@@ -265,7 +265,7 @@ pub async fn update_adhan_jamat_times(
     };
 
     if !mosque_admin.is_app_admin() {
-        if let Err(e) = is_mosque_admin(mosque_admin.id, mosque_id.clone(), &db).await {
+        if let Err(e) = is_mosque_admin(&mosque_admin.id, &mosque_id, &db).await {
             let (status, msg) = match e {
                 UserElevationError::Unauthorized => (
                     StatusCode::UNAUTHORIZED,
@@ -473,4 +473,60 @@ pub async fn remove_favorite(
     }
 
     Ok(ApiResponse::data("Successfully removed the mosque from favorite list of the user".to_string()))    
+}
+
+#[server(input = PatchJson, output = Json, prefix = "/mosques", endpoint = "update-personnel")]
+pub async fn update_mosque_personnel(person_type: String, person_id: String, mosque_id: String) -> Result<ApiResponse, ServerFnError> {
+    let (response_options, db, auth_user) = match get_authenticated_user::<String>().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+
+    if person_type != "imam" && person_type != "muazzin" {
+        response_options.set_status(StatusCode::BAD_REQUEST);
+        return Ok(ApiResponse::error("person_type must be either 'imam' or 'muazzin'".to_string()));
+    }
+
+    let person_id: RecordId = match parse_record_id(&person_id, "person_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    let mosque_id: RecordId = match parse_record_id(&mosque_id, "mosque_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    if !auth_user.is_app_admin() {
+        if let Err(e) = is_mosque_admin(&auth_user.id, &mosque_id, &db).await {
+            let (status, msg) = match e {
+                UserElevationError::Unauthorized => (
+                    StatusCode::UNAUTHORIZED,
+                    "The user trying to update mosque info is not an admin of that mosque".to_string(),
+                ),
+                _ => (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "Failed to verify admin permissions".to_string(),
+                ),
+            };
+            error!("{}", msg);
+            response_options.set_status(status);
+            return Ok(ApiResponse::error(msg));
+        }
+    }
+
+    let update_query = format!("UPDATE mosques SET {} = $person_id WHERE id = $mosque_id", person_type);
+    let result = db.query(update_query)
+        .bind(("person_id", person_id))
+        .bind(("mosque_id", mosque_id))
+        .await;
+
+    match result {
+        Ok(_) => Ok(ApiResponse::data(format!("Successfully updated mosque {} information", person_type))),
+        Err(e) => {
+            error!(?e, "Failed to update mosque personnel");
+            response_options.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            Ok(ApiResponse::error("Failed to update mosque personnel due to database error".to_string()))
+        }
+    }
 }

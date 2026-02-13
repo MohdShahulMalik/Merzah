@@ -47,14 +47,14 @@ pub async fn elevate_user(
 }
 
 pub async fn is_mosque_admin(
-    admin_user_id: RecordId,
-    mosque_id: RecordId,
+    admin_user_id: &RecordId,
+    mosque_id: &RecordId,
     db: &Surreal<Client>,
 ) -> Result<(), UserElevationError> {
     let is_admin_query = r#"SELECT * FROM $mosque_admin->handles->mosques WHERE id = $mosque_id"#;
     let mut query_result = db.query(is_admin_query)
-        .bind(("mosque_admin", admin_user_id))
-        .bind(("mosque_id", mosque_id))
+        .bind(("mosque_admin", admin_user_id.clone()))
+        .bind(("mosque_id", mosque_id.clone()))
         .await
         .map_err(UserElevationError::DatabaseError)?;
 
