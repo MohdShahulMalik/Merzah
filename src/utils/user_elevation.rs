@@ -46,23 +46,11 @@ pub async fn elevate_user(
     Ok(format!("Elevated the user to {elevation_degree}"))
 }
 
-pub async fn verify_mosque_admin_or_app_admin(
+pub async fn is_mosque_admin(
     admin_user_id: RecordId,
     mosque_id: RecordId,
     db: &Surreal<Client>,
 ) -> Result<(), UserElevationError> {
-    let admin_user: Option<User> = db.select(admin_user_id.clone()).await
-        .map_err(UserElevationError::DatabaseError)?;
-
-    let admin_user = match admin_user {
-        Some(user) => user,
-        None => return Err(UserElevationError::AdminNotFound),
-    };
-
-    if admin_user.is_app_admin() {
-        return Ok(());
-    }
-
     let is_admin_query = r#"SELECT * FROM $mosque_admin->handles->mosques WHERE id = $mosque_id"#;
     let mut query_result = db.query(is_admin_query)
         .bind(("mosque_admin", admin_user_id))

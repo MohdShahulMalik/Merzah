@@ -3,7 +3,7 @@ use crate::{
     errors::user_elevation::UserElevationError,
     utils::{
         parsing::parse_record_id, ssr::get_authenticated_user, ssr::get_server_context, user_elevation::elevate_user,
-        user_elevation::verify_mosque_admin_or_app_admin,
+        user_elevation::is_mosque_admin,
     },
 };
 #[cfg(feature = "ssr")]
@@ -264,24 +264,22 @@ pub async fn update_adhan_jamat_times(
         Err(e) => return Ok(e),
     };
 
-    if let Err(e) = verify_mosque_admin_or_app_admin(mosque_admin.id, mosque_id.clone(), &db).await {
-        let (status, msg) = match e {
-            UserElevationError::Unauthorized => (
-                StatusCode::UNAUTHORIZED,
-                "The user trying to update mosque info is not an admin of that mosque".to_string(),
-            ),
-            UserElevationError::AdminNotFound => (
-                StatusCode::UNAUTHORIZED,
-                "The mosque admin was not found".to_string(),
-            ),
-            _ => (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                "Failed to verify admin permissions".to_string(),
-            ),
-        };
-        error!("{}", msg);
-        response_options.set_status(status);
-        return Ok(ApiResponse::error(msg));
+    if !mosque_admin.is_app_admin() {
+        if let Err(e) = is_mosque_admin(mosque_admin.id, mosque_id.clone(), &db).await {
+            let (status, msg) = match e {
+                UserElevationError::Unauthorized => (
+                    StatusCode::UNAUTHORIZED,
+                    "The user trying to update mosque info is not an admin of that mosque".to_string(),
+                ),
+                _ => (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "Failed to verify admin permissions".to_string(),
+                ),
+            };
+            error!("{}", msg);
+            response_options.set_status(status);
+            return Ok(ApiResponse::error(msg));
+        }
     }
 
     db.update::<Option<MosqueRecord>>(mosque_id)
