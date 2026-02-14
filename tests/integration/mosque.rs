@@ -1,4 +1,4 @@
-use crate::{auth::RegisterationFormWrapper, common::get_test_db};
+use crate::common::get_test_db;
 use merzah::{
     models::{
         api_responses::{ApiResponse, MosqueResponse}, auth::{Platform, RegistrationFormData}, mosque::{PrayerTimes, PrayerTimesUpdate, MosqueRecord, MosqueSearchResult}, user::{Identifier, User}

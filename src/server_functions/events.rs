@@ -4,7 +4,7 @@ use leptos::{ prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, * };
 use surrealdb::RecordId;
 use tracing::error;
 
-use crate::{models::{api_responses::ApiResponse, events::{ CreateEvent, Event, UpdatedEvent }}, utils::parsing::parse_record_id};
+use crate::{models::{api_responses::ApiResponse, events::{ CreateEvent, Event, UpdatedEvent }}, utils::{parsing::parse_record_id, ssr::get_server_context}};
 use crate::utils::ssr::{ServerResponse, get_authenticated_user};
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
@@ -142,4 +142,43 @@ pub async fn fetch_users_favorite_mosques_events() -> Result<ApiResponse<Vec<Eve
     };
 
     Ok(responder.ok(events))
+}
+
+pub async fn fetch_mosque_events(mosque_id: String) -> Result<ApiResponse<Vec<Event>>, surrealdb::Error> {
+    let (response_options, db) = match get_server_context::<Vec<Event>>().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+
+    let responder = ServerResponse::new(response_options);
+
+    let mosque_id: RecordId = match parse_record_id::<Vec<Event>>(&mosque_id, "mosque_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    let query = r#"
+        $mosque_id->hosts->events.*
+    "#;
+
+    let events_query_result = db.query(query)
+        .bind(("mosque_id", mosque_id))
+        .await;
+
+    let events_take_result = match events_query_result {
+        Ok(mut response) => response.take(0),
+        Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
+    };
+
+    let events_option: Option<Vec<Event>> = match events_take_result {
+        Ok(events) => events,
+        Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured while parsing the query result: {err}"))),
+    };
+
+    let events: Vec<Event> = match events_option {
+        Some(events) => events,
+        None => return Ok(responder.ok(vec![])), // no events found for the mosque, return an empty array
+    };
+
+    Ok(ApiResponse::data(events))
 }
