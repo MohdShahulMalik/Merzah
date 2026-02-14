@@ -48,6 +48,13 @@ impl EventSummary {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum FetchedEvents {
+    Summary(Vec<EventSummary>),
+    Personal(Vec<PersonalEvent>),
+}
+
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct CreateEvent {
     #[garde(length(min = 2, max = 100))]

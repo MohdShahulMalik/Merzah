@@ -6,8 +6,9 @@ use leptos::{ prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, * };
 use surrealdb::RecordId;
 use tracing::error;
 
-use crate::{models::{api_responses::ApiResponse, events::{ CreateEvent, Event, PersonalEvent, UpdatedEvent }}, utils::{parsing::parse_record_id, ssr::get_server_context}};
+use crate::{models::{api_responses::ApiResponse, events::{ CreateEvent, Event, EventSummary, FetchedEvents, PersonalEvent, UpdatedEvent }}, utils::{parsing::parse_record_id, ssr::get_server_context}};
 use crate::utils::ssr::{ServerResponse, get_authenticated_user};
+use crate::utils::user_elevation::is_mosque_admin;
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
 pub async fn add_event(mosque_id: String, event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
@@ -159,41 +160,63 @@ pub async fn fetch_users_favorite_mosques_events() -> Result<ApiResponse<Vec<Per
     Ok(responder.ok(personal_events))
 }
 
-pub async fn fetch_mosque_events(mosque_id: String) -> Result<ApiResponse<Vec<Event>>, surrealdb::Error> {
-    let (response_options, db) = match get_server_context::<Vec<Event>>().await {
+#[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "/fetch-mosque-events")]
+pub async fn fetch_mosque_events(mosque_id: String) -> Result<ApiResponse<FetchedEvents>, ServerFnError> {
+    let (response_options, db, user) = match get_authenticated_user::<FetchedEvents>().await {
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
 
     let responder = ServerResponse::new(response_options);
 
-    let mosque_id: RecordId = match parse_record_id::<Vec<Event>>(&mosque_id, "mosque_id") {
+    let mosque_id: RecordId = match parse_record_id(&mosque_id, "mosque_id") {
         Ok(id) => id,
         Err(e) => return Ok(e),
     };
 
-    let query = r#"
-        $mosque_id->hosts->events.*
-    "#;
+    let is_admin = is_mosque_admin(&user.id, &mosque_id, &db).await.is_ok();
 
-    let events_query_result = db.query(query)
-        .bind(("mosque_id", mosque_id))
-        .await;
+    if is_admin {
+        let query = r#"
+            SELECT 
+                { id: id, title: title, description: description, category: category, date: date, speaker: speaker } AS event,
+                count(<-attending) AS rsvp_count
+            FROM events
+            WHERE id IN $mosque_id->hosts->events
+            GROUP BY ALL
+        "#;
 
-    let events_take_result = match events_query_result {
-        Ok(mut response) => response.take(0),
-        Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
-    };
+        let query_result = db.query(query)
+            .bind(("mosque_id", mosque_id))
+            .await;
 
-    let events_option: Option<Vec<Event>> = match events_take_result {
-        Ok(events) => events,
-        Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured while parsing the query result: {err}"))),
-    };
+        let events: Vec<EventSummary> = match query_result {
+            Ok(mut response) => response.take(0).unwrap_or_default(),
+            Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
+        };
 
-    let events: Vec<Event> = match events_option {
-        Some(events) => events,
-        None => return Ok(responder.ok(vec![])), // no events found for the mosque, return an empty array
-    };
+        Ok(responder.ok(FetchedEvents::Summary(events)))
+    } else {
+        let query = r#"
+            SELECT 
+                { id: id, title: title, description: description, category: category, date: date, speaker: speaker } AS event,
+                (count(<-attending WHERE in = $user_id) == 1) AS rsvp
+            FROM events
+            WHERE id IN $mosque_id->hosts->events
+            GROUP BY ALL
+        "#;
 
-    Ok(ApiResponse::data(events))
+        let query_result = db.query(query)
+            .bind(("mosque_id", mosque_id))
+            .bind(("user_id", user.id))
+            .await;
+
+        let events: Vec<PersonalEvent> = match query_result {
+            Ok(mut response) => response.take(0).unwrap_or_default(),
+            Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
+        };
+
+        Ok(responder.ok(FetchedEvents::Personal(events)))
+    }
 }
+
