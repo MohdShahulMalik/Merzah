@@ -24,6 +24,30 @@ pub struct Event {
     pub speaker: Option<String>,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PersonalEvent {
+    pub event: Event,
+    pub rsvp: bool,
+}
+
+impl PersonalEvent {
+    pub fn new(event: Event, rsvp: bool) -> Self {
+        Self { event, rsvp }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct EventSummary {
+    pub event: Event,
+    pub rsvp_count: usize,
+}
+
+impl EventSummary {
+    pub fn new(event: Event, rsvp_count: usize) -> Self {
+        Self { event, rsvp_count }
+    }
+}
+
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct CreateEvent {
     #[garde(length(min = 2, max = 100))]

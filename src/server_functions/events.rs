@@ -1,10 +1,12 @@
+use std::collections::HashSet;
+
 use garde::Validate;
 use leptos::{ prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, * };
 
 use surrealdb::RecordId;
 use tracing::error;
 
-use crate::{models::{api_responses::ApiResponse, events::{ CreateEvent, Event, UpdatedEvent }}, utils::{parsing::parse_record_id, ssr::get_server_context}};
+use crate::{models::{api_responses::ApiResponse, events::{ CreateEvent, Event, PersonalEvent, UpdatedEvent }}, utils::{parsing::parse_record_id, ssr::get_server_context}};
 use crate::utils::ssr::{ServerResponse, get_authenticated_user};
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
@@ -116,32 +118,45 @@ pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Resu
 }
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "/fetch-users-favorite-mosques-events")]
-pub async fn fetch_users_favorite_mosques_events() -> Result<ApiResponse<Vec<Event>>, ServerFnError> {
-    let (response_options, db, user) = match get_authenticated_user::<Vec<Event>>().await {
+pub async fn fetch_users_favorite_mosques_events() -> Result<ApiResponse<Vec<PersonalEvent>>, ServerFnError> {
+    let (response_options, db, user) = match get_authenticated_user::<Vec<PersonalEvent>>().await {
         Ok(ctx) => ctx,
         Err(err) => return Ok(err),
     };
     let responder = ServerResponse::new(response_options);
 
-    let query = r#"
-        $user_id ->favorited->mosques->hosts->events.*
+    let events_and_rsvp_query = r#"
+        $user_id ->favorited->mosques->hosts->events.*;
+        $user_id -> attending -> events;
     "#;
 
-    let result = db.query(query)
-        .bind(("user_id", user.id))
+    let events_and_rsvp_query_result = db.query(events_and_rsvp_query)
+        .bind(("user_id", user.id.clone()))
         .await;
 
-    let events_result: Result<Vec<Event>, surrealdb::Error> = match result {
-        Ok(mut response) => response.take(0),
+    let mut db_response =  match events_and_rsvp_query_result {
+        Ok(response) => response,
         Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
     };
 
-    let events: Vec<Event> = match events_result {
+    let events = match db_response.take::<Vec<Event>>(0) {
         Ok(events) => events,
-        Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured while parsing the query result: {err}"))),
+        Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
     };
 
-    Ok(responder.ok(events))
+    let rsvp = match db_response.take::<Vec<String>>(1) {
+        Ok(rsvp_result) => rsvp_result,
+        Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
+    };
+
+    let rsvp_set: HashSet<String> = rsvp.into_iter().collect();
+
+    let personal_events: Vec<PersonalEvent> = events.into_iter().map(|event| {
+        let is_attending = rsvp_set.contains(&event.id);
+        PersonalEvent::new(event, is_attending)
+    }).collect();
+
+    Ok(responder.ok(personal_events))
 }
 
 pub async fn fetch_mosque_events(mosque_id: String) -> Result<ApiResponse<Vec<Event>>, surrealdb::Error> {
