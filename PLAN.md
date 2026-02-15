@@ -35,9 +35,34 @@ Instead of deleting expired events and creating new ones, update the existing ev
 **Update `schemas/events.surql`:**
 ```sql
 -- Recurrence configuration
-DEFINE FIELD IF NOT EXISTS recurrence_pattern ON events TYPE option<string>; 
-    -- Values: 'daily', 'weekly', 'monthly', 'custom'
+DEFINE FIELD IF NOT EXISTS recurrence_pattern ON events TYPE option<string>;
+    -- Values: 'daily', 'weekly', 'biweekly', 'monthly', 'quarterly', 'yearly'
+    -- No interval field - pattern names are self-descriptive
 DEFINE FIELD IF NOT EXISTS recurrence_end_date ON events TYPE option<datetime>;
+    -- Calculated from duration dropdown on create (not user-entered)
+```
+
+**Duration Dropdown (UI):**
+```
+Repeats: [Weekly ▼]
+Duration: [3 months ▼]
+Options:
+- 1 month
+- 3 months (default)
+- 6 months
+- 1 year
+- Forever
+```
+
+**API Calculation (no user input needed):**
+```rust
+let recurrence_end_date = match duration {
+    "1_month" => start_date + Duration::days(30),
+    "3_months" => start_date + Duration::days(90),
+    "6_months" => start_date + Duration::days(180),
+    "1_year" => start_date + Duration::days(365),
+    "forever" => None, // NULL = no end date
+};
 ```
 
 ### RSVP Behavior for Recurring Events
@@ -93,11 +118,10 @@ When deleting a recurring event:
 ```rust
 use chrono::{DateTime, FixedOffset, Duration, Months};
 
-/// Calculate next occurrence based on pattern and interval
+/// Calculate next occurrence based on pattern (no interval needed)
 fn calculate_next_date(
     current: DateTime<FixedOffset>,
     pattern: &str,
-    interval: i32,
 ) -> DateTime<FixedOffset>;
 
 /// Rotate event to next occurrence (in-place update)
@@ -127,11 +151,10 @@ POST /mosques/events/add-event?mosque_id=...
 Body: {
     ...existing fields,
     "recurrence_pattern": "weekly",
-    "recurrence_interval": 1,
-    "recurrence_end_date": "2026-12-31T00:00:00Z"
+    "recurrence_duration": "3_months"  // API calculates end_date internally
 }
 
-// Update with scope
+// Update (all edits apply to current and future)
 PATCH /mosques/events/update-event
 Body: {
     "event_id": "...",
@@ -229,22 +252,37 @@ async fn run_rotation(db: &Surreal<Client>) {
 
 ## 5. Technical Details
 
-### Date Calculation Logic
+### Date Calculation Logic (No Interval Parameter)
 
 ```rust
 use chrono::{DateTime, FixedOffset, Duration, Months};
 
 match pattern {
-    "daily" => current + Duration::days(interval as i64),
-    "weekly" => current + Duration::weeks(interval as i64),
+    "daily" => current + Duration::days(1),
+    "weekly" => current + Duration::weeks(1),
+    "biweekly" => current + Duration::weeks(2),
     "monthly" => {
-        // Use chronoMonths for proper month arithmetic (handles year rollover, Feb 28/29, etc.)
-        current.checked_add_months(Months::new(interval as u32))
-            .unwrap_or(current) // Fallback if calculation fails
+        // Use chrono Months for proper month arithmetic (handles year rollover, Feb 28/29, etc.)
+        current.checked_add_months(Months::new(1))
+            .unwrap_or(current)
     },
+    "quarterly" => current.checked_add_months(Months::new(3))
+        .unwrap_or(current),
+    "yearly" => current.checked_add_months(Months::new(12))
+        .unwrap_or(current),
     _ => current, // Fallback
 }
 ```
+
+**Supported Patterns:**
+| Pattern | Interval | Use Case |
+|---------|----------|----------|
+| `daily` | Every 1 day | Daily prayer times |
+| `weekly` | Every 7 days | Weekly halaqah |
+| `biweekly` | Every 14 days | Bi-weekly study circle |
+| `monthly` | Every 1 month | Monthly community meeting |
+| `quarterly` | Every 3 months | Quarterly events |
+| `yearly` | Every 12 months | Annual Eid celebration |
 
 ### Event Query Logic
 
@@ -317,8 +355,10 @@ Return to push notifications after recurrence is stable:
 - Keep it simple: in-place rotation is the key insight
 - No separate template/instance records
 - RSVPs stay on the same event ID
-- Hourly rotation job is acceptable latency
-- Focus on daily/weekly/monthly patterns first
+- Daily rotation job is acceptable latency
+- Descriptive patterns (daily, weekly, biweekly, monthly) - no mental math
+- Duration dropdown (1m, 3m, 6m, 1y, forever) - auto-calculates end date
+- All edits apply to "this and future" by default
 
 ---
 
@@ -813,5 +853,5 @@ Allow users to customize notifications:
 
 ---
 
-**Last Updated:** 2026-02-14
+**Last Updated:** 2026-02-15
 **Status:** Recurrence Phase 1 Ready, Push Notifications Pending Recurrence Completion
