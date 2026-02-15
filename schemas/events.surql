@@ -13,4 +13,7 @@ DEFINE FIELD IF NOT EXISTS recurrence_pattern ON events TYPE option<string>
 	        -- Logic: If pattern exists, end_date cannot be NONE
 	        ($value == NONE OR recurrence_end_date != NONE);
 
-DEFINE FIELD IF NOT EXISTS recurrence_end_date ON events TYPE option<datetime>;
+DEFINE FIELD IF NOT EXISTS recurrence_end_date ON events TYPE option<datetime>
+	ASSERT 
+        -- Logic: If an end date is provided, a recurrence pattern MUST be set
+        ($value == NONE OR recurrence_pattern != NONE);
