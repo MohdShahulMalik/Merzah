@@ -35,11 +35,8 @@ Instead of deleting expired events and creating new ones, update the existing ev
 **Update `schemas/events.surql`:**
 ```sql
 -- Recurrence configuration
-DEFINE FIELD IF NOT EXISTS is_recurring ON events TYPE bool DEFAULT false;
 DEFINE FIELD IF NOT EXISTS recurrence_pattern ON events TYPE option<string>; 
     -- Values: 'daily', 'weekly', 'monthly', 'custom'
-DEFINE FIELD IF NOT EXISTS recurrence_interval ON events TYPE int DEFAULT 1;
-    -- Every N days/weeks/months (e.g., every 2 weeks)
 DEFINE FIELD IF NOT EXISTS recurrence_end_date ON events TYPE option<datetime>;
 ```
 
@@ -64,7 +61,6 @@ When editing a recurring event, user selects scope:
 When deleting a recurring event:
 
 1. **Stop recurring** (default)
-   - Set `is_recurring = false`
    - Event becomes a one-time event (current occurrence)
 2. **Delete entire series**
    - Actually delete the event record
@@ -80,7 +76,6 @@ When deleting a recurring event:
 - [ ] Update `Event` model in `src/models/events.rs`
 - [ ] Update `CreateEvent` model to support recurrence
 - [ ] Add `UpdateEvent` scope enum
-- [ ] Create migration script
 
 **Files to Modify:**
 - `schemas/events.surql`
@@ -131,7 +126,6 @@ pub async fn check_and_rotate_events(
 POST /mosques/events/add-event?mosque_id=...
 Body: {
     ...existing fields,
-    "is_recurring": true,
     "recurrence_pattern": "weekly",
     "recurrence_interval": 1,
     "recurrence_end_date": "2026-12-31T00:00:00Z"
@@ -142,7 +136,6 @@ PATCH /mosques/events/update-event
 Body: {
     "event_id": "...",
     "title": "New Title",
-    "edit_scope": "future"  // or "single" (not supported), "all"
 }
 
 // Delete with option
@@ -157,7 +150,7 @@ Body: {
 
 **Tasks:**
 - [ ] Create `src/jobs/event_rotation.rs`
-- [ ] Set up scheduled job (runs every hour)
+- [ ] Set up scheduled job (runs every day)
 - [ ] Implement rotation logic with logging
 - [ ] Add metrics/observability
 
