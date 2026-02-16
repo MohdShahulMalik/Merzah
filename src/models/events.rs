@@ -137,6 +137,12 @@ pub struct UpdatedEvent {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(inner(length(min = 2, max = 100)))]
     pub speaker: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[garde(skip)]
+    pub recurrence_pattern: Option<EventRecurrence>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[garde(skip)]
+    pub recurrence_end_date: Option<DateTime<FixedOffset>>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]

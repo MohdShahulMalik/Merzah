@@ -76,41 +76,61 @@ pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Resu
         Err(err) => return Ok(err),
     };
 
+    let responder = ServerResponse::new(response_options);
+
     let event_id: RecordId = match parse_record_id(&event_id, "event_id") {
         Ok(id) => id,
         Err(e) => return Ok(e),
     };
-    let responder = ServerResponse::new(response_options);
 
-    let update_result = db.update::<Option<Event>>(event_id.clone())
-        .merge(updated_event)
-        .await;
+    let validation_result = updated_event.validate();
+    if let Err(err) = validation_result {
+        let errors = err
+            .iter()
+            .map(|(field, msg)| format!("{field}: {msg}"))
+            .collect::<Vec<_>>();
 
-    match update_result {
-        Ok(Some(_)) => (),
-        Ok(None) => {
-            return Ok(responder.not_found("No event found with the provided ID".to_string()));
-        },
-        Err(err) => {
-            return Ok(responder.internal_server_error(format!("Some db error occured: {err}")));
-        }
+        error!(?errors);
+        let error =
+            responder.unprocessable_entity("Error while validating the event's data".to_string());
+
+        return Ok(error);
     }
 
-    let update_hosts_query = r#"
-        UPDATE hosts
-        SET updated_at = time::now()
-        WHERE out = $event_id;
+    let update_event_transaction = r#"
+        BEGIN TRANSACTION;
+        LET $event = (UPDATE ONLY $event_id MERGE $updated_event);
+        IF $event != NONE {
+            UPDATE hosts SET updated_at = time::now() WHERE out = $event_id;
+        };
+        COMMIT TRANSACTION;
+        RETURN $event;
     "#;
 
-    let update_hosts_result = db.query(update_hosts_query)
-        .bind(("event_id", event_id.clone()))
+    let transaction_result = db.query(update_event_transaction)
+        .bind(("event_id", event_id))
+        .bind(("updated_event", updated_event))
         .await;
 
-    match update_hosts_result {
-        Ok(_) => (),
-        Err(err) => {
-            return Ok(responder.internal_server_error(format!("Some db error occured while updating the related hosts records: {err}")));
+    match transaction_result {
+        Ok(mut result) => {
+            if let Err(err) = result.check() {
+                return Ok(responder.internal_server_error(format!("Some db error occured during the transaction: {err}")));
+            }
+
+            let event: Option<Event> = match result.take(4) {
+                Ok(event) => event,
+                Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured while fetching the updated event: {err}"))),
+            };
+
+            if event.is_none() {
+                return Ok(responder.not_found("No event found with the provided ID".to_string()));
+            }
         },
+
+        Err(err) => {
+            return Ok(responder.internal_server_error(format!("Some db error occured while executing the transaction: {err}")));
+        }
     }
     
     Ok(responder.ok("successfully updated the event record".to_string()))
