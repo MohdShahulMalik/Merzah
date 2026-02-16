@@ -6,12 +6,14 @@ use leptos::{ prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, * };
 use surrealdb::RecordId;
 use tracing::error;
 
-use crate::{models::{api_responses::ApiResponse, events::{ CreateEvent, Event, EventSummary, FetchedEvents, PersonalEvent, UpdatedEvent }}, utils::{parsing::parse_record_id, ssr::get_server_context}};
+use crate::{
+    models::{api_responses::ApiResponse, events::{ CreateEvent, Event, EventRecord, EventSummary, FetchedEvents, PersonalEvent, UpdatedEvent }}, utils::parsing::parse_record_id
+};
 use crate::utils::ssr::{ServerResponse, get_authenticated_user};
 use crate::utils::user_elevation::is_mosque_admin;
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
-pub async fn add_event(mosque_id: String, event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
+pub async fn add_event(mosque_id: String, create_event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
     let (response_options, db, user) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(error) => return Ok(error),
@@ -23,49 +25,45 @@ pub async fn add_event(mosque_id: String, event: CreateEvent) -> Result<ApiRespo
         Err(e) => return Ok(e),
     };
 
-    let validation_result = event.validate();
+    let validation_result = create_event.validate();
     if let Err(err) = validation_result {
         let errors = err
             .iter()
             .map(|(field, msg)| format!("{field}: {msg}"))
             .collect::<Vec<_>>();
+
         error!(?errors);
         let error =
             responder.unprocessable_entity("Error while validating the event's data".to_string());
+
         return Ok(error);
     }
 
-    let create_result: Result<Option<Event>, surrealdb::Error> =
-        db.create("events").content(event).await;
+    let event_record = EventRecord::from(create_event);
 
-    let event: Event = match create_result {
-        Ok(Some(ev)) => ev,
-        Ok(None) => {
-            return Ok(responder.not_found(
-                "Some db error occured: query successfully executed but no record was created"
-                    .to_string(),
-            ));
-        }
-        Err(err) => {
-            return Ok(responder.internal_server_error(format!("Some db error occured: {err}")));
-        }
-    };
-
-    let host_query = r#"RELATE $mosque_id -> hosts -> $event_id
-        SET created_by = $user_id
+    let create_event_transaction = r#"
+        BEGIN TRANSACTION;
+        LET $event = (CREATE ONLY events CONTENT $event_data);
+        RELATE $mosque_id -> hosts -> $event.id SET created_by = $user_id;
+        COMMIT TRANSACTION;
     "#;
 
-    let host_result = db.query(host_query)
+    let transaction_result = db.query(create_event_transaction)
+        .bind(("event_data", event_record))
         .bind(("mosque_id", mosque_id))
-        .bind(("event_id", event.id.clone()))
         .bind(("user_id", user.id))
         .await;
 
-    match host_result {
-        Ok(_) => (),
-        Err(err) => {
-            return Ok(responder.internal_server_error(format!("Some db error occured while creating the relationship between the event and the mosque: {err}")));
+    match transaction_result {
+        Ok(result) => {
+            if let Err(err) = result.check() {
+                return Ok(responder.internal_server_error(format!("Some db error occured during the transaction: {err}")));
+            }
         },
+
+        Err(err) => {
+            return Ok(responder.internal_server_error(format!("Some db error occured while executing the transaction: {err}")));
+        }
     }
 
     Ok(responder.created("Successfully created the event record Alhadulillah!".to_string()))
@@ -145,12 +143,12 @@ pub async fn fetch_users_favorite_mosques_events() -> Result<ApiResponse<Vec<Per
         Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
     };
 
-    let rsvp = match db_response.take::<Vec<String>>(1) {
+    let rsvp = match db_response.take::<Vec<RecordId>>(1) {
         Ok(rsvp_result) => rsvp_result,
         Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
     };
 
-    let rsvp_set: HashSet<String> = rsvp.into_iter().collect();
+    let rsvp_set: HashSet<RecordId> = rsvp.into_iter().collect();
 
     let personal_events: Vec<PersonalEvent> = events.into_iter().map(|event| {
         let is_attending = rsvp_set.contains(&event.id);
