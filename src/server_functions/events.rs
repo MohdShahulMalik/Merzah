@@ -113,10 +113,11 @@ pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Resu
         .await;
 
     match transaction_result {
-        Ok(mut result) => {
-            if let Err(err) = result.check() {
-                return Ok(responder.internal_server_error(format!("Some db error occured during the transaction: {err}")));
-            }
+        Ok(result) => {
+            let mut result = match result.check() {
+                Ok(r) => r,
+                Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured during the transaction: {err}"))),
+            };
 
             let event: Option<Event> = match result.take(4) {
                 Ok(event) => event,
