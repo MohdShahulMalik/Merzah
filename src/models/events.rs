@@ -7,9 +7,20 @@ use surrealdb::RecordId;
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum EventCategory {
-    Deen,
-    Dunya,
+    Halaqah,
     Fundraiser,
+    Youth,
+    Lecture,
+    Community,
+    Workshop,
+    Seminar,
+    Conference,
+    Sports,
+    Social,
+    Volunteer,
+    Iftar,
+    Taraweeh,
+    Eid,
 }
 
 #[cfg(feature = "ssr")]
