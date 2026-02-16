@@ -7,7 +7,7 @@ use surrealdb::RecordId;
 use tracing::error;
 
 use crate::{
-    models::{api_responses::ApiResponse, events::{ CreateEvent, Event, EventRecord, EventSummary, FetchedEvents, PersonalEvent, UpdatedEvent }}, utils::parsing::parse_record_id
+    models::{api_responses::ApiResponse, events::{ CreateEvent, Event, EventDetails, EventRecord, EventSummary, FetchedEvents, PersonalEvent, UpdatedEvent }}, utils::parsing::parse_record_id
 };
 use crate::utils::ssr::{ServerResponse, get_authenticated_user};
 use crate::utils::user_elevation::is_mosque_admin;
@@ -159,17 +159,17 @@ pub async fn fetch_users_favorite_mosques_events() -> Result<ApiResponse<Vec<Per
         Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
     };
 
-    let events = match db_response.take::<Vec<Event>>(0) {
+    let events = match db_response.take::<Vec<EventDetails>>(0) {
         Ok(events) => events,
         Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
     };
 
-    let rsvp = match db_response.take::<Vec<RecordId>>(1) {
+    let rsvp = match db_response.take::<Vec<String>>(1) {
         Ok(rsvp_result) => rsvp_result,
         Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured: {err}"))),
     };
 
-    let rsvp_set: HashSet<RecordId> = rsvp.into_iter().collect();
+    let rsvp_set: HashSet<String> = rsvp.into_iter().collect();
 
     let personal_events: Vec<PersonalEvent> = events.into_iter().map(|event| {
         let is_attending = rsvp_set.contains(&event.id);
@@ -198,11 +198,19 @@ pub async fn fetch_mosque_events(mosque_id: String) -> Result<ApiResponse<Fetche
     if is_admin {
         let query = r#"
             SELECT 
-                { id: id, title: title, description: description, category: category, date: date, speaker: speaker } AS event,
-                count(<-attending) AS rsvp_count
-            FROM events
-            WHERE id IN $mosque_id->hosts->events
-            GROUP BY ALL
+                {
+                    id: type::string(id),
+                    title: title,
+                    description: description,
+                    category: category,
+                    date: date,
+                    speaker: speaker
+                } AS event,
+
+                array::len(<-attending)
+                AS rsvp_count
+
+            FROM $mosque_id->hosts->events
         "#;
 
         let query_result = db.query(query)
@@ -218,11 +226,19 @@ pub async fn fetch_mosque_events(mosque_id: String) -> Result<ApiResponse<Fetche
     } else {
         let query = r#"
             SELECT 
-                { id: id, title: title, description: description, category: category, date: date, speaker: speaker } AS event,
-                (count(<-attending WHERE in = $user_id) == 1) AS rsvp
-            FROM events
-            WHERE id IN $mosque_id->hosts->events
-            GROUP BY ALL
+                {
+                    id: type::string(id),
+                    title: title,
+                    description: description,
+                    category: category,
+                    date: date,
+                    speaker: speaker
+                } AS event,
+
+                (array::len(<-attending WHERE in = $user_id) == 1)
+                AS rsvp
+
+            FROM $mosque_id->hosts->events
         "#;
 
         let query_result = db.query(query)

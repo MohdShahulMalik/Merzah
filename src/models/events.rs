@@ -36,6 +36,17 @@ pub struct Event {
     pub recurrence_end_date: Option<DateTime<FixedOffset>>,
 }
 
+// To be used on client side, where we don't have access to RecordId
+#[derive(Debug, Deserialize, Serialize)]
+pub struct EventDetails {
+    pub id: String,
+    pub title: String,
+    pub description: String,
+    pub category: EventCategory,
+    pub date: DateTime<FixedOffset>,
+    pub speaker: Option<String>,
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "lowercase")]
 pub enum EventRecurrence {
@@ -147,24 +158,24 @@ pub struct UpdatedEvent {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PersonalEvent {
-    pub event: Event,
+    pub event: EventDetails,
     pub rsvp: bool,
 }
 
 impl PersonalEvent {
-    pub fn new(event: Event, rsvp: bool) -> Self {
+    pub fn new(event: EventDetails, rsvp: bool) -> Self {
         Self { event, rsvp }
     }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct EventSummary {
-    pub event: Event,
+    pub event: EventDetails,
     pub rsvp_count: usize,
 }
 
 impl EventSummary {
-    pub fn new(event: Event, rsvp_count: usize) -> Self {
+    pub fn new(event: EventDetails, rsvp_count: usize) -> Self {
         Self { event, rsvp_count }
     }
 }
