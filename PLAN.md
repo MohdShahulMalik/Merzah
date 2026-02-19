@@ -97,10 +97,10 @@ When deleting a recurring event:
 ### Phase 1: Database & Models (Priority)
 
 **Tasks:**
-- [ ] Add recurrence fields to events table schema
-- [ ] Update `Event` model in `src/models/events.rs`
-- [ ] Update `CreateEvent` model to support recurrence
-- [ ] Add `UpdateEvent` scope enum
+- [x] Add recurrence fields to events table schema
+- [x] Update `Event` model in `src/models/events.rs`
+- [x] Update `CreateEvent` model to support recurrence
+- [x] Add `UpdateEvent` scope enum
 
 **Files to Modify:**
 - `schemas/events.surql`
@@ -109,10 +109,10 @@ When deleting a recurring event:
 ### Phase 2: Recurrence Logic Service
 
 **Tasks:**
-- [ ] Create `src/services/recurrence.rs`
-- [ ] Implement `calculate_next_date()` function
-- [ ] Implement `rotate_event()` function (in-place update)
-- [ ] Add unit tests for date calculations
+- [x] Create `src/services/recurrence.rs`
+- [x] Implement `calculate_next_date()` function
+- [x] Implement `rotate_event()` function (in-place update)
+- [x] Add unit tests for date calculations
 
 **Key Functions:**
 ```rust
@@ -139,10 +139,10 @@ pub async fn check_and_rotate_events(
 ### Phase 3: API Updates
 
 **Tasks:**
-- [ ] Update `add_event` endpoint to support recurrence creation
-- [ ] Update `update_event` endpoint to handle edit scopes
-- [ ] Update `delete_event` endpoint to handle delete options
-- [ ] Update `fetch_users_favorite_mosques_events` to filter properly
+- [x] Update `add_event` endpoint to support recurrence creation
+- [x] Update `update_event` endpoint to handle edit scopes
+- [x] Update `delete_event` endpoint to handle delete options
+- [x] Update `fetch_users_favorite_mosques_events` to filter properly
 
 **New/Modified Endpoints:**
 ```rust
