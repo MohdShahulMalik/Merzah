@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use garde::Validate;
-use leptos::{ prelude::ServerFnError, server_fn::codec::{Json, PatchJson}, * };
+use leptos::{ prelude::ServerFnError, server_fn::codec::{DeleteUrl, Json, PatchJson}, * };
 
 use surrealdb::RecordId;
 use tracing::error;
@@ -255,3 +255,54 @@ pub async fn fetch_mosque_events(mosque_id: String) -> Result<ApiResponse<Fetche
     }
 }
 
+#[server(input = DeleteUrl, output = Json, prefix = "/mosques/events", endpoint = "/delete/{event_id}")]
+pub async fn delete_event(event_id: String) -> Result<ApiResponse<String>, ServerFnError> {
+    let (response_options, db, _user) = match get_authenticated_user::<String>().await {
+        Ok(ctx) => ctx,
+        Err(err) => return Ok(err),
+    };
+
+    let responder = ServerResponse::new(response_options);
+
+    let event_id: RecordId = match parse_record_id(&event_id, "event_id") {
+        Ok(id) => id,
+        Err(e) => return Ok(e),
+    };
+
+    let delete_event_transaction = r#"
+        BEGIN TRANSACTION;
+        DELETE hosts WHERE out = $event_id;
+        DELETE attending WHERE out = $event_id;
+        LET $deleted = (DELETE ONLY $event_id RETURN BEFORE);
+        COMMIT TRANSACTION;
+        RETURN $deleted;
+    "#;
+
+    let transaction_result = db.query(delete_event_transaction)
+        .bind(("event_id", event_id))
+        .await;
+
+    match transaction_result {
+        Ok(result) => {
+            let mut result = match result.check() {
+                Ok(r) => r,
+                Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured during the transaction: {err}"))),
+            };
+
+            let event: Option<Event> = match result.take(4) {
+                Ok(event) => event,
+                Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured while fetching the deleted event: {err}"))),
+            };
+
+            if event.is_none() {
+                return Ok(responder.not_found("No event found with the provided ID".to_string()));
+            }
+        },
+
+        Err(err) => {
+            return Ok(responder.internal_server_error(format!("Some db error occured while executing the transaction: {err}")));
+        }
+    }
+
+    Ok(responder.ok("Successfully deleted the event record".to_string()))
+}
