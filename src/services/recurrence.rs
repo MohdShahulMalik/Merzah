@@ -1,7 +1,13 @@
-use chrono::{DateTime, Datelike, Duration, FixedOffset, LocalResult, NaiveDate, NaiveDateTime, TimeZone};
+use chrono::{
+    DateTime, Datelike, Duration, FixedOffset, LocalResult, NaiveDate, NaiveDateTime, TimeZone, Utc,
+};
 use std::cmp::min;
 
+#[cfg(feature = "ssr")]
+use crate::models::events::Event;
 use crate::models::events::EventRecurrence;
+#[cfg(feature = "ssr")]
+use surrealdb::{engine::remote::ws::Client, Surreal};
 
 pub fn calculate_next_date(
     curr_date: DateTime<FixedOffset>,
@@ -18,13 +24,13 @@ pub fn calculate_next_date(
             let weekday = curr_date.weekday().number_from_monday();
             let days_to_add = if weekday > 5 { 8 - weekday } else { 1 };
             Some(curr_date + Duration::days(days_to_add as i64))
-        },
+        }
 
         EventRecurrence::Weekends => {
             let weekday = curr_date.weekday().number_from_monday();
             let days_to_add = if weekday <= 5 { 6 - weekday } else { 1 };
             Some(curr_date + Duration::days(days_to_add as i64))
-        },
+        }
 
         EventRecurrence::Monthly => {
             let date = curr_date.date_naive();
@@ -49,8 +55,8 @@ pub fn calculate_next_date(
                 LocalResult::Single(dt) => Some(dt),
                 _ => None,
             }
-        },
-        
+        }
+
         EventRecurrence::Quaterly => {
             let date = curr_date.date_naive();
             let months_to_add = 3;
@@ -69,8 +75,8 @@ pub fn calculate_next_date(
                 LocalResult::Single(dt) => Some(dt),
                 _ => None,
             }
-        },
-        
+        }
+
         EventRecurrence::Yearly => {
             let date = curr_date.date_naive();
             let next_year = date.year() + 1;
@@ -104,4 +110,68 @@ fn days_in_month(year: i32, month: u32) -> u32 {
         
         _ => 30,
     }
+}
+
+#[cfg(feature = "ssr")]
+pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, surrealdb::Error> {
+    use tracing::{error, info};
+
+    let Some(pattern) = event.recurrence_pattern.clone() else {
+        return Ok(false);
+    };
+
+    let Some(next_date) = calculate_next_date(event.date, pattern) else {
+        error!("Failed to calculate next date for event {}", event.id);
+        return Ok(false);
+    };
+
+    if let Some(end_date) = event.recurrence_end_date {
+        if next_date > end_date {
+            db.query("DELETE FROM events WHERE id = $id")
+                .bind(("id", event.id.clone()))
+                .await?;
+            info!("Deleted event {} - recurrence series ended", event.id);
+            return Ok(false);
+        }
+    }
+
+    db.query("UPDATE $event SET date = $next_date")
+        .bind(("event", event.id.clone()))
+        .bind(("next_date", next_date))
+        .await?;
+
+    info!("Rotated event {} to {}", event.id, next_date);
+    Ok(true)
+}
+
+#[cfg(feature = "ssr")]
+pub async fn check_and_rotate_events(db: &Surreal<Client>) -> Result<usize, surrealdb::Error> {
+    use tracing::{error, info};
+
+    let now: DateTime<FixedOffset> = Utc::now().into();
+    let search_query = r#"
+         SELECT * FROM events
+         WHERE date < $now
+         AND recurrence_pattern != NONE
+         AND (recurrence_end_date = NONE OR recurrence_end_date > $now)
+     "#;
+
+    let events: Vec<Event> = db
+        .query(search_query)
+        .bind(("now", now))
+        .await?
+        .take(0)?;
+
+    let mut rotated_count = 0;
+
+    for event in events {
+        match rotate_event(event, db).await {
+            Ok(true) => rotated_count += 1,
+            Ok(false) => {}
+            Err(e) => error!("Failed to rotate event: {}", e),
+        }
+    }
+
+    info!("Rotated {} events", rotated_count);
+    Ok(rotated_count)
 }
