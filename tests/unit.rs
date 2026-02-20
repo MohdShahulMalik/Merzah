@@ -5,3 +5,5 @@ mod auth;
 mod session;
 #[path = "unit/user_elevation.rs"]
 mod user_elevation;
+#[path = "unit/recurrence.rs"]
+mod recurrence;

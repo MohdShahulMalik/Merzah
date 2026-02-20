@@ -22,13 +22,19 @@ pub fn calculate_next_date(
 
         EventRecurrence::Weekdays => {
             let weekday = curr_date.weekday().number_from_monday();
-            let days_to_add = if weekday > 5 { 8 - weekday } else { 1 };
+            let days_to_add = if weekday >= 5 { 8 - weekday } else { 1 };
             Some(curr_date + Duration::days(days_to_add as i64))
         }
 
         EventRecurrence::Weekends => {
             let weekday = curr_date.weekday().number_from_monday();
-            let days_to_add = if weekday <= 5 { 6 - weekday } else { 1 };
+            let days_to_add = if weekday <= 5 {
+                6 - weekday
+            } else if weekday == 6 {
+                1
+            } else {
+                6
+            };
             Some(curr_date + Duration::days(days_to_add as i64))
         }
 
