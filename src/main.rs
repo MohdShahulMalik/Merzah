@@ -9,8 +9,22 @@ async fn main() -> std::io::Result<()> {
     use leptos_meta::MetaTags;
     use merzah::app::*;
     use merzah::database::connection::init_db;
+    use merzah::jobs::event_rotation::start_scheduler;
 
     let db = init_db().await;
+    let db_for_scheduler = db.clone();
+
+    tokio::spawn(async move {
+        loop {
+            match start_scheduler(db_for_scheduler.clone()).await {
+                Ok(()) => break,
+                Err(e) => {
+                    tracing::error!("Scheduler failed, retrying in 5s: {:?}", e);
+                    tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
+                }
+            }
+        }
+    });
 
     let conf = get_configuration(None).unwrap();
     let addr = conf.leptos_options.site_addr;

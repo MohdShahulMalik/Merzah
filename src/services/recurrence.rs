@@ -127,8 +127,8 @@ pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, su
 
     if let Some(end_date) = event.recurrence_end_date {
         if next_date > end_date {
-            db.query("DELETE FROM events WHERE id = $id")
-                .bind(("id", event.id.clone()))
+            db.query("DELETE $event")
+                .bind(("event", event.id.clone()))
                 .await?;
             info!("Deleted event {} - recurrence series ended", event.id);
             return Ok(false);
@@ -153,7 +153,6 @@ pub async fn check_and_rotate_events(db: &Surreal<Client>) -> Result<usize, surr
          SELECT * FROM events
          WHERE date < $now
          AND recurrence_pattern != NONE
-         AND (recurrence_end_date = NONE OR recurrence_end_date > $now)
      "#;
 
     let events: Vec<Event> = db
