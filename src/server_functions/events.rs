@@ -44,7 +44,7 @@ pub async fn add_event(mosque_id: String, create_event: CreateEvent) -> Result<A
     let create_event_transaction = r#"
         BEGIN TRANSACTION;
         LET $event = (CREATE ONLY events CONTENT $event_data);
-        RELATE $mosque_id -> hosts -> $event.id SET created_by = $user_id;
+        RELATE $mosque_id -> hosts -> $event SET created_by = $user_id;
         COMMIT TRANSACTION;
     "#;
 
@@ -119,7 +119,7 @@ pub async fn update_event(event_id: String, updated_event: UpdatedEvent) -> Resu
                 Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured during the transaction: {err}"))),
             };
 
-            let event: Option<Event> = match result.take(4) {
+            let event: Option<Event> = match result.take(1) {
                 Ok(event) => event,
                 Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured while fetching the updated event: {err}"))),
             };
@@ -255,8 +255,10 @@ pub async fn fetch_mosque_events(mosque_id: String) -> Result<ApiResponse<Fetche
     }
 }
 
-#[server(input = DeleteUrl, output = Json, prefix = "/mosques/events", endpoint = "/delete/{event_id}")]
+#[server(input = DeleteUrl, output = Json, prefix = "/mosques/events", endpoint = "/delete/")]
 pub async fn delete_event(event_id: String) -> Result<ApiResponse<String>, ServerFnError> {
+    tracing::info!(?event_id, "delete_event called with event_id");
+    
     let (response_options, db, _user) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(err) => return Ok(err),
@@ -289,7 +291,7 @@ pub async fn delete_event(event_id: String) -> Result<ApiResponse<String>, Serve
                 Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured during the transaction: {err}"))),
             };
 
-            let event: Option<Event> = match result.take(4) {
+            let event: Option<Event> = match result.take(2) {
                 Ok(event) => event,
                 Err(err) => return Ok(responder.internal_server_error(format!("Some db error occured while fetching the deleted event: {err}"))),
             };
