@@ -5,3 +5,5 @@ mod auth;
 mod mosque;
 #[path = "integration/mosque_admin.rs"]
 mod mosque_admin;
+#[path = "integration/events.rs"]
+mod events;
