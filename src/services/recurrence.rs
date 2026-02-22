@@ -1,5 +1,5 @@
 use chrono::{
-    DateTime, Datelike, Duration, FixedOffset, LocalResult, NaiveDate, NaiveDateTime, TimeZone, Utc,
+    DateTime, Datelike, Duration, FixedOffset, LocalResult, NaiveDate, NaiveDateTime, TimeZone,
 };
 use std::cmp::min;
 
@@ -143,7 +143,7 @@ pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, su
 
     db.query("UPDATE $event SET date = $next_date")
         .bind(("event", event.id.clone()))
-        .bind(("next_date", next_date))
+        .bind(("next_date", next_date.to_rfc3339()))
         .await?;
 
     info!("Rotated event {} to {}", event.id, next_date);
@@ -154,16 +154,14 @@ pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, su
 pub async fn check_and_rotate_events(db: &Surreal<Client>) -> Result<usize, surrealdb::Error> {
     use tracing::{error, info};
 
-    let now: DateTime<FixedOffset> = Utc::now().into();
     let search_query = r#"
-         SELECT * FROM events
-         WHERE date < $now
-         AND recurrence_pattern != NONE
-     "#;
+        SELECT * FROM events
+        WHERE time::from::iso8601(date) < time::now()
+        AND recurrence_pattern != NONE
+    "#;
 
     let events: Vec<Event> = db
         .query(search_query)
-        .bind(("now", now))
         .await?
         .take(0)?;
 
