@@ -31,6 +31,7 @@ pub struct Event {
     pub description: String,
     pub category: EventCategory,
     pub date: DateTime<FixedOffset>,
+    pub mosque: RecordId,
     pub speaker: Option<String>,
     pub recurrence_pattern: Option<EventRecurrence>,
     pub recurrence_end_date: Option<DateTime<FixedOffset>>,
