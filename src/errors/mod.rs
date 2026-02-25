@@ -4,3 +4,5 @@ pub mod session;
 pub mod auth;
 #[cfg(feature = "ssr")]
 pub mod user_elevation;
+#[cfg(feature = "ssr")]
+pub mod oauth;

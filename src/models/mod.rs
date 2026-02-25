@@ -6,3 +6,4 @@ pub mod api_responses;
 pub mod mosque;
 pub mod form;
 pub mod events;
+pub mod oauth;
