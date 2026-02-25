@@ -22,6 +22,10 @@ use crate::auth::session::{create_session, delete_session, remove_session_cookie
 use crate::errors::session::SessionError;
 #[cfg(feature = "ssr")]
 use crate::errors::auth::AuthError;
+#[cfg(feature = "ssr")]
+use crate::auth::oauth::google::{exchange_code, find_or_create_user, get_authorization_url, get_user_info};
+#[cfg(feature = "ssr")]
+use crate::auth::oauth::state::{generate_state, validate_state};
 
 #[server(input=Json, prefix = "/auth", endpoint = "register")]
 pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>, ServerFnError> {
@@ -225,4 +229,131 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
     }
 
     Ok(ApiResponse::data("Successfully logged out the user".to_string()))
+}
+
+#[server(input=Json, prefix="/auth", endpoint="google-url")]
+pub async fn get_google_oauth_url() -> Result<ApiResponse<String>, ServerFnError> {
+    let (response_option, _db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+
+    let state = match generate_state() {
+        Ok(s) => s,
+        Err(e) => {
+            error!(?e, "Failed to generate state");
+            response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse::error("Failed to generate authentication state".to_string()));
+        }
+    };
+
+    let url = match get_authorization_url(&state) {
+        Ok(u) => u,
+        Err(e) => {
+            error!(?e, "Failed to get authorization URL");
+            response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse::error("Failed to create authorization URL".to_string()));
+        }
+    };
+
+    let cookie = format!(
+        "google_oauth_state={}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age={}",
+        state,
+        10 * 60
+    );
+
+    use actix_web::http::header::{HeaderValue, SET_COOKIE};
+    
+    let header_value = match HeaderValue::from_str(&cookie) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to create header value");
+            response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse::error("Failed to set cookie".to_string()));
+        }
+    };
+    
+    response_option.insert_header(SET_COOKIE, header_value);
+
+    Ok(ApiResponse { data: Some(url), error: None })
+}
+
+#[server(input=Json, prefix="/auth", endpoint="google-callback")]
+pub async fn handle_google_callback(
+    code: String,
+    state: String,
+) -> Result<ApiResponse<String>, ServerFnError> {
+    let (response_option, db) = match get_server_context().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+
+    let req = match leptos_actix::extract::<HttpRequest>().await {
+        Ok(req) => req,
+        Err(e) => {
+            error!(?e, "Failed to extract request");
+            response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
+            return Ok(ApiResponse::error("Internal server error".to_string()));
+        }
+    };
+
+    let stored_state = req
+        .cookie("google_oauth_state")
+        .map(|c| c.value().to_string())
+        .unwrap_or_default();
+
+    if !validate_state(&state, &stored_state) {
+        error!("State validation failed");
+        response_option.set_status(StatusCode::BAD_REQUEST);
+        return Ok(ApiResponse::error("Invalid authentication state".to_string()));
+    }
+
+    let token_response = match exchange_code(&code).await {
+        Ok(token) => token,
+        Err(e) => {
+            error!(?e, "Failed to exchange code");
+            response_option.set_status(StatusCode::BAD_REQUEST);
+            return Ok(ApiResponse::error("Failed to exchange authorization code".to_string()));
+        }
+    };
+
+    let user_info = match get_user_info(&token_response.access_token).await {
+        Ok(user) => user,
+        Err(e) => {
+            error!(?e, "Failed to get user info");
+            response_option.set_status(StatusCode::BAD_REQUEST);
+            return Ok(ApiResponse::error("Failed to get user information".to_string()));
+        }
+    };
+
+    let user_id = match find_or_create_user(user_info, &db).await {
+        Ok(id) => id,
+        Err(e) => {
+            error!(error = %e, "Failed to find or create user");
+            return Err(ServerFnError::ServerError(format!("Failed to authenticate user: {:?}", e)));
+        }
+    };
+
+    let session_token = match create_session(user_id, &db).await {
+        Ok(token) => token,
+        Err(e) => {
+            error!(?e, "Failed to create session");
+            return Err(ServerFnError::ServerError("Failed to create session".to_string()));
+        }
+    };
+
+    if let Err(e) = set_session_cookie(&session_token) {
+        error!(?e, "Failed to set session cookie");
+        return Err(ServerFnError::ServerError("Failed to set session".to_string()));
+    }
+
+    let clear_cookie = "google_oauth_state=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0";
+    
+    use actix_web::http::header::{HeaderValue, SET_COOKIE};
+    
+    if let Ok(header_value) = HeaderValue::from_str(clear_cookie) {
+        response_option.insert_header(SET_COOKIE, header_value);
+    }
+
+    Ok(ApiResponse::data("Successfully authenticated with Google".to_string()))
 }
