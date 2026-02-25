@@ -6,7 +6,7 @@ use crate::models::{
     auth::{LoginFormData, Platform, RegistrationFormData},
     user::Identifier,
 };
-use crate::server_functions::auth::{login, register};
+use crate::server_functions::auth::{login, register, get_google_oauth_url};
 
 #[component]
 pub fn Register() -> impl IntoView {
@@ -165,6 +165,21 @@ pub fn Login() -> impl IntoView {
     let email_or_mobile_input: NodeRef<html::Input> = NodeRef::new();
     let password_input: NodeRef<html::Input> = NodeRef::new();
 
+    let start_google_login = move |_| {
+        spawn_local(async move {
+            match get_google_oauth_url().await {
+                Ok(response) => {
+                    if let Some(url) = response.data {
+                        window().location().set_href(&url).ok();
+                    }
+                }
+                Err(e) => {
+                    set_error.set(format!("Failed to start Google login: {}", e));
+                }
+            }
+        });
+    };
+
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         ev.prevent_default();
 
@@ -244,7 +259,22 @@ pub fn Login() -> impl IntoView {
             </section>
 
             <section class = "flex-1 bg-surface-700 00 h-[85svh] mt-11 fixed right-[8rem] w-[30%] px-10 rounded-3xl text-foreground-900">
-                <form on:submit = on_submit class = "grid gap-4 mt-16 mb-3">
+            //TODO: Place this button at an appropriate place and style it properly
+                <button
+                    on:click = start_google_login
+                    class = "flex items-center justify-center gap-2 w-full bg-white text-gray-700 font-semibold py-2 px-4 rounded-2xl border border-gray-300 hover:bg-gray-100 transition-colors mb-4"
+                >
+                    <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5" />
+                    "Continue with Google"
+                </button>
+                
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="flex-1 h-px bg-gray-300"></div>
+                    <span class="text-sm text-gray-500">or</span>
+                    <div class="flex-1 h-px bg-gray-300"></div>
+                </div>
+                
+                <form on:submit = on_submit class = "grid gap-4 mb-3">
                     <div>
                         <h1 class = "text-2xl font-bold">"Login"</h1>
                         <h2 class = "text-foreground-400">"Welcome back. please enter your details."</h2>

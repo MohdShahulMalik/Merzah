@@ -1,12 +1,15 @@
 use leptos::prelude::*;
-use leptos_meta::{Stylesheet, Title, provide_meta_context};
+use leptos_meta::{provide_meta_context, Stylesheet, Title};
 use leptos_router::{
-    StaticSegment, WildcardSegment,
     components::{Route, Router, Routes},
-    path,
+    path, StaticSegment, WildcardSegment,
 };
 
-use crate::pages::{add_mosques_of_region::AddMosquesOfRegion, auth::{Login, Register}};
+use crate::pages::{
+    add_mosques_of_region::AddMosquesOfRegion,
+    auth::{Login, Register},
+    google_callback::GoogleCallback,
+};
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -29,6 +32,7 @@ pub fn App() -> impl IntoView {
                     <Route path=path!("/register") view=Register/>
                     <Route path=path!("/login") view=Login/>
                     <Route path=path!("/add-mosques") view=AddMosquesOfRegion/>
+                    <Route path=path!("/auth/callback/google") view=GoogleCallback/>
                     <Route path=WildcardSegment("any") view=NotFound/>
                 </Routes>
             </main>
