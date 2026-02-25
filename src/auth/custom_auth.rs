@@ -71,7 +71,9 @@ pub async fn authenticate(form: LoginFormData, db: &Surreal<Client>) -> Result<R
     let (identifier_type, identifier_value) = match form.identifier {
         Identifier::Email(email) => ("email", email),
         Identifier::Mobile(mobile) => ("mobile", mobile),
-        Identifier::Workos(_) => return Err(anyhow!(AuthError::UserNotFound)),
+        Identifier::Google(_) | Identifier::Meta(_) | Identifier::Instagram(_) => {
+            return Err(anyhow!(AuthError::UserNotFound))
+        }
     };
 
     let mut result = db.query("SELECT * FROM user_identifier WHERE identifier_value = $identifier_value FETCH user")

@@ -108,9 +108,16 @@ pub enum Identifier {
     #[serde(rename = "email")]
     Email(#[garde(email)] String),
     #[serde(rename = "mobile")]
-    Mobile(#[garde(pattern(r"^[+]?[(]?[0-9]{1,4}[)]?[- .]?[(]?[0-9]{1,4}[)]?[- .]?[0-9]{4,10}$"))] String),
-    #[serde(rename = "workos")]
-    Workos(#[garde(skip)] String),
+    Mobile(
+        #[garde(pattern(r"^[+]?[(]?[0-9]{1,4}[)]?[- .]?[(]?[0-9]{1,4}[)]?[- .]?[0-9]{4,10}$"))]
+        String,
+    ),
+    #[serde(rename = "google")]
+    Google(#[garde(skip)] String),
+    #[serde(rename = "meta")]
+    Meta(#[garde(skip)] String),
+    #[serde(rename = "instagram")]
+    Instagram(#[garde(skip)] String),
 }
 
 #[cfg(feature = "ssr")]

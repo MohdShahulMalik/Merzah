@@ -54,7 +54,9 @@ impl RegistrationFormData {
         let (identifier_type, identifier_value) = match &self.identifier {
             Identifier::Email(email) => ("email", email.to_string()),
             Identifier::Mobile(mobile) => ("mobile", mobile.to_string()),
-            Identifier::Workos(_) => return Err(anyhow!("WorkOS identifiers cannot be manually registered")),
+            Identifier::Google(_) | Identifier::Meta(_) | Identifier::Instagram(_) => {
+                return Err(anyhow!("OAuth identifiers cannot be manually registered"))
+            }
         };
 
         let mut result = db
