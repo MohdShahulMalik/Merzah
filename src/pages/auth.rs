@@ -1,8 +1,11 @@
 use garde::Validate;
-use leptos::{ html, prelude::*, reactive::spawn_local };
+use leptos::{html, prelude::*, reactive::spawn_local};
 use leptos_router::components::A;
 
-use crate::models::{auth::{LoginFormData, RegistrationFormData, Platform}, user::Identifier};
+use crate::models::{
+    auth::{LoginFormData, Platform, RegistrationFormData},
+    user::Identifier,
+};
 use crate::server_functions::auth::{login, register};
 
 #[component]
@@ -152,7 +155,6 @@ pub fn Register() -> impl IntoView {
     }
 }
 
-// TO-DO: make the authenticate method in custom_auth.rs file use FETCH clause to retrieve the user's data in a single query only along with the user_details record
 #[component]
 pub fn Login() -> impl IntoView {
     let (error, set_error) = signal("".to_string());
@@ -241,41 +243,45 @@ pub fn Login() -> impl IntoView {
 
             </section>
 
-            <section class = "flex-1 bg-surface-700 h-[85svh]">
-                <form on:submit = on_submit>
-                    <h1>"Login"</h1>
-                    <h2>"Welcome back. please enter your details."</h2>
+            <section class = "flex-1 bg-surface-700 00 h-[85svh] mt-11 fixed right-[8rem] w-[30%] px-10 rounded-3xl text-foreground-900">
+                <form on:submit = on_submit class = "grid gap-4 mt-16 mb-3">
+                    <div>
+                        <h1 class = "text-2xl font-bold">"Login"</h1>
+                        <h2 class = "text-foreground-400">"Welcome back. please enter your details."</h2>
+                    </div>
 
-                    <div class = "form-group">
-                        <label for = "contact">"Email or Mobile"</label>
+                    <div class = "form-group grid">
+                        <label for = "contact" class = "">"Email or Mobile"</label>
                         <input
                             type = "text"
                             name = "contact"
                             placeholder = "email@example.com or +91923XXXXX90"
                             node_ref = email_or_mobile_input
+                            class = "border-[0.125rem] border-stroke outline-none transition-all focus:border-indigo-300 focus:ring-4 focus:ring-indigo-400/20 rounded-2xl mt-1 mb-0.5 py-2 px-3 bg-surface-750"
                             required
                         />
                         <Show when = move || !identifier_error.get().is_empty()>
                             <p>{identifier_error.get()}</p>
                         </Show>
                         <Show when = move || identifier_error.get().is_empty()>
-                            <p>"Enter a valid email or mobile number"</p>
+                            <p class = "text-foreground-600 text-[.9rem]">"Enter a valid email or mobile number"</p>
                         </Show>
                     </div>
 
-                    <div class = "form-group">
-                        <label for = "password">"Password"</label>
+                    <div class = "form-group grid">
+                        <label for = "password" class = "">"Password"</label>
                         <input
                             type = "password"
                             name = "password"
                             node_ref = password_input
                             required
+                            class = "border-[0.125rem] border-stroke outline-none transition-all focus:border-indigo-300 focus:ring-4 focus:ring-indigo-400/20 rounded-2xl mt-1 mb-0.5 py-2 px-3 bg-surface-750"
                         />
                         <Show when = move || !password_error.get().is_empty()>
                             <p>{password_error.get()}</p>
                         </Show>
                         <Show when = move || password_error.get().is_empty()>
-                            <p>"Password must contain 8 characters"</p>
+                            <p class = "text-foreground-600 text-[.9rem]">"Password must contain 8 characters"</p>
                         </Show>
                             <div>
                                 <A href = "/forgot-password">"Forgot Password"</A>
@@ -284,7 +290,7 @@ pub fn Login() -> impl IntoView {
 
 
                     <button
-                        class = "border-2 bg-primary border-stroke cursor-pointer"
+                        class = "bg-indigo-300 cursor-pointer font-bold text-white py-2 rounded-2xl shadow-[0_0_20px_theme('colors.indigo.400/70%')]"
                         type = "submit">Login
                     </button>
 
