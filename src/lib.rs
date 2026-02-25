@@ -36,6 +36,7 @@ pub mod pages;
 pub mod components;
 #[cfg(feature = "ssr")]
 pub mod services;
+#[cfg(feature = "ssr")]
 pub mod jobs;
 
 pub mod server_functions;

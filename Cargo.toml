@@ -37,7 +37,7 @@ wasm-bindgen = "=0.2.105"
 wasm-bindgen-futures = "0.4.55"
 leptos-leaflet = "0.10.2"
 leptos-use = "0.18.0"
-tokio-cron-scheduler = "0.15.1"
+tokio-cron-scheduler = { version = "0.15.1", optional = true }
 
 [features]
 csr = ["leptos/csr"]
@@ -63,6 +63,7 @@ ssr = [
   "dep:tracing-subscriber",
   "dep:tracing-appender",
   "dep:http",
+  "dep:tokio-cron-scheduler",
 ]
 default = ["web"]
 web = []

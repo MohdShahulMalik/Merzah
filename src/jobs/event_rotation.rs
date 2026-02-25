@@ -1,11 +1,15 @@
+#[cfg(feature = "ssr")]
 use anyhow::Result;
+#[cfg(feature = "ssr")]
 use surrealdb::{engine::remote::ws::Client, Surreal};
-use tokio_cron_scheduler::{Job, JobScheduler};
-use tracing::{error, info};
 
-use crate::services::recurrence::check_and_rotate_events;
-
+#[cfg(feature = "ssr")]
 pub async fn start_scheduler(db: Surreal<Client>) -> Result<()> {
+    use tokio_cron_scheduler::{Job, JobScheduler};
+    use tracing::{error, info};
+
+    use crate::services::recurrence::check_and_rotate_events;
+
     let scheduler = JobScheduler::new().await?;
 
     let db_clone = db.clone();

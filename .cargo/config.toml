@@ -2,5 +2,8 @@
 linker = "clang"
 rustflags = ["-C", "link-arg=-fuse-ld=mold"]
 
+[target.wasm32-unknown-unknown]
+rustflags = ["--cfg", "getrandom_backend=\"wasm_js\""]
+
 # Note: WASM linking uses 'lld' by default which is fine. 
 # mold speeds up the SERVER binary linking which runs every time you save.
