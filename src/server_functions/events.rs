@@ -1,27 +1,37 @@
+#[cfg(feature = "ssr")]
 use std::collections::HashSet;
 
+#[cfg(feature = "ssr")]
 use garde::Validate;
 use leptos::{
     prelude::ServerFnError,
     server_fn::codec::{DeleteUrl, Json, PatchJson},
     *,
 };
-
+#[cfg(feature = "ssr")]
 use surrealdb::RecordId;
+#[cfg(feature = "ssr")]
 use tracing::error;
 
+#[cfg(feature = "ssr")]
 use crate::utils::ssr::{ServerResponse, get_authenticated_user};
+#[cfg(feature = "ssr")]
 use crate::utils::user_elevation::is_mosque_admin;
+#[cfg(feature = "ssr")]
+use crate::utils::parsing::parse_record_id;
 use crate::{
     models::{
         api_responses::ApiResponse,
         events::{
-            CreateEvent, Event, EventDetails, EventRecord, EventSummary, FetchedEvents,
+            CreateEvent, FetchedEvents,
             PersonalEvent, UpdatedEvent,
         },
     },
-    utils::parsing::parse_record_id,
 };
+#[cfg(feature = "ssr")]
+use crate::models::events::{ EventDetails, EventSummary };
+#[cfg(feature = "ssr")]
+use crate::models::events::{ Event, EventRecord, UpdatedEventRecord };
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
 pub async fn add_event(create_event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
@@ -45,7 +55,10 @@ pub async fn add_event(create_event: CreateEvent) -> Result<ApiResponse<String>,
         return Ok(error);
     }
 
-    let event_record = EventRecord::from(create_event);
+    let event_record = match EventRecord::try_from(create_event) {
+        Ok(record) => record,
+        Err(e) => return Ok(e),
+    };
 
     let create_event_transaction = r#"
         BEGIN TRANSACTION;
@@ -110,6 +123,11 @@ pub async fn update_event(
         return Ok(error);
     }
 
+    let updated_event_record = match UpdatedEventRecord::try_from(updated_event) {
+        Ok(record) => record,
+        Err(e) => return Ok(e),
+    };
+
     let update_event_transaction = r#"
         BEGIN TRANSACTION;
         LET $event = (UPDATE ONLY $event_id MERGE $updated_event);
@@ -123,7 +141,7 @@ pub async fn update_event(
     let transaction_result = db
         .query(update_event_transaction)
         .bind(("event_id", event_id))
-        .bind(("updated_event", updated_event))
+        .bind(("updated_event", updated_event_record))
         .await;
 
     match transaction_result {

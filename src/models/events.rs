@@ -1,8 +1,13 @@
+#[cfg(feature = "ssr")]
+use crate::models::api_responses::ApiResponse;
 use chrono::{DateTime, FixedOffset};
 use garde::Validate;
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "ssr")]
 use surrealdb::RecordId;
+
+#[cfg(feature = "ssr")]
+use crate::utils::parsing::parse_record_id;
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
@@ -81,7 +86,7 @@ pub struct CreateEvent {
     #[garde(skip)]
     pub date: DateTime<FixedOffset>,
     #[garde(skip)]
-    pub mosque: RecordId,
+    pub mosque: String,
     #[garde(length(min = 2, max = 100))]
     pub speaker: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -92,8 +97,11 @@ pub struct CreateEvent {
     pub recurrence_duration: Option<Interval>,
 }
 
-impl From<CreateEvent> for EventRecord {
-    fn from(create: CreateEvent) -> Self {
+#[cfg(feature = "ssr")]
+impl TryFrom<CreateEvent> for EventRecord {
+    type Error = ApiResponse<String>;
+
+    fn try_from(create: CreateEvent) -> Result<Self, Self::Error> {
         let recurrence_end_date = match create.recurrence_duration {
             Some(Interval::OneMonth) => Some(create.date + chrono::Duration::days(30)),
             Some(Interval::ThreeMonths) => Some(create.date + chrono::Duration::days(90)),
@@ -103,16 +111,18 @@ impl From<CreateEvent> for EventRecord {
             None => None,
         };
 
-        Self {
+        let mosque = parse_record_id::<String>(&create.mosque, "mosque")?;
+
+        Ok(Self {
             title: create.title,
             description: create.description,
             category: create.category,
             date: create.date,
-            mosque: create.mosque,
+            mosque,
             speaker: create.speaker,
             recurrence_pattern: create.recurrence_pattern,
             recurrence_end_date,
-        }
+        })
     }
 }
 
@@ -145,7 +155,7 @@ pub struct UpdatedEvent {
     pub date: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(skip)]
-    pub mosque: Option<RecordId>,
+    pub mosque: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(inner(length(min = 2, max = 100)))]
     pub speaker: Option<String>,
@@ -155,6 +165,50 @@ pub struct UpdatedEvent {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(skip)]
     pub recurrence_end_date: Option<DateTime<FixedOffset>>,
+}
+
+#[cfg(feature = "ssr")]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct UpdatedEventRecord {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<EventCategory>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date: Option<DateTime<FixedOffset>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mosque: Option<RecordId>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speaker: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recurrence_pattern: Option<EventRecurrence>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recurrence_end_date: Option<DateTime<FixedOffset>>,
+}
+
+#[cfg(feature = "ssr")]
+impl TryFrom<UpdatedEvent> for UpdatedEventRecord {
+    type Error = ApiResponse<String>;
+
+    fn try_from(update: UpdatedEvent) -> Result<Self, Self::Error> {
+        let mosque = update
+            .mosque
+            .map(|m| parse_record_id::<String>(&m, "mosque"))
+            .transpose()?;
+
+        Ok(Self {
+            title: update.title,
+            description: update.description,
+            category: update.category,
+            date: update.date,
+            mosque,
+            speaker: update.speaker,
+            recurrence_pattern: update.recurrence_pattern,
+            recurrence_end_date: update.recurrence_end_date,
+        })
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
