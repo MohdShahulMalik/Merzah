@@ -6,7 +6,7 @@ use crate::models::{
     auth::{LoginFormData, Platform, RegistrationFormData},
     user::Identifier,
 };
-use crate::server_functions::auth::{login, register, get_google_oauth_url};
+use crate::server_functions::auth::{get_google_oauth_url, login, register};
 
 #[component]
 pub fn Register() -> impl IntoView {
@@ -241,39 +241,27 @@ pub fn Login() -> impl IntoView {
 
                     <div class = "w-full">
                         <img class = "w-auto h-12" src="/assets/logo-text.png" alt="Merzah <logo>" />
-                        <span class = "text-foreground-600">Community Management App</span>
+                        <span class = "text-foreground-600">Your Mosque, Your Community</span>
                     </div>
 
                 </div>
 
-                <div class = "w-[60%] grid gap-16">
+                <div class = "w-[45%] grid gap-16">
                     <p class = "text-4xl font-bold text-foreground-900">
-                        "Welcome back to a simpler way to manage your community"
+                        "Welcome back to connect with your mosque, stay informed on events, and grow in deen and dunya"
                     </p>
 
                     <p class = "text-foreground-600">
-                        "A modern, trustworthy experience that respects Islamic design. warm tones, gentle patterns, and clear usability, all in one place."
+                        "Rooted in Islamic values: connecting Muslims with their masajid and empowering everyone through holistic, ethical learning."
                     </p>
                 </div>
 
             </section>
 
-            <section class = "flex-1 bg-surface-700 00 h-[85svh] mt-11 fixed right-[8rem] w-[30%] px-10 rounded-3xl text-foreground-900">
+            <section class = "flex-1 bg-surface-700 fixed right-[8rem] top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl text-foreground-900">
             //TODO: Place this button at an appropriate place and style it properly
-                <button
-                    on:click = start_google_login
-                    class = "flex items-center justify-center gap-2 w-full bg-white text-gray-700 font-semibold py-2 px-4 rounded-2xl border border-gray-300 hover:bg-gray-100 transition-colors mb-4"
-                >
-                    <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5" />
-                    "Continue with Google"
-                </button>
-                
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="flex-1 h-px bg-gray-300"></div>
-                    <span class="text-sm text-gray-500">or</span>
-                    <div class="flex-1 h-px bg-gray-300"></div>
-                </div>
-                
+
+
                 <form on:submit = on_submit class = "grid gap-4 mb-3">
                     <div>
                         <h1 class = "text-2xl font-bold">"Login"</h1>
@@ -303,6 +291,7 @@ pub fn Login() -> impl IntoView {
                         <input
                             type = "password"
                             name = "password"
+                            placeholder = "Enter your password"
                             node_ref = password_input
                             required
                             class = "border-[0.125rem] border-stroke outline-none transition-all focus:border-indigo-300 focus:ring-4 focus:ring-indigo-400/20 rounded-2xl mt-1 mb-0.5 py-2 px-3 bg-surface-750"
@@ -314,18 +303,54 @@ pub fn Login() -> impl IntoView {
                             <p class = "text-foreground-600 text-[.9rem]">"Password must contain 8 characters"</p>
                         </Show>
                             <div>
-                                <A href = "/forgot-password">"Forgot Password"</A>
+                                <A href = "/forgot-password" attr:class = "text-indigo-400 font-bold">"Forgot password?"</A>
                             </div>
                     </div>
 
 
                     <button
-                        class = "bg-indigo-300 cursor-pointer font-bold text-white py-2 rounded-2xl shadow-[0_0_20px_theme('colors.indigo.400/70%')]"
+                        class = "bg-indigo-400 hover:bg-indigo-500 transition-colors duration-300 cursor-pointer font-bold text-white py-2 rounded-2xl "
                         type = "submit">Login
                     </button>
 
 
                 </form>
+
+                <div class="flex items-center gap-4 mb-6 mt-6">
+                    <div class="flex-1 h-px bg-gray-300"></div>
+                    <span class="text-[.8rem] text-foreground-600">Or continue with</span>
+                    <div class="flex-1 h-px bg-gray-300"></div>
+                </div>
+
+                <div class="flex gap-2 mb-8">
+                    <button
+                        on:click = start_google_login
+                        class = "flex-1 flex items-center justify-center gap-2 bg-white text-gray-700 font-semibold py-2 px-2 rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors"
+                    >
+                        <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5" />
+                    </button>
+
+                    <button
+                        on:click = start_google_login
+                        class = "flex-1 flex items-center justify-center gap-2 bg-[#5865F2] text-white font-semibold py-2 px-2 rounded-2xl border border-[#5865F2] hover:bg-[#4752C4] transition-colors"
+                    >
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                    </button>
+
+                    <button
+                        on:click = start_google_login
+                        class = "flex-1 flex items-center justify-center gap-2 bg-[#00A4EF] text-white font-semibold py-2 px-2 rounded-2xl border border-[#00A4EF] hover:bg-[#0088CC] transition-colors"
+                    >
+                        <svg class="w-5 h-5 text-white" viewBox="0 0 23 23">
+                            <path fill="white" d="M1 1h10v10H1z"/>
+                            <path fill="white" d="M1 12h10v10H1z"/>
+                            <path fill="white" d="M12 1h10v10H12z"/>
+                            <path fill="white" d="M12 12h10v10H12z"/>
+                        </svg>
+                    </button>
+                </div>
 
                 <Show
                     when = move || !error.get().is_empty()
@@ -341,9 +366,14 @@ pub fn Login() -> impl IntoView {
                     <p>{success.get()}</p>
                 </Show>
 
+                <p class = "text-[0.90rem] text-foreground-600 text-center mb-2">"Don't have an account?"</p>
+                <A href = "/register">
+                    <button
+                    class = "bg-transparent w-[100%] border-indigo-400 border-2 hover:bg-indigo-300/30 transition-colors duration-300 cursor-pointer font-bold text-indigo-400 py-2 rounded-2xl"
+                    type = "submit">Register
+                    </button>
+                </A>
 
-                <p>"Don't have an account?"</p>
-                <A href = "/register"><button>Register</button></A>
             </section>
 
         </main>
