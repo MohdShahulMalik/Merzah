@@ -4,6 +4,8 @@ use leptos::*;
 use crate::models::auth::LoginFormData;
 use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData };
 #[cfg(feature = "ssr")]
+use crate::models::oauth::GoogleUser;
+#[cfg(feature = "ssr")]
 use crate::models::auth::Platform;
 #[cfg(feature = "ssr")]
 use garde::Validate;
@@ -317,7 +319,7 @@ pub async fn handle_google_callback(
         }
     };
 
-    let user_info = match get_user_info(&token_response.access_token).await {
+    let user_info: GoogleUser = match get_user_info(&token_response.access_token).await {
         Ok(user) => user,
         Err(e) => {
             error!(?e, "Failed to get user info");
@@ -342,17 +344,22 @@ pub async fn handle_google_callback(
         }
     };
 
-    if let Err(e) = set_session_cookie(&session_token) {
-        error!(?e, "Failed to set session cookie");
-        return Err(ServerFnError::ServerError("Failed to set session".to_string()));
-    }
-
-    let clear_cookie = "google_oauth_state=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0";
-    
     use actix_web::http::header::{HeaderValue, SET_COOKIE};
+
+    let session_cookie = format!(
+        "__Host-session={}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age={}",
+        session_token,
+        24 * 60 * 60
+    );
+
+    let clear_state_cookie = "google_oauth_state=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0";
     
-    if let Ok(header_value) = HeaderValue::from_str(clear_cookie) {
-        response_option.insert_header(SET_COOKIE, header_value);
+    if let Ok(session_header) = HeaderValue::from_str(&session_cookie) {
+        response_option.append_header(SET_COOKIE, session_header);
+    }
+    
+    if let Ok(clear_header) = HeaderValue::from_str(clear_state_cookie) {
+        response_option.append_header(SET_COOKIE, clear_header);
     }
 
     Ok(ApiResponse::data("Successfully authenticated with Google".to_string()))
