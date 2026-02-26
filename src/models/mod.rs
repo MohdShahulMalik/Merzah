@@ -6,4 +6,5 @@ pub mod api_responses;
 pub mod mosque;
 pub mod form;
 pub mod events;
+#[cfg(feature = "ssr")]
 pub mod oauth;

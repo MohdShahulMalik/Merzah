@@ -1,5 +1,7 @@
+#[cfg(feature = "ssr")]
 use serde::Deserialize;
 
+#[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize)]
 pub struct GoogleTokenResponse {
     pub access_token: String,
@@ -8,6 +10,7 @@ pub struct GoogleTokenResponse {
     pub scope: String,
 }
 
+#[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize)]
 pub struct GoogleUser {
     pub id: String,
