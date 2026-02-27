@@ -1,9 +1,12 @@
 use leptos::prelude::*;
 
-
 #[component]
-pub fn prayer_time_card(prayer_name: String, jamat_time: String, adhan_time: String) -> impl IntoView{
-    view !{
+pub fn prayer_time_card(
+    prayer_name: String,
+    jamat_time: String,
+    adhan_time: String,
+) -> impl IntoView {
+    view! {
         <div>
             <p>{prayer_name}</p>
             <div>
@@ -15,7 +18,12 @@ pub fn prayer_time_card(prayer_name: String, jamat_time: String, adhan_time: Str
 }
 
 #[component]
-pub fn nearby_mosques_card(mosque_name: String, next_prayer: String, jamat_time: String, distance: f64) -> impl IntoView{
+pub fn nearby_mosques_card(
+    mosque_name: String,
+    next_prayer: String,
+    jamat_time: String,
+    distance: f64,
+) -> impl IntoView {
     view! {
         <div>
             <div></div>
@@ -31,7 +39,13 @@ pub fn nearby_mosques_card(mosque_name: String, next_prayer: String, jamat_time:
 }
 
 #[component]
-pub fn mosque_events_card(event_title: String, event_type: String,  mosque_name: String, event_time: String, event_short_description: String) -> impl IntoView{
+pub fn mosque_events_card(
+    event_title: String,
+    event_type: String,
+    mosque_name: String,
+    event_time: String,
+    event_short_description: String,
+) -> impl IntoView {
     view! {
         <div>
             <div class = "flex justify-between">
@@ -47,7 +61,11 @@ pub fn mosque_events_card(event_title: String, event_type: String,  mosque_name:
 }
 
 #[component]
-pub fn educational_resources_card(resource_title: String, resource_short_description: String, resource_by: String) -> impl IntoView{
+pub fn educational_resources_card(
+    resource_title: String,
+    resource_short_description: String,
+    resource_by: String,
+) -> impl IntoView {
     view! {
         <div>
             <div></div>
