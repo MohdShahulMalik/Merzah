@@ -2,6 +2,7 @@ use garde::Validate;
 use leptos::{html, prelude::*, reactive::spawn_local};
 use leptos_router::components::A;
 
+use crate::components::text_input::TextInput;
 use crate::models::{
     auth::{LoginFormData, Platform, RegistrationFormData},
     user::Identifier,
@@ -268,43 +269,29 @@ pub fn Login() -> impl IntoView {
                         <h2 class = "text-foreground-400">"Welcome back. please enter your details."</h2>
                     </div>
 
-                    <div class = "form-group grid">
-                        <label for = "contact" class = "">"Email or Mobile"</label>
-                        <input
-                            type = "text"
-                            name = "contact"
-                            placeholder = "email@example.com or +91923XXXXX90"
-                            node_ref = email_or_mobile_input
-                            class = "border-[0.125rem] border-stroke outline-none transition-all focus:border-indigo-300 focus:ring-4 focus:ring-indigo-400/20 rounded-2xl mt-1 mb-0.5 py-2 px-3 bg-surface-750"
-                            required
-                        />
-                        <Show when = move || !identifier_error.get().is_empty()>
-                            <p>{identifier_error.get()}</p>
-                        </Show>
-                        <Show when = move || identifier_error.get().is_empty()>
-                            <p class = "text-foreground-600 text-[.9rem]">"Enter a valid email or mobile number"</p>
-                        </Show>
-                    </div>
+                    <TextInput
+                        label = "Email or Mobile"
+                        name = "contact"
+                        placeholder = "email@example.com or +91923XXXXX90"
+                        input_type = "text"
+                        node_ref = email_or_mobile_input
+                        error_signal = identifier_error
+                        hint = "Enter a valid email or mobile number"
+                    />
 
-                    <div class = "form-group grid">
-                        <label for = "password" class = "">"Password"</label>
-                        <input
-                            type = "password"
+                    <div>
+                        <TextInput
+                            label = "Password"
                             name = "password"
                             placeholder = "Enter your password"
+                            input_type = "password"
                             node_ref = password_input
-                            required
-                            class = "border-[0.125rem] border-stroke outline-none transition-all focus:border-indigo-300 focus:ring-4 focus:ring-indigo-400/20 rounded-2xl mt-1 mb-0.5 py-2 px-3 bg-surface-750"
+                            error_signal = password_error
+                            hint = "Password must contain 8 characters"
                         />
-                        <Show when = move || !password_error.get().is_empty()>
-                            <p>{password_error.get()}</p>
-                        </Show>
-                        <Show when = move || password_error.get().is_empty()>
-                            <p class = "text-foreground-600 text-[.9rem]">"Password must contain 8 characters"</p>
-                        </Show>
-                            <div>
-                                <A href = "/forgot-password" attr:class = "text-indigo-400 font-bold">"Forgot password?"</A>
-                            </div>
+                        <div>
+                            <A href = "/forgot-password" attr:class = "text-indigo-400 font-bold">"Forgot password?"</A>
+                        </div>
                     </div>
 
 
