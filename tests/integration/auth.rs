@@ -69,7 +69,7 @@ async fn register_server_fn_successfully_register_a_user(
     let (id_type, id_value) = match identifier {
         Identifier::Email(e) => ("email", e),
         Identifier::Mobile(m) => ("mobile", m),
-        Identifier::Workos(_) => todo!(),
+        _ => panic!(),
     };
 
     // 1. Verify User Identifier exists

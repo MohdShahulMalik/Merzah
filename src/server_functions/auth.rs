@@ -35,7 +35,7 @@ use crate::auth::oauth::google::{exchange_code, find_or_create_user, get_authori
 #[cfg(feature = "ssr")]
 use crate::auth::oauth::state::{generate_state, validate_state};
 
-#[server(input=Json, prefix = "/auth", endpoint = "register")]
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "register")]
 pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>, ServerFnError> {
     let (response_option, db) = match get_server_context().await {
         Ok(ctx) => ctx,
@@ -97,7 +97,7 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
     }
 }
 
-#[server(input=Json, prefix="/auth", endpoint="login")]
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "login")]
 pub async fn login(
     form: LoginFormData,
 ) -> Result<ApiResponse<String>, ServerFnError> {
@@ -239,7 +239,7 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
     Ok(ApiResponse::data("Successfully logged out the user".to_string()))
 }
 
-#[server(input=Json, prefix="/auth", endpoint="google-url")]
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "google-url")]
 pub async fn get_google_oauth_url() -> Result<ApiResponse<String>, ServerFnError> {
     let (response_option, _db) = match get_server_context().await {
         Ok(ctx) => ctx,
@@ -286,7 +286,7 @@ pub async fn get_google_oauth_url() -> Result<ApiResponse<String>, ServerFnError
     Ok(ApiResponse { data: Some(url), error: None })
 }
 
-#[server(input=Json, prefix="/auth", endpoint="google-callback")]
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "google-callback")]
 pub async fn handle_google_callback(
     code: String,
     state: String,
@@ -371,12 +371,12 @@ pub async fn handle_google_callback(
     Ok(ApiResponse::data("Successfully authenticated with Google".to_string()))
 }
 
-#[server(input=Json, prefix="/auth", endpoint="discord-url")]
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "discord-url")]
 pub async fn get_discord_oauth_url() -> Result<ApiResponse<String>, ServerFnError> {
     OAuthCallback::get_url::<DiscordProvider>("discord_oauth_state").await
 }
 
-#[server(input=Json, prefix="/auth", endpoint="discord-callback")]
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "discord-callback")]
 pub async fn handle_discord_callback(
     code: String,
     state: String,
@@ -384,12 +384,12 @@ pub async fn handle_discord_callback(
     OAuthCallback::handle::<DiscordProvider>(code, state, "discord_oauth_state").await
 }
 
-#[server(input=Json, prefix="/auth", endpoint="microsoft-url")]
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "microsoft-url")]
 pub async fn get_microsoft_oauth_url() -> Result<ApiResponse<String>, ServerFnError> {
     OAuthCallback::get_url::<MicrosoftProvider>("microsoft_oauth_state").await
 }
 
-#[server(input=Json, prefix="/auth", endpoint="microsoft-callback")]
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "microsoft-callback")]
 pub async fn handle_microsoft_callback(
     code: String,
     state: String,
