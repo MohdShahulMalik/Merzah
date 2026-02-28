@@ -1,4 +1,12 @@
 #[cfg(feature = "ssr")]
+pub mod discord;
+#[cfg(feature = "ssr")]
 pub mod google;
+#[cfg(feature = "ssr")]
+pub mod helpers;
+#[cfg(feature = "ssr")]
+pub mod microsoft;
+#[cfg(feature = "ssr")]
+pub mod provider;
 #[cfg(feature = "ssr")]
 pub mod state;
