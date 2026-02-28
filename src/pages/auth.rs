@@ -199,10 +199,12 @@ pub fn Login() -> impl IntoView {
             .expect("Failed to get the password input node unfortunately")
             .value();
 
-        let identifier = if email_or_mobile_value.contains('@') {
-            Identifier::Email(email_or_mobile_value)
-        } else {
+        let is_mobile = email_or_mobile_value.chars().all(|c| c.is_digit(10) || c == '+' || c.is_whitespace() || c == '-' || c == '.' || c == '(' || c == ')');
+
+        let identifier = if is_mobile {
             Identifier::Mobile(email_or_mobile_value)
+        } else {
+            Identifier::Email(email_or_mobile_value)
         };
         let login_form = LoginFormData {
             identifier,
@@ -216,7 +218,7 @@ pub fn Login() -> impl IntoView {
                 let error_msg = error.to_string();
 
                 if field_str.starts_with("identifier") {
-                    set_identifier_error.set(error_msg);
+                    set_identifier_error.set("A valid email or mobile number is required".to_string());
                 } else if field_str.starts_with("password") {
                     set_password_error.set(error_msg);
                 }
