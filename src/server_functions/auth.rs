@@ -6,6 +6,12 @@ use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData };
 #[cfg(feature = "ssr")]
 use crate::models::oauth::GoogleUser;
 #[cfg(feature = "ssr")]
+use crate::auth::oauth::discord::DiscordProvider;
+#[cfg(feature = "ssr")]
+use crate::auth::oauth::helpers::OAuthCallback;
+#[cfg(feature = "ssr")]
+use crate::auth::oauth::microsoft::MicrosoftProvider;
+#[cfg(feature = "ssr")]
 use crate::models::auth::Platform;
 #[cfg(feature = "ssr")]
 use garde::Validate;
@@ -364,3 +370,30 @@ pub async fn handle_google_callback(
 
     Ok(ApiResponse::data("Successfully authenticated with Google".to_string()))
 }
+
+#[server(input=Json, prefix="/auth", endpoint="discord-url")]
+pub async fn get_discord_oauth_url() -> Result<ApiResponse<String>, ServerFnError> {
+    OAuthCallback::get_url::<DiscordProvider>("discord_oauth_state").await
+}
+
+#[server(input=Json, prefix="/auth", endpoint="discord-callback")]
+pub async fn handle_discord_callback(
+    code: String,
+    state: String,
+) -> Result<ApiResponse<String>, ServerFnError> {
+    OAuthCallback::handle::<DiscordProvider>(code, state, "discord_oauth_state").await
+}
+
+#[server(input=Json, prefix="/auth", endpoint="microsoft-url")]
+pub async fn get_microsoft_oauth_url() -> Result<ApiResponse<String>, ServerFnError> {
+    OAuthCallback::get_url::<MicrosoftProvider>("microsoft_oauth_state").await
+}
+
+#[server(input=Json, prefix="/auth", endpoint="microsoft-callback")]
+pub async fn handle_microsoft_callback(
+    code: String,
+    state: String,
+) -> Result<ApiResponse<String>, ServerFnError> {
+    OAuthCallback::handle::<MicrosoftProvider>(code, state, "microsoft_oauth_state").await
+}
+

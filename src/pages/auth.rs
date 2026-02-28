@@ -7,7 +7,9 @@ use crate::models::{
     auth::{LoginFormData, Platform, RegistrationFormData},
     user::Identifier,
 };
-use crate::server_functions::auth::{get_google_oauth_url, login, register};
+use crate::server_functions::auth::{
+    get_discord_oauth_url, get_google_oauth_url, get_microsoft_oauth_url, login, register,
+};
 
 #[component]
 pub fn Register() -> impl IntoView {
@@ -181,6 +183,36 @@ pub fn Login() -> impl IntoView {
         });
     };
 
+    let start_discord_login = move |_| {
+        spawn_local(async move {
+            match get_discord_oauth_url().await {
+                Ok(response) => {
+                    if let Some(url) = response.data {
+                        window().location().set_href(&url).ok();
+                    }
+                }
+                Err(e) => {
+                    set_error.set(format!("Failed to start Discord login: {}", e));
+                }
+            }
+        });
+    };
+
+    let start_microsoft_login = move |_| {
+        spawn_local(async move {
+            match get_microsoft_oauth_url().await {
+                Ok(response) => {
+                    if let Some(url) = response.data {
+                        window().location().set_href(&url).ok();
+                    }
+                }
+                Err(e) => {
+                    set_error.set(format!("Failed to start Microsoft login: {}", e));
+                }
+            }
+        });
+    };
+
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         ev.prevent_default();
 
@@ -320,7 +352,7 @@ pub fn Login() -> impl IntoView {
                     </button>
 
                     <button
-                        on:click = start_google_login
+                        on:click = start_discord_login
                         class = "flex-1 flex items-center justify-center gap-2 bg-[#5865F2] text-white font-semibold py-2 px-2 rounded-2xl border border-[#5865F2] hover:bg-[#4752C4] transition-colors"
                     >
                         <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -329,7 +361,7 @@ pub fn Login() -> impl IntoView {
                     </button>
 
                     <button
-                        on:click = start_google_login
+                        on:click = start_microsoft_login
                         class = "flex-1 flex items-center justify-center gap-2 bg-[#00A4EF] text-white font-semibold py-2 px-2 rounded-2xl border border-[#00A4EF] hover:bg-[#0088CC] transition-colors"
                     >
                         <svg class="w-5 h-5 text-white" viewBox="0 0 23 23">

@@ -8,7 +8,9 @@ use leptos_router::{
 use crate::pages::{
     add_mosques_of_region::AddMosquesOfRegion,
     auth::{Login, Register},
+    discord_callback::DiscordCallback,
     google_callback::GoogleCallback,
+    microsoft_callback::MicrosoftCallback,
 };
 
 #[component]
@@ -33,6 +35,8 @@ pub fn App() -> impl IntoView {
                     <Route path=path!("/login") view=Login/>
                     <Route path=path!("/add-mosques") view=AddMosquesOfRegion/>
                     <Route path=path!("/auth/callback/google") view=GoogleCallback/>
+                    <Route path=path!("/auth/callback/discord") view=DiscordCallback/>
+                    <Route path=path!("/auth/callback/microsoft") view=MicrosoftCallback/>
                     <Route path=WildcardSegment("any") view=NotFound/>
                 </Routes>
             </main>
