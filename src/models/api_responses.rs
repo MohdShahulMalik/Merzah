@@ -1,22 +1,29 @@
 use serde::{Deserialize, Serialize};
 
-use crate::models::{mosque::PrayerTimes, user::{UserIdentifierOnClient, UserOnClient}};
+use crate::models::{
+    mosque::PrayerTimes,
+    user::{UserIdentifierOnClient, UserOnClient},
+};
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct ApiResponse<T = String>{
-    #[serde(skip_serializing_if = "Option::is_none")]
+pub struct ApiResponse<T = String> {
     pub data: Option<T>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
 impl<T> ApiResponse<T> {
     pub fn data(data: T) -> Self {
-        Self {data: Some(data), error: None}
+        Self {
+            data: Some(data),
+            error: None,
+        }
     }
 
     pub fn error(error: String) -> Self {
-        Self {data: None, error: Some(error)}
+        Self {
+            data: None,
+            error: Some(error),
+        }
     }
 }
 
