@@ -268,6 +268,7 @@ pub async fn update_adhan_jamat_times(
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
+    let responder = ServerResponse::new(response_options);
 
     let mosque_id: RecordId = match parse_record_id(&mosque_id, "mosque_id") {
         Ok(id) => id,
@@ -276,19 +277,12 @@ pub async fn update_adhan_jamat_times(
 
     if !mosque_admin.is_app_admin() {
         if let Err(e) = is_mosque_admin(&mosque_admin.id, &mosque_id, &db).await {
-            let (status, msg) = match e {
-                UserElevationError::Unauthorized => (
-                    StatusCode::UNAUTHORIZED,
-                    "The user trying to update mosque info is not an admin of that mosque".to_string(),
-                ),
-                _ => (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    "Failed to verify admin permissions".to_string(),
-                ),
+            let msg = match e {
+                UserElevationError::Unauthorized => "The user trying to update mosque info is not an admin of that mosque".to_string(),
+                _ => "Failed to verify admin permissions".to_string(),
             };
             error!("{}", msg);
-            response_options.set_status(status);
-            return Ok(ApiResponse::error(msg));
+            return Ok(responder.internal_server_error(msg));
         }
     }
 
@@ -296,9 +290,7 @@ pub async fn update_adhan_jamat_times(
         .merge(prayer_times)
         .await?;
 
-    Ok(ApiResponse::data(
-        "Successfully updated jamat and adhan times".to_string(),
-    ))
+    Ok(responder.ok("Successfully updated jamat and adhan times".to_string()))
 }
 
 #[server(input = Json, output = Json, prefix = "/mosques", endpoint = "add-admin")]
@@ -310,6 +302,7 @@ pub async fn add_admin(
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
+    let responder = ServerResponse::new(response_options);
 
     let requested_user: RecordId = match parse_record_id(&requested_user, "requested_user") {
         Ok(id) => id,
@@ -326,8 +319,7 @@ pub async fn add_admin(
             "The user {} trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin",
             mosque_supervisor.id
         );
-        response_options.set_status(StatusCode::UNAUTHORIZED);
-        return Ok(ApiResponse::error("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin".to_string()));
+        return Ok(responder.unauthorized("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin".to_string()));
     }
 
     let relation_query = r#"
@@ -354,19 +346,18 @@ pub async fn add_admin(
         }
     }
 
-    Ok(ApiResponse::data(
-        "Elevated the user to a requested_user".to_string(),
-    ))
+    Ok(responder.ok("Elevated the user to a requested_user".to_string()))
 }
 
 #[server(input = Json, output = Json, prefix = "/mosques", endpoint = "elevate-user-to-mosque-supervisor")]
 pub async fn elevate_user_to_mosque_supervisor(
     user_id: String,
 ) -> Result<ApiResponse<String>, ServerFnError> {
-    let (response_option, db, app_admin) = match get_authenticated_user::<String>().await {
+    let (response_options, db, app_admin) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
+    let responder = ServerResponse::new(response_options);
 
     let user_id: RecordId = match parse_record_id(&user_id, "user_id") {
         Ok(id) => id,
@@ -375,41 +366,34 @@ pub async fn elevate_user_to_mosque_supervisor(
 
     let result = elevate_user(app_admin.id, user_id, "mosque_supervisor".to_string(), &db).await;
 
-    let elevation_error = match result {
-        Ok(success_msg) => return Ok(ApiResponse::data(success_msg)),
-        Err(e) => e,
-    };
-
-    let (status, msg) = match elevation_error {
-        UserElevationError::Unauthorized => (
-            StatusCode::UNAUTHORIZED,
-            "You are not authorized to perform this action".to_string(),
-        ),
-        UserElevationError::AdminNotFound => {
-            (StatusCode::UNAUTHORIZED, "Admin user not found".to_string())
+    match result {
+        Ok(success_msg) => return Ok(responder.ok(success_msg)),
+        Err(elevation_error) => {
+            match elevation_error {
+                UserElevationError::Unauthorized => {
+                    return Ok(responder.unauthorized("You are not authorized to perform this action".to_string()));
+                }
+                UserElevationError::AdminNotFound => {
+                    return Ok(responder.unauthorized("Admin user not found".to_string()));
+                }
+                UserElevationError::TargetUserNotFound => {
+                    return Ok(responder.not_found("User to elevate not found".to_string()));
+                }
+                UserElevationError::AlreadyElevated(role) => {
+                    return Ok(responder.conflict(format!("User is already a {}", role)));
+                }
+                UserElevationError::SelfElevationNotAllowed => {
+                    return Ok(responder.bad_request("You cannot elevate yourself".to_string()));
+                }
+                UserElevationError::DatabaseError(db_err) => {
+                    error!(?db_err, "Database error during user elevation");
+                    return Err(ServerFnError::ServerError(
+                        "Internal server error during elevation".to_string(),
+                    ));
+                }
+            }
         }
-        UserElevationError::TargetUserNotFound => (
-            StatusCode::NOT_FOUND,
-            "User to elevate not found".to_string(),
-        ),
-        UserElevationError::AlreadyElevated(role) => {
-            (StatusCode::CONFLICT, format!("User is already a {}", role))
-        }
-        UserElevationError::SelfElevationNotAllowed => (
-            StatusCode::BAD_REQUEST,
-            "You cannot elevate yourself".to_string(),
-        ),
-        UserElevationError::DatabaseError(db_err) => {
-            error!(?db_err, "Database error during user elevation");
-            return Err(ServerFnError::ServerError(
-                "Internal server error during elevation".to_string(),
-            ));
-        }
-    };
-
-    error!("User elevation failed: {}", msg);
-    response_option.set_status(status);
-    Ok(ApiResponse::error(msg))
+    }
 }
 
 #[server(input = Json, output = Json, prefix = "/mosques", endpoint = "add-favorite")]
@@ -420,6 +404,7 @@ pub async fn add_favorite(
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
+    let responder = ServerResponse::new(response_options);
 
     let mosque_id = match parse_record_id(&mosque_id, "mosque_id") {
         Ok(id) => id,
@@ -440,16 +425,11 @@ pub async fn add_favorite(
         Ok(_) => (),
         Err(e) => {
             error!(?e, "Database error");
-            response_options.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-            return Ok(ApiResponse::error(
-                "Failed to favorite a mosque".to_string(),
-            ));
+            return Ok(responder.internal_server_error("Failed to favorite a mosque".to_string()));
         }
     }
 
-    Ok(ApiResponse::data(
-        "Successfully added the mosque to user's favorite list".to_string(),
-    ))
+    Ok(responder.ok("Successfully added the mosque to user's favorite list".to_string()))
 }
 
 #[server(input = DeleteUrl, output = Json, prefix = "/mosques", endpoint = "/remove-favorite")]
@@ -460,6 +440,7 @@ pub async fn remove_favorite(
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
+    let responder = ServerResponse::new(response_options);
 
     let mosque_id = match parse_record_id(&mosque_id, "mosque_id") {
         Ok(id) => id,
@@ -477,12 +458,11 @@ pub async fn remove_favorite(
         Ok(_) => (),
         Err(e) => {
             error!(?e, "Failed to remove favorited mosque for the user");
-            response_options.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-            return Ok(ApiResponse::error("Failed to remove favorited mosque for the user".to_string()))
+            return Ok(responder.internal_server_error("Failed to remove favorited mosque for the user".to_string()))
         }
     }
 
-    Ok(ApiResponse::data("Successfully removed the mosque from favorite list of the user".to_string()))    
+    Ok(responder.ok("Successfully removed the mosque from favorite list of the user".to_string()))    
 }
 
 #[server(input = PatchJson, output = Json, prefix = "/mosques", endpoint = "update-personnel")]
@@ -491,10 +471,10 @@ pub async fn update_mosque_personnel(person_type: String, person_id: String, mos
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
+    let responder = ServerResponse::new(response_options);
 
     if person_type != "imam" && person_type != "muazzin" {
-        response_options.set_status(StatusCode::BAD_REQUEST);
-        return Ok(ApiResponse::error("person_type must be either 'imam' or 'muazzin'".to_string()));
+        return Ok(responder.bad_request("person_type must be either 'imam' or 'muazzin'".to_string()));
     }
 
     let person_id: RecordId = match parse_record_id(&person_id, "person_id") {
@@ -509,19 +489,12 @@ pub async fn update_mosque_personnel(person_type: String, person_id: String, mos
 
     if !auth_user.is_app_admin() {
         if let Err(e) = is_mosque_admin(&auth_user.id, &mosque_id, &db).await {
-            let (status, msg) = match e {
-                UserElevationError::Unauthorized => (
-                    StatusCode::UNAUTHORIZED,
-                    "The user trying to update mosque info is not an admin of that mosque".to_string(),
-                ),
-                _ => (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    "Failed to verify admin permissions".to_string(),
-                ),
+            let msg = match e {
+                UserElevationError::Unauthorized => "The user trying to update mosque info is not an admin of that mosque".to_string(),
+                _ => "Failed to verify admin permissions".to_string(),
             };
             error!("{}", msg);
-            response_options.set_status(status);
-            return Ok(ApiResponse::error(msg));
+            return Ok(responder.internal_server_error(msg));
         }
     }
 
@@ -532,11 +505,10 @@ pub async fn update_mosque_personnel(person_type: String, person_id: String, mos
         .await;
 
     match result {
-        Ok(_) => Ok(ApiResponse::data(format!("Successfully updated mosque {} information", person_type))),
+        Ok(_) => Ok(responder.ok(format!("Successfully updated mosque {} information", person_type))),
         Err(e) => {
             error!(?e, "Failed to update mosque personnel");
-            response_options.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-            Ok(ApiResponse::error("Failed to update mosque personnel due to database error".to_string()))
+            Ok(responder.internal_server_error("Failed to update mosque personnel due to database error".to_string()))
         }
     }
 }
