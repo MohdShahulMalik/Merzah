@@ -2,12 +2,12 @@
 use crate::{
     errors::user_elevation::UserElevationError,
     utils::{
-        parsing::parse_record_id, ssr::get_authenticated_user, ssr::get_server_context, user_elevation::elevate_user,
+        parsing::parse_record_id, 
+        ssr::{get_authenticated_user, get_server_context, ServerResponse}, 
+        user_elevation::elevate_user,
         user_elevation::is_mosque_admin,
     },
 };
-#[cfg(feature = "ssr")]
-use actix_web::http::StatusCode;
 use leptos::{
     prelude::ServerFnError,
     server_fn::codec::{Json, PatchJson, DeleteUrl},
@@ -40,11 +40,11 @@ pub async fn add_mosques_of_region(
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
+    let responder = ServerResponse::new(response_options);
 
     if !user.is_app_admin() && !user.is_mosque_supervisor() {
         error!("Unauthorized attempt to add mosques of region by user {}", user.id);
-        response_options.set_status(StatusCode::UNAUTHORIZED);
-        return Ok(ApiResponse::error("Only app admins can add mosques of region".to_string()));
+        return Ok(responder.unauthorized("Only app admins can add mosques of region".to_string()));
     }
 
     let query = format!(
