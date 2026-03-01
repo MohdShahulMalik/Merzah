@@ -87,6 +87,14 @@ impl ServerResponse {
         Self { options }
     }
 
+    pub fn insert_header(&self, name: actix_web::http::header::HeaderName, value: actix_web::http::header::HeaderValue) {
+        self.options.insert_header(name, value);
+    }
+
+    pub fn append_header(&self, name: actix_web::http::header::HeaderName, value: actix_web::http::header::HeaderValue) {
+        self.options.append_header(name, value);
+    }
+
     pub fn ok<T>(&self, data: T) -> ApiResponse<T> {
         self.options.set_status(StatusCode::OK);
         ApiResponse::data(data)
