@@ -231,7 +231,15 @@ pub fn Login() -> impl IntoView {
             .expect("Failed to get the password input node unfortunately")
             .value();
 
-        let is_mobile = email_or_mobile_value.chars().all(|c| c.is_digit(10) || c == '+' || c.is_whitespace() || c == '-' || c == '.' || c == '(' || c == ')');
+        let is_mobile = email_or_mobile_value.chars().all(|c| {
+            c.is_digit(10)
+                || c == '+'
+                || c.is_whitespace()
+                || c == '-'
+                || c == '.'
+                || c == '('
+                || c == ')'
+        });
 
         let identifier = if is_mobile {
             Identifier::Mobile(email_or_mobile_value)
@@ -250,7 +258,8 @@ pub fn Login() -> impl IntoView {
                 let error_msg = error.to_string();
 
                 if field_str.starts_with("identifier") {
-                    set_identifier_error.set("A valid email or mobile number is required".to_string());
+                    set_identifier_error
+                        .set("A valid email or mobile number is required".to_string());
                 } else if field_str.starts_with("password") {
                     set_password_error.set(error_msg);
                 }
@@ -268,8 +277,8 @@ pub fn Login() -> impl IntoView {
     };
 
     view! {
-        <main class = "flex gap-1 h-svh bg-surface-900">
-            <section class = "felx-[2] content-center grid gap-16 pl-24">
+        <main class = "flex min-h-svh bg-surface-900 pl-24 max-[863px]:px-0 overflow-scroll max-[863px]:items-center max-[863px]:justify-center [@media(min-width:863px)_and_(max-width:1060px)]:pl-8 max-[863px]:py-6">
+            <section class = "content-center grid gap-16 max-[863px]:hidden">
 
                 <div class = "flex gap-2">
                     <img class = "w-auto h-16 rounded-full" src = "/assets/logo.png" />
@@ -282,7 +291,7 @@ pub fn Login() -> impl IntoView {
                 </div>
 
                 <div class = "w-[45%] grid gap-16">
-                    <p class = "text-4xl font-bold text-foreground-900">
+                    <p class = "text-4xl font-bold text-foreground-900 [@media(min-width:767px)_and_(max-width:1060px)]:font-light">
                         "Welcome back to connect with your mosque, stay informed on events, and grow in deen and dunya"
                     </p>
 
@@ -292,10 +301,18 @@ pub fn Login() -> impl IntoView {
                 </div>
 
             </section>
+// 
+            <section class = "bg-surface-700 fixed top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl right-[8rem] max-xl:right-[2rem] max-xl:w-[40%] text-foreground-900 [@media(min-width:1145px)_and_(max-width:1286px)]:right-[3rem] [@media(min-width:1145px)_and_(max-width:1286px)]:w-[35%] [@media(min-width:600px)_and_(max-width:767px)]:w-[70%] max-[768px]:w-[70%] max-[863px]:w-[65%] max-sm:w-[85%] max-[863px]:static max-[863px]:translate-y-0 max-sm:translate-x-0 [@media(min-width:900px)_and_(max-width:1000px)]:w-[45%] [@media(min-width:863px)_and_(max-width:900px)]:w-[50%]">
 
-            <section class = "flex-1 bg-surface-700 fixed right-[8rem] top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl text-foreground-900">
-            //TODO: Place this button at an appropriate place and style it properly
+                <div class = "gap-2 mb-4 hidden max-[863px]:flex">
+                    <img class = "w-auto h-10 rounded-full" src = "/assets/logo.png" />
 
+                    <div class = "w-full">
+                        <img class = "w-auto h-6" src="/assets/logo-text.png" alt="Merzah <logo>" />
+                        <span class = "text-foreground-600 text-[0.85rem]">Your Mosque, Your Community</span>
+                    </div>
+
+                </div>
 
                 <form on:submit = on_submit class = "grid gap-4 mb-3">
                     <div>
@@ -327,7 +344,6 @@ pub fn Login() -> impl IntoView {
                             <A href = "/forgot-password" attr:class = "text-indigo-400 font-bold">"Forgot password?"</A>
                         </div>
                     </div>
-
 
                     <button
                         class = "bg-indigo-400 hover:bg-indigo-500 transition-colors duration-300 cursor-pointer font-bold text-white py-2 rounded-2xl "
