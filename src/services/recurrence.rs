@@ -156,7 +156,7 @@ pub async fn check_and_rotate_events(db: &Surreal<Client>) -> Result<usize, surr
 
     let search_query = r#"
         SELECT * FROM events
-        WHERE time::from::iso8601(date) < time::now()
+        WHERE <datetime>date < time::now()
         AND recurrence_pattern != NONE
     "#;
 
