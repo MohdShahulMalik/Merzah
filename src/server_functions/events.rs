@@ -9,7 +9,7 @@ use leptos::{
     *,
 };
 #[cfg(feature = "ssr")]
-use surrealdb::RecordId;
+use surrealdb::{RecordId, sql::Geometry};
 #[cfg(feature = "ssr")]
 use tracing::error;
 
@@ -23,13 +23,13 @@ use crate::{
     models::{
         api_responses::ApiResponse,
         events::{
-            CreateEvent, FetchedEvents,
-            PersonalEvent, UpdatedEvent,
+            CreateEvent, FavoriteAndNearbyEventsQueryResult, FetchedEvents, PersonalEvent,
+            UpdatedEvent,
         },
     },
 };
 #[cfg(feature = "ssr")]
-use crate::models::events::{ EventDetails, EventSummary };
+use crate::models::events::EventSummary;
 #[cfg(feature = "ssr")]
 use crate::models::events::{ Event, EventRecord, UpdatedEventRecord };
 
@@ -180,7 +180,10 @@ pub async fn update_event(
 }
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "/fetch-users-favorite-mosques-events")]
-pub async fn fetch_users_favorite_mosques_events()
+pub async fn fetch_users_favorite_mosques_events(
+    lat: f64,
+    lon: f64,
+)
 -> Result<ApiResponse<Vec<PersonalEvent>>, ServerFnError> {
     let (response_options, db, user) = match get_authenticated_user::<Vec<PersonalEvent>>().await {
         Ok(ctx) => ctx,
@@ -188,14 +191,61 @@ pub async fn fetch_users_favorite_mosques_events()
     };
     let responder = ServerResponse::new(response_options);
 
+    let point = Geometry::Point((lon, lat).into());
+    let radius_in_meters = 5000;
+
     let events_and_rsvp_query = r#"
-        $user_id ->favorited->mosques->hosts->events.*;
-        $user_id -> attending -> events;
+        BEGIN TRANSACTION;
+        LET $favorite_events = (
+            SELECT VALUE {
+                id: type::string(id),
+                title: title,
+                description: description,
+                category: category,
+                date: date,
+                speaker: speaker
+            }
+            FROM $user_id->favorited->mosques->hosts->events
+        );
+
+        LET $attending_events = (
+            SELECT VALUE type::string(out)
+            FROM attending
+            WHERE in = $user_id
+        );
+
+        LET $nearby_mosques = (
+            SELECT VALUE id
+            FROM mosques
+            WHERE geo::distance(location, $point) < $radius
+        );
+
+        LET $nearby_events = (
+            SELECT VALUE {
+                id: type::string(id),
+                title: title,
+                description: description,
+                category: category,
+                date: date,
+                speaker: speaker
+            }
+            FROM events
+            WHERE mosque IN $nearby_mosques
+        );
+        COMMIT TRANSACTION;
+
+        RETURN {
+            favorite_events: $favorite_events,
+            attending_events: $attending_events,
+            nearby_events: $nearby_events
+        };
     "#;
 
     let events_and_rsvp_query_result = db
         .query(events_and_rsvp_query)
         .bind(("user_id", user.id.clone()))
+        .bind(("point", point))
+        .bind(("radius", radius_in_meters))
         .await;
 
     let mut db_response = match events_and_rsvp_query_result {
@@ -205,27 +255,42 @@ pub async fn fetch_users_favorite_mosques_events()
         }
     };
 
-    let events = match db_response.take::<Vec<EventDetails>>(0) {
-        Ok(events) => events,
+    db_response = match db_response.check() {
+        Ok(response) => response,
+        Err(err) => {
+            return Ok(responder.internal_server_error(format!(
+                "Some db error occured during the transaction: {err}"
+            )));
+        }
+    };
+
+    let events_and_attendance = match db_response.take::<Option<FavoriteAndNearbyEventsQueryResult>>(4) {
+        Ok(Some(events_and_attendance)) => events_and_attendance,
+        Ok(None) => {
+            return Ok(responder.internal_server_error(
+                "No event data was returned from the transaction".to_string(),
+            ));
+        }
         Err(err) => {
             return Ok(responder.internal_server_error(format!("Some db error occured: {err}")));
         }
     };
 
-    let rsvp = match db_response.take::<Vec<String>>(1) {
-        Ok(rsvp_result) => rsvp_result,
-        Err(err) => {
-            return Ok(responder.internal_server_error(format!("Some db error occured: {err}")));
-        }
-    };
+    let rsvp_set: HashSet<String> = events_and_attendance.attending_events.into_iter().collect();
+    let mut seen_event_ids = HashSet::new();
 
-    let rsvp_set: HashSet<String> = rsvp.into_iter().collect();
-
-    let personal_events: Vec<PersonalEvent> = events
+    let personal_events: Vec<PersonalEvent> = events_and_attendance
+        .favorite_events
         .into_iter()
-        .map(|event| {
-            let is_attending = rsvp_set.contains(&event.id);
-            PersonalEvent::new(event, is_attending)
+        .chain(events_and_attendance.nearby_events)
+        .filter_map(|event| {
+            let event_id = event.id.clone();
+            if !seen_event_ids.insert(event_id.clone()) {
+                return None;
+            }
+
+            let is_attending = rsvp_set.contains(&event_id);
+            Some(PersonalEvent::new(event, is_attending))
         })
         .collect();
 

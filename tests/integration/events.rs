@@ -5,7 +5,8 @@ use merzah::{
     models::{
         api_responses::ApiResponse,
         events::{
-            CreateEvent, Event, EventCategory, EventRecord, EventRecurrence, Interval, UpdatedEvent,
+            CreateEvent, Event, EventCategory, EventRecord, EventRecurrence, Interval,
+            PersonalEvent, UpdatedEvent,
         },
         mosque::MosqueRecord,
         user::User,
@@ -38,6 +39,12 @@ struct UpdateEventParams {
 #[derive(Serialize)]
 struct RsvpParams {
     pub event_id: String,
+}
+
+#[derive(Serialize)]
+struct FetchUsersFavoriteMosquesEventsParams {
+    pub lat: f64,
+    pub lon: f64,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -131,6 +138,55 @@ async fn setup_mosque(
         .expect("Not returned")
 }
 
+async fn setup_mosque_at(
+    db: &surrealdb::Surreal<surrealdb::engine::remote::ws::Client>,
+    lat: f64,
+    lon: f64,
+    name: &str,
+) -> MosqueRecord {
+    db.create("mosques")
+        .content(CreateMosque {
+            location: Geometry::Point((lon, lat).into()),
+            name: name.to_string(),
+        })
+        .await
+        .expect("Failed to create mosque")
+        .expect("Not returned")
+}
+
+async fn create_hosted_event(
+    db: &surrealdb::Surreal<surrealdb::engine::remote::ws::Client>,
+    mosque_id: &RecordId,
+    title: &str,
+) -> Event {
+    let event_date =
+        Utc::now().with_timezone(&FixedOffset::east_opt(0).unwrap()) + Duration::days(3);
+
+    let event: Event = db
+        .create("events")
+        .content(EventRecord {
+            title: title.to_string(),
+            description: format!("Description for {title}"),
+            category: EventCategory::Community,
+            date: event_date,
+            mosque: mosque_id.clone(),
+            speaker: None,
+            recurrence_pattern: None,
+            recurrence_end_date: None,
+        })
+        .await
+        .expect("Failed to create event")
+        .expect("Not returned");
+
+    db.query("RELATE $mosque -> hosts -> $event")
+        .bind(("mosque", mosque_id.clone()))
+        .bind(("event", event.id.clone()))
+        .await
+        .expect("Failed to create hosts relation");
+
+    event
+}
+
 async fn create_event_via_api(
     client: &Client,
     addr: &str,
@@ -181,7 +237,7 @@ async fn test_create_recurring_event_via_api(#[case] auth_method: AuthMethod) {
         description: "A weekly gathering for Quran study and discussion.".to_string(),
         category: EventCategory::Halaqah,
         date: event_date,
-        mosque: mosque.id.clone(),
+        mosque: mosque.id.to_string(),
         speaker: Some("Imam Ahmed".to_string()),
         recurrence_pattern: Some(EventRecurrence::Weekly),
         recurrence_duration: Some(Interval::ThreeMonths),
@@ -236,7 +292,7 @@ async fn test_create_one_time_event_via_api() {
         description: "A special lecture on Islamic history.".to_string(),
         category: EventCategory::Lecture,
         date: event_date,
-        mosque: mosque.id.clone(),
+        mosque: mosque.id.to_string(),
         speaker: Some("Scholar Yusuf".to_string()),
         recurrence_pattern: None,
         recurrence_duration: None,
@@ -292,7 +348,7 @@ async fn test_create_event_with_different_recurrence_patterns(
         description: "Test event".to_string(),
         category: EventCategory::Community,
         date: event_date,
-        mosque: mosque.id.clone(),
+        mosque: mosque.id.to_string(),
         speaker: None,
         recurrence_pattern: Some(pattern.clone()),
         recurrence_duration: duration,
@@ -336,7 +392,7 @@ async fn test_update_event_title() {
         description: "Original description".to_string(),
         category: EventCategory::Lecture,
         date: event_date,
-        mosque: mosque.id.clone(),
+        mosque: mosque.id.to_string(),
         speaker: None,
         recurrence_pattern: None,
         recurrence_duration: None,
@@ -410,7 +466,7 @@ async fn test_delete_event() {
         description: "This event will be deleted".to_string(),
         category: EventCategory::Community,
         date: event_date,
-        mosque: mosque.id.clone(),
+        mosque: mosque.id.to_string(),
         speaker: None,
         recurrence_pattern: None,
         recurrence_duration: None,
@@ -466,6 +522,99 @@ async fn test_delete_event() {
         .expect("Take failed");
 
     assert!(deleted_events.is_empty(), "Event should be deleted");
+}
+
+#[rstest]
+#[case::web(AuthMethod::Web)]
+#[case::mobile(AuthMethod::Mobile)]
+#[tokio::test]
+async fn test_fetch_users_favorite_mosques_events_includes_nearby_and_deduplicates(
+    #[case] auth_method: AuthMethod,
+) {
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let client = Client::new();
+
+    let (user, session) = setup_user_and_session(&db).await;
+
+    let favorite_near_mosque = setup_mosque_at(&db, 0.0, 0.0, "Favorite Near Mosque").await;
+    let nearby_non_favorite_mosque =
+        setup_mosque_at(&db, 0.01, 0.01, "Nearby Non Favorite Mosque").await;
+    let far_mosque = setup_mosque_at(&db, 2.0, 2.0, "Far Mosque").await;
+
+    db.query("RELATE $user -> favorited -> $mosque")
+        .bind(("user", user.id.clone()))
+        .bind(("mosque", favorite_near_mosque.id.clone()))
+        .await
+        .expect("Failed to favorite mosque");
+
+    let favorite_event = create_hosted_event(&db, &favorite_near_mosque.id, "Favorite Event").await;
+    let nearby_event = create_hosted_event(&db, &nearby_non_favorite_mosque.id, "Nearby Event").await;
+    let far_event = create_hosted_event(&db, &far_mosque.id, "Far Event").await;
+
+    db.query("RELATE $user -> attending -> $event")
+        .bind(("user", user.id.clone()))
+        .bind(("event", favorite_event.id.clone()))
+        .await
+        .expect("Failed to create RSVP relation");
+
+    let url = format!("{}/mosques/events/fetch-users-favorite-mosques-events", addr);
+    let params = FetchUsersFavoriteMosquesEventsParams { lat: 0.0, lon: 0.0 };
+
+    let req = build_auth_headers(&client, &session, auth_method, &url);
+    let response = req
+        .json(&params)
+        .send()
+        .await
+        .expect("Failed to fetch favorite and nearby mosque events");
+
+    assert!(
+        response.status().is_success(),
+        "Fetch failed: {:?}",
+        response.text().await
+    );
+
+    let api_response: ApiResponse<Vec<PersonalEvent>> = response
+        .json()
+        .await
+        .expect("Failed to deserialize events response");
+
+    assert!(api_response.error.is_none());
+    let events = api_response.data.expect("Expected event data");
+    assert_eq!(events.len(), 2, "Expected deduplicated nearby + favorite events");
+
+    let favorite_event_id = favorite_event.id.to_string();
+    let nearby_event_id = nearby_event.id.to_string();
+    let far_event_id = far_event.id.to_string();
+
+    assert_eq!(
+        events
+            .iter()
+            .filter(|event| event.event.id == favorite_event_id)
+            .count(),
+        1,
+        "Favorite event should appear exactly once even if nearby"
+    );
+    assert!(
+        events.iter().any(|event| event.event.id == nearby_event_id),
+        "Nearby non-favorite event should be included"
+    );
+    assert!(
+        events.iter().all(|event| event.event.id != far_event_id),
+        "Far event should be excluded"
+    );
+
+    let favorite_personal_event = events
+        .iter()
+        .find(|event| event.event.id == favorite_event_id)
+        .expect("Favorite event should be present");
+    assert!(favorite_personal_event.rsvp, "RSVP state should be preserved");
+
+    let nearby_personal_event = events
+        .iter()
+        .find(|event| event.event.id == nearby_event_id)
+        .expect("Nearby event should be present");
+    assert!(!nearby_personal_event.rsvp, "Non-attending nearby event should have rsvp=false");
 }
 
 #[tokio::test]

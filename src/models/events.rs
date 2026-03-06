@@ -224,6 +224,13 @@ impl PersonalEvent {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct FavoriteAndNearbyEventsQueryResult {
+    pub favorite_events: Vec<EventDetails>,
+    pub attending_events: Vec<String>,
+    pub nearby_events: Vec<EventDetails>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct EventSummary {
     pub event: EventDetails,
     pub rsvp_count: usize,
