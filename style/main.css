@@ -65,3 +65,7 @@
     }
   }
 }
+
+:root, :host {
+  background-color: var(--color-surface-900);
+}

@@ -1,0 +1,48 @@
+use leptos::prelude::*;
+use leptos::IntoView;
+use leptos_router::components::A;
+
+#[component]
+pub fn Nav() -> impl IntoView {
+    view! {
+        <nav class = "fixed bottom-0 right-0 left-0 border-t border-gray-200 bg-white shadow-lg md:right-auto md:top-0">
+            <ul class="flex justify-around text-foreground p-3 md:grid md:place-items-center md:gap-6 md:px-5 ">
+                <li>
+                    <A href="/" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:items-center md:gap-4 md:text-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6">
+                            <path d="M3 10.5l9-7.5 9 7.5v9.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9.5z"/>
+                            <path d="M10 22v-6a2 2 0 1 1 4 0v6"/>
+                        </svg>
+                        <span>Home</span>
+                    </A>
+                </li>
+
+                <li>
+                    <A href="/mosques" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:items-center md:gap-4 md:text-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6">
+                            <path d="M12 8c-2.2 0-4 1.8-4 4v10h8V12c0-2.2-1.8-4-4-4z"/>
+                            <path d="M10 22v-4a2 2 0 1 1 4 0v4"/>
+                            <path d="M5 22V12H4l2-3 2 3H7v10"/>
+                            <path d="M19 22V12h1l-2-3-2 3h1v10"/>
+                            <path d="M12 4v4"/>
+                            <path d="M12 2a1.5 1.5 0 0 0 0 3"/>
+                            <path d="M2 22h20"/>
+                        </svg>
+                        <span>Mosques</span>
+                    </A>
+                </li>
+
+                <li>
+                    <A href="/education" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:items-center md:gap-4 md:text-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            <path d="M12 7v14"/>
+                        </svg>
+                        <span>Learn</span>
+                    </A>
+                </li>
+            </ul>
+        </nav>
+    }
+}

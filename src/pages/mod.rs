@@ -4,4 +4,4 @@ pub mod add_mosques_of_region;
 pub mod google_callback;
 pub mod discord_callback;
 pub mod microsoft_callback;
-pub mod dashboard;
+pub mod home;
