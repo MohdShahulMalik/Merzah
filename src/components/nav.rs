@@ -5,10 +5,17 @@ use leptos_router::components::A;
 #[component]
 pub fn Nav() -> impl IntoView {
     view! {
-        <nav class = "fixed bottom-0 right-0 left-0 border-t border-gray-200 bg-white shadow-lg md:right-auto md:top-0">
-            <ul class="flex justify-around text-foreground p-3 md:grid md:place-items-center md:gap-6 md:px-5 ">
+        <nav class = "fixed bottom-0 right-0 left-0 border-t border-gray-200 bg-white shadow-lg md:right-auto md:top-0 md:w-[25%] md:text-left lg:w-[20%] md:min-w-fit">
+
+            <div class = "gap-2 mb-4 hidden md:flex md:pl-8 md:p-3 md:items-center">
+                <img class = "w-auto h-10 rounded-full" src = "/assets/logo.png" />
+
+                <img class = "w-auto h-8" src="/assets/logo-text.png" alt="Merzah <logo>" />
+            </div>
+
+            <ul class="flex justify-around text-foreground p-3 md:flex-col md:items-start md:gap-9 md:pl-8">
                 <li>
-                    <A href="/" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:items-center md:gap-4 md:text-base">
+                    <A href="/" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:gap-4 md:text-lg md:items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6">
                             <path d="M3 10.5l9-7.5 9 7.5v9.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9.5z"/>
                             <path d="M10 22v-6a2 2 0 1 1 4 0v6"/>
@@ -18,7 +25,7 @@ pub fn Nav() -> impl IntoView {
                 </li>
 
                 <li>
-                    <A href="/mosques" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:items-center md:gap-4 md:text-base">
+                    <A href="/mosques" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:gap-4 md:text-lg md:items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6">
                             <path d="M12 8c-2.2 0-4 1.8-4 4v10h8V12c0-2.2-1.8-4-4-4z"/>
                             <path d="M10 22v-4a2 2 0 1 1 4 0v4"/>
@@ -33,13 +40,26 @@ pub fn Nav() -> impl IntoView {
                 </li>
 
                 <li>
-                    <A href="/education" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:items-center md:gap-4 md:text-base">
+                    <A href="/learn" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:gap-4 md:text-lg md:items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6">
                             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                             <path d="M12 7v14"/>
                         </svg>
                         <span>Learn</span>
+                    </A>
+                </li>
+
+                <li>
+                    <A href="/events" attr:class="grid justify-items-center gap-1 text-sm font-medium text-foreground-400 hover:text-indigo-400 transition-colors md:flex md:gap-4 md:text-lg md:items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                            <path d="m12 13 1 2 2 1-2 1-1 2-1-2-2-1 2-1z"></path>
+                        </svg>
+                        <span>Events</span>
                     </A>
                 </li>
             </ul>
