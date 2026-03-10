@@ -1,12 +1,20 @@
 use leptos::prelude::*;
 use leptos_meta::{provide_meta_context, Script, Stylesheet, Title};
 use leptos_router::{
-    components::{Route, Router, Routes},
-    path, StaticSegment, WildcardSegment,
+    components::{ParentRoute, Route, Router, Routes},
+    path, WildcardSegment,
 };
 
 use crate::pages::{
-    add_mosques_of_region::AddMosquesOfRegion, auth::{Login, Register}, home::Home, discord_callback::DiscordCallback, google_callback::GoogleCallback, microsoft_callback::MicrosoftCallback
+    add_mosques_of_region::AddMosquesOfRegion,
+    auth::{Login, Register},
+    discord_callback::DiscordCallback,
+    events::Events,
+    google_callback::GoogleCallback,
+    home::Home,
+    layout::AppLayout,
+    learn::Learn,
+    microsoft_callback::MicrosoftCallback,
 };
 
 #[component]
@@ -31,7 +39,11 @@ pub fn App() -> impl IntoView {
         <Router>
             <main>
                 <Routes fallback=move || "Not found.">
-                    <Route path=StaticSegment("") view=Home/>
+                    <ParentRoute path=path!("/") view=AppLayout>
+                        <Route path=path!("") view=Home/>
+                        <Route path=path!("events") view=Events/>
+                        <Route path=path!("learn") view=Learn/>
+                    </ParentRoute>
                     <Route path=path!("/register") view=Register/>
                     <Route path=path!("/login") view=Login/>
                     <Route path=path!("/add-mosques") view=AddMosquesOfRegion/>
