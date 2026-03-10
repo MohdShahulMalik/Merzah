@@ -223,6 +223,7 @@ impl PersonalEvent {
     }
 }
 
+#[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize, Serialize)]
 pub struct FavoriteAndNearbyEventsQueryResult {
     pub favorite_events: Vec<EventDetails>,

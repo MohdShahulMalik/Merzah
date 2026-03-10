@@ -23,7 +23,7 @@ use crate::{
     models::{
         api_responses::ApiResponse,
         events::{
-            CreateEvent, FavoriteAndNearbyEventsQueryResult, FetchedEvents, PersonalEvent,
+            CreateEvent, FetchedEvents, PersonalEvent,
             UpdatedEvent,
         },
     },
@@ -31,7 +31,7 @@ use crate::{
 #[cfg(feature = "ssr")]
 use crate::models::events::EventSummary;
 #[cfg(feature = "ssr")]
-use crate::models::events::{ Event, EventRecord, UpdatedEventRecord };
+use crate::models::events::{ Event, EventRecord, UpdatedEventRecord, FavoriteAndNearbyEventsQueryResult };
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
 pub async fn add_event(create_event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
