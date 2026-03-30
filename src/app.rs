@@ -1,21 +1,31 @@
 use leptos::prelude::*;
-use leptos_meta::{provide_meta_context, Script, Stylesheet, Title};
+use leptos_meta::{Script, Stylesheet, Title, provide_meta_context};
 use leptos_router::{
+    WildcardSegment,
     components::{ParentRoute, Route, Router, Routes},
-    path, WildcardSegment,
+    path,
+};
+use reactive_stores::Store;
+
+use crate::{
+    models::user::UserOnClient,
+    pages::{
+        add_mosques_of_region::AddMosquesOfRegion,
+        auth::{Login, Register},
+        discord_callback::DiscordCallback,
+        events::Events,
+        google_callback::GoogleCallback,
+        home::Home,
+        layout::AppLayout,
+        learn::Learn,
+        microsoft_callback::MicrosoftCallback,
+    },
 };
 
-use crate::pages::{
-    add_mosques_of_region::AddMosquesOfRegion,
-    auth::{Login, Register},
-    discord_callback::DiscordCallback,
-    events::Events,
-    google_callback::GoogleCallback,
-    home::Home,
-    layout::AppLayout,
-    learn::Learn,
-    microsoft_callback::MicrosoftCallback,
-};
+#[derive(Clone, Debug, Store)]
+struct AppState {
+    user: UserOnClient,
+}
 
 #[component]
 pub fn App() -> impl IntoView {

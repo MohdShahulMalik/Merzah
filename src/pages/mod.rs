@@ -1,10 +1,10 @@
-pub mod auth;
-pub mod home_screen;
 pub mod add_mosques_of_region;
-pub mod google_callback;
+pub mod auth;
 pub mod discord_callback;
-pub mod microsoft_callback;
-pub mod home;
 pub mod events;
-pub mod learn;
+pub mod google_callback;
+pub mod home;
+pub mod home_screen;
 pub mod layout;
+pub mod learn;
+pub mod microsoft_callback;

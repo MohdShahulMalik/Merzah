@@ -6,13 +6,13 @@ use actix_files::Files;
 #[cfg(feature = "ssr")]
 use actix_web::dev::Server;
 #[cfg(feature = "ssr")]
-use actix_web::{web, App, HttpServer};
+use actix_web::{App, HttpServer, web};
 #[cfg(feature = "ssr")]
-use leptos::config::{get_configuration, ConfFile};
+use leptos::config::{ConfFile, get_configuration};
 #[cfg(feature = "ssr")]
 use leptos::prelude::*;
 #[cfg(feature = "ssr")]
-use leptos_actix::{generate_route_list, LeptosRoutes};
+use leptos_actix::{LeptosRoutes, generate_route_list};
 #[cfg(feature = "ssr")]
 use leptos_meta::MetaTags;
 #[cfg(feature = "ssr")]
@@ -26,18 +26,18 @@ use crate::app::App;
 pub mod app;
 #[cfg(feature = "ssr")]
 pub mod auth;
+pub mod components;
 #[cfg(feature = "ssr")]
 pub mod database;
 pub mod errors;
-pub mod models;
 #[cfg(feature = "ssr")]
-pub mod utils;
+pub mod jobs;
+pub mod models;
 pub mod pages;
-pub mod components;
 #[cfg(feature = "ssr")]
 pub mod services;
 #[cfg(feature = "ssr")]
-pub mod jobs;
+pub mod utils;
 
 pub mod server_functions;
 
