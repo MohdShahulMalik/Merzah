@@ -88,7 +88,10 @@ impl OAuthProvider for DiscordProvider {
             .map_err(|e| OAuthError::ParseError(e.to_string()))?;
 
         let picture = discord_user.avatar.map(|avatar| {
-            format!("https://cdn.discordapp.com/avatars/{}/{}.png", discord_user.id, avatar)
+            format!(
+                "https://cdn.discordapp.com/avatars/{}/{}.png",
+                discord_user.id, avatar
+            )
         });
 
         Ok(ProviderUser {

@@ -25,7 +25,9 @@ impl OAuthCallback {
             Err(e) => {
                 error!(?e, "Failed to generate state");
                 response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-                return Ok(ApiResponse::error("Failed to generate authentication state".to_string()));
+                return Ok(ApiResponse::error(
+                    "Failed to generate authentication state".to_string(),
+                ));
             }
         };
 
@@ -35,7 +37,10 @@ impl OAuthCallback {
             Err(e) => {
                 error!(error = %e, "Failed to get authorization URL");
                 response_option.set_status(StatusCode::INTERNAL_SERVER_ERROR);
-                return Ok(ApiResponse::error(format!("Failed to create authorization URL: {}", e)));
+                return Ok(ApiResponse::error(format!(
+                    "Failed to create authorization URL: {}",
+                    e
+                )));
             }
         };
 
@@ -59,7 +64,10 @@ impl OAuthCallback {
 
         response_option.insert_header(SET_COOKIE, header_value);
 
-        Ok(ApiResponse { data: Some(url), error: None })
+        Ok(ApiResponse {
+            data: Some(url),
+            error: None,
+        })
     }
 
     pub async fn handle<P: OAuthProvider + Default + 'static>(
@@ -89,7 +97,9 @@ impl OAuthCallback {
         if !validate_state(&state, &stored_state) {
             error!("State validation failed");
             response_option.set_status(StatusCode::BAD_REQUEST);
-            return Ok(ApiResponse::error("Invalid authentication state".to_string()));
+            return Ok(ApiResponse::error(
+                "Invalid authentication state".to_string(),
+            ));
         }
 
         let provider = P::default();
@@ -99,7 +109,10 @@ impl OAuthCallback {
             Err(e) => {
                 error!(error = %e, "Failed to exchange code");
                 response_option.set_status(StatusCode::BAD_REQUEST);
-                return Ok(ApiResponse::error(format!("Failed to exchange authorization code: {}", e)));
+                return Ok(ApiResponse::error(format!(
+                    "Failed to exchange authorization code: {}",
+                    e
+                )));
             }
         };
 
@@ -108,7 +121,10 @@ impl OAuthCallback {
             Err(e) => {
                 error!(error = %e, "Failed to get user info");
                 response_option.set_status(StatusCode::BAD_REQUEST);
-                return Ok(ApiResponse::error(format!("Failed to get user information: {}", e)));
+                return Ok(ApiResponse::error(format!(
+                    "Failed to get user information: {}",
+                    e
+                )));
             }
         };
 
@@ -116,7 +132,10 @@ impl OAuthCallback {
             Ok(id) => id,
             Err(e) => {
                 error!(error = %e, "Failed to find or create user");
-                return Err(ServerFnError::ServerError(format!("Failed to authenticate user: {:?}", e)));
+                return Err(ServerFnError::ServerError(format!(
+                    "Failed to authenticate user: {:?}",
+                    e
+                )));
             }
         };
 
@@ -124,7 +143,9 @@ impl OAuthCallback {
             Ok(token) => token,
             Err(e) => {
                 error!(?e, "Failed to create session");
-                return Err(ServerFnError::ServerError("Failed to create session".to_string()));
+                return Err(ServerFnError::ServerError(
+                    "Failed to create session".to_string(),
+                ));
             }
         };
 
@@ -136,7 +157,10 @@ impl OAuthCallback {
             24 * 60 * 60
         );
 
-        let clear_state_cookie = format!("{}={}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0", cookie_name, "");
+        let clear_state_cookie = format!(
+            "{}={}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0",
+            cookie_name, ""
+        );
 
         if let Ok(session_header) = HeaderValue::from_str(&session_cookie) {
             response_option.append_header(SET_COOKIE, session_header);
@@ -147,6 +171,9 @@ impl OAuthCallback {
         }
 
         let provider_name = provider.provider_name();
-        Ok(ApiResponse::data(format!("Successfully authenticated with {}", provider_name)))
+        Ok(ApiResponse::data(format!(
+            "Successfully authenticated with {}",
+            provider_name
+        )))
     }
 }

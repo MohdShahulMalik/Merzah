@@ -1,5 +1,5 @@
-use base64::{engine::general_purpose, Engine as _};
-use rand::{thread_rng, Rng};
+use base64::{Engine as _, engine::general_purpose};
+use rand::{Rng, thread_rng};
 
 use crate::errors::oauth::{StateError, StateResult};
 

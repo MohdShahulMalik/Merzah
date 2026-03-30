@@ -3,9 +3,9 @@ use anyhow::{Context, Result};
 use chrono::{Duration, Utc};
 use leptos::prelude::expect_context;
 use leptos_actix::ResponseOptions;
-use surrealdb::{RecordId, Surreal};
 use surrealdb::engine::remote::ws::Client;
 use surrealdb::sql::Datetime;
+use surrealdb::{RecordId, Surreal};
 
 use crate::{
     errors::session::SessionError,
@@ -38,10 +38,7 @@ pub async fn create_session(user: RecordId, db: &Surreal<Client>) -> Result<Stri
     Ok(session_token)
 }
 
-pub async fn get_user_by_session(
-    session_token: &str,
-    db: &Surreal<Client>
-) -> Result<User> {
+pub async fn get_user_by_session(session_token: &str, db: &Surreal<Client>) -> Result<User> {
     validate_session_token(session_token)?;
 
     let result_from_sessions_table: Option<crate::models::session::SessionWithUser> = db
@@ -66,7 +63,8 @@ pub async fn get_user_by_session(
 pub async fn delete_session(session_token: &str, db: &Surreal<Client>) -> Result<()> {
     validate_session_token(session_token)?;
 
-    let response: Option<Session> = db.query("SELECT * FROM sessions WHERE session_token = $val LIMIT 1")
+    let response: Option<Session> = db
+        .query("SELECT * FROM sessions WHERE session_token = $val LIMIT 1")
         .bind(("val", session_token.to_string()))
         .await
         .map_err(|e| SessionError::DatabaseError(Box::new(e)))
@@ -139,7 +137,10 @@ pub async fn update_session_expiry(user_id: RecordId, db: &Surreal<Client>) -> R
     Ok(())
 }
 
-pub async fn update_session_expiry_and_token(user_id: RecordId, db: &Surreal<Client>) -> Result<String> {
+pub async fn update_session_expiry_and_token(
+    user_id: RecordId,
+    db: &Surreal<Client>,
+) -> Result<String> {
     let session: Option<Session> = db
         .select(user_id.clone())
         .await
@@ -179,10 +180,7 @@ pub async fn cleanup_expired_sessions(db: &Surreal<Client>) -> Result<()> {
     Ok(())
 }
 
-pub fn set_session_cookie(
-    session_token: &str
-) -> Result<()> {
-    
+pub fn set_session_cookie(session_token: &str) -> Result<()> {
     let response = expect_context::<ResponseOptions>();
 
     let cookie = format!(
@@ -193,8 +191,7 @@ pub fn set_session_cookie(
 
     response.insert_header(
         SET_COOKIE,
-        HeaderValue::from_str(&cookie)
-            .with_context(|| "Failed to set sesion headers")?
+        HeaderValue::from_str(&cookie).with_context(|| "Failed to set sesion headers")?,
     );
 
     Ok(())
@@ -208,9 +205,9 @@ pub fn remove_session_cookie() -> Result<()> {
     response.insert_header(
         SET_COOKIE,
         HeaderValue::from_str(cookie)
-            .with_context(|| "Failed to set cookies for session removal")?
+            .with_context(|| "Failed to set cookies for session removal")?,
     );
-    
+
     Ok(())
 }
 

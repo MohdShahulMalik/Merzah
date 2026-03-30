@@ -1,19 +1,16 @@
 use crate::errors::auth::AuthError;
 use crate::models::auth::LoginFormData;
 use crate::models::user::{Identifier, User, UserIdentifierWithUser};
-use crate::models::{
-    auth::RegistrationFormData,
-    user::CreateUser
-};
-use anyhow::{anyhow, Context, Result};
+use crate::models::{auth::RegistrationFormData, user::CreateUser};
+use anyhow::{Context, Result, anyhow};
 use argon2::{
     Argon2,
-    password_hash::{PasswordHasher, SaltString, PasswordVerifier},
+    password_hash::{PasswordHasher, PasswordVerifier, SaltString},
 };
 use garde::Validate;
 use rand::rngs::OsRng;
-use surrealdb::{RecordId, Surreal};
 use surrealdb::engine::remote::ws::Client;
+use surrealdb::{RecordId, Surreal};
 
 pub async fn register_user(form: RegistrationFormData, db: &Surreal<Client>) -> Result<RecordId> {
     form.validate()
@@ -52,17 +49,19 @@ pub async fn register_user(form: RegistrationFormData, db: &Surreal<Client>) -> 
             COMMIT TRANSACTION; 
         "#;
 
-        let mut result = db.query(surql)
+    let mut result = db.query(surql)
             .bind(("user_data", user))
             .bind(("identifier_data", identifier_data))
             .await
             .map_err(|e| AuthError::DatabaseError(Box::new(e)))
             .with_context(|| "Failed to successfully create a user with their identifier, the database Transaction failed")?;
 
-        let created_user_option: Option<User> = result.take(0)
-            .map_err(|e| AuthError::DatabaseError(Box::new(e)))?;
-        let created_user: User = created_user_option.ok_or_else(|| anyhow!("User Creation returned no data"))?;
-        let user_id = created_user.id;
+    let created_user_option: Option<User> = result
+        .take(0)
+        .map_err(|e| AuthError::DatabaseError(Box::new(e)))?;
+    let created_user: User =
+        created_user_option.ok_or_else(|| anyhow!("User Creation returned no data"))?;
+    let user_id = created_user.id;
 
     Ok(user_id)
 }
@@ -72,18 +71,22 @@ pub async fn authenticate(form: LoginFormData, db: &Surreal<Client>) -> Result<R
         Identifier::Email(email) => ("email", email),
         Identifier::Mobile(mobile) => ("mobile", mobile),
         Identifier::Google(_) | Identifier::Meta(_) | Identifier::Instagram(_) => {
-            return Err(anyhow!(AuthError::UserNotFound))
+            return Err(anyhow!(AuthError::UserNotFound));
         }
     };
 
-    let mut result = db.query("SELECT * FROM user_identifier WHERE identifier_value = $identifier_value FETCH user")
+    let mut result = db
+        .query(
+            "SELECT * FROM user_identifier WHERE identifier_value = $identifier_value FETCH user",
+        )
         .bind(("identifier_type", identifier_type))
         .bind(("identifier_value", identifier_value))
         .await
         .map_err(|e| AuthError::DatabaseError(Box::new(e)))
         .with_context(|| "Failed to get search for the identifier for authentication")?;
 
-    let user_identifier_with_user_option: Option<UserIdentifierWithUser> = result.take(0)
+    let user_identifier_with_user_option: Option<UserIdentifierWithUser> = result
+        .take(0)
         .map_err(|e| AuthError::DatabaseError(Box::new(e)))
         .with_context(|| "failed to get the result for the request user identifier")?;
     let user_identifier_with_user: UserIdentifierWithUser =
@@ -95,7 +98,8 @@ pub async fn authenticate(form: LoginFormData, db: &Surreal<Client>) -> Result<R
         .map_err(AuthError::PasswordHashError)?;
 
     let argon2 = Argon2::default();
-    argon2.verify_password(form.password.as_bytes(), &parsed_hash)
+    argon2
+        .verify_password(form.password.as_bytes(), &parsed_hash)
         .map_err(AuthError::PasswordVerificationError)
         .with_context(|| "Password verification failed")?;
 

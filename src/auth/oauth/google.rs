@@ -1,5 +1,5 @@
-use surrealdb::{RecordId, Surreal};
 use surrealdb::engine::remote::ws::Client;
+use surrealdb::{RecordId, Surreal};
 
 use crate::errors::oauth::{OAuthError, OAuthResult};
 use crate::models::oauth::{GoogleTokenResponse, GoogleUser};
@@ -11,7 +11,7 @@ pub fn get_authorization_url(state: &str) -> OAuthResult<String> {
         .map_err(|_| OAuthError::MissingEnvVar("GOOGLE_CLIENT_ID".to_string()))?;
     let redirect_uri = std::env::var("GOOGLE_REDIRECT_URI")
         .map_err(|_| OAuthError::MissingEnvVar("GOOGLE_REDIRECT_URI".to_string()))?;
-    
+
     let params = [
         ("client_id", client_id),
         ("redirect_uri", redirect_uri),
@@ -19,12 +19,11 @@ pub fn get_authorization_url(state: &str) -> OAuthResult<String> {
         ("scope", "openid email profile".to_string()),
         ("state", state.to_string()),
     ];
-    
-    let url = reqwest::Url::parse_with_params(
-        "https://accounts.google.com/o/oauth2/v2/auth",
-        &params,
-    ).map_err(|e| OAuthError::UrlBuildError(e.to_string()))?;
-    
+
+    let url =
+        reqwest::Url::parse_with_params("https://accounts.google.com/o/oauth2/v2/auth", &params)
+            .map_err(|e| OAuthError::UrlBuildError(e.to_string()))?;
+
     Ok(url.to_string())
 }
 
@@ -35,9 +34,9 @@ pub async fn exchange_code(code: &str) -> OAuthResult<GoogleTokenResponse> {
         .map_err(|_| OAuthError::MissingEnvVar("GOOGLE_CLIENT_SECRET".to_string()))?;
     let redirect_uri = std::env::var("GOOGLE_REDIRECT_URI")
         .map_err(|_| OAuthError::MissingEnvVar("GOOGLE_REDIRECT_URI".to_string()))?;
-    
+
     let client = reqwest::Client::new();
-    
+
     let response = client
         .post("https://oauth2.googleapis.com/token")
         .form(&[
@@ -49,37 +48,37 @@ pub async fn exchange_code(code: &str) -> OAuthResult<GoogleTokenResponse> {
         ])
         .send()
         .await?;
-    
+
     if !response.status().is_success() {
         return Err(OAuthError::InvalidResponse);
     }
-    
+
     let token_response = response
         .json()
         .await
         .map_err(|e| OAuthError::ParseError(e.to_string()))?;
-    
+
     Ok(token_response)
 }
 
 pub async fn get_user_info(access_token: &str) -> OAuthResult<GoogleUser> {
     let client = reqwest::Client::new();
-    
+
     let response = client
         .get("https://www.googleapis.com/oauth2/v2/userinfo")
         .header("Authorization", format!("Bearer {}", access_token))
         .send()
         .await?;
-    
+
     if !response.status().is_success() {
         return Err(OAuthError::InvalidResponse);
     }
-    
+
     let user = response
         .json()
         .await
         .map_err(|e| OAuthError::ParseError(e.to_string()))?;
-    
+
     Ok(user)
 }
 
@@ -98,7 +97,8 @@ pub async fn find_or_create_user(
     }
 
     let display_name = profile.name.unwrap_or_else(|| {
-        profile.email
+        profile
+            .email
             .split('@')
             .next()
             .unwrap_or("User")
@@ -134,11 +134,10 @@ pub async fn find_or_create_user(
         .await
         .map_err(|e| OAuthError::DatabaseError(Box::new(e)))?;
 
-    let created_user: Option<User> = result.take(0)
+    let created_user: Option<User> = result
+        .take(0)
         .map_err(|e| OAuthError::DatabaseError(Box::new(e)))?;
-    let user_id = created_user
-        .ok_or(OAuthError::UserNotFound)?
-        .id;
+    let user_id = created_user.ok_or(OAuthError::UserNotFound)?.id;
 
     Ok(user_id)
 }

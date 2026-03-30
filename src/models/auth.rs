@@ -31,8 +31,6 @@ pub struct RegistrationFormData {
     pub platform: Platform,
 }
 
-
-
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
 pub struct LoginFormData {
     #[garde(dive)]
@@ -45,9 +43,13 @@ pub struct LoginFormData {
 
 #[cfg(feature = "ssr")]
 impl RegistrationFormData {
-
     pub fn new(name: String, identifier: Identifier, password: String, platform: Platform) -> Self {
-        RegistrationFormData { name, identifier, password, platform }
+        RegistrationFormData {
+            name,
+            identifier,
+            password,
+            platform,
+        }
     }
 
     pub async fn validate_uniqueness(&self, db: &Surreal<Client>) -> Result<()> {
@@ -55,7 +57,7 @@ impl RegistrationFormData {
             Identifier::Email(email) => ("email", email.to_string()),
             Identifier::Mobile(mobile) => ("mobile", mobile.to_string()),
             Identifier::Google(_) | Identifier::Meta(_) | Identifier::Instagram(_) => {
-                return Err(anyhow!("OAuth identifiers cannot be manually registered"))
+                return Err(anyhow!("OAuth identifiers cannot be manually registered"));
             }
         };
 

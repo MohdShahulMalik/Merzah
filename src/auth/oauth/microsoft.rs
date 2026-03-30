@@ -19,8 +19,8 @@ pub struct MicrosoftProvider {
 
 impl MicrosoftProvider {
     pub fn new() -> Self {
-        let tenant_id = std::env::var("MICROSOFT_TENANT_ID")
-            .unwrap_or_else(|_| "common".to_string());
+        let tenant_id =
+            std::env::var("MICROSOFT_TENANT_ID").unwrap_or_else(|_| "common".to_string());
         Self { tenant_id }
     }
 }
@@ -93,9 +93,7 @@ impl OAuthProvider for MicrosoftProvider {
             .await
             .map_err(|e| OAuthError::ParseError(e.to_string()))?;
 
-        let email = microsoft_user
-            .email
-            .ok_or(OAuthError::InvalidResponse)?;
+        let email = microsoft_user.email.ok_or(OAuthError::InvalidResponse)?;
 
         let name = microsoft_user.name.or_else(|| {
             match (microsoft_user.given_name, microsoft_user.family_name) {

@@ -1,6 +1,6 @@
 use serde::Deserialize;
-use surrealdb::{RecordId, Surreal};
 use surrealdb::engine::remote::ws::Client;
+use surrealdb::{RecordId, Surreal};
 
 use crate::errors::oauth::{OAuthError, OAuthResult};
 use crate::models::user::{CreateUser, User, UserIdentifier};
@@ -116,11 +116,7 @@ pub trait OAuthProvider: Send + Sync {
                 .to_string()
         });
 
-        let placeholder_password = format!(
-            "oauth_{}_{}",
-            identifier_type,
-            generate_token()
-        );
+        let placeholder_password = format!("oauth_{}_{}", identifier_type, generate_token());
 
         let user = CreateUser {
             display_name,
@@ -155,9 +151,7 @@ pub trait OAuthProvider: Send + Sync {
         let created_user: Option<User> = result
             .take(0)
             .map_err(|e| OAuthError::DatabaseError(Box::new(e)))?;
-        let user_id = created_user
-            .ok_or(OAuthError::UserNotFound)?
-            .id;
+        let user_id = created_user.ok_or(OAuthError::UserNotFound)?.id;
 
         Ok(user_id)
     }
