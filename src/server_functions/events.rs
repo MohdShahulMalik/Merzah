@@ -14,24 +14,21 @@ use surrealdb::{RecordId, sql::Geometry};
 use tracing::error;
 
 #[cfg(feature = "ssr")]
+use crate::models::events::EventSummary;
+#[cfg(feature = "ssr")]
+use crate::models::events::{
+    Event, EventRecord, FavoriteAndNearbyEventsQueryResult, UpdatedEventRecord,
+};
+use crate::models::{
+    api_responses::ApiResponse,
+    events::{CreateEvent, FetchedEvents, PersonalEvent, UpdatedEvent},
+};
+#[cfg(feature = "ssr")]
+use crate::utils::parsing::parse_record_id;
+#[cfg(feature = "ssr")]
 use crate::utils::ssr::{ServerResponse, get_authenticated_user};
 #[cfg(feature = "ssr")]
 use crate::utils::user_elevation::is_mosque_admin;
-#[cfg(feature = "ssr")]
-use crate::utils::parsing::parse_record_id;
-use crate::{
-    models::{
-        api_responses::ApiResponse,
-        events::{
-            CreateEvent, FetchedEvents, PersonalEvent,
-            UpdatedEvent,
-        },
-    },
-};
-#[cfg(feature = "ssr")]
-use crate::models::events::EventSummary;
-#[cfg(feature = "ssr")]
-use crate::models::events::{ Event, EventRecord, UpdatedEventRecord, FavoriteAndNearbyEventsQueryResult };
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "add-event")]
 pub async fn add_event(create_event: CreateEvent) -> Result<ApiResponse<String>, ServerFnError> {
@@ -183,8 +180,7 @@ pub async fn update_event(
 pub async fn fetch_users_favorite_mosques_events(
     lat: f64,
     lon: f64,
-)
--> Result<ApiResponse<Vec<PersonalEvent>>, ServerFnError> {
+) -> Result<ApiResponse<Vec<PersonalEvent>>, ServerFnError> {
     let (response_options, db, user) = match get_authenticated_user::<Vec<PersonalEvent>>().await {
         Ok(ctx) => ctx,
         Err(err) => return Ok(err),
@@ -264,17 +260,18 @@ pub async fn fetch_users_favorite_mosques_events(
         }
     };
 
-    let events_and_attendance = match db_response.take::<Option<FavoriteAndNearbyEventsQueryResult>>(4) {
-        Ok(Some(events_and_attendance)) => events_and_attendance,
-        Ok(None) => {
-            return Ok(responder.internal_server_error(
-                "No event data was returned from the transaction".to_string(),
-            ));
-        }
-        Err(err) => {
-            return Ok(responder.internal_server_error(format!("Some db error occured: {err}")));
-        }
-    };
+    let events_and_attendance =
+        match db_response.take::<Option<FavoriteAndNearbyEventsQueryResult>>(4) {
+            Ok(Some(events_and_attendance)) => events_and_attendance,
+            Ok(None) => {
+                return Ok(responder.internal_server_error(
+                    "No event data was returned from the transaction".to_string(),
+                ));
+            }
+            Err(err) => {
+                return Ok(responder.internal_server_error(format!("Some db error occured: {err}")));
+            }
+        };
 
     let rsvp_set: HashSet<String> = events_and_attendance.attending_events.into_iter().collect();
     let mut seen_event_ids = HashSet::new();

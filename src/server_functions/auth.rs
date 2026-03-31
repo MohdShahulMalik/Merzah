@@ -1,39 +1,43 @@
-use leptos::prelude::ServerFnError;
-use leptos::server_fn::codec::{DeleteUrl, Json};
-use leptos::*; 
-use crate::models::auth::LoginFormData;
-use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData };
-#[cfg(feature = "ssr")]
-use crate::models::oauth::GoogleUser;
 #[cfg(feature = "ssr")]
 use crate::auth::oauth::discord::DiscordProvider;
 #[cfg(feature = "ssr")]
 use crate::auth::oauth::helpers::OAuthCallback;
 #[cfg(feature = "ssr")]
 use crate::auth::oauth::microsoft::MicrosoftProvider;
+use crate::models::auth::LoginFormData;
 #[cfg(feature = "ssr")]
 use crate::models::auth::Platform;
 #[cfg(feature = "ssr")]
+use crate::models::oauth::GoogleUser;
+use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData, user::UserOnClient};
+#[cfg(feature = "ssr")]
 use garde::Validate;
+use leptos::prelude::ServerFnError;
+use leptos::server_fn::codec::{DeleteUrl, Json};
+use leptos::*;
 
-#[cfg(feature = "ssr")]
-use actix_web::HttpRequest;
-#[cfg(feature = "ssr")]
-use crate::utils::ssr::{ServerResponse, get_authenticated_user, get_server_context};
-#[cfg(feature = "ssr")]
-use tracing::error;
 #[cfg(feature = "ssr")]
 use crate::auth::custom_auth::{authenticate, register_user};
 #[cfg(feature = "ssr")]
-use crate::auth::session::{create_session, delete_session, remove_session_cookie, set_session_cookie};
+use crate::auth::oauth::google::{
+    exchange_code, find_or_create_user, get_authorization_url, get_user_info,
+};
 #[cfg(feature = "ssr")]
-use crate::errors::session::SessionError;
+use crate::auth::oauth::state::{generate_state, validate_state};
+#[cfg(feature = "ssr")]
+use crate::auth::session::{
+    create_session, delete_session, remove_session_cookie, set_session_cookie,
+};
 #[cfg(feature = "ssr")]
 use crate::errors::auth::AuthError;
 #[cfg(feature = "ssr")]
-use crate::auth::oauth::google::{exchange_code, find_or_create_user, get_authorization_url, get_user_info};
+use crate::errors::session::SessionError;
 #[cfg(feature = "ssr")]
-use crate::auth::oauth::state::{generate_state, validate_state};
+use crate::utils::ssr::{ServerResponse, get_authenticated_user, get_server_context};
+#[cfg(feature = "ssr")]
+use actix_web::HttpRequest;
+#[cfg(feature = "ssr")]
+use tracing::error;
 
 #[server(input = Json, output = Json, prefix = "/auth", endpoint = "register")]
 pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>, ServerFnError> {
@@ -51,37 +55,43 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
             .map(|(field, msg)| format!("{}, {}", field, msg))
             .collect::<Vec<_>>();
         error!(?errors);
-        return Ok(responder.unprocessable_entity(errors.join("\n")))
+        return Ok(responder.unprocessable_entity(errors.join("\n")));
     }
 
     let validation_result_for_uniqueness = form.validate_uniqueness(&db).await;
     if let Err(error) = validation_result_for_uniqueness {
         error!(?error);
         return Ok(responder.conflict(format!("{}", error)));
-    } 
+    }
 
     let registration_result = register_user(form.clone(), &db).await;
 
     if let Err(error) = registration_result {
-        error!(?error, "Failed to register the user");  
-        return Err(ServerFnError::ServerError("Failed to register the user".to_string()));
+        error!(?error, "Failed to register the user");
+        return Err(ServerFnError::ServerError(
+            "Failed to register the user".to_string(),
+        ));
     };
 
     let user_id = registration_result.ok();
     let session_creation_result = create_session(user_id.unwrap(), &db).await;
     if let Err(error) = session_creation_result {
         error!(?error);
-        return Err(ServerFnError::ServerError("Failed to generate session tokens for the registered user".to_string()));
+        return Err(ServerFnError::ServerError(
+            "Failed to generate session tokens for the registered user".to_string(),
+        ));
     }
 
     let session_token = session_creation_result.ok().unwrap();
-    
+
     if let Platform::Web = form.platform {
         let cookie_creation_result = set_session_cookie(&session_token);
 
         if let Err(error) = cookie_creation_result {
             error!(?error);
-            return Err(ServerFnError::ServerError("Failed to create appropriate cookies after registration".to_string()));
+            return Err(ServerFnError::ServerError(
+                "Failed to create appropriate cookies after registration".to_string(),
+            ));
         }
 
         Ok(responder.ok("The user has been registered successfully".to_string()))
@@ -91,9 +101,7 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
 }
 
 #[server(input = Json, output = Json, prefix = "/auth", endpoint = "login")]
-pub async fn login(
-    form: LoginFormData,
-) -> Result<ApiResponse<String>, ServerFnError> {
+pub async fn login(form: LoginFormData) -> Result<ApiResponse<String>, ServerFnError> {
     let (response_options, db, _user) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
@@ -107,20 +115,26 @@ pub async fn login(
                 match auth_error {
                     AuthError::UserNotFound | AuthError::PasswordVerificationError(_) => {
                         error!("Authentication failed for user.");
-                        return Ok(responder.unauthorized("Invalid username or password.".to_string()));
-                    },
+                        return Ok(
+                            responder.unauthorized("Invalid username or password.".to_string())
+                        );
+                    }
                     AuthError::DatabaseError(_) | AuthError::PasswordHashError(_) => {
                         error!(?error, "Internal server error during authentication.");
-                        return Ok(responder.internal_server_error("An internal error occurred.".to_string()));
-                    },
+                        return Ok(responder
+                            .internal_server_error("An internal error occurred.".to_string()));
+                    }
                     _ => {
                         error!(?error, "An unexpected authentication error occurred.");
-                        return Ok(responder.internal_server_error("An internal error occurred.".to_string()));
+                        return Ok(responder
+                            .internal_server_error("An internal error occurred.".to_string()));
                     }
                 }
             } else {
                 error!(?error, "An unexpected error occurred during login.");
-                return Ok(responder.internal_server_error("An internal error occurred.".to_string()));
+                return Ok(
+                    responder.internal_server_error("An internal error occurred.".to_string())
+                );
             }
         }
     };
@@ -132,7 +146,7 @@ pub async fn login(
     }
 
     let session_token = session_creation_result.ok().unwrap();
-    
+
     if let Platform::Web = form.platform {
         let cookie_creation_result = set_session_cookie(&session_token);
 
@@ -145,6 +159,17 @@ pub async fn login(
     } else {
         Ok(responder.ok(session_token))
     }
+}
+
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "me")]
+pub async fn fetch_me() -> Result<ApiResponse<UserOnClient>, ServerFnError> {
+    let (response_options, _db, user) = match get_authenticated_user::<UserOnClient>().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+    let responder = ServerResponse::new(response_options);
+
+    Ok(responder.ok(UserOnClient::from(user)))
 }
 
 #[server(input=DeleteUrl, output=Json, prefix="/auth", endpoint="logout")]
@@ -191,21 +216,27 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
                     return Ok(responder.unauthorized("Invalid session token".to_string()));
                 }
                 SessionError::UserNotFound => {
-                    return Ok(responder.unauthorized("User not found for this session".to_string()));
+                    return Ok(
+                        responder.unauthorized("User not found for this session".to_string())
+                    );
                 }
                 SessionError::DatabaseError(err) => {
-                    return Ok(responder.internal_server_error(format!("Database error occurred: {}", err)));
+                    return Ok(responder
+                        .internal_server_error(format!("Database error occurred: {}", err)));
                 }
             }
         }
-        return Ok(responder.internal_server_error("Failed to delete the session from the server".to_string()));
+        return Ok(responder
+            .internal_server_error("Failed to delete the session from the server".to_string()));
     }
 
     // Only attempt to remove cookie if it was present
     if req.cookie("__Host-session").is_some() {
         if let Err(e) = remove_session_cookie() {
             error!(?e, "Failed to remove session cookie");
-            return Ok(responder.internal_server_error("Failed to remove session cookie".to_string()));
+            return Ok(
+                responder.internal_server_error("Failed to remove session cookie".to_string())
+            );
         }
     }
 
@@ -224,7 +255,8 @@ pub async fn get_google_oauth_url() -> Result<ApiResponse<String>, ServerFnError
         Ok(s) => s,
         Err(e) => {
             error!(?e, "Failed to generate state");
-            return Ok(responder.internal_server_error("Failed to generate authentication state".to_string()));
+            return Ok(responder
+                .internal_server_error("Failed to generate authentication state".to_string()));
         }
     };
 
@@ -232,7 +264,9 @@ pub async fn get_google_oauth_url() -> Result<ApiResponse<String>, ServerFnError
         Ok(u) => u,
         Err(e) => {
             error!(?e, "Failed to get authorization URL");
-            return Ok(responder.internal_server_error("Failed to create authorization URL".to_string()));
+            return Ok(
+                responder.internal_server_error("Failed to create authorization URL".to_string())
+            );
         }
     };
 
@@ -243,7 +277,7 @@ pub async fn get_google_oauth_url() -> Result<ApiResponse<String>, ServerFnError
     );
 
     use actix_web::http::header::{HeaderValue, SET_COOKIE};
-    
+
     let header_value = match HeaderValue::from_str(&cookie) {
         Ok(v) => v,
         Err(e) => {
@@ -251,7 +285,7 @@ pub async fn get_google_oauth_url() -> Result<ApiResponse<String>, ServerFnError
             return Ok(responder.internal_server_error("Failed to set cookie".to_string()));
         }
     };
-    
+
     responder.insert_header(SET_COOKIE, header_value);
 
     Ok(responder.ok(url))
@@ -306,7 +340,10 @@ pub async fn handle_google_callback(
         Ok(id) => id,
         Err(e) => {
             error!(error = %e, "Failed to find or create user");
-            return Err(ServerFnError::ServerError(format!("Failed to authenticate user: {:?}", e)));
+            return Err(ServerFnError::ServerError(format!(
+                "Failed to authenticate user: {:?}",
+                e
+            )));
         }
     };
 
@@ -314,7 +351,9 @@ pub async fn handle_google_callback(
         Ok(token) => token,
         Err(e) => {
             error!(?e, "Failed to create session");
-            return Err(ServerFnError::ServerError("Failed to create session".to_string()));
+            return Err(ServerFnError::ServerError(
+                "Failed to create session".to_string(),
+            ));
         }
     };
 
@@ -326,12 +365,13 @@ pub async fn handle_google_callback(
         24 * 60 * 60
     );
 
-    let clear_state_cookie = "google_oauth_state=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0";
-    
+    let clear_state_cookie =
+        "google_oauth_state=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0";
+
     if let Ok(session_header) = HeaderValue::from_str(&session_cookie) {
         responder.append_header(SET_COOKIE, session_header);
     }
-    
+
     if let Ok(clear_header) = HeaderValue::from_str(clear_state_cookie) {
         responder.append_header(SET_COOKIE, clear_header);
     }
@@ -364,4 +404,3 @@ pub async fn handle_microsoft_callback(
 ) -> Result<ApiResponse<String>, ServerFnError> {
     OAuthCallback::handle::<MicrosoftProvider>(code, state, "microsoft_oauth_state").await
 }
-

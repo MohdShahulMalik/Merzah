@@ -2,32 +2,35 @@
 use crate::{
     errors::user_elevation::UserElevationError,
     utils::{
-        parsing::parse_record_id, 
-        ssr::{get_authenticated_user, get_server_context, ServerResponse}, 
+        parsing::parse_record_id,
+        ssr::{ServerResponse, get_authenticated_user, get_server_context},
         user_elevation::elevate_user,
         user_elevation::is_mosque_admin,
     },
 };
 use leptos::{
     prelude::ServerFnError,
-    server_fn::codec::{Json, PatchJson, DeleteUrl},
+    server_fn::codec::{DeleteUrl, Json, PatchJson},
     *,
 };
 
-use crate::models::{api_responses::{ApiResponse, MosqueResponse}, mosque::PrayerTimesUpdate};
+use crate::models::{
+    api_responses::{ApiResponse, MosqueResponse},
+    mosque::PrayerTimesUpdate,
+};
 
 #[cfg(feature = "ssr")]
 use crate::models::mosque::{
     MosqueFromOverpass, MosqueRecord, MosqueSearchResult, OverpassResponse,
 };
 #[cfg(feature = "ssr")]
+use crate::models::user::{UserIdentifier, UserIdentifierOnClient};
+#[cfg(feature = "ssr")]
+use std::collections::{HashMap, HashSet};
+#[cfg(feature = "ssr")]
 use surrealdb::{RecordId, sql::Geometry};
 #[cfg(feature = "ssr")]
 use tracing::error;
-#[cfg(feature = "ssr")]
-use std::collections::{HashSet, HashMap};
-#[cfg(feature = "ssr")]
-use crate::models::user::{UserIdentifier, UserIdentifierOnClient};
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(
@@ -43,7 +46,10 @@ pub async fn add_mosques_of_region(
     let responder = ServerResponse::new(response_options);
 
     if !user.is_app_admin() && !user.is_mosque_supervisor() {
-        error!("Unauthorized attempt to add mosques of region by user {}", user.id);
+        error!(
+            "Unauthorized attempt to add mosques of region by user {}",
+            user.id
+        );
         return Ok(responder.unauthorized("Only app admins can add mosques of region".to_string()));
     }
 
@@ -202,7 +208,7 @@ pub async fn fetch_mosques_for_location(
         .await?;
 
     let mosques: Vec<MosqueSearchResult> = response.take(0)?;
-    
+
     // 1. Collect unique user IDs for bulk identifier fetch
     let mut user_ids = HashSet::new();
     for mosque in &mosques {
@@ -219,39 +225,47 @@ pub async fn fetch_mosques_for_location(
     let mut id_to_contacts: HashMap<RecordId, Vec<UserIdentifierOnClient>> = HashMap::new();
 
     if !user_ids_vec.is_empty() {
-        let mut ident_res = db.query("SELECT * FROM user_identifier WHERE user IN $user_ids")
+        let mut ident_res = db
+            .query("SELECT * FROM user_identifier WHERE user IN $user_ids")
             .bind(("user_ids", user_ids_vec))
             .await?;
         let identifiers: Vec<UserIdentifier> = ident_res.take(0)?;
 
         // 3. Map identifiers by User ID
         for ident in identifiers {
-            id_to_contacts.entry(ident.user).or_default().push(
-                UserIdentifierOnClient::new(ident.identifier_type, ident.identifier_value)
-            );
+            id_to_contacts
+                .entry(ident.user)
+                .or_default()
+                .push(UserIdentifierOnClient::new(
+                    ident.identifier_type,
+                    ident.identifier_value,
+                ));
         }
     }
 
     // 4. Assemble final MosqueResponse
-    let mosque_responses = mosques.into_iter().map(|m| {
-        let imam_id = m.imam.as_ref().map(|u| u.id.clone());
-        let muazzin_id = m.muazzin.as_ref().map(|u| u.id.clone());
-        let mut res = m.from();
-        
-        if let Some(id) = imam_id {
-            if let Some(contacts) = id_to_contacts.get(&id) {
-                res.imam_contact = contacts.clone();
+    let mosque_responses = mosques
+        .into_iter()
+        .map(|m| {
+            let imam_id = m.imam.as_ref().map(|u| u.id.clone());
+            let muazzin_id = m.muazzin.as_ref().map(|u| u.id.clone());
+            let mut res = m.from();
+
+            if let Some(id) = imam_id {
+                if let Some(contacts) = id_to_contacts.get(&id) {
+                    res.imam_contact = contacts.clone();
+                }
             }
-        }
-        
-        if let Some(id) = muazzin_id {
-            if let Some(contacts) = id_to_contacts.get(&id) {
-                res.muazzin_contact = contacts.clone();
+
+            if let Some(id) = muazzin_id {
+                if let Some(contacts) = id_to_contacts.get(&id) {
+                    res.muazzin_contact = contacts.clone();
+                }
             }
-        }
-        
-        res
-    }).collect();
+
+            res
+        })
+        .collect();
 
     Ok(ApiResponse {
         data: Some(mosque_responses),
@@ -278,7 +292,10 @@ pub async fn update_adhan_jamat_times(
     if !mosque_admin.is_app_admin() {
         if let Err(e) = is_mosque_admin(&mosque_admin.id, &mosque_id, &db).await {
             let msg = match e {
-                UserElevationError::Unauthorized => "The user trying to update mosque info is not an admin of that mosque".to_string(),
+                UserElevationError::Unauthorized => {
+                    "The user trying to update mosque info is not an admin of that mosque"
+                        .to_string()
+                }
                 _ => "Failed to verify admin permissions".to_string(),
             };
             error!("{}", msg);
@@ -368,38 +385,35 @@ pub async fn elevate_user_to_mosque_supervisor(
 
     match result {
         Ok(success_msg) => return Ok(responder.ok(success_msg)),
-        Err(elevation_error) => {
-            match elevation_error {
-                UserElevationError::Unauthorized => {
-                    return Ok(responder.unauthorized("You are not authorized to perform this action".to_string()));
-                }
-                UserElevationError::AdminNotFound => {
-                    return Ok(responder.unauthorized("Admin user not found".to_string()));
-                }
-                UserElevationError::TargetUserNotFound => {
-                    return Ok(responder.not_found("User to elevate not found".to_string()));
-                }
-                UserElevationError::AlreadyElevated(role) => {
-                    return Ok(responder.conflict(format!("User is already a {}", role)));
-                }
-                UserElevationError::SelfElevationNotAllowed => {
-                    return Ok(responder.bad_request("You cannot elevate yourself".to_string()));
-                }
-                UserElevationError::DatabaseError(db_err) => {
-                    error!(?db_err, "Database error during user elevation");
-                    return Err(ServerFnError::ServerError(
-                        "Internal server error during elevation".to_string(),
-                    ));
-                }
+        Err(elevation_error) => match elevation_error {
+            UserElevationError::Unauthorized => {
+                return Ok(responder
+                    .unauthorized("You are not authorized to perform this action".to_string()));
             }
-        }
+            UserElevationError::AdminNotFound => {
+                return Ok(responder.unauthorized("Admin user not found".to_string()));
+            }
+            UserElevationError::TargetUserNotFound => {
+                return Ok(responder.not_found("User to elevate not found".to_string()));
+            }
+            UserElevationError::AlreadyElevated(role) => {
+                return Ok(responder.conflict(format!("User is already a {}", role)));
+            }
+            UserElevationError::SelfElevationNotAllowed => {
+                return Ok(responder.bad_request("You cannot elevate yourself".to_string()));
+            }
+            UserElevationError::DatabaseError(db_err) => {
+                error!(?db_err, "Database error during user elevation");
+                return Err(ServerFnError::ServerError(
+                    "Internal server error during elevation".to_string(),
+                ));
+            }
+        },
     }
 }
 
 #[server(input = Json, output = Json, prefix = "/mosques", endpoint = "add-favorite")]
-pub async fn add_favorite(
-    mosque_id: String,
-) -> Result<ApiResponse<String>, ServerFnError> {
+pub async fn add_favorite(mosque_id: String) -> Result<ApiResponse<String>, ServerFnError> {
     let (response_options, db, user) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
@@ -433,9 +447,7 @@ pub async fn add_favorite(
 }
 
 #[server(input = DeleteUrl, output = Json, prefix = "/mosques", endpoint = "/remove-favorite")]
-pub async fn remove_favorite(
-    mosque_id: String,
-) -> Result<ApiResponse<String>, ServerFnError>{
+pub async fn remove_favorite(mosque_id: String) -> Result<ApiResponse<String>, ServerFnError> {
     let (response_options, db, user) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
@@ -448,8 +460,9 @@ pub async fn remove_favorite(
     };
 
     let remove_favorite_query = "DELETE favorited WHERE in = $user_id AND out = $mosque_id";
-    
-    let result = db.query(remove_favorite_query)
+
+    let result = db
+        .query(remove_favorite_query)
         .bind(("user_id", user.id))
         .bind(("mosque_id", mosque_id))
         .await;
@@ -458,15 +471,21 @@ pub async fn remove_favorite(
         Ok(_) => (),
         Err(e) => {
             error!(?e, "Failed to remove favorited mosque for the user");
-            return Ok(responder.internal_server_error("Failed to remove favorited mosque for the user".to_string()))
+            return Ok(responder.internal_server_error(
+                "Failed to remove favorited mosque for the user".to_string(),
+            ));
         }
     }
 
-    Ok(responder.ok("Successfully removed the mosque from favorite list of the user".to_string()))    
+    Ok(responder.ok("Successfully removed the mosque from favorite list of the user".to_string()))
 }
 
 #[server(input = PatchJson, output = Json, prefix = "/mosques", endpoint = "update-personnel")]
-pub async fn update_mosque_personnel(person_type: String, person_id: String, mosque_id: String) -> Result<ApiResponse, ServerFnError> {
+pub async fn update_mosque_personnel(
+    person_type: String,
+    person_id: String,
+    mosque_id: String,
+) -> Result<ApiResponse, ServerFnError> {
     let (response_options, db, auth_user) = match get_authenticated_user::<String>().await {
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
@@ -474,7 +493,9 @@ pub async fn update_mosque_personnel(person_type: String, person_id: String, mos
     let responder = ServerResponse::new(response_options);
 
     if person_type != "imam" && person_type != "muazzin" {
-        return Ok(responder.bad_request("person_type must be either 'imam' or 'muazzin'".to_string()));
+        return Ok(
+            responder.bad_request("person_type must be either 'imam' or 'muazzin'".to_string())
+        );
     }
 
     let person_id: RecordId = match parse_record_id(&person_id, "person_id") {
@@ -490,7 +511,10 @@ pub async fn update_mosque_personnel(person_type: String, person_id: String, mos
     if !auth_user.is_app_admin() {
         if let Err(e) = is_mosque_admin(&auth_user.id, &mosque_id, &db).await {
             let msg = match e {
-                UserElevationError::Unauthorized => "The user trying to update mosque info is not an admin of that mosque".to_string(),
+                UserElevationError::Unauthorized => {
+                    "The user trying to update mosque info is not an admin of that mosque"
+                        .to_string()
+                }
                 _ => "Failed to verify admin permissions".to_string(),
             };
             error!("{}", msg);
@@ -498,17 +522,26 @@ pub async fn update_mosque_personnel(person_type: String, person_id: String, mos
         }
     }
 
-    let update_query = format!("UPDATE mosques SET {} = $person_id WHERE id = $mosque_id", person_type);
-    let result = db.query(update_query)
+    let update_query = format!(
+        "UPDATE mosques SET {} = $person_id WHERE id = $mosque_id",
+        person_type
+    );
+    let result = db
+        .query(update_query)
         .bind(("person_id", person_id))
         .bind(("mosque_id", mosque_id))
         .await;
 
     match result {
-        Ok(_) => Ok(responder.ok(format!("Successfully updated mosque {} information", person_type))),
+        Ok(_) => Ok(responder.ok(format!(
+            "Successfully updated mosque {} information",
+            person_type
+        ))),
         Err(e) => {
             error!(?e, "Failed to update mosque personnel");
-            Ok(responder.internal_server_error("Failed to update mosque personnel due to database error".to_string()))
+            Ok(responder.internal_server_error(
+                "Failed to update mosque personnel due to database error".to_string(),
+            ))
         }
     }
 }

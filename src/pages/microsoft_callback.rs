@@ -1,6 +1,6 @@
+use crate::server_functions::auth::handle_microsoft_callback;
 use leptos::{prelude::*, reactive::spawn_local};
 use leptos_router::hooks::use_query_map;
-use crate::server_functions::auth::handle_microsoft_callback;
 
 #[component]
 pub fn MicrosoftCallback() -> impl IntoView {

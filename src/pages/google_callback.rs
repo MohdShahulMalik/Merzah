@@ -1,6 +1,6 @@
+use crate::server_functions::auth::handle_google_callback;
 use leptos::{prelude::*, reactive::spawn_local};
 use leptos_router::hooks::use_query_map;
-use crate::server_functions::auth::handle_google_callback;
 
 #[component]
 pub fn GoogleCallback() -> impl IntoView {
