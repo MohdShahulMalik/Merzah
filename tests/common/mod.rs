@@ -1,30 +1,35 @@
-#[cfg(feature="ssr")]
-use surrealdb::engine::remote::ws::{Client, Ws};
-#[cfg(feature="ssr")]
-use surrealdb::opt::auth::Root;
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 use surrealdb::Surreal;
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
+use surrealdb::engine::remote::ws::{Client, Ws};
+#[cfg(feature = "ssr")]
+use surrealdb::opt::auth::Root;
+#[cfg(feature = "ssr")]
 use testcontainers::runners::AsyncRunner;
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 use testcontainers_modules::surrealdb::SurrealDb;
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 use tokio::sync::OnceCell;
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 use uuid::Uuid;
 
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 static DB_CONTAINER: OnceCell<testcontainers::ContainerAsync<SurrealDb>> = OnceCell::const_new();
 
 pub async fn get_test_db() -> Surreal<Client> {
-    let container = DB_CONTAINER.get_or_init(|| async {
-        SurrealDb::default()
-            .start()
-            .await
-            .expect("Failed to start SurrealDB Docker container")
-    }).await;
+    let container = DB_CONTAINER
+        .get_or_init(|| async {
+            SurrealDb::default()
+                .start()
+                .await
+                .expect("Failed to start SurrealDB Docker container")
+        })
+        .await;
 
-    let port = container.get_host_port_ipv4(8000).await.expect("Failed to get mapped port");
+    let port = container
+        .get_host_port_ipv4(8000)
+        .await
+        .expect("Failed to get mapped port");
     let url = format!("127.0.0.1:{}", port);
 
     let db = Surreal::new::<Ws>(&url)
@@ -45,13 +50,16 @@ pub async fn get_test_db() -> Surreal<Client> {
         .expect("Failed to switch to isolated namespace");
 
     let initial_migration_path = "migrations/definitions/_initial.json";
-    let error_msg = &format!("Failed to read migration file: {}. Ensure you run tests from project root.", initial_migration_path);
+    let error_msg = &format!(
+        "Failed to read migration file: {}. Ensure you run tests from project root.",
+        initial_migration_path
+    );
     let migration_content = tokio::fs::read_to_string(initial_migration_path)
         .await
         .expect(error_msg);
 
-    let migration_json: serde_json::Value = serde_json::from_str(&migration_content)
-        .expect("Failed to parse _initial.json");
+    let migration_json: serde_json::Value =
+        serde_json::from_str(&migration_content).expect("Failed to parse _initial.json");
 
     if let Some(schemas) = migration_json.get("schemas").and_then(|v| v.as_str()) {
         db.query(schemas)
@@ -64,6 +72,28 @@ pub async fn get_test_db() -> Surreal<Client> {
             .await
             .expect("Failed to execute initial events");
     }
+
+    // let schema_dir = "schemas";
+    // if let Ok(mut dir) = tokio::fs::read_dir(schema_dir).await {
+    //     let mut files = Vec::new();
+    //     while let Ok(Some(entry)) = dir.next_entry().await {
+    //         let path = entry.path();
+    //         if path.extension().and_then(|ext| ext.to_str()) == Some("surql") {
+    //             files.push(path);
+    //         }
+    //     }
+
+    //     for path in files {
+    //         let content = tokio::fs::read_to_string(&path)
+    //             .await
+    //             .expect("Failed to read schema file");
+    //         if !content.trim().is_empty() {
+    //             db.query(content)
+    //                 .await
+    //                 .expect("Failed to execute schema file");
+    //         }
+    //     }
+    // }
 
     db
 }

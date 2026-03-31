@@ -1,6 +1,10 @@
 use crate::common::get_test_db;
 use merzah::{
-    models::{api_responses::ApiResponse, auth::{LoginFormData, RegistrationFormData, Platform}, user::Identifier},
+    models::{
+        api_responses::ApiResponse,
+        auth::{LoginFormData, Platform, RegistrationFormData},
+        user::Identifier,
+    },
     spawn_app,
 };
 use reqwest::Client;
@@ -16,7 +20,6 @@ pub struct RegisterationFormWrapper {
 struct LoginFormWrapper {
     form: LoginFormData,
 }
-
 
 #[rstest]
 #[case::mobile("Armaan Ali".to_string(), Identifier::Mobile("+91 1234567890".to_string()), "thisisasecret".to_string(), Some("The user has been registered successfully".to_string()), "Payload with Identifier Type mobile")]
@@ -35,7 +38,12 @@ async fn register_server_fn_successfully_register_a_user(
     let relative_addr = format!("{}/auth/register", addr);
 
     let body = RegisterationFormWrapper {
-        form: RegistrationFormData::new(name.clone(), identifier.clone(), password.clone(), Platform::Web),
+        form: RegistrationFormData::new(
+            name.clone(),
+            identifier.clone(),
+            password.clone(),
+            Platform::Web,
+        ),
     };
 
     let response = client
@@ -145,10 +153,15 @@ async fn logout_server_fn_successfully_logs_out_user() {
         .headers()
         .get("set-cookie")
         .expect("Missing Set-Cookie header in registration response");
-    
-    let cookie_str = cookie_header.to_str().expect("Failed to convert cookie to string");
+
+    let cookie_str = cookie_header
+        .to_str()
+        .expect("Failed to convert cookie to string");
     // Extract name=value part (strip attributes like Path, HttpOnly)
-    let session_cookie = cookie_str.split(';').next().expect("Failed to parse cookie");
+    let session_cookie = cookie_str
+        .split(';')
+        .next()
+        .expect("Failed to parse cookie");
 
     // 3. Call Logout
     let response = client
@@ -171,7 +184,10 @@ async fn logout_server_fn_successfully_logs_out_user() {
         .await
         .expect("Failed to deserialize logout response");
 
-    assert_eq!(api_response.data, Some("Successfully logged out the user".to_string()));
+    assert_eq!(
+        api_response.data,
+        Some("Successfully logged out the user".to_string())
+    );
     assert!(api_response.error.is_none());
 
     // 4. Verify Session Deleted
@@ -179,8 +195,9 @@ async fn logout_server_fn_successfully_logs_out_user() {
         .query("SELECT * FROM user_identifier WHERE identifier_value = 'logout@example.com'")
         .await
         .expect("Failed to query user");
-    
-    let user_identifier: Option<merzah::models::user::UserIdentifier> = result.take(0).expect("Failed to parse user");
+
+    let user_identifier: Option<merzah::models::user::UserIdentifier> =
+        result.take(0).expect("Failed to parse user");
     let user_id = user_identifier.expect("User not found").user;
 
     let mut session_result = db
@@ -188,7 +205,7 @@ async fn logout_server_fn_successfully_logs_out_user() {
         .bind(("user", user_id))
         .await
         .expect("Failed to query sessions");
-    
+
     let sessions: Option<merzah::models::session::Session> = session_result.take(0).unwrap();
     assert!(sessions.is_none(), "Session should have been deleted");
 }
@@ -196,13 +213,12 @@ async fn logout_server_fn_successfully_logs_out_user() {
 #[tokio::test]
 async fn login_server_fn_successfully_logs_in_user() {
     let client = Client::new();
-        
+
     let db = get_test_db().await;
     let addr = spawn_app(db.clone());
     let register_url = format!("{}/auth/register", addr);
     let login_url = format!("{}/auth/login", addr);
     let logout_url = format!("{}/auth/logout", addr);
-
 
     let name = "Login Test User".to_string();
     let email = "login_test@example.com".to_string();
@@ -223,17 +239,24 @@ async fn login_server_fn_successfully_logs_in_user() {
         .await
         .expect("Failed to register");
 
-    
-
-    assert!(reg_response.status().is_success(), "Registration failed: {:?}", reg_response.text().await);
+    assert!(
+        reg_response.status().is_success(),
+        "Registration failed: {:?}",
+        reg_response.text().await
+    );
 
     let cookie_header = reg_response
         .headers()
         .get("set-cookie")
         .expect("Missing Set-Cookie header in registration response");
 
-    let cookie_str = cookie_header.to_str().expect("Failed to convert cookie to string");
-    let session_cookie = cookie_str.split(';').next().expect("Failed to parse cookie");
+    let cookie_str = cookie_header
+        .to_str()
+        .expect("Failed to convert cookie to string");
+    let session_cookie = cookie_str
+        .split(';')
+        .next()
+        .expect("Failed to parse cookie");
 
     let logout_client = Client::new();
 
@@ -251,9 +274,12 @@ async fn login_server_fn_successfully_logs_in_user() {
         .await
         .expect("Failed to deserialize logout response");
 
-    assert_eq!(api_response.data, Some("Successfully logged out the user".to_string()));
+    assert_eq!(
+        api_response.data,
+        Some("Successfully logged out the user".to_string())
+    );
     assert!(api_response.error.is_none());
-            
+
     let login_client = Client::new();
 
     let login_form = LoginFormData {
@@ -281,18 +307,20 @@ async fn login_server_fn_successfully_logs_in_user() {
         .await
         .expect("Failed to deserialize login response");
 
-    assert_eq!(api_response.data, Some("The user has been logged in successfully".to_string()));
+    assert_eq!(
+        api_response.data,
+        Some("The user has been logged in successfully".to_string())
+    );
     assert!(api_response.error.is_none());
-
-
 
     let mut result = db
         .query("SELECT * FROM user_identifier WHERE identifier_value = $val")
         .bind(("val", email.clone()))
         .await
         .expect("Failed to query user");
-    
-    let user_identifier: Option<merzah::models::user::UserIdentifier> = result.take(0).expect("Failed to parse user");
+
+    let user_identifier: Option<merzah::models::user::UserIdentifier> =
+        result.take(0).expect("Failed to parse user");
     let user_id = user_identifier.expect("User not found").user;
 
     let mut session_result = db
@@ -300,10 +328,14 @@ async fn login_server_fn_successfully_logs_in_user() {
         .bind(("user", user_id))
         .await
         .expect("Failed to query sessions");
-    
-    let sessions: Vec<merzah::models::session::Session> = session_result.take(0).expect("Failed to parse sessions");
-    
-    assert!(!sessions.is_empty(), "A session should exist for the logged in user");
+
+    let sessions: Vec<merzah::models::session::Session> =
+        session_result.take(0).expect("Failed to parse sessions");
+
+    assert!(
+        !sessions.is_empty(),
+        "A session should exist for the logged in user"
+    );
     assert_eq!(sessions.len(), 1_usize);
 }
 
@@ -337,14 +369,19 @@ async fn mobile_auth_flow_works_correctly() {
         .expect("Failed to register");
 
     assert!(response.status().is_success());
-    assert!(response.headers().get("set-cookie").is_none(), "Mobile registration should not set cookies");
+    assert!(
+        response.headers().get("set-cookie").is_none(),
+        "Mobile registration should not set cookies"
+    );
 
     let api_response = response
         .json::<ApiResponse<String>>()
         .await
         .expect("Failed to deserialize response");
-    
-    let session_token = api_response.data.expect("Mobile registration should return session token");
+
+    let session_token = api_response
+        .data
+        .expect("Mobile registration should return session token");
     assert!(!session_token.is_empty());
 
     // 2. Logout using the token
@@ -373,16 +410,24 @@ async fn mobile_auth_flow_works_correctly() {
         .expect("Failed to login");
 
     assert!(response.status().is_success());
-    assert!(response.headers().get("set-cookie").is_none(), "Mobile login should not set cookies");
+    assert!(
+        response.headers().get("set-cookie").is_none(),
+        "Mobile login should not set cookies"
+    );
 
     let api_response = response
         .json::<ApiResponse<String>>()
         .await
         .expect("Failed to deserialize response");
-    
-    let new_session_token = api_response.data.expect("Mobile login should return session token");
+
+    let new_session_token = api_response
+        .data
+        .expect("Mobile login should return session token");
     assert!(!new_session_token.is_empty());
-    assert_ne!(session_token, new_session_token, "New session token should be different");
+    assert_ne!(
+        session_token, new_session_token,
+        "New session token should be different"
+    );
 
     // 4. Verify Session exists in DB
     let mut session_result = db
@@ -390,8 +435,9 @@ async fn mobile_auth_flow_works_correctly() {
         .bind(("t", new_session_token))
         .await
         .expect("Failed to query sessions");
-    
-    let sessions: Vec<merzah::models::session::Session> = session_result.take(0).expect("Failed to parse sessions");
+
+    let sessions: Vec<merzah::models::session::Session> =
+        session_result.take(0).expect("Failed to parse sessions");
     assert_eq!(sessions.len(), 1);
 }
 
@@ -410,14 +456,20 @@ async fn extract_session(response: reqwest::Response, auth_method: AuthMethod) -
                 .expect("Missing Set-Cookie header")
                 .to_str()
                 .expect("Failed to convert cookie to string");
-            cookie_header.split(';').next().expect("Failed to parse cookie").to_string()
+            cookie_header
+                .split(';')
+                .next()
+                .expect("Failed to parse cookie")
+                .to_string()
         }
         AuthMethod::Mobile => {
             let api_response: ApiResponse<String> = response
                 .json()
                 .await
                 .expect("Failed to deserialize response");
-            api_response.data.expect("Mobile auth should return session token")
+            api_response
+                .data
+                .expect("Mobile auth should return session token")
         }
     }
 }
@@ -433,9 +485,7 @@ fn get_auth_header(session: &str, auth_method: AuthMethod) -> Option<(String, St
 #[case::web(AuthMethod::Web)]
 #[case::mobile(AuthMethod::Mobile)]
 #[tokio::test]
-async fn test_authenticated_user_can_logout_with_any_method(
-    #[case] auth_method: AuthMethod,
-) {
+async fn test_authenticated_user_can_logout_with_any_method(#[case] auth_method: AuthMethod) {
     let client = Client::new();
     let db = get_test_db().await;
     let addr = spawn_app(db.clone());
@@ -478,21 +528,24 @@ async fn test_authenticated_user_can_logout_with_any_method(
         logout_req = logout_req.header("Cookie", session);
     }
 
-    let logout_response = logout_req
-        .send()
-        .await
-        .expect("Failed to call logout");
+    let logout_response = logout_req.send().await.expect("Failed to call logout");
 
-    assert!(logout_response.status().is_success(), 
-        "Logout should succeed with {:?}. Status: {:?}", 
-        auth_method, logout_response.status());
+    assert!(
+        logout_response.status().is_success(),
+        "Logout should succeed with {:?}. Status: {:?}",
+        auth_method,
+        logout_response.status()
+    );
 
     let api_response: ApiResponse<String> = logout_response
         .json()
         .await
         .expect("Failed to deserialize logout response");
 
-    assert_eq!(api_response.data, Some("Successfully logged out the user".to_string()));
+    assert_eq!(
+        api_response.data,
+        Some("Successfully logged out the user".to_string())
+    );
     assert!(api_response.error.is_none());
 }
 
@@ -518,17 +571,20 @@ async fn test_unauthenticated_request_returns_401(
         AuthMethod::Web => {
             use http::header;
 
-            req = req.header(header::COOKIE, "__Host-session=abcdefghijklmnopqrstuvwxyz1234567890abcd");
+            req = req.header(
+                header::COOKIE,
+                "__Host-session=abcdefghijklmnopqrstuvwxyz1234567890abcd",
+            );
         }
         AuthMethod::Mobile => {
-            req = req.header("Authorization", "Bearer abcdefghijklmnopqrstuvwxyz1234567890abcd");
+            req = req.header(
+                "Authorization",
+                "Bearer abcdefghijklmnopqrstuvwxyz1234567890abcd",
+            );
         }
     }
 
-    let response = req
-        .send()
-        .await
-        .expect("Failed to call logout");
+    let response = req.send().await.expect("Failed to call logout");
 
     let status = response.status().as_u16();
 
@@ -539,9 +595,11 @@ async fn test_unauthenticated_request_returns_401(
         .error
         .unwrap_or_default();
 
-    assert_eq!(status, 401, 
-        "Unauthenticated {:?} request should return 401, error: {error}", 
-        auth_method,);
+    assert_eq!(
+        status, 401,
+        "Unauthenticated {:?} request should return 401, error: {error}",
+        auth_method,
+    );
 }
 
 #[rstest]
@@ -581,18 +639,22 @@ async fn test_auth_flow_registration_returns_correct_response_for_platform(
 
     match auth_method {
         AuthMethod::Web => {
-            assert!(response.headers().get("set-cookie").is_some(), 
-                "Web registration should set cookies");
+            assert!(
+                response.headers().get("set-cookie").is_some(),
+                "Web registration should set cookies"
+            );
         }
         AuthMethod::Mobile => {
-            assert!(response.headers().get("set-cookie").is_none(), 
-                "Mobile registration should not set cookies");
-            let api_response: ApiResponse<String> = response
-                .json()
-                .await
-                .expect("Failed to deserialize");
-            assert!(api_response.data.is_some(), 
-                "Mobile registration should return session token");
+            assert!(
+                response.headers().get("set-cookie").is_none(),
+                "Mobile registration should not set cookies"
+            );
+            let api_response: ApiResponse<String> =
+                response.json().await.expect("Failed to deserialize");
+            assert!(
+                api_response.data.is_some(),
+                "Mobile registration should return session token"
+            );
         }
     }
 }

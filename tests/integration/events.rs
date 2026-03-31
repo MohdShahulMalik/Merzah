@@ -549,7 +549,8 @@ async fn test_fetch_users_favorite_mosques_events_includes_nearby_and_deduplicat
         .expect("Failed to favorite mosque");
 
     let favorite_event = create_hosted_event(&db, &favorite_near_mosque.id, "Favorite Event").await;
-    let nearby_event = create_hosted_event(&db, &nearby_non_favorite_mosque.id, "Nearby Event").await;
+    let nearby_event =
+        create_hosted_event(&db, &nearby_non_favorite_mosque.id, "Nearby Event").await;
     let far_event = create_hosted_event(&db, &far_mosque.id, "Far Event").await;
 
     db.query("RELATE $user -> attending -> $event")
@@ -558,7 +559,10 @@ async fn test_fetch_users_favorite_mosques_events_includes_nearby_and_deduplicat
         .await
         .expect("Failed to create RSVP relation");
 
-    let url = format!("{}/mosques/events/fetch-users-favorite-mosques-events", addr);
+    let url = format!(
+        "{}/mosques/events/fetch-users-favorite-mosques-events",
+        addr
+    );
     let params = FetchUsersFavoriteMosquesEventsParams { lat: 0.0, lon: 0.0 };
 
     let req = build_auth_headers(&client, &session, auth_method, &url);
@@ -581,7 +585,11 @@ async fn test_fetch_users_favorite_mosques_events_includes_nearby_and_deduplicat
 
     assert!(api_response.error.is_none());
     let events = api_response.data.expect("Expected event data");
-    assert_eq!(events.len(), 2, "Expected deduplicated nearby + favorite events");
+    assert_eq!(
+        events.len(),
+        2,
+        "Expected deduplicated nearby + favorite events"
+    );
 
     let favorite_event_id = favorite_event.id.to_string();
     let nearby_event_id = nearby_event.id.to_string();
@@ -608,13 +616,19 @@ async fn test_fetch_users_favorite_mosques_events_includes_nearby_and_deduplicat
         .iter()
         .find(|event| event.event.id == favorite_event_id)
         .expect("Favorite event should be present");
-    assert!(favorite_personal_event.rsvp, "RSVP state should be preserved");
+    assert!(
+        favorite_personal_event.rsvp,
+        "RSVP state should be preserved"
+    );
 
     let nearby_personal_event = events
         .iter()
         .find(|event| event.event.id == nearby_event_id)
         .expect("Nearby event should be present");
-    assert!(!nearby_personal_event.rsvp, "Non-attending nearby event should have rsvp=false");
+    assert!(
+        !nearby_personal_event.rsvp,
+        "Non-attending nearby event should have rsvp=false"
+    );
 }
 
 #[tokio::test]
