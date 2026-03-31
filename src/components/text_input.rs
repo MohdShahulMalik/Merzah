@@ -19,7 +19,7 @@ pub fn TextInput(
                 placeholder = {placeholder}
                 node_ref = node_ref
                 required
-                class = "border-[0.125rem] border-stroke outline-none transition-all focus:border-indigo-300 focus:ring-4 focus:ring-indigo-400/20 rounded-2xl mt-1 mb-0.5 py-2 px-3 bg-surface-750"
+                class = "border-[0.125rem] border-stroke outline-none transition-all focus:border-indigo-300 focus:ring-4 focus:ring-indigo-400/20 rounded-2xl mt-1 mb-0.5 py-2 px-3 bg-surface-750 dark:text-gray-600"
             />
             <Show when = move || !error_signal.get().is_empty()>
                 <p class = "text-danger text-[.9rem]">{error_signal.get()}</p>

@@ -1,7 +1,7 @@
 #[cfg(feature = "ssr")]
 use anyhow::Result;
 #[cfg(feature = "ssr")]
-use surrealdb::{engine::remote::ws::Client, Surreal};
+use surrealdb::{Surreal, engine::remote::ws::Client};
 
 #[cfg(feature = "ssr")]
 pub async fn start_scheduler(db: Surreal<Client>) -> Result<()> {
@@ -18,7 +18,10 @@ pub async fn start_scheduler(db: Surreal<Client>) -> Result<()> {
         Box::pin(async move {
             match check_and_rotate_events(&db).await {
                 Ok(rotated_count) => {
-                    info!("Checked and rotated events, {} events rotated", rotated_count);
+                    info!(
+                        "Checked and rotated events, {} events rotated",
+                        rotated_count
+                    );
                 }
                 Err(e) => {
                     error!("Error rotating events: {:?}", e);
@@ -31,4 +34,4 @@ pub async fn start_scheduler(db: Surreal<Client>) -> Result<()> {
     scheduler.start().await?;
 
     Ok(())
-}  
+}

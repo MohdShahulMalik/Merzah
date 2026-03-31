@@ -1,5 +1,5 @@
 #[cfg(feature = "ssr")]
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 #[cfg(feature = "ssr")]
 use std::{env, fs};
 
@@ -37,8 +37,8 @@ struct IdRow {
 }
 
 #[cfg(feature = "ssr")]
-async fn import_tracks(base: &PathBuf) -> anyhow::Result<()> {
-    let mut path = base.clone();
+async fn import_tracks(base: &Path) -> anyhow::Result<()> {
+    let mut path: PathBuf = base.to_path_buf();
     path.push("tracks.json");
     if !path.exists() {
         anyhow::bail!("tracks.json not found at {}", path.display());
@@ -54,8 +54,8 @@ async fn import_tracks(base: &PathBuf) -> anyhow::Result<()> {
 }
 
 #[cfg(feature = "ssr")]
-async fn import_courses(base: &PathBuf) -> anyhow::Result<()> {
-    let mut dir = base.clone();
+async fn import_courses(base: &Path) -> anyhow::Result<()> {
+    let mut dir = base.to_path_buf();
     dir.push("courses");
     if !dir.exists() {
         anyhow::bail!("courses directory not found at {}", dir.display());
@@ -165,8 +165,8 @@ async fn import_courses(base: &PathBuf) -> anyhow::Result<()> {
 }
 
 #[cfg(feature = "ssr")]
-async fn import_roadmaps(base: &PathBuf) -> anyhow::Result<()> {
-    let mut dir = base.clone();
+async fn import_roadmaps(base: &Path) -> anyhow::Result<()> {
+    let mut dir = base.to_path_buf();
     dir.push("roadmaps");
     if !dir.exists() {
         anyhow::bail!("roadmaps directory not found at {}", dir.display());
@@ -192,10 +192,6 @@ async fn import_roadmaps(base: &PathBuf) -> anyhow::Result<()> {
             None
         };
 
-        let track_id = match track_id {
-            Some(id) => Some(id),
-            None => None,
-        };
         let created_by: RecordId = roadmap.created_by.parse()?;
         let status = roadmap.status.unwrap_or_else(|| "draft".to_string());
 
@@ -242,8 +238,8 @@ async fn import_roadmaps(base: &PathBuf) -> anyhow::Result<()> {
 }
 
 #[cfg(feature = "ssr")]
-async fn import_frameworks(base: &PathBuf) -> anyhow::Result<()> {
-    let mut dir = base.clone();
+async fn import_frameworks(base: &Path) -> anyhow::Result<()> {
+    let mut dir = base.to_path_buf();
     dir.push("frameworks");
     if !dir.exists() {
         anyhow::bail!("frameworks directory not found at {}", dir.display());
@@ -267,11 +263,6 @@ async fn import_frameworks(base: &PathBuf) -> anyhow::Result<()> {
             row.map(|row| row.id)
         } else {
             None
-        };
-
-        let track_id = match track_id {
-            Some(id) => Some(id),
-            None => None,
         };
 
         let created_by: RecordId = framework.created_by.parse()?;
