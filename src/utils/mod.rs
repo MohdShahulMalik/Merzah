@@ -1,6 +1,8 @@
-pub mod token_generator;
-#[cfg(feature="ssr")]
-pub mod user_elevation;
+#[cfg(feature = "ssr")]
+pub mod education_auth;
 pub mod parsing;
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 pub mod ssr;
+pub mod token_generator;
+#[cfg(feature = "ssr")]
+pub mod user_elevation;

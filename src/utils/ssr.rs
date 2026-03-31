@@ -1,4 +1,10 @@
+#[cfg(feature = "ssr")]
+use crate::auth::session::get_user_by_session;
 use crate::models::api_responses::ApiResponse;
+#[cfg(feature = "ssr")]
+use crate::models::user::User;
+#[cfg(feature = "ssr")]
+use actix_web::{http::StatusCode, web};
 #[cfg(feature = "ssr")]
 use leptos::prelude::use_context;
 #[cfg(feature = "ssr")]
@@ -6,13 +12,7 @@ use leptos_actix::ResponseOptions;
 #[cfg(feature = "ssr")]
 use surrealdb::{Surreal, engine::remote::ws::Client};
 #[cfg(feature = "ssr")]
-use actix_web::{web, http::StatusCode};
-#[cfg(feature = "ssr")]
 use tracing::error;
-#[cfg(feature = "ssr")]
-use crate::auth::session::get_user_by_session;
-#[cfg(feature = "ssr")]
-use crate::models::user::User;
 
 #[cfg(feature = "ssr")]
 pub async fn get_server_context<T>() -> Result<(ResponseOptions, Surreal<Client>), ApiResponse<T>> {
@@ -32,14 +32,15 @@ pub async fn get_server_context<T>() -> Result<(ResponseOptions, Surreal<Client>
             return Err(ApiResponse::error("Internal Server Error".to_string()));
         }
     };
-    
+
     Ok((response_options, db.get_ref().clone()))
 }
 
 #[cfg(feature = "ssr")]
-pub async fn get_authenticated_user<T>() -> Result<(ResponseOptions, Surreal<Client>, User), ApiResponse<T>> {
+pub async fn get_authenticated_user<T>()
+-> Result<(ResponseOptions, Surreal<Client>, User), ApiResponse<T>> {
     let (response_options, db) = get_server_context::<T>().await?;
-    
+
     let req = match leptos_actix::extract::<actix_web::HttpRequest>().await {
         Ok(req) => req,
         Err(e) => {
@@ -87,11 +88,19 @@ impl ServerResponse {
         Self { options }
     }
 
-    pub fn insert_header(&self, name: actix_web::http::header::HeaderName, value: actix_web::http::header::HeaderValue) {
+    pub fn insert_header(
+        &self,
+        name: actix_web::http::header::HeaderName,
+        value: actix_web::http::header::HeaderValue,
+    ) {
         self.options.insert_header(name, value);
     }
 
-    pub fn append_header(&self, name: actix_web::http::header::HeaderName, value: actix_web::http::header::HeaderValue) {
+    pub fn append_header(
+        &self,
+        name: actix_web::http::header::HeaderName,
+        value: actix_web::http::header::HeaderValue,
+    ) {
         self.options.append_header(name, value);
     }
 
@@ -149,7 +158,7 @@ impl ServerResponse {
         self.options.set_status(StatusCode::INTERNAL_SERVER_ERROR);
         ApiResponse::error(error)
     }
-    
+
     pub fn conflict<T>(&self, error: String) -> ApiResponse<T> {
         self.options.set_status(StatusCode::CONFLICT);
         ApiResponse::error(error)

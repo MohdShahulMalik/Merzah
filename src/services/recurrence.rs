@@ -7,7 +7,7 @@ use std::cmp::min;
 use crate::models::events::Event;
 use crate::models::events::EventRecurrence;
 #[cfg(feature = "ssr")]
-use surrealdb::{engine::remote::ws::Client, Surreal};
+use surrealdb::{Surreal, engine::remote::ws::Client};
 
 pub fn calculate_next_date(
     curr_date: DateTime<FixedOffset>,
@@ -112,8 +112,8 @@ fn days_in_month(year: i32, month: u32) -> u32 {
             } else {
                 28
             }
-        },
-        
+        }
+
         _ => 30,
     }
 }
@@ -160,10 +160,7 @@ pub async fn check_and_rotate_events(db: &Surreal<Client>) -> Result<usize, surr
         AND recurrence_pattern != NONE
     "#;
 
-    let events: Vec<Event> = db
-        .query(search_query)
-        .await?
-        .take(0)?;
+    let events: Vec<Event> = db.query(search_query).await?.take(0)?;
 
     let mut rotated_count = 0;
 

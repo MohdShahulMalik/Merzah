@@ -127,7 +127,7 @@ pub fn Register() -> impl IntoView {
     };
 
     view! {
-        <main class = "flex min-h-svh bg-surface-900 pl-24 max-[863px]:px-0 overflow-scroll max-[863px]:items-center max-[863px]:justify-center [@media(min-width:863px)_and_(max-width:1060px)]:pl-8 max-[863px]:py-6">
+        <main class = "flex h-svh bg-surface-900 pl-24 max-[863px]:px-0 overflow-scroll max-[863px]:items-center max-[863px]:justify-center [@media(min-width:863px)_and_(max-width:1060px)]:pl-8 max-[863px]:py-6 max-[600px]:px-0 max-[600px]:py-0">
             <section class = "content-center grid gap-16 max-[863px]:hidden">
 
                 <div class = "flex gap-2">
@@ -152,7 +152,7 @@ pub fn Register() -> impl IntoView {
 
             </section>
 
-            <section class = "bg-surface-700 fixed top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl right-[8rem] max-xl:right-[2rem] max-xl:w-[40%] text-foreground-900 [@media(min-width:1145px)_and_(max-width:1286px)]:right-[3rem] [@media(min-width:1145px)_and_(max-width:1286px)]:w-[35%] [@media(min-width:600px)_and_(max-width:767px)]:w-[70%] max-[768px]:w-[70%] max-[863px]:w-[65%] max-sm:w-[85%] max-[863px]:static max-[863px]:translate-y-0 max-sm:translate-x-0 [@media(min-width:900px)_and_(max-width:1000px)]:w-[45%] [@media(min-width:863px)_and_(max-width:900px)]:w-[50%] [@media(min-width:863px)_and_(max-width:897px)]:right-[1rem]">
+            <section class = "bg-surface-700 fixed top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl right-[8rem] max-xl:right-[2rem] max-xl:w-[40%] text-foreground-900 [@media(min-width:1145px)_and_(max-width:1286px)]:right-[3rem] [@media(min-width:1145px)_and_(max-width:1286px)]:w-[35%] [@media(min-width:600px)_and_(max-width:767px)]:w-[70%] max-[768px]:w-[70%] max-[863px]:w-[65%] max-sm:w-[85%] max-[863px]:static max-[863px]:translate-y-0 max-sm:translate-x-0 [@media(min-width:900px)_and_(max-width:1000px)]:w-[45%] [@media(min-width:863px)_and_(max-width:900px)]:w-[50%] [@media(min-width:863px)_and_(max-width:897px)]:right-[1rem] max-[600px]:w-full max-[600px]:h-full max-[600px]:rounded-none">
 
                 <div class = "gap-2 mb-4 hidden max-[863px]:flex">
                     <img class = "w-auto h-10 rounded-full" src = "/assets/logo.png" />
@@ -390,7 +390,7 @@ pub fn Login() -> impl IntoView {
     };
 
     view! {
-            <main class = "flex min-h-svh bg-surface-900 pl-24 max-[863px]:px-0 overflow-scroll max-[863px]:items-center max-[863px]:justify-center [@media(min-width:863px)_and_(max-width:1060px)]:pl-8 max-[863px]:py-6">
+            <main class = "flex h-svh bg-surface-900 pl-24 max-[863px]:px-0 overflow-scroll max-[863px]:items-center max-[863px]:justify-center [@media(min-width:863px)_and_(max-width:1060px)]:pl-8 max-[863px]:py-6 max-[600px]:px-0 max-[600px]:py-0">
                 <section class = "content-center grid gap-16 max-[863px]:hidden">
 
                     <div class = "flex gap-2">
@@ -414,8 +414,8 @@ pub fn Login() -> impl IntoView {
                     </div>
 
                 </section>
-    //
-                <section class = "bg-surface-700 fixed top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl right-[8rem] max-xl:right-[2rem] max-xl:w-[40%] text-foreground-900 [@media(min-width:1145px)_and_(max-width:1286px)]:right-[3rem] [@media(min-width:1145px)_and_(max-width:1286px)]:w-[35%] [@media(min-width:600px)_and_(max-width:767px)]:w-[70%] max-[768px]:w-[70%] max-[863px]:w-[65%] max-sm:w-[85%] max-[863px]:static max-[863px]:translate-y-0 max-sm:translate-x-0 [@media(min-width:900px)_and_(max-width:1000px)]:w-[45%] [@media(min-width:863px)_and_(max-width:900px)]:w-[50%]">
+
+                <section class = "bg-surface-700 fixed top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl right-[8rem] max-xl:right-[2rem] max-xl:w-[40%] text-foreground-900 [@media(min-width:1145px)_and_(max-width:1286px)]:right-[3rem] [@media(min-width:1145px)_and_(max-width:1286px)]:w-[35%] [@media(min-width:600px)_and_(max-width:767px)]:w-[70%] max-[768px]:w-[70%] max-[863px]:w-[65%] max-sm:w-[85%] max-[863px]:static max-[863px]:translate-y-0 max-sm:translate-x-0 [@media(min-width:900px)_and_(max-width:1000px)]:w-[45%] [@media(min-width:863px)_and_(max-width:900px)]:w-[50%] max-[600px]:w-full max-[600px]:h-full max-[600px]:rounded-none max-[600px]:grid max-[600px]:place-items-center">
 
                     <div class = "gap-2 mb-4 hidden max-[863px]:flex">
                         <img class = "w-auto h-10 rounded-full" src = "/assets/logo.png" />

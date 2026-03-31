@@ -14,9 +14,15 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         ev.prevent_default();
 
-        let south_value = south_input.get().expect("<input> should be mounted").value();
+        let south_value = south_input
+            .get()
+            .expect("<input> should be mounted")
+            .value();
         let west_value = west_input.get().expect("<input> should be mounted").value();
-        let north_value = north_input.get().expect("<input> should be mounted").value();
+        let north_value = north_input
+            .get()
+            .expect("<input> should be mounted")
+            .value();
         let east_value = east_input.get().expect("<input> should be mounted").value();
 
         let south = match south_value.parse::<f64>() {
@@ -47,7 +53,7 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                 return;
             }
         };
-        
+
         set_error.set("".to_string());
 
         spawn_local(async move {
@@ -63,7 +69,7 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                         set_error.set("Received an empty response from server.".to_string());
                         set_success.set("".to_string());
                     }
-                },
+                }
                 Err(e) => {
                     set_error.set(format!("Function Error: {}", e));
                     set_success.set("".to_string());
