@@ -1,8 +1,8 @@
 use dotenvy::dotenv;
 use std::env;
+use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::{Client, Ws};
 use surrealdb::opt::auth::Root;
-use surrealdb::Surreal;
 
 pub async fn init_db() -> Surreal<Client> {
     dotenv().ok();
@@ -30,8 +30,6 @@ pub async fn init_db() -> Surreal<Client> {
         .use_db(&db_name)
         .await
         .expect("Failed to use namespace or database");
-    
+
     db
 }
-
-

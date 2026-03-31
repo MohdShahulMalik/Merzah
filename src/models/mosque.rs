@@ -1,10 +1,10 @@
+use chrono::NaiveTime;
 use serde::Deserialize;
 use serde::Serialize;
 #[cfg(feature = "ssr")]
 use surrealdb::RecordId;
 #[cfg(feature = "ssr")]
 use surrealdb::sql::Geometry;
-use chrono::NaiveTime;
 
 #[cfg(feature = "ssr")]
 use crate::models::api_responses::MosqueResponse;
@@ -36,7 +36,7 @@ pub struct MosqueSearchResult {
     pub muazzin: Option<User>,
 }
 
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize)]
 pub struct MosqueRecord {
     pub id: RecordId,
@@ -77,12 +77,12 @@ impl MosqueSearchResult {
         let imam = self.imam.map(|imam| imam.into());
         let muazzin = self.muazzin.map(|muazzin| muazzin.into());
 
-        MosqueResponse { 
+        MosqueResponse {
             id: self.id.to_string(),
-            location: self.location, 
-            name: self.name, 
-            street: self.street, 
-            city: self.city, 
+            location: self.location,
+            name: self.name,
+            street: self.street,
+            city: self.city,
             adhan_times: self.adhan_times,
             jamat_times: self.jamat_times,
             imam_contact: vec![],
@@ -142,7 +142,7 @@ pub struct PrayerTimesUpdate {
     pub jamat_times: Option<PrayerTimes>,
 }
 
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize)]
 pub struct MosqueData {
     pub id: String,

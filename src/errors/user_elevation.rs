@@ -1,7 +1,7 @@
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 use thiserror::Error;
 
-#[cfg(feature="ssr")]
+#[cfg(feature = "ssr")]
 #[derive(Debug, Error)]
 pub enum UserElevationError {
     #[error("Database operation failed")]
@@ -18,7 +18,7 @@ pub enum UserElevationError {
 
     #[error("The user is already an {0}")]
     AlreadyElevated(String),
-    
+
     #[error("Cannot elevate self")]
     SelfElevationNotAllowed,
 }

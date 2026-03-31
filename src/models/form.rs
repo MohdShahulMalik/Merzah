@@ -95,7 +95,7 @@ pub struct InputConfig {
 
     // Select/Radio Options
     pub options: Option<Vec<SelectOption>>,
-    
+
     // Checkbox
     pub checked: bool,
 
@@ -163,7 +163,7 @@ impl InputConfig {
     }
 
     pub fn time(name: impl Into<String>, label: impl Into<String>) -> Self {
-                Self {
+        Self {
             name: name.into(),
             label: label.into(),
             input_type: InputType::Time,
@@ -172,7 +172,7 @@ impl InputConfig {
     }
 
     pub fn checkbox(name: impl Into<String>, label: impl Into<String>) -> Self {
-                Self {
+        Self {
             name: name.into(),
             label: label.into(),
             input_type: InputType::Checkbox,
@@ -181,7 +181,7 @@ impl InputConfig {
     }
 
     pub fn radio(name: impl Into<String>, label: impl Into<String>) -> Self {
-                Self {
+        Self {
             name: name.into(),
             label: label.into(),
             input_type: InputType::Radio,
@@ -190,7 +190,7 @@ impl InputConfig {
     }
 
     pub fn textarea(name: impl Into<String>, label: impl Into<String>) -> Self {
-                Self {
+        Self {
             name: name.into(),
             label: label.into(),
             input_type: InputType::Textarea,
@@ -296,5 +296,4 @@ impl InputConfig {
     pub fn get_id(&self) -> &str {
         self.id.as_deref().unwrap_or(&self.name)
     }
-
 }
