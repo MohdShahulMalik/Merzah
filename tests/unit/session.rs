@@ -1,8 +1,8 @@
 use crate::common::get_test_db;
 use merzah::auth::custom_auth::register_user;
 use merzah::auth::session::{create_session, delete_session, get_user_by_session};
-use merzah::models::{auth::RegistrationFormData, user::Identifier};
 use merzah::models::auth::Platform;
+use merzah::models::{auth::RegistrationFormData, user::Identifier};
 
 #[tokio::test]
 async fn test_delete_session_success() -> anyhow::Result<()> {
@@ -46,10 +46,10 @@ async fn test_delete_session_invalid_token_format() -> anyhow::Result<()> {
 async fn test_delete_non_existent_session_token_should_be_successful() -> anyhow::Result<()> {
     let db = get_test_db().await;
     // A valid formatted token (40-50 chars, alphanumeric/dash/underscore) that doesn't exist
-    let fake_token = "a".repeat(45); 
-    
+    let fake_token = "a".repeat(45);
+
     let result = delete_session(&fake_token, &db).await;
     assert!(result.is_err());
-    
+
     Ok(())
 }

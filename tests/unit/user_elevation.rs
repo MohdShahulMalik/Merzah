@@ -1,43 +1,42 @@
 use crate::common::get_test_db;
+use merzah::auth::custom_auth::register_user;
 use merzah::{
     models::{
-        auth::{RegistrationFormData, Platform},
+        auth::{Platform, RegistrationFormData},
         user::{Identifier, User},
     },
     utils::user_elevation::elevate_user,
 };
-use surrealdb::{engine::remote::ws::Client, Surreal};
-use merzah::auth::custom_auth::register_user;
-use serde::Serialize;
 use rstest::rstest;
+use serde::Serialize;
+use surrealdb::{Surreal, engine::remote::ws::Client};
 
 #[derive(Serialize)]
 struct Role {
     role: String,
 }
 
-async fn create_user(
-    db: &Surreal<Client>,
-    name: &str,
-    email: &str,
-    role: Option<&str>,
-) -> User {
+async fn create_user(db: &Surreal<Client>, name: &str, email: &str, role: Option<&str>) -> User {
     // Generate unique email to avoid collision in parallel tests if any
     let unique_email = format!("{}_{}", uuid::Uuid::new_v4(), email);
-    
+
     let form = RegistrationFormData::new(
         name.to_string(),
         Identifier::Email(unique_email),
         "password".to_string(),
         Platform::Web,
     );
-    let user_id = register_user(form, db).await.expect("Failed to register user");
+    let user_id = register_user(form, db)
+        .await
+        .expect("Failed to register user");
 
     if let Some(r) = role {
         // Manually update role for setup
         let _: Option<User> = db
             .update(user_id.clone())
-            .merge(Role { role: r.to_string() })
+            .merge(Role {
+                role: r.to_string(),
+            })
             .await
             .expect("Failed to set role");
     }
@@ -47,8 +46,20 @@ async fn create_user(
 
 #[rstest]
 #[case::success("app_admin", "regular", "mosque_supervisor", true, None)]
-#[case::unauthorized_requester("regular", "regular", "mosque_supervisor", false, Some("The user attempting the elevation is not authorized to elevate"))]
-#[case::already_elevated("app_admin", "mosque_supervisor", "mosque_supervisor", false, Some("The user is already an mosque supervisor"))]
+#[case::unauthorized_requester(
+    "regular",
+    "regular",
+    "mosque_supervisor",
+    false,
+    Some("The user attempting the elevation is not authorized to elevate")
+)]
+#[case::already_elevated(
+    "app_admin",
+    "mosque_supervisor",
+    "mosque_supervisor",
+    false,
+    Some("The user is already an mosque supervisor")
+)]
 #[tokio::test]
 async fn test_elevate_user(
     #[case] admin_role: &str,
@@ -59,7 +70,13 @@ async fn test_elevate_user(
 ) {
     let db = get_test_db().await;
     let admin = create_user(&db, "Admin", "admin@test.com", Some(admin_role)).await;
-    let target_user = create_user(&db, "Target", "target@test.com", Some(target_user_initial_role)).await;
+    let target_user = create_user(
+        &db,
+        "Target",
+        "target@test.com",
+        Some(target_user_initial_role),
+    )
+    .await;
 
     let result = elevate_user(
         admin.id.clone(),
@@ -70,8 +87,15 @@ async fn test_elevate_user(
     .await;
 
     if should_succeed {
-        assert!(result.is_ok(), "Elevation should have succeeded but failed with: {:?}", result.err());
-        assert_eq!(result.unwrap(), format!("Elevated the user to {}", elevation_degree));
+        assert!(
+            result.is_ok(),
+            "Elevation should have succeeded but failed with: {:?}",
+            result.err()
+        );
+        assert_eq!(
+            result.unwrap(),
+            format!("Elevated the user to {}", elevation_degree)
+        );
 
         // Verify DB update
         let updated_user: User = db.select(target_user.id).await.unwrap().unwrap();
@@ -106,7 +130,11 @@ async fn test_elevate_user_target_not_found() {
 
     assert!(result.is_err());
     let err = result.unwrap_err();
-    assert!(err.to_string().contains("The user to be elevated was not found") || err.to_string().contains("TargetUserNotFound"));
+    assert!(
+        err.to_string()
+            .contains("The user to be elevated was not found")
+            || err.to_string().contains("TargetUserNotFound")
+    );
 }
 
 #[tokio::test]
@@ -125,5 +153,9 @@ async fn test_elevate_user_admin_not_found() {
 
     assert!(result.is_err());
     let err = result.unwrap_err();
-    assert!(err.to_string().contains("The admin that's elevating the user was not found") || err.to_string().contains("AdminNotFound"));
+    assert!(
+        err.to_string()
+            .contains("The admin that's elevating the user was not found")
+            || err.to_string().contains("AdminNotFound")
+    );
 }

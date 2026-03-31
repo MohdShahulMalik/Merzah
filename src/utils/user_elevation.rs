@@ -1,15 +1,19 @@
-use surrealdb::{engine::remote::ws::Client, RecordId, Surreal};
+use surrealdb::{RecordId, Surreal, engine::remote::ws::Client};
 
-use crate::{errors::user_elevation::UserElevationError, models::user::{UpdateUser, User}, models::mosque::MosqueRecord};
+use crate::{
+    errors::user_elevation::UserElevationError,
+    models::mosque::MosqueRecord,
+    models::user::{UpdateUser, User},
+};
 
 pub async fn elevate_user(
     app_admin: RecordId,
     user_being_elevated_id: RecordId,
     elevation_degree: String,
-    db: &Surreal<Client>
+    db: &Surreal<Client>,
 ) -> Result<String, UserElevationError> {
-
-    let admin_check: Option<User> = db.select(app_admin)
+    let admin_check: Option<User> = db
+        .select(app_admin)
         .await
         .map_err(UserElevationError::DatabaseError)?;
 
@@ -18,12 +22,13 @@ pub async fn elevate_user(
             if !admin.is_app_admin() {
                 Err(UserElevationError::Unauthorized)?;
             }
-        },
+        }
         None => Err(UserElevationError::AdminNotFound)?,
     }
 
     // 3. Fetch the target user
-    let check_user_being_elevated: Option<User> = db.select(user_being_elevated_id)
+    let check_user_being_elevated: Option<User> = db
+        .select(user_being_elevated_id)
         .await
         .map_err(UserElevationError::DatabaseError)?;
 
@@ -33,16 +38,18 @@ pub async fn elevate_user(
     };
 
     if user_being_elevated.is_mosque_supervisor() {
-        Err(UserElevationError::AlreadyElevated("mosque supervisor".to_string()))?
+        Err(UserElevationError::AlreadyElevated(
+            "mosque supervisor".to_string(),
+        ))?
     }
 
     user_being_elevated.elevate_to(elevation_degree.clone());
 
     db.update::<Option<User>>(user_being_elevated.id.clone()) // Clone ID so struct isn't partially moved
-        .merge::<UpdateUser>(user_being_elevated.into())      // Move the struct
+        .merge::<UpdateUser>(user_being_elevated.into()) // Move the struct
         .await
         .map_err(UserElevationError::DatabaseError)?;
-    
+
     Ok(format!("Elevated the user to {elevation_degree}"))
 }
 
@@ -52,7 +59,8 @@ pub async fn is_mosque_admin(
     db: &Surreal<Client>,
 ) -> Result<(), UserElevationError> {
     let is_admin_query = r#"SELECT * FROM $mosque_admin->handles->mosques WHERE id = $mosque_id"#;
-    let mut query_result = db.query(is_admin_query)
+    let mut query_result = db
+        .query(is_admin_query)
         .bind(("mosque_admin", admin_user_id.clone()))
         .bind(("mosque_id", mosque_id.clone()))
         .await
