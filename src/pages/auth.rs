@@ -127,7 +127,7 @@ pub fn Register() -> impl IntoView {
     };
 
     view! {
-        <main class = "flex h-svh bg-surface-900 pl-24 max-[863px]:px-0 overflow-scroll max-[863px]:items-center max-[863px]:justify-center [@media(min-width:863px)_and_(max-width:1060px)]:pl-8 max-[863px]:py-6 max-[600px]:px-0 max-[600px]:py-0">
+        <main class = "flex min-h-svh bg-surface-900 pl-24 max-[863px]:px-0 overflow-scroll max-[863px]:items-center max-[863px]:justify-center [@media(min-width:863px)_and_(max-width:1060px)]:pl-8 max-[863px]:py-6 max-[600px]:px-0 max-[600px]:py-0">
             <section class = "content-center grid gap-16 max-[863px]:hidden">
 
                 <div class = "flex gap-2">
@@ -152,9 +152,9 @@ pub fn Register() -> impl IntoView {
 
             </section>
 
-            <section class = "bg-surface-700 fixed top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl right-[8rem] max-xl:right-[2rem] max-xl:w-[40%] text-foreground-900 [@media(min-width:1145px)_and_(max-width:1286px)]:right-[3rem] [@media(min-width:1145px)_and_(max-width:1286px)]:w-[35%] [@media(min-width:600px)_and_(max-width:767px)]:w-[70%] max-[768px]:w-[70%] max-[863px]:w-[65%] max-sm:w-[85%] max-[863px]:static max-[863px]:translate-y-0 max-sm:translate-x-0 [@media(min-width:900px)_and_(max-width:1000px)]:w-[45%] [@media(min-width:863px)_and_(max-width:900px)]:w-[50%] [@media(min-width:863px)_and_(max-width:897px)]:right-[1rem] max-[600px]:w-full max-[600px]:h-full max-[600px]:rounded-none">
+            <section class = "bg-surface-700 fixed top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl right-[8rem] max-xl:right-[2rem] max-xl:w-[40%] text-foreground-900 [@media(min-width:1145px)_and_(max-width:1286px)]:right-[3rem] [@media(min-width:1145px)_and_(max-width:1286px)]:w-[35%] [@media(min-width:600px)_and_(max-width:767px)]:w-[70%] max-[768px]:w-[70%] max-[863px]:w-[65%] max-sm:w-[85%] max-[863px]:static max-[863px]:translate-y-0 max-sm:translate-x-0 [@media(min-width:900px)_and_(max-width:1000px)]:w-[45%] [@media(min-width:863px)_and_(max-width:900px)]:w-[50%] [@media(min-width:863px)_and_(max-width:897px)]:right-[1rem] max-[600px]:w-full max-[600px]:min-h-svh max-[600px]:h-auto max-[600px]:rounded-none max-[600px]:grid max-[600px]:place-items-center">
 
-                <div class = "gap-2 mb-4 hidden max-[863px]:flex">
+                <div class = "gap-2 mb-4 hidden max-[863px]:flex w-full">
                     <img class = "w-auto h-10 rounded-full" src = "/assets/logo.png" />
 
                     <div class = "w-full">
@@ -164,7 +164,7 @@ pub fn Register() -> impl IntoView {
 
                 </div>
 
-                <form on:submit = on_submit class = "grid gap-3 mb-2">
+                <form on:submit = on_submit class = "grid gap-3 mb-2 w-full">
                     <div>
                         <h1 class = "text-2xl font-bold">Register</h1>
                         <h2 class = "text-foreground-400">Sign up to get started</h2>
@@ -207,13 +207,13 @@ pub fn Register() -> impl IntoView {
 
                 </form>
 
-                <div class="flex items-center gap-4 my-4">
+                <div class="flex items-center gap-4 my-4 w-full">
                     <div class="flex-1 h-px bg-gray-300"></div>
                     <span class="text-[.8rem] text-foreground-600">Or continue with</span>
                     <div class="flex-1 h-px bg-gray-300"></div>
                 </div>
 
-                <div class="flex gap-2 mb-6">
+                <div class="flex gap-2 mb-6 w-full">
                     <button
                         on:click = start_google_login
                         class = "flex-1 flex items-center justify-center gap-2 bg-white text-gray-700 font-semibold py-2 px-2 rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors"
@@ -258,7 +258,7 @@ pub fn Register() -> impl IntoView {
                 </Show>
 
                 <p class = "text-[0.90rem] text-foreground-600 text-center mb-2">"Already have an account?"</p>
-                <A href = "/login">
+                <A href = "/login" attr:class="w-full">
                     <button
                     class = "bg-transparent w-[100%] border-indigo-400 border-2 hover:bg-indigo-300/30 transition-colors duration-300 cursor-pointer font-bold text-indigo-400 py-2 rounded-2xl"
                     type = "submit">Login
@@ -390,7 +390,7 @@ pub fn Login() -> impl IntoView {
     };
 
     view! {
-            <main class = "flex h-svh bg-surface-900 pl-24 max-[863px]:px-0 overflow-scroll max-[863px]:items-center max-[863px]:justify-center [@media(min-width:863px)_and_(max-width:1060px)]:pl-8 max-[863px]:py-6 max-[600px]:px-0 max-[600px]:py-0">
+            <main class = "flex min-h-svh bg-surface-900 pl-24 max-[863px]:px-0 overflow-scroll max-[863px]:items-center max-[863px]:justify-center [@media(min-width:863px)_and_(max-width:1060px)]:pl-8 max-[863px]:py-6 max-[600px]:px-0 max-[600px]:py-0">
                 <section class = "content-center grid gap-16 max-[863px]:hidden">
 
                     <div class = "flex gap-2">
@@ -415,9 +415,9 @@ pub fn Login() -> impl IntoView {
 
                 </section>
 
-                <section class = "bg-surface-700 fixed top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl right-[8rem] max-xl:right-[2rem] max-xl:w-[40%] text-foreground-900 [@media(min-width:1145px)_and_(max-width:1286px)]:right-[3rem] [@media(min-width:1145px)_and_(max-width:1286px)]:w-[35%] [@media(min-width:600px)_and_(max-width:767px)]:w-[70%] max-[768px]:w-[70%] max-[863px]:w-[65%] max-sm:w-[85%] max-[863px]:static max-[863px]:translate-y-0 max-sm:translate-x-0 [@media(min-width:900px)_and_(max-width:1000px)]:w-[45%] [@media(min-width:863px)_and_(max-width:900px)]:w-[50%] max-[600px]:w-full max-[600px]:h-full max-[600px]:rounded-none max-[600px]:grid max-[600px]:place-items-center">
+                <section class = "bg-surface-700 fixed top-[50%] -translate-y-1/2 w-[30%] px-10 py-8 rounded-3xl right-[8rem] max-xl:right-[2rem] max-xl:w-[40%] text-foreground-900 [@media(min-width:1145px)_and_(max-width:1286px)]:right-[3rem] [@media(min-width:1145px)_and_(max-width:1286px)]:w-[35%] [@media(min-width:600px)_and_(max-width:767px)]:w-[70%] max-[768px]:w-[70%] max-[863px]:w-[65%] max-sm:w-[85%] max-[863px]:static max-[863px]:translate-y-0 max-sm:translate-x-0 [@media(min-width:900px)_and_(max-width:1000px)]:w-[45%] [@media(min-width:863px)_and_(max-width:900px)]:w-[50%] max-[600px]:w-full max-[600px]:min-h-svh max-[600px]:h-auto max-[600px]:rounded-none max-[600px]:grid max-[600px]:place-items-center">
 
-                    <div class = "gap-2 mb-4 hidden max-[863px]:flex">
+                    <div class = "gap-2 mb-4 hidden max-[863px]:flex w-full">
                         <img class = "w-auto h-10 rounded-full" src = "/assets/logo.png" />
 
                         <div class = "w-full">
@@ -427,7 +427,7 @@ pub fn Login() -> impl IntoView {
 
                     </div>
 
-                    <form on:submit = on_submit class = "grid gap-4 mb-3">
+                    <form on:submit = on_submit class = "grid gap-4 mb-3 w-full">
                         <div>
                             <h1 class = "text-2xl font-bold">"Login"</h1>
                             <h2 class = "text-foreground-400">"Welcome back. please enter your details."</h2>
@@ -466,13 +466,13 @@ pub fn Login() -> impl IntoView {
 
                     </form>
 
-                    <div class="flex items-center gap-4 mb-6 mt-6">
+                    <div class="flex items-center gap-4 mb-6 mt-6 w-full">
                         <div class="flex-1 h-px bg-gray-300"></div>
                         <span class="text-[.8rem] text-foreground-600">Or continue with</span>
                         <div class="flex-1 h-px bg-gray-300"></div>
                     </div>
 
-                    <div class="flex gap-2 mb-8">
+                    <div class="flex gap-2 mb-8 w-full max-[600px]:mb-0">
                         <button
                             on:click = start_google_login
                             class = "flex-1 flex items-center justify-center gap-2 bg-white text-gray-700 font-semibold py-2 px-2 rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors"
@@ -516,13 +516,15 @@ pub fn Login() -> impl IntoView {
                         <p>{success.get()}</p>
                     </Show>
 
-                    <p class = "text-[0.90rem] text-foreground-600 text-center mb-2">"Don't have an account?"</p>
-                    <A href = "/register">
-                        <button
-                        class = "bg-transparent w-[100%] border-indigo-400 border-2 hover:bg-indigo-300/30 transition-colors duration-300 cursor-pointer font-bold text-indigo-400 py-2 rounded-2xl"
-                        type = "submit">Register
-                        </button>
-                    </A>
+                    <div class = "max-[600px]:mb-10 max-[600px]:w-full">
+                        <p class = "text-[0.90rem] text-foreground-600 text-center mb-2">"Don't have an account?"</p>
+                        <A href = "/register" attr:class="w-full">
+                            <button
+                            class = "bg-transparent w-[100%] border-indigo-400 border-2 hover:bg-indigo-300/30 transition-colors duration-300 cursor-pointer font-bold text-indigo-400 py-2 rounded-2xl"
+                            type = "submit">Register
+                            </button>
+                        </A>
+                    </div>
 
                 </section>
 
