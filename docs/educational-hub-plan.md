@@ -44,34 +44,34 @@ Track → Course → Module → Lesson
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           CONTENT HIERARCHY                              │
+│                           CONTENT HIERARCHY                             │ 
 ├─────────────────────────────────────────────────────────────────────────┤
-│  Track ──has──> Course ──contains──> Module ──contains──> Lesson       │
+│  Track ──has──> Course ──contains──> Module ──contains──> Lesson        │
 │    │                │                      │                   │        │
 │    v                v                      v                   v        │
 │  4 tracks      Many courses          3-8 modules         5-20 lessons   │
 │  (fixed)       per track             per course          per module     │
 ├─────────────────────────────────────────────────────────────────────────┤
-│                         USER PROGRESS                                    │
+│                         USER PROGRESS                                   │ 
 ├─────────────────────────────────────────────────────────────────────────┤
 │  User ──enrolled──> Course          User ──completed──> Lesson          │
-│         (edge)                              (edge)                       │
+│         (edge)                              (edge)                      │ 
 ├─────────────────────────────────────────────────────────────────────────┤
-│                       GAMIFICATION & QUIZZES                             │
+│                       GAMIFICATION & QUIZZES                            │
 ├─────────────────────────────────────────────────────────────────────────┤
 │  Quiz ──has──> Question ──answered_by──> QuizAttempt                    │
 │  User ──has_streak──> UserStreak                                        │
 │  User ──earned──> Achievement (edge)                                    │
 │  Course ──awards──> Certificate ──earned_by──> User                     │
 ├─────────────────────────────────────────────────────────────────────────┤
-│                      ROADMAPS & FRAMEWORKS                               │
+│                      ROADMAPS & FRAMEWORKS                              │ 
 ├─────────────────────────────────────────────────────────────────────────┤
 │  Roadmap ──includes──> Course (ordered, optional/required)              │
-│     │                                                                    │
+│     │                                                                   │ 
 │     └──> image_url (visual representation)                              │
-│                                                                          │
+│                                                                         │ 
 │  Framework ──has──> Milestone ──contains──> Course/Resource             │
-│       │                                                                  │
+│       │                                                                 │ 
 │       └──> image_url (diagram/visualization)                            │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
