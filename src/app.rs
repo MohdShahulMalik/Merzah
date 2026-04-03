@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{logging, prelude::*};
 use leptos_meta::{Script, Stylesheet, Title, provide_meta_context};
 use leptos_router::{
     WildcardSegment,
@@ -8,7 +8,7 @@ use leptos_router::{
 use reactive_stores::Store;
 
 use crate::{
-    models::user::UserOnClient,
+    models::{api_responses::ApiResponse, user::UserOnClient},
     pages::{
         add_mosques_of_region::AddMosquesOfRegion,
         auth::{Login, Register},
@@ -20,17 +20,38 @@ use crate::{
         learn::Learn,
         microsoft_callback::MicrosoftCallback,
     },
+    server_functions::auth::fetch_me,
 };
 
 #[derive(Clone, Debug, Store)]
-struct AppState {
-    user: UserOnClient,
+pub struct AppState {
+    user: Option<UserOnClient>,
 }
 
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
+    let app_state = Store::new(AppState { user: None });
+    let auth_user = OnceResource::new(async { fetch_me().await });
+
+    provide_context(app_state);
+
+    Effect::new(move |_| {
+        auth_user.map(|auth_user_response_result| match auth_user_response_result {
+            Ok(auth_user_response) => {
+                let auth_error = auth_user_response.error.clone();
+                app_state.user().set(auth_user_response.data.clone());
+
+                if let Some(error) = auth_error {
+                    logging::log!("No authenticated user found. error: {:?}", error);
+                }
+            }
+            Err(error) => {
+                logging::log!("Error fetching user data: {:?}", error);
+            }
+        });
+    });
 
     view! {
         <Script src="https://cdn.tailwindcss.com"/>

@@ -1,17 +1,23 @@
 use leptos::prelude::*;
 
 #[component]
-pub fn prayer_time_card(
+pub fn PrayerCard(
     prayer_name: String,
     jamat_time: String,
     adhan_time: String,
 ) -> impl IntoView {
     view! {
-        <div>
+        <div class = "bg-white">
             <p>{prayer_name}</p>
-            <div>
-                <span>"Iqamah Time: "{jamat_time}</span>
-                <span>"Adhan Time: "{adhan_time}</span>
+            <div class = "flex justify-between">
+                <div class = "grid">
+                    <span>{jamat_time}</span>
+                    <span>Iqamah</span>
+                </div>
+                <div class = "grid">
+                    <span>{adhan_time}</span>
+                    <span>Adhan</span>
+                </div>
             </div>
         </div>
     }
