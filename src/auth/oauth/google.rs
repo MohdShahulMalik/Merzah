@@ -87,7 +87,7 @@ pub async fn find_or_create_user(
     db: &Surreal<Client>,
 ) -> OAuthResult<RecordId> {
     let existing: Option<UserIdentifier> = db
-        .query("SELECT user FROM user_identifier WHERE identifier_type = 'google' AND identifier_value = $id")
+        .query("SELECT * FROM user_identifier WHERE identifier_type = 'google' AND identifier_value = $id")
         .bind(("id", profile.id.clone()))
         .await?
         .take(0)?;

@@ -97,7 +97,7 @@ pub trait OAuthProvider: Send + Sync {
         let identifier_type = self.identifier_type().to_string();
 
         let existing: Option<UserIdentifier> = db
-            .query("SELECT user FROM user_identifier WHERE identifier_type = $id_type AND identifier_value = $id")
+            .query("SELECT * FROM user_identifier WHERE identifier_type = $id_type AND identifier_value = $id")
             .bind(("id_type", identifier_type.clone()))
             .bind(("id", profile.id.clone()))
             .await?
