@@ -28,7 +28,7 @@ pub fn GoogleCallback() -> impl IntoView {
                     } else {
                         set_success.set(true);
                         // TODO: Use better approach to redirect after successful authentication if possible.
-                        let _ = window().location().set_href("/dashboard");
+                        let _ = window().location().set_href("/home");
                     }
                 }
                 Err(e) => {

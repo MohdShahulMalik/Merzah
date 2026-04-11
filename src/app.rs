@@ -71,7 +71,7 @@ pub fn App() -> impl IntoView {
             <main>
                 <Routes fallback=move || "Not found.">
                     <ParentRoute path=path!("/") view=AppLayout>
-                        <Route path=path!("") view=Home/>
+                        <Route path=path!("home") view=Home/>
                         <Route path=path!("events") view=Events/>
                         <Route path=path!("learn") view=Learn/>
                     </ParentRoute>

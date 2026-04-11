@@ -27,7 +27,7 @@ pub fn DiscordCallback() -> impl IntoView {
                         set_error.set(err_msg);
                     } else {
                         set_success.set(true);
-                        let _ = window().location().set_href("/dashboard");
+                        let _ = window().location().set_href("/home");
                     }
                 }
                 Err(e) => {
