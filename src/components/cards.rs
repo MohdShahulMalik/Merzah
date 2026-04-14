@@ -70,7 +70,7 @@ pub fn mosque_events_card(
         <div>
             <div class = "flex justify-between">
                 <h1>{event_title}</h1>
-                <h2>{event_type}</h2>
+                <h2>{highlighted_text(event_type)}</h2>
             </div>
             <div class = "grid">
                 <span>{mosque_name}" • "{event_time}</span>
