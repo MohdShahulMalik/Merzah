@@ -1,5 +1,5 @@
 use leptos::IntoView;
-use crate::components::cards::PrayerCard;
+use crate::components::cards::{NextPrayerReminderCard, PrayerCard};
 use leptos::prelude::*;
 
 #[component]
@@ -8,7 +8,17 @@ pub fn Home() -> impl IntoView {
     let (is_not_current, _) = signal(false);
 
     view! {
-        <div>
+        <div class="space-y-8">
+            <NextPrayerReminderCard
+                location="Brooklyn, NY".to_string()
+                mosque_name="Masjid Al-Farooq".to_string()
+                prayer_name="Maghrib".to_string()
+                iqamah_time="7:48 PM".to_string()
+                hours_remaining="02".to_string()
+                minutes_remaining="29".to_string()
+                seconds_remaining="23".to_string()
+            />
+
             <div class="flex flex-wrap gap-4">
                 <PrayerCard
                     prayer_name="Fajr".to_string()

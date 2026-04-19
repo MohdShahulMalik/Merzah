@@ -38,6 +38,75 @@ pub fn PrayerCard(
 }
 
 #[component]
+pub fn NextPrayerReminderCard(
+    location: String,
+    mosque_name: String,
+    prayer_name: String,
+    iqamah_time: String,
+    hours_remaining: String,
+    minutes_remaining: String,
+    seconds_remaining: String,
+) -> impl IntoView {
+    view! {
+        <section class="relative overflow-hidden rounded-[2rem] border border-violet-900/20 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.16),_transparent_28%),linear-gradient(135deg,_#23104a_0%,_#31105d_48%,_#24103f_100%)] px-6 py-7 text-white shadow-[0_1.5rem_4rem_rgba(37,16,79,0.22)] md:px-10 md:py-9">
+            <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(180deg,transparent_0%,rgba(162,132,230,0.12)_100%)]"></div>
+            <div class="pointer-events-none absolute -left-12 top-10 h-36 w-36 rounded-full bg-amber-300/10 blur-3xl"></div>
+            <div class="pointer-events-none absolute right-0 top-0 h-full w-full bg-[radial-gradient(circle_at_85%_25%,rgba(255,219,137,0.12),transparent_18%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.12),transparent_14%)]"></div>
+
+            <div class="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+                <div class="max-w-2xl">
+                    <div class="mb-6 flex items-center gap-3 text-violet-100/85">
+                        <div class="grid h-12 w-12 place-items-center rounded-2xl border border-amber-200/20 bg-white/10 text-2xl shadow-[0_0.5rem_1.25rem_rgba(10,4,24,0.18)]">
+                            "☾"
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-violet-100/70">
+                                "Next Prayer"
+                            </p>
+                            <p class="text-sm text-violet-100/80">{location}</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="inline-flex items-center rounded-full border border-white/12 bg-white/10 px-4 py-2 text-sm font-medium text-violet-50 shadow-[0_0.5rem_1rem_rgba(11,6,27,0.18)]">
+                            {mosque_name}
+                        </div>
+                        <h2 class="text-5xl font-semibold tracking-tight text-white md:text-6xl">
+                            {prayer_name}
+                        </h2>
+                        <p class="text-base text-violet-100/78 md:text-lg">
+                            "Iqamah at "
+                            <span class="font-semibold text-amber-200">{iqamah_time}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 self-start sm:gap-4 lg:self-end">
+                    <div class="min-w-24 rounded-[1.5rem] border border-white/10 bg-slate-950/35 px-4 py-4 text-center shadow-[0_0.75rem_1.6rem_rgba(8,5,20,0.24)] backdrop-blur">
+                        <p class="text-4xl font-semibold leading-none text-amber-100">{hours_remaining}</p>
+                        <p class="mt-3 text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-violet-100/55">
+                            "Hours"
+                        </p>
+                    </div>
+                    <div class="min-w-24 rounded-[1.5rem] border border-white/10 bg-slate-950/35 px-4 py-4 text-center shadow-[0_0.75rem_1.6rem_rgba(8,5,20,0.24)] backdrop-blur">
+                        <p class="text-4xl font-semibold leading-none text-amber-100">{minutes_remaining}</p>
+                        <p class="mt-3 text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-violet-100/55">
+                            "Minutes"
+                        </p>
+                    </div>
+                    <div class="min-w-24 rounded-[1.5rem] border border-white/10 bg-slate-950/35 px-4 py-4 text-center shadow-[0_0.75rem_1.6rem_rgba(8,5,20,0.24)] backdrop-blur">
+                        <p class="text-4xl font-semibold leading-none text-amber-100">{seconds_remaining}</p>
+                        <p class="mt-3 text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-violet-100/55">
+                            "Seconds"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+#[component]
 pub fn nearby_mosques_card(
     mosque_name: String,
     next_prayer: String,
@@ -70,7 +139,6 @@ pub fn mosque_events_card(
         <div>
             <div class = "flex justify-between">
                 <h1>{event_title}</h1>
-                <h2>{highlighted_text(event_type)}</h2>
             </div>
             <div class = "grid">
                 <span>{mosque_name}" • "{event_time}</span>
