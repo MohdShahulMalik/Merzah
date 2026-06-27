@@ -7,8 +7,16 @@ pub fn PrayerCard(
     adhan_time: String,
     is_current: ReadSignal<bool>
 ) -> impl IntoView {
+    let border_classes = move || {
+        if is_current.get() {
+            "ring-2 ring-green-500"
+        } else {
+            ""
+        }
+    };
+
     view! {
-        <div class:border-green-500=is_current class = "group relative w-[10.25rem] overflow-hidden rounded-2xl border border-indigo-100 bg-white px-3 py-3.5 shadow-[0_0.5rem_1.5rem_rgba(15,23,42,0.08)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.11)]">
+        <div class=move || format!("group relative w-[10.25rem] overflow-hidden rounded-2xl bg-surface-700 border-t-3 border-t-white px-3 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.18)] hover:scale-[1.03] {}", border_classes())>
             <p class = "text-[1.05rem] font-semibold tracking-tight text-foreground-900 mb-3 text-center">{prayer_name}</p>
 
             <div class = "grid grid-cols-[1fr_auto_1fr] items-center gap-2">
