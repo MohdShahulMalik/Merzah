@@ -131,44 +131,65 @@ pub fn NextPrayerReminderCard(
 }
 
 #[component]
-pub fn nearby_mosques_card(
+pub fn NearbyMosqueCard(
     mosque_name: String,
-    next_prayer: String,
-    jamat_time: String,
+    iqamah_label: String,
+    iqamah_time: String,
     distance: f64,
+    is_favorite: bool,
 ) -> impl IntoView {
     view! {
-        <div>
-            <div></div>
-            <div>
-                <h1>{mosque_name}</h1>
-                <div class = "grid">
-                    <span>{distance} " • Next: "{next_prayer}</span>
-                    <span>"Jamat Time: "{jamat_time}</span>
+        <article class="overflow-hidden rounded-[1.2rem] bg-white shadow-[0_0.35rem_1rem_rgba(25,22,68,0.14)] ring-1 ring-indigo-950/5">
+            <div class="relative flex h-[7.75rem] items-center justify-center bg-[#c9cef3]">
+                <span class="text-4xl">"🕌"</span>
+                <div class="absolute right-4 top-2 flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-lg shadow-sm">
+                    {if is_favorite { "💗" } else { "🤍" }}
                 </div>
             </div>
-        </div>
+            <div class="space-y-3 p-4">
+                <div>
+                    <h3 class="text-lg font-bold leading-tight text-[#050047]">{mosque_name}</h3>
+                    <p class="mt-1 text-sm text-[#17135f]">
+                        <span class="mr-2 text-pink-500">"⚲"</span>
+                        {format!("{distance:.1} km away")}
+                    </p>
+                </div>
+                <div class="flex items-center justify-between rounded-lg bg-[#e8edff] px-3 py-2 text-sm text-[#211c74]">
+                    <span>{iqamah_label}</span>
+                    <span class="font-bold">{iqamah_time}</span>
+                </div>
+            </div>
+        </article>
     }
 }
 
 #[component]
-pub fn mosque_events_card(
+pub fn MosqueEventCard(
     event_title: String,
     event_type: String,
+    event_type_class: String,
     mosque_name: String,
+    event_day: String,
     event_time: String,
     event_short_description: String,
 ) -> impl IntoView {
     view! {
-        <div>
-            <div class = "flex justify-between">
-                <h1>{event_title}</h1>
+        <article class="rounded-xl bg-white p-5 shadow-[0_0.25rem_0.8rem_rgba(25,22,68,0.10)] ring-1 ring-indigo-950/10">
+            <div class="mb-6 flex items-start justify-between gap-4">
+                <span class=format!("rounded-lg px-3 py-1 text-xs font-bold uppercase tracking-wider {}", event_type_class)>
+                    {event_type}
+                </span>
+                <div class="text-right text-[#050047]">
+                    <p class="font-bold">{event_day}</p>
+                    <p class="mt-1 text-sm">{event_time}</p>
+                </div>
             </div>
-            <div class = "grid">
-                <span>{mosque_name}" • "{event_time}</span>
-                <span>{event_short_description}</span>
+            <div class="space-y-2">
+                <h3 class="text-lg font-bold leading-tight text-[#050047]">{event_title}</h3>
+                <p class="text-base text-[#302977]">"🕌 "{mosque_name}</p>
+                <p class="text-base leading-relaxed text-[#302977]">{event_short_description}</p>
             </div>
-        </div>
+        </article>
     }
 }
 
