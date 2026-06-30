@@ -197,19 +197,42 @@ pub fn MosqueEventCard(
 }
 
 #[component]
-pub fn educational_resources_card(
+pub fn EducationalResourceCard(
+    icon: String,
+    lesson_count: String,
+    level: String,
     resource_title: String,
-    resource_short_description: String,
     resource_by: String,
+    action_label: String,
 ) -> impl IntoView {
     view! {
-        <div>
-            <div></div>
-            <div class = "grid">
-                <h1>{resource_title}</h1>
-                <h2>{resource_short_description}</h2>
-                <span>{resource_by}</span>
+        <article class="shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-indigo-950/5 w-[25%]">
+            <div class="relative flex h-[8.5rem] items-center justify-center bg-[#211f55]">
+                <span class="text-4xl">{icon}</span>
+                <div class="absolute inset-x-0 bottom-0 h-1 bg-[#d8d7e7]">
+                    <div class="h-full w-[65%] bg-[#f0bd25]"></div>
+                </div>
             </div>
-        </div>
+
+            <div class="space-y-3 px-3 py-3">
+                <div class="flex flex-wrap gap-2">
+                    <span class="rounded-full bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74]">
+                        {lesson_count}
+                    </span>
+                    <span class="rounded-full bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74]">
+                        {level}
+                    </span>
+                </div>
+
+                <div>
+                    <h3 class="text-base font-bold leading-tight text-[#050047]">{resource_title}</h3>
+                    <p class="mt-1 text-sm text-[#17135f]">{resource_by}</p>
+                </div>
+
+                <button class="w-full rounded-lg bg-[#e8edff] px-3 py-2.5 text-sm font-medium text-[#050047] transition-colors hover:bg-[#dbe3ff]">
+                    {action_label}
+                </button>
+            </div>
+        </article>
     }
 }
