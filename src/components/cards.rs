@@ -9,7 +9,7 @@ pub fn PrayerCard(
 ) -> impl IntoView {
     let border_classes = move || {
         if is_current.get() {
-            "ring-2 ring-green-500"
+            "ring ring-green-500"
         } else {
             ""
         }
@@ -139,25 +139,28 @@ pub fn NearbyMosqueCard(
     is_favorite: bool,
 ) -> impl IntoView {
     view! {
-        <article class="overflow-hidden rounded-[1.2rem] bg-white shadow-[0_0.35rem_1rem_rgba(25,22,68,0.14)] ring-1 ring-indigo-950/5">
+        <article class="rounded-2xl bg-white ring-1 ring-indigo-950/5 w-[25%]">
             <div class="relative flex h-[7.75rem] items-center justify-center bg-[#c9cef3]">
                 <span class="text-4xl">"🕌"</span>
-                <div class="absolute right-4 top-2 flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-lg shadow-sm">
-                    {if is_favorite { "💗" } else { "🤍" }}
+                <div class="absolute right-4 top-2 flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-lg shadow-sm cursor-pointer transition-all">
+                    {if is_favorite { "❤️" } else { "🤍" }}
                 </div>
             </div>
+
             <div class="space-y-3 p-4">
                 <div>
-                    <h3 class="text-lg font-bold leading-tight text-[#050047]">{mosque_name}</h3>
+                    <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047]">{mosque_name}</h3>
                     <p class="mt-1 text-sm text-[#17135f]">
                         <span class="mr-2 text-pink-500">"⚲"</span>
                         {format!("{distance:.1} km away")}
                     </p>
                 </div>
+
                 <div class="flex items-center justify-between rounded-lg bg-[#e8edff] px-3 py-2 text-sm text-[#211c74]">
                     <span>{iqamah_label}</span>
                     <span class="font-bold">{iqamah_time}</span>
                 </div>
+
             </div>
         </article>
     }
@@ -174,20 +177,20 @@ pub fn MosqueEventCard(
     event_short_description: String,
 ) -> impl IntoView {
     view! {
-        <article class="rounded-xl bg-white p-5 shadow-[0_0.25rem_0.8rem_rgba(25,22,68,0.10)] ring-1 ring-indigo-950/10">
-            <div class="mb-6 flex items-start justify-between gap-4">
-                <span class=format!("rounded-lg px-3 py-1 text-xs font-bold uppercase tracking-wider {}", event_type_class)>
+        <article class="shrink-0 w-[32.2%] rounded-xl bg-white p-4 ring-1 ring-indigo-950/10">
+            <div class="mb-3 flex items-start justify-between gap-3">
+                <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider {}", event_type_class)>
                     {event_type}
                 </span>
                 <div class="text-right text-[#050047]">
-                    <p class="font-bold">{event_day}</p>
-                    <p class="mt-1 text-sm">{event_time}</p>
+                    <p class="text-[0.85rem] font-bold">{event_day}</p>
+                    <p class="mt-0.5 text-xs">{event_time}</p>
                 </div>
             </div>
-            <div class="space-y-2">
-                <h3 class="text-lg font-bold leading-tight text-[#050047]">{event_title}</h3>
-                <p class="text-base text-[#302977]">"🕌 "{mosque_name}</p>
-                <p class="text-base leading-relaxed text-[#302977]">{event_short_description}</p>
+            <div class="space-y-1.5">
+                <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047]">{event_title}</h3>
+                <p class="text-xs text-foreground-600">"🕌 "{mosque_name}</p>
+                <p class="text-[0.8rem] leading-relaxed text-[#302977]">{event_short_description}</p>
             </div>
         </article>
     }
