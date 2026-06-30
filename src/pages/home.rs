@@ -1,4 +1,4 @@
-use crate::components::cards::{MosqueEventCard, NearbyMosqueCard, NextPrayerReminderCard, PrayerCard};
+use crate::components::cards::{EducationalResourceCard, MosqueEventCard, NearbyMosqueCard, NextPrayerReminderCard, PrayerCard};
 use leptos::IntoView;
 use leptos::prelude::*;
 
@@ -8,7 +8,7 @@ pub fn Home() -> impl IntoView {
     let (is_not_current, _) = signal(false);
 
     view! {
-        <div class="space-y-8 mt-4 mr-4">
+        <div class="space-y-8 mt-4 mr-4 mb-4">
             <NextPrayerReminderCard
                 location="Brooklyn, NY".to_string()
                 mosque_name="Masjid Al-Farooq".to_string()
@@ -63,7 +63,7 @@ pub fn Home() -> impl IntoView {
                     <h2 class="text-2xl font-bold text-[#050047]">"Nearby Mosques"</h2>
                     <a href="#" class="text-base font-medium text-[#050047] hover:underline">"View All"</a>
                 </div>
-                <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+                <div class="flex gap-5 overflow-x-scroll">
                     <NearbyMosqueCard
                         mosque_name="Masjid Al-Farooq".to_string()
                         iqamah_label="Maghrib Iqamah".to_string()
@@ -100,7 +100,7 @@ pub fn Home() -> impl IntoView {
                     <h2 class="text-2xl font-bold text-[#050047]">"Upcoming Events"</h2>
                     <a href="#" class="text-base font-medium text-[#050047] hover:underline">"View All"</a>
                 </div>
-                <div class="grid gap-5 lg:grid-cols-3">
+                <div class="flex gap-5 overflow-x-scroll w-full">
                     <MosqueEventCard
                         event_title="Jummah Prayer & Khutbah".to_string()
                         event_type="Khutbah".to_string()
@@ -127,6 +127,55 @@ pub fn Home() -> impl IntoView {
                         event_day="Sunday".to_string()
                         event_time="11:00 AM".to_string()
                         event_short_description="Join us for a family-friendly breakfast and engaging activities for children and youth.".to_string()
+                    />
+                </div>
+            </section>
+
+            <section class="space-y-5">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-[#050047]">"Recommended"</h2>
+                    <a href="#" class="text-base font-medium text-[#050047] hover:underline">"View All"</a>
+                </div>
+                <div class="flex gap-5 overflow-x-scroll w-full">
+                    <EducationalResourceCard
+                        icon="📖".to_string()
+                        lesson_count="12 lessons".to_string()
+                        level="Beginner".to_string()
+                        resource_title="Introduction to Tajweed".to_string()
+                        resource_by="Sheikh Muhammad Ali".to_string()
+                        action_label="Continue Learning".to_string()
+                    />
+                    <EducationalResourceCard
+                        icon="🌙".to_string()
+                        lesson_count="8 lessons".to_string()
+                        level="All Levels".to_string()
+                        resource_title="Ramadan Preparation Guide".to_string()
+                        resource_by="Ustadha Fatima Hassan".to_string()
+                        action_label="Start Course".to_string()
+                    />
+                    <EducationalResourceCard
+                        icon="🤲".to_string()
+                        lesson_count="15 lessons".to_string()
+                        level="Intermediate".to_string()
+                        resource_title="The Art of Du'a".to_string()
+                        resource_by="Imam Yusuf Rahman".to_string()
+                        action_label="Continue Learning".to_string()
+                    />
+                    <EducationalResourceCard
+                        icon="📚".to_string()
+                        lesson_count="20 lessons".to_string()
+                        level="Advanced".to_string()
+                        resource_title="Seerah: Life of the Prophet ﷺ".to_string()
+                        resource_by="Dr. Omar Suleiman".to_string()
+                        action_label="Start Course".to_string()
+                    />
+                    <EducationalResourceCard
+                        icon="💎".to_string()
+                        lesson_count="10 lessons".to_string()
+                        level="Beginner".to_string()
+                        resource_title="Islamic Finance Basics".to_string()
+                        resource_by="Sheikh Ahmad Bilal".to_string()
+                        action_label="Start Course".to_string()
                     />
                 </div>
             </section>
