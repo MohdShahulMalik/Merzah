@@ -54,10 +54,7 @@ pub fn App() -> impl IntoView {
     });
 
     view! {
-        <Script src="https://cdn.tailwindcss.com"/>
-        <Script>
-            "tailwind.config = { corePlugins: { preflight: false, transform: false, translate: false }, optimizeUniversalDefaults: true }"
-        </Script>
+        <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"/>
 
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
