@@ -139,7 +139,7 @@ pub fn NearbyMosqueCard(
     is_favorite: bool,
 ) -> impl IntoView {
     view! {
-        <article class="rounded-2xl bg-white ring-1 ring-indigo-950/5 w-[25%]">
+        <article class="rounded-2xl overflow-hidden bg-white ring-1 ring-indigo-950/5 w-[25%]">
             <div class="relative flex h-[7.75rem] items-center justify-center bg-[#c9cef3]">
                 <span class="text-4xl">"🕌"</span>
                 <div class="absolute right-4 top-2 flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-lg shadow-sm cursor-pointer transition-all">

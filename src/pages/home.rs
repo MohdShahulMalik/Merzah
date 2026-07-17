@@ -63,7 +63,7 @@ pub fn Home() -> impl IntoView {
                     <h2 class="text-2xl font-bold text-[#050047]">"Nearby Mosques"</h2>
                     <a href="#" class="text-base font-medium text-[#050047] hover:underline">"View All"</a>
                 </div>
-                <div class="flex gap-5 overflow-x-scroll">
+                <div class="flex gap-5 overflow-x-scroll pb-4">
                     <NearbyMosqueCard
                         mosque_name="Masjid Al-Farooq".to_string()
                         iqamah_label="Maghrib Iqamah".to_string()
@@ -100,7 +100,7 @@ pub fn Home() -> impl IntoView {
                     <h2 class="text-2xl font-bold text-[#050047]">"Upcoming Events"</h2>
                     <a href="#" class="text-base font-medium text-[#050047] hover:underline">"View All"</a>
                 </div>
-                <div class="flex gap-5 overflow-x-scroll w-full">
+                <div class="flex gap-5 overflow-x-scroll w-full pb-4">
                     <MosqueEventCard
                         event_title="Jummah Prayer & Khutbah".to_string()
                         event_type="Khutbah".to_string()
@@ -136,7 +136,7 @@ pub fn Home() -> impl IntoView {
                     <h2 class="text-2xl font-bold text-[#050047]">"Recommended"</h2>
                     <a href="#" class="text-base font-medium text-[#050047] hover:underline">"View All"</a>
                 </div>
-                <div class="flex gap-5 overflow-x-scroll w-full">
+                <div class="flex gap-5 overflow-x-scroll w-full pb-4">
                     <EducationalResourceCard
                         icon="📖".to_string()
                         lesson_count="12 lessons".to_string()

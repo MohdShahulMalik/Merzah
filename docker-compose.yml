@@ -7,7 +7,7 @@ services:
       command: chown -R 65532:65532 /data
 
   surrealdb:
-    image: surrealdb/surrealdb:latest
+    image: surrealdb/surrealdb:v2
     container_name: surrealdb
     ports:
       - "${SURREAL_PORT}:8000"
