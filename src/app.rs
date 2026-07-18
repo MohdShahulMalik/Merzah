@@ -63,7 +63,6 @@ pub fn App() -> impl IntoView {
         // sets the document title
         <Title text="Merzah"/>
 
-        // content for this welcome page
         <Router>
             <main>
                 <Routes fallback=move || "Not found.">
