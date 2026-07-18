@@ -16,7 +16,7 @@ pub fn PrayerCard(
     };
 
     view! {
-        <div class=move || format!("group relative w-[10.25rem] overflow-hidden rounded-2xl bg-surface-700 border-t-3 border-t-white px-3 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.18)] hover:scale-[1.03] {}", border_classes())>
+        <div class=move || format!("group relative w-[10.25rem] overflow-hidden rounded-2xl bg-white border-t-white px-3 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.18)] hover:scale-[1.03] {}", border_classes())>
             <p class = "text-[1.05rem] font-semibold tracking-tight text-foreground-900 mb-3 text-center">{prayer_name}</p>
 
             <div class = "grid grid-cols-[1fr_auto_1fr] items-center gap-2">
@@ -56,7 +56,7 @@ pub fn NextPrayerReminderCard(
     seconds_remaining: String,
 ) -> impl IntoView {
     view! {
-        <section class="relative overflow-hidden rounded-[2rem] border border-violet-900/20 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.16),_transparent_28%),linear-gradient(135deg,_#23104a_0%,_#31105d_48%,_#24103f_100%)] px-6 py-7 text-white shadow-[0_1.5rem_4rem_rgba(37,16,79,0.22)] md:px-10 md:py-9">
+        <section class="relative overflow-hidden rounded-4xl border border-violet-900/20 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.16),_transparent_28%),linear-gradient(135deg,_#23104a_0%,_#31105d_48%,_#24103f_100%)] px-6 py-7 text-white shadow-[0_1.5rem_4rem_rgba(37,16,79,0.22)]">
             <div class="pointer-events-none absolute inset-0">
                 <svg class="absolute top-[12%] left-[8%]" width="3" height="3"><circle cx="1.5" cy="1.5" r="1.5" fill="white" opacity="0.8"/></svg>
                 <svg class="absolute top-[20%] left-[20%]" width="4" height="4"><circle cx="2" cy="2" r="2" fill="white" opacity="0.6"/></svg>
@@ -80,7 +80,7 @@ pub fn NextPrayerReminderCard(
             <div class="pointer-events-none absolute -left-12 top-10 h-36 w-36 rounded-full bg-amber-300/10 blur-3xl"></div>
             <div class="pointer-events-none absolute right-0 top-0 h-full w-full bg-[radial-gradient(circle_at_85%_25%,rgba(255,219,137,0.12),transparent_18%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.12),transparent_14%)]"></div>
 
-            <div class="relative flex gap-8 lg:flex-row lg:items-center lg:justify-between">
+            <div class="relative flex gap-8 flex-row items-center justify-between">
                 <div class="flex max-w-2xl justify-center items-center">
                     <div class="mb-6 flex items-center gap-3 text-violet-100/85">
                     </div>
@@ -99,7 +99,7 @@ pub fn NextPrayerReminderCard(
                     </div>
                 </div>
 
-                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[0.68rem] text-violet-100/60">
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[0.68rem] text-violet-100/60 max-[840px]:bottom-1">
                     <span>"📍"</span>
                     <span>{location}</span>
                 </div>
@@ -139,8 +139,8 @@ pub fn NearbyMosqueCard(
     is_favorite: bool,
 ) -> impl IntoView {
     view! {
-        <article class="rounded-2xl overflow-hidden bg-white ring-1 ring-indigo-950/5 w-[25%]">
-            <div class="relative flex h-[7.75rem] items-center justify-center bg-[#c9cef3]">
+        <article class="rounded-2xl overflow-hidden bg-white ring-1 ring-indigo-950/5 w-[18rem]">
+            <div class="relative flex h-31 items-center justify-center bg-[#c9cef3]">
                 <span class="text-4xl">"🕌"</span>
                 <div class="absolute right-4 top-2 flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-lg shadow-sm cursor-pointer transition-all">
                     {if is_favorite { "❤️" } else { "🤍" }}
@@ -177,7 +177,7 @@ pub fn MosqueEventCard(
     event_short_description: String,
 ) -> impl IntoView {
     view! {
-        <article class="shrink-0 w-[32.2%] rounded-xl bg-white p-4 ring-1 ring-indigo-950/10">
+        <article class="shrink-0 w-98 rounded-xl bg-white p-4 ring-1 ring-indigo-950/10">
             <div class="mb-3 flex items-start justify-between gap-3">
                 <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider {}", event_type_class)>
                     {event_type}
@@ -206,8 +206,8 @@ pub fn EducationalResourceCard(
     action_label: String,
 ) -> impl IntoView {
     view! {
-        <article class="shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-indigo-950/5 w-[25%]">
-            <div class="relative flex h-[8.5rem] items-center justify-center bg-[#211f55]">
+        <article class="shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-indigo-950/5 w-82">
+            <div class="relative flex h-34 items-center justify-center bg-[#211f55]">
                 <span class="text-4xl">{icon}</span>
                 <div class="absolute inset-x-0 bottom-0 h-1 bg-[#d8d7e7]">
                     <div class="h-full w-[65%] bg-[#f0bd25]"></div>
