@@ -8,7 +8,7 @@ use leptos_router::{
 use reactive_stores::Store;
 
 use crate::{
-    models::{api_responses::ApiResponse, user::UserOnClient},
+    models::user::UserOnClient,
     pages::{
         add_mosques_of_region::AddMosquesOfRegion,
         auth::{Login, Register},
