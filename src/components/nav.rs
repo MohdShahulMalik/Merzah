@@ -4,7 +4,7 @@ use leptos_router::components::A;
 
 #[component]
 pub fn Nav() -> impl IntoView {
-    let nav_link_class = "grid w-full justify-items-center gap-1 py-2 text-sm font-medium text-gray-400 rounded-xl transition-all duration-200 hover:text-indigo-600 aria-[current=page]:text-indigo-700 aria-[current=page]:font-semibold aria-[current=page]:bg-indigo-50 lg:aria-[current=page]:border-t-0 lg:flex lg:w-full lg:items-center lg:justify-start lg:gap-4 lg:rounded-xl lg:px-4 lg:py-3 lg:text-base lg:hover:bg-indigo-50 lg:aria-[current=page]:bg-indigo-100 lg:aria-[current=page]:shadow-sm";
+    let nav_link_class = "grid w-full justify-items-center gap-1 py-2 text-sm font-medium text-gray-600 rounded-xl transition-all duration-200 hover:text-indigo-500 aria-[current=page]:text-indigo-700 aria-[current=page]:font-semibold aria-[current=page]:bg-indigo-50 lg:aria-[current=page]:border-t-0 lg:flex lg:w-full lg:items-center lg:justify-start lg:gap-4 lg:rounded-xl lg:px-4 lg:py-3 lg:text-base lg:hover:bg-indigo-50 lg:aria-[current=page]:bg-indigo-100 lg:aria-[current=page]:shadow-sm";
 
     view! {
         <nav class = "fixed bottom-0 right-0 left-0 border-t border-gray-200 bg-white shadow-lg lg:sticky lg:top-0 lg:text-left lg:w-[17vw] lg:min-w-fit lg:h-screen lg:self-start lg:border-t-0 lg:border-r lg:py-6 lg:px-4 lg:shadow-md">
