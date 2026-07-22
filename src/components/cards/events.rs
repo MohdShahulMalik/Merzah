@@ -11,15 +11,17 @@ pub fn FeaturedEventCard(
     description: String,
     cta_label: String,
 ) -> impl IntoView {
-    let border_colors = ["primary", "secondary"];
-    let border_color = border_colors[index % border_colors.len()];
+    let border_class = match index % 2 {
+        0 => "absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-indigo-500 to-sky-500",
+        _ => "absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-purple-500 to-indigo-500",
+    };
 
     view! {
-        <article class="relative overflow-hidden rounded-xl bg-white p-6 shadow-lg hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl transition">
-            <div class=format!("absolute left-0 top-0 h-1 w-full bg-{}", border_color) />
+        <article class="relative overflow-hidden rounded-xl bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl">
+            <div class=border_class />
 
             <div class="space-y-4">
-                <span class="inline-flex rounded-md bg-secondary/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-secondary">
+                <span class="inline-flex rounded-md bg-violet-50 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-violet-700 ring-1 ring-violet-200/70">
                     {badge}
                 </span>
 
@@ -47,7 +49,7 @@ pub fn FeaturedEventCard(
 
                 <a
                     href="#"
-                    class="inline-flex rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white transition hover:bg-primary-dark"
+                    class="inline-flex rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-violet-700"
                 >
                     {cta_label}" →"
                 </a>
