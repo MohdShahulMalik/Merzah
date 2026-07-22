@@ -80,10 +80,16 @@ pub fn CourseCard(
     duration: String,
     lesson_count: String,
     #[prop(optional)] progress_percent: Option<u8>,
+    #[prop(optional)] img_link: Option<String>,
     instructor_initials: String,
     instructor_name: String,
     cta_label: String,
 ) -> impl IntoView {
+    let image_alt = format!("{} course cover", title);
+    let img_link = img_link.unwrap_or_else(|| {
+        "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=640&h=360&q=80".to_string()
+    });
+
     let progress_view = progress_percent.map(|progress_percent| {
         view! {
             <div class="mb-4">
@@ -103,7 +109,15 @@ pub fn CourseCard(
     });
 
     view! {
-        <article class="rounded-2xl border border-purple-100 bg-white p-6 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)]">
+        <article class="group rounded-2xl border border-purple-100 bg-white p-6 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)]">
+            <div class="mb-5 overflow-hidden rounded-xl bg-purple-100">
+                <img
+                    src=img_link
+                    alt=image_alt
+                    class="h-50 w-full object-cover transition duration-300 ease-out group-hover:scale-105"
+                />
+            </div>
+
             <div class="mb-4 flex items-start justify-between gap-3">
                 <span class=format!("rounded-full px-3 py-1 text-xs font-semibold {}", category_class)>
                     {category}
