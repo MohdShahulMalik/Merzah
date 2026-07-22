@@ -70,19 +70,24 @@ pub fn AllEventCard(
     cta_label: String,
 ) -> impl IntoView {
     let border_class = match index % 3 {
-        0 => "absolute bottom-0 left-0 top-0 w-1 bg-secondary transition-all duration-200 group-hover:w-1.5",
-        1 => "absolute bottom-0 left-0 top-0 w-1 bg-primary transition-all duration-200 group-hover:w-1.5",
-        _ => "absolute bottom-0 left-0 top-0 w-1 bg-info transition-all duration-200 group-hover:w-1.5",
+        0 => "absolute bottom-0 left-0 top-0 w-1 bg-violet-600 transition-all duration-200 group-hover:w-1.5",
+        1 => "absolute bottom-0 left-0 top-0 w-1 bg-fuchsia-500 transition-all duration-200 group-hover:w-1.5",
+        _ => "absolute bottom-0 left-0 top-0 w-1 bg-sky-500 transition-all duration-200 group-hover:w-1.5",
+    };
+
+    let category_pill_class = match index % 3 {
+        0 => "inline-flex rounded-md bg-violet-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-violet-700 ring-1 ring-violet-200/70",
+        1 => "inline-flex rounded-md bg-fuchsia-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-fuchsia-700 ring-1 ring-fuchsia-200/70",
+        _ => "inline-flex rounded-md bg-sky-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-sky-700 ring-1 ring-sky-200/70",
     };
 
     view! {
-        // NOTE: `group` is not a tailwind class and it's just used to trigger resize of the left border when hovering the card
         <article class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-lg transition duration-200 ease-out hover:-translate-y-1 hover:shadow-xl">
             <div class=border_class />
 
             <div class="space-y-5 pl-2">
                 <div class="flex items-center justify-between gap-4">
-                    <span class="inline-flex rounded-md bg-gray-200/40 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-primary-dark">
+                    <span class=category_pill_class>
                         {category}
                     </span>
 
@@ -113,7 +118,7 @@ pub fn AllEventCard(
 
                 <a
                     href="#"
-                    class="inline-flex rounded-lg border-2 border-gray-200/40 bg-gray-200/40 px-5 py-2.5 text-sm text-foreground-900 font-bold text-primary-dark transition"
+                    class="inline-flex rounded-lg border-2 border-violet-200/80 bg-violet-50 px-5 py-2.5 text-sm font-bold text-violet-700 transition hover:bg-violet-100"
                 >
                     {cta_label}" →"
                 </a>
