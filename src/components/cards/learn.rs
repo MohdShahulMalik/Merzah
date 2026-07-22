@@ -9,15 +9,19 @@ pub fn ContinueLearningCard(
     lesson_progress: String,
     progress_percent: u8,
     cta_label: String,
-    img_link: String,
+    #[prop(optional)] img_link: Option<String>,
 ) -> impl IntoView {
+    let img_link = img_link.unwrap_or_else(|| {
+        "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=128&h=128&fit=crop".to_string()
+    });
+
     view! {
         <article class="rounded-2xl border border-purple-200 bg-linear-to-br from-purple-100 to-indigo-100 p-6 shadow-md md:p-8">
             <div class="flex gap-6 ">
                 <div class="w-50">
                     <img src = {img_link} alt="Continue Learning" class="mb-4 w-full rounded-xl md:mb-6 xl:w-64" />
                 </div>
-                <div class = "items-center justify-center gap-6">
+                <div class = "items-center justify-center gap-6 w-full flex">
                     <div class="flex-1">
                         <span class="mb-3 inline-flex rounded-full bg-purple-600 px-3 py-1 text-xs font-semibold uppercase text-white">
                             {status}
