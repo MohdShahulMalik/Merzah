@@ -12,14 +12,19 @@ pub fn ContinueLearningCard(
     #[prop(optional)] img_link: Option<String>,
 ) -> impl IntoView {
     let img_link = img_link.unwrap_or_else(|| {
-        "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=128&h=128&fit=crop".to_string()
+        "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=128&h=128&fit=crop"
+            .to_string()
     });
 
     view! {
         <article class="rounded-2xl border border-purple-200 bg-linear-to-br from-purple-100 to-indigo-100 p-6 shadow-md md:p-8">
             <div class="flex gap-6 ">
-                <div class="w-50">
-                    <img src = {img_link} alt="Continue Learning" class="mb-4 w-full rounded-xl md:mb-6 xl:w-64" />
+                <div class="w-50 xl:w-64 max-md:hidden">
+                    <img
+                        src = {img_link}
+                        alt="Continue Learning"
+                        class="mb-4 w-full rounded-xl"
+                    />
                 </div>
                 <div class = "items-center justify-center gap-6 w-full flex">
                     <div class="flex-1">
