@@ -42,7 +42,7 @@ pub fn Events() -> impl IntoView {
             <section class="space-y-6">
                 <div class="flex items-center justify-between">
                     <h1 class="text-3xl font-bold text-foreground-900">"Featured Events"</h1>
-                    <a href="#" class="font-semibold text-primary hover:underline">"View all →"</a>
+                    <a href="#" class="font-medium text-purple-600 hover:text-purple-700">"View All →"</a>
                 </div>
 
                 <div class="grid gap-8 lg:grid-cols-2">
