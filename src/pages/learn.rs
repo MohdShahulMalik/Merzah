@@ -103,6 +103,36 @@ pub fn Learn() -> impl IntoView {
                         instructor_name="Dr. Aisha Ali".to_string()
                         cta_label="Start Course".to_string()
                     />
+
+                    <CourseCard
+                        category="Faith & Worship".to_string()
+                        category_class="bg-green-100 text-green-700".to_string()
+                        badge="Beginner".to_string()
+                        badge_class="bg-purple-100 text-purple-700".to_string()
+                        title="Pillars of Islam".to_string()
+                        description="Comprehensive guide to the five pillars: Shahada, Salah, Zakat, Sawm, and Hajj".to_string()
+                        duration="6 hours".to_string()
+                        lesson_count="15 lessons".to_string()
+                        instructor_initials="SK".to_string()
+                        instructor_name="Sheikh Khalid Ahmed".to_string()
+                        cta_label="Start Course".to_string()
+                    />
+
+                    <CourseCard
+                        category="Quran".to_string()
+                        category_class="bg-blue-100 text-blue-700".to_string()
+                        badge="Intermediate".to_string()
+                        badge_class="bg-purple-100 text-purple-700".to_string()
+                        title="Tajweed Mastery".to_string()
+                        description="Perfect your Quranic recitation with proper pronunciation and rules of tajweed".to_string()
+                        duration="8 hours".to_string()
+                        lesson_count="20 lessons".to_string()
+                        progress_percent=35
+                        instructor_initials="QF".to_string()
+                        instructor_name="Qari Fatima Hassan".to_string()
+                        cta_label="Continue Course".to_string()
+                    />
+                    
                 </div>
             </section>
 
@@ -213,6 +243,36 @@ pub fn Learn() -> impl IntoView {
                         instructor_name="Dr. Omar Hasan".to_string()
                         cta_label="Start Course".to_string()
                     />
+
+                    <CourseCard
+                        category="Faith & Worship".to_string()
+                        category_class="bg-green-100 text-green-700".to_string()
+                        badge="Beginner".to_string()
+                        badge_class="bg-purple-100 text-purple-700".to_string()
+                        title="Pillars of Islam".to_string()
+                        description="Comprehensive guide to the five pillars: Shahada, Salah, Zakat, Sawm, and Hajj".to_string()
+                        duration="6 hours".to_string()
+                        lesson_count="15 lessons".to_string()
+                        instructor_initials="SK".to_string()
+                        instructor_name="Sheikh Khalid Ahmed".to_string()
+                        cta_label="Start Course".to_string()
+                    />
+
+                    <CourseCard
+                        category="Quran".to_string()
+                        category_class="bg-blue-100 text-blue-700".to_string()
+                        badge="Intermediate".to_string()
+                        badge_class="bg-purple-100 text-purple-700".to_string()
+                        title="Tajweed Mastery".to_string()
+                        description="Perfect your Quranic recitation with proper pronunciation and rules of tajweed".to_string()
+                        duration="8 hours".to_string()
+                        lesson_count="20 lessons".to_string()
+                        progress_percent=35
+                        instructor_initials="QF".to_string()
+                        instructor_name="Qari Fatima Hassan".to_string()
+                        cta_label="Continue Course".to_string()
+                    />
+                    
                 </div>
             </section>
         </div>
