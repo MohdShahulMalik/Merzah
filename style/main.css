@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@source "../src/**/*.rs";
-@source "../src/**/*.html";
 
 /* body { */
 /* font-family: sans-serif; */
