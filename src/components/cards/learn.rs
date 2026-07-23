@@ -118,16 +118,16 @@ pub fn CourseCard(
     });
 
     view! {
-        <article class="group rounded-2xl border border-purple-100 bg-white p-6 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)]">
+        <article class="group w-90 shrink-0 rounded-2xl border border-purple-100 bg-white p-6 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)]">
             <div class="mb-5 overflow-hidden rounded-xl bg-purple-100">
                 <img
                     src=img_link
                     alt=image_alt
-                    class="h-50 w-full object-cover transition duration-300 ease-out group-hover:scale-105"
+                    class="md:h-50 h-40 w-full object-cover transition duration-300 ease-out group-hover:scale-105"
                 />
             </div>
 
-            <div class="mb-4 flex items-start justify-between gap-3">
+            <div class="mb-2 md:mb-4 flex items-start justify-between gap-3">
                 <span class=format!("rounded-full px-3 py-1 text-xs font-semibold {}", category_class)>
                     {category}
                 </span>
@@ -141,7 +141,7 @@ pub fn CourseCard(
                 {title}
             </h3>
 
-            <p class="mb-4 line-clamp-2 text-sm text-gray-600">
+            <p class="mb-4 line-clamp-2 text-sm text-gray-600 max-md:hidden!">
                 {description}
             </p>
 
@@ -160,7 +160,7 @@ pub fn CourseCard(
             {progress_view}
 
             <div class="mb-4 flex items-center gap-2">
-                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-purple-200 text-sm font-semibold text-purple-700">
+                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-purple-200 text-sm font-semibold text-purple-700 max-md:hidden!">
                     {instructor_initials}
                 </div>
 
