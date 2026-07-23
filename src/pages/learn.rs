@@ -137,9 +137,14 @@ pub fn Learn() -> impl IntoView {
             </section>
 
             <section class="space-y-6">
-                <h1 class="text-3xl font-bold text-purple-900">"Guided Learning Paths"</h1>
+                <div class="flex items-center justify-between gap-4">
+                    <h1 class="text-3xl font-bold text-purple-900">"Guided Learning Paths"</h1>
+                    <a href="#" class="font-medium text-purple-600 hover:text-purple-700">
+                        "View All →"
+                    </a>
+                </div>
 
-                <div class="grid gap-6 xl:grid-cols-2">
+                <div class="grid gap-6 md:grid-cols-2">
                     <LearningPathCard
                         title="Foundations of Faith".to_string()
                         description="Build strong aqeedah and understanding of core Islamic beliefs".to_string()
