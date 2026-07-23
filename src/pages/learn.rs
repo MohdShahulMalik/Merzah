@@ -60,7 +60,7 @@ pub fn Learn() -> impl IntoView {
                     </a>
                 </div>
 
-                <div class="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                <div class="flex gap-6 w-full overflow-x-scroll scrollbar-hide pb-4">
                     <CourseCard
                         category="Faith & Worship".to_string()
                         category_class="bg-green-100 text-green-700".to_string()
@@ -201,7 +201,7 @@ pub fn Learn() -> impl IntoView {
             <section class="space-y-6">
                 <h1 class="text-3xl font-bold text-purple-900">"Recommended for You"</h1>
 
-                <div class="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                <div class="flex gap-6 w-full overflow-x-scroll scrollbar-hide pb-4">
                     <CourseCard
                         category="Character".to_string()
                         category_class="bg-rose-100 text-rose-700".to_string()
