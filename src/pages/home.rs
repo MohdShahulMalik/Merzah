@@ -1,6 +1,7 @@
 use crate::components::cards::{EducationalResourceCard, MosqueEventCard, NearbyMosqueCard, NextPrayerReminderCard, PrayerCard};
 use leptos::IntoView;
 use leptos::prelude::*;
+use leptos_router::components::A;
 
 #[component]
 pub fn Home() -> impl IntoView {
@@ -61,7 +62,7 @@ pub fn Home() -> impl IntoView {
             <section class="space-y-5">
                 <div class="flex items-center justify-between">
                     <h2 class="text-2xl font-bold text-purple-900">"Nearby Mosques"</h2>
-                    <a href="#" class="font-medium text-purple-600 hover:text-purple-700">"View All →"</a>
+                    <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">"View All →"</A>
                 </div>
                 <div class="flex gap-5 overflow-x-scroll pb-4">
                     <NearbyMosqueCard
@@ -102,7 +103,7 @@ pub fn Home() -> impl IntoView {
             <section class="space-y-5">
                 <div class="flex items-center justify-between">
                     <h2 class="text-2xl font-bold text-purple-900">"Upcoming Events"</h2>
-                    <a href="#" class="font-medium text-purple-600 hover:text-purple-700">"View All →"</a>
+                    <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">"View All →"</A>
                 </div>
                 <div class="flex gap-5 overflow-x-scroll pb-4">
                     <MosqueEventCard
@@ -138,7 +139,7 @@ pub fn Home() -> impl IntoView {
             <section class="space-y-5">
                 <div class="flex items-center justify-between">
                     <h2 class="text-2xl font-bold text-purple-900">"Recommended"</h2>
-                    <a href="#" class="font-medium text-purple-600 hover:text-purple-700">"View All →"</a>
+                    <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">"View All →"</A>
                 </div>
                 <div class="flex gap-5 overflow-x-scroll pb-4">
                     <EducationalResourceCard
