@@ -41,7 +41,7 @@ pub fn Events() -> impl IntoView {
 
             <section class="space-y-6">
                 <div class="flex items-center justify-between">
-                    <h1 class="text-3xl font-bold text-foreground-900">"Featured Events"</h1>
+                    <h1 class="text-3xl font-bold text-purple-900">"Featured Events"</h1>
                     <a href="#" class="font-medium text-purple-600 hover:text-purple-700">"View All →"</a>
                 </div>
 
@@ -69,7 +69,7 @@ pub fn Events() -> impl IntoView {
             </section>
 
             <section class="space-y-6">
-                <h1 class="text-3xl font-bold text-foreground-900">"All Events"</h1>
+                <h1 class="text-3xl font-bold text-purple-900">"All Events"</h1>
 
                 <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
                     <AllEventCard
