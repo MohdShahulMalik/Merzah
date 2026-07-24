@@ -242,39 +242,56 @@ pub fn MosqueEventCard(
 
 #[component]
 pub fn EducationalResourceCard(
-    icon: String,
     lesson_count: String,
     level: String,
     resource_title: String,
     resource_by: String,
     action_label: String,
+    #[prop(optional)] image_url: Option<String>,
 ) -> impl IntoView {
+    let image_url = image_url.unwrap_or_else(|| {
+        "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?auto=format&fit=crop&w=640&h=360&q=80".to_string()
+    });
+    let image_alt = format!("{} resource cover", resource_title);
+
     view! {
-        <article class="shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-indigo-950/5 w-82">
-            <div class="relative flex h-34 items-center justify-center bg-[#211f55]">
-                <span class="text-4xl">{icon}</span>
-                <div class="absolute inset-x-0 bottom-0 h-1 bg-[#d8d7e7]">
-                    <div class="h-full w-[65%] bg-[#f0bd25]"></div>
-                </div>
+        <article class="group relative w-82 shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-indigo-950/5 transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-200">
+            <div class="relative h-34 overflow-hidden bg-[#211f55]">
+                <img
+                    src=image_url
+                    alt=image_alt
+                    class="h-full w-full object-cover transition-[filter] duration-500 ease-out group-hover:[filter:brightness(0.76)_saturate(0.9)]"
+                />
+                <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-[#211f55]/72 via-[#211f55]/18 to-transparent"></div>
+
+                <div class="pointer-events-none absolute left-3 top-3 h-8 w-8 -translate-x-1 -translate-y-1 border-l border-t border-white/0 opacity-0 transition-[border-color,opacity,transform] duration-500 ease-out group-hover:translate-x-0 group-hover:translate-y-0 group-hover:border-white/70 group-hover:opacity-100"></div>
+                <div class="pointer-events-none absolute bottom-3 right-3 h-8 w-8 translate-x-1 translate-y-1 border-b border-r border-white/0 opacity-0 transition-[border-color,opacity,transform] duration-500 ease-out group-hover:translate-x-0 group-hover:translate-y-0 group-hover:border-white/70 group-hover:opacity-100"></div>
+
             </div>
 
-            <div class="space-y-3 px-3 py-3">
+            <div class="relative space-y-3 px-3 py-3">
+                <div class="pointer-events-none absolute inset-y-4 left-0 w-px bg-linear-to-b from-transparent via-amber-300 to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"></div>
+
                 <div class="flex flex-wrap gap-2">
-                    <span class="rounded-full bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74]">
+                    <span class="rounded-full bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74] transition-colors duration-300 ease-out group-hover:text-[#4c1d95]">
                         {lesson_count}
                     </span>
-                    <span class="rounded-full bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74]">
+                    <span class="rounded-full bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74] transition-colors duration-300 ease-out group-hover:text-[#4c1d95]">
                         {level}
                     </span>
                 </div>
 
                 <div>
-                    <h3 class="text-base font-bold leading-tight text-[#050047]">{resource_title}</h3>
-                    <p class="mt-1 text-sm text-[#17135f]">{resource_by}</p>
+                    <h3 class="relative inline-block text-base font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-purple-900">
+                        <span>{resource_title}</span>
+                        <span class="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-amber-300 transition-transform duration-500 ease-out group-hover:scale-x-100"></span>
+                    </h3>
+                    <p class="mt-2 text-sm text-[#17135f] transition-colors duration-300 ease-out group-hover:text-indigo-700">{resource_by}</p>
                 </div>
 
-                <button class="w-full rounded-lg bg-[#e8edff] px-3 py-2.5 text-sm font-medium text-[#050047] transition-colors hover:bg-[#dbe3ff]">
-                    {action_label}
+                <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-purple-700">
+                    <span>{action_label}</span>
+                    <span class="transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">"→"</span>
                 </button>
             </div>
         </article>
