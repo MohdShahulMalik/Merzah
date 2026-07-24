@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos_router::components::A;
 
 #[component]
 pub fn PrayerCard(
@@ -168,8 +169,9 @@ pub fn NearbyMosqueCard(
                 </div>
 
                 <div class="absolute inset-x-0 bottom-0 translate-y-full border-t border-white/15 bg-[#211f55]/88 px-4 py-3 text-white backdrop-blur-md transition-transform duration-500 ease-out group-hover:translate-y-0">
-                    <div class="flex items-center justify-start">
-                        <span class="text-sm font-bold text-amber-200">"View details →"</span>
+                    <div class="flex items-center justify-between">
+                        <A href="#" attr:class="text-sm font-bold text-amber-200 hover:text-amber-100">"Directions →"</A>
+                        <A href="#" attr:class="text-sm font-bold text-amber-200 hover:text-amber-100">"View Mosque →"</A>
                     </div>
                 </div>
             </div>
