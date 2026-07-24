@@ -70,6 +70,7 @@ pub fn Home() -> impl IntoView {
                         iqamah_time="7:48 PM".to_string()
                         distance=0.2
                         is_favorite=true
+                        image_url="https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=640&h=360&q=80".to_string()
                     />
                     <NearbyMosqueCard
                         mosque_name="Islamic Center of Brooklyn".to_string()
@@ -77,6 +78,7 @@ pub fn Home() -> impl IntoView {
                         iqamah_time="7:50 PM".to_string()
                         distance=0.8
                         is_favorite=false
+                        image_url="https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=640&h=360&q=80".to_string()
                     />
                     <NearbyMosqueCard
                         mosque_name="Masjid At-Taqwa".to_string()
@@ -84,6 +86,7 @@ pub fn Home() -> impl IntoView {
                         iqamah_time="7:45 PM".to_string()
                         distance=1.2
                         is_favorite=false
+                        image_url="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=640&h=360&q=80".to_string()
                     />
                     <NearbyMosqueCard
                         mosque_name="Muslim Community Center".to_string()
@@ -91,6 +94,7 @@ pub fn Home() -> impl IntoView {
                         iqamah_time="7:52 PM".to_string()
                         distance=2.1
                         is_favorite=false
+                        image_url="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=640&h=360&q=80".to_string()
                     />
                 </div>
             </section>
@@ -138,39 +142,38 @@ pub fn Home() -> impl IntoView {
                 </div>
                 <div class="flex gap-5 overflow-x-scroll pb-4">
                     <EducationalResourceCard
-                        icon="📖".to_string()
                         lesson_count="12 lessons".to_string()
                         level="Beginner".to_string()
                         resource_title="Introduction to Tajweed".to_string()
                         resource_by="Sheikh Muhammad Ali".to_string()
                         action_label="Continue Learning".to_string()
+                        image_url="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=640&h=360&q=80".to_string()
                     />
                     <EducationalResourceCard
-                        icon="🌙".to_string()
                         lesson_count="8 lessons".to_string()
                         level="All Levels".to_string()
                         resource_title="Ramadan Preparation Guide".to_string()
                         resource_by="Ustadha Fatima Hassan".to_string()
                         action_label="Start Course".to_string()
+                        image_url="https://images.unsplash.com/photo-1542816417-0983c9c9ad53?auto=format&fit=crop&w=640&h=360&q=80".to_string()
                     />
                     <EducationalResourceCard
-                        icon="🤲".to_string()
                         lesson_count="15 lessons".to_string()
                         level="Intermediate".to_string()
                         resource_title="The Art of Du'a".to_string()
                         resource_by="Imam Yusuf Rahman".to_string()
                         action_label="Continue Learning".to_string()
+                        image_url="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=640&h=360&q=80".to_string()
                     />
                     <EducationalResourceCard
-                        icon="📚".to_string()
                         lesson_count="20 lessons".to_string()
                         level="Advanced".to_string()
                         resource_title="Seerah: Life of the Prophet ﷺ".to_string()
                         resource_by="Dr. Omar Suleiman".to_string()
                         action_label="Start Course".to_string()
+                        image_url="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=640&h=360&q=80".to_string()
                     />
                     <EducationalResourceCard
-                        icon="💎".to_string()
                         lesson_count="10 lessons".to_string()
                         level="Beginner".to_string()
                         resource_title="Islamic Finance Basics".to_string()
