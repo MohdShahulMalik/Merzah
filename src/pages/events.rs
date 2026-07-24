@@ -2,6 +2,7 @@ use crate::components::cards::{AllEventCard, FeaturedEventCard};
 use crate::components::filters::{FilterGroup, FilterOption, Filters};
 use leptos::IntoView;
 use leptos::prelude::*;
+use leptos_router::components::A;
 
 #[component]
 pub fn Events() -> impl IntoView {
@@ -42,7 +43,7 @@ pub fn Events() -> impl IntoView {
             <section class="space-y-6">
                 <div class="flex items-center justify-between">
                     <h1 class="text-3xl font-bold text-purple-900">"Featured Events"</h1>
-                    <a href="#" class="font-medium text-purple-600 hover:text-purple-700">"View All →"</a>
+                    <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">"View All →"</A>
                 </div>
 
                 <div class="grid gap-8 lg:grid-cols-2">

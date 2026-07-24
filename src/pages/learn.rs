@@ -1,6 +1,7 @@
 use crate::components::cards::{ContinueLearningCard, CourseCard, LearningPathCard};
 use crate::components::filters::{FilterGroup, FilterOption, Filters};
 use leptos::prelude::*;
+use leptos_router::components::A;
 
 #[component]
 pub fn Learn() -> impl IntoView {
@@ -55,9 +56,9 @@ pub fn Learn() -> impl IntoView {
             <section class="space-y-6">
                 <div class="flex items-center justify-between gap-4">
                     <h1 class="text-3xl font-bold text-purple-900">"Featured Courses"</h1>
-                    <a href="#" class="font-medium text-purple-600 hover:text-purple-700">
+                    <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">
                         "View All →"
-                    </a>
+                    </A>
                 </div>
 
                 <div class="flex gap-6 w-full overflow-x-scroll scrollbar-hide pb-4">
@@ -139,9 +140,9 @@ pub fn Learn() -> impl IntoView {
             <section class="space-y-6">
                 <div class="flex items-center justify-between gap-4">
                     <h1 class="text-3xl font-bold text-purple-900">"Guided Learning Paths"</h1>
-                    <a href="#" class="font-medium text-purple-600 hover:text-purple-700">
+                    <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">
                         "View All →"
-                    </a>
+                    </A>
                 </div>
 
                 <div class="grid gap-6 md:grid-cols-2">
