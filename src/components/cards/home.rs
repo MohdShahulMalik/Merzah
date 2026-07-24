@@ -220,19 +220,20 @@ pub fn MosqueEventCard(
     event_short_description: String,
 ) -> impl IntoView {
     view! {
-        <article class="shrink-0 w-98 rounded-xl bg-white p-4 ring-1 ring-indigo-950/10">
-            <div class="mb-3 flex items-start justify-between gap-3">
-                <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider {}", event_type_class)>
+        <article class="group relative w-98 shrink-0 overflow-hidden rounded-xl bg-white p-4 ring-1 ring-indigo-950/10 transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-300/70">
+
+            <div class="relative mb-3 flex items-start justify-between gap-3">
+                <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider transition-[transform,letter-spacing] duration-300 ease-out group-hover:tracking-[0.14em] {}", event_type_class)>
                     {event_type}
                 </span>
-                <div class="text-right text-[#050047]">
+                <div class="rounded-lg px-2 py-1 text-right text-[#050047] transition-colors duration-300 ease-out group-hover:bg-indigo-50">
                     <p class="text-[0.85rem] font-bold">{event_day}</p>
                     <p class="mt-0.5 text-xs">{event_time}</p>
                 </div>
             </div>
-            <div class="space-y-1.5">
-                <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047]">{event_title}</h3>
-                <p class="text-xs text-foreground-600">"🕌 "{mosque_name}</p>
+            <div class="relative space-y-1.5">
+                <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-purple-900">{event_title}</h3>
+                <p class="text-xs text-foreground-600 transition-colors duration-300 ease-out group-hover:text-indigo-700">"🕌 "{mosque_name}</p>
                 <p class="text-[0.8rem] leading-relaxed text-[#302977]">{event_short_description}</p>
             </div>
         </article>
