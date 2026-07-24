@@ -137,28 +137,71 @@ pub fn NearbyMosqueCard(
     iqamah_time: String,
     distance: f64,
     is_favorite: bool,
+    #[prop(optional)] image_url: Option<String>,
 ) -> impl IntoView {
+    let image_url = image_url.unwrap_or_else(|| {
+        "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=640&h=360&q=80".to_string()
+    });
+    let image_alt = format!("{} mosque", mosque_name);
+
     view! {
-        <article class="rounded-2xl overflow-hidden bg-white ring-1 ring-indigo-950/5 w-[18rem]">
-            <div class="relative flex h-31 items-center justify-center bg-[#c9cef3]">
-                <span class="text-4xl">"🕌"</span>
-                <div class="absolute right-4 top-2 flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-lg shadow-sm cursor-pointer transition-all">
-                    {if is_favorite { "❤️" } else { "🤍" }}
+        <article class="group relative w-[18rem] overflow-hidden rounded-2xl bg-white ring-1 ring-indigo-950/5 transition-[background-color,ring-color] duration-500 ease-out hover:bg-[#fbf8ef] hover:ring-[#d8c07a]/70">
+            <div class="relative h-31 overflow-hidden bg-[#c9cef3]">
+                <img
+                    src=image_url
+                    alt=image_alt
+                    class="h-full w-full object-cover [object-position:center_48%] transition-[object-position,filter] duration-700 ease-out group-hover:[object-position:center_56%] group-hover:[filter:sepia(0.08)_saturate(0.98)_contrast(1.02)]"
+                />
+                <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-[#050047]/60 via-[#050047]/12 to-white/0"></div>
+
+                <div class="absolute right-3 top-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/25 bg-white/18 text-white backdrop-blur-md transition-[background-color,border-color,color] duration-300 ease-out group-hover:border-white/55 group-hover:bg-white group-hover:text-pink-600">
+                    <svg
+                        class=if is_favorite { "h-4 w-4 fill-pink-500 stroke-pink-500" } else { "h-4 w-4 fill-none stroke-current" }
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5..5 5.5 0 0 0 0-7.78Z" />
+                    </svg>
+                </div>
+
+                <div class="absolute inset-x-0 bottom-0 translate-y-full border-t border-white/15 bg-[#211f55]/88 px-4 py-3 text-white backdrop-blur-md transition-transform duration-500 ease-out group-hover:translate-y-0">
+                    <div class="flex items-center justify-start">
+                        <span class="text-sm font-bold text-amber-200">"View details →"</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="space-y-3 p-4">
+            <div class="relative space-y-3 p-4">
+                <div class="pointer-events-none absolute inset-x-4 top-0 h-px bg-linear-to-r from-transparent via-[#f0bd25]/0 to-transparent transition-colors duration-500 ease-out group-hover:via-[#f0bd25]/70"></div>
+
                 <div>
-                    <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047]">{mosque_name}</h3>
-                    <p class="mt-1 text-sm text-[#17135f]">
-                        <span class="mr-2 text-pink-500">"⚲"</span>
-                        {format!("{distance:.1} km away")}
+                    <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-[#211f55]">
+                        {mosque_name}
+                    </h3>
+                    <p class="mt-2 flex items-center gap-1.5 text-sm text-[#17135f] transition-colors duration-300 ease-out group-hover:text-[#4a3d86]">
+                        <svg
+                            class="h-3.5 w-3.5 text-[#f0bd25]"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0Z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                        <span>{format!("{distance:.1} km away")}</span>
                     </p>
                 </div>
 
-                <div class="flex items-center justify-between rounded-lg bg-[#e8edff] px-3 py-2 text-sm text-[#211c74]">
-                    <span>{iqamah_label}</span>
-                    <span class="font-bold">{iqamah_time}</span>
+                <div class="relative flex items-center justify-between rounded-lg border border-transparent bg-[#e8edff] px-3 py-2 text-sm text-[#211c74] transition-[background-color,border-color] duration-300 ease-out group-hover:border-[#ead58d] group-hover:bg-white/70">
+                    <span class="text-[0.72rem] font-medium uppercase tracking-[0.08em] text-[#5c5793] transition-colors duration-300 ease-out group-hover:text-[#7c6a2e]">{iqamah_label}</span>
+                    <span class="font-bold text-[#211c74] transition-colors duration-300 ease-out group-hover:text-[#6b4e00]">{iqamah_time}</span>
                 </div>
 
             </div>
