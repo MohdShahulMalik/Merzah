@@ -191,14 +191,17 @@ pub fn LearningPathCard(
     cta_label: String,
 ) -> impl IntoView {
     view! {
-        <article class="rounded-2xl bg-white bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-[length:32px_32px] p-6 shadow-lg md:p-8">
-            <div class="mb-4 flex items-start justify-between gap-4">
+        <article class="group relative overflow-hidden rounded-2xl bg-white bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-6 shadow-lg ring-2 ring-transparent transition-[background-position,background-color,ring-color] duration-700 ease-out hover:bg-[#fbfaff] hover:ring-purple-200 group-hover:[background-position:16px_16px] md:p-8">
+            <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(168,85,247,0.13),transparent_28%),linear-gradient(135deg,rgba(240,189,37,0.08),transparent_42%)] opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100"></div>
+            <div class="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-purple-300/0 to-transparent transition-colors duration-700 ease-out group-hover:via-purple-300/80"></div>
+
+            <div class="relative mb-4 flex items-start justify-between gap-4">
                 <div>
-                    <h3 class=format!("mb-2 text-2xl font-bold {}", title_class)>
+                    <h3 class=format!("mb-2 text-2xl font-bold transition-colors duration-300 ease-out {}", title_class)>
                         {title}
                     </h3>
 
-                    <p class=format!("mb-4 {}", description_class)>
+                    <p class=format!("mb-4 transition-colors duration-300 ease-out {}", description_class)>
                         {description}
                     </p>
                 </div>
