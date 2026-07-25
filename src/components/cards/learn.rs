@@ -206,39 +206,45 @@ pub fn LearningPathCard(
                     </p>
                 </div>
 
-                <div class=format!("text-4xl {}", icon_class) aria-hidden="true">
-                    {icon}
+                <div class="relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/70 ring-1 ring-purple-100 transition-[background-color,ring-color] duration-500 ease-out group-hover:bg-white group-hover:ring-purple-200" aria-hidden="true">
+                    <div class="absolute inset-1 rounded-2xl bg-purple-200/0 blur-md transition-colors duration-500 ease-out group-hover:bg-purple-200/45"></div>
+                    <div class=format!("relative text-4xl transition-[transform,filter] duration-500 ease-out group-hover:-rotate-3 group-hover:scale-105 group-hover:[filter:saturate(1.12)] {}", icon_class)>
+                        {icon}
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-gray-400">
-                <div class="flex items-center gap-2">
+            <div class="relative mb-6 flex flex-wrap items-center gap-3 text-gray-400">
+                <div class="flex items-center gap-2 rounded-full bg-white/50 px-3 py-1.5 text-sm ring-1 ring-purple-100/0 transition-[background-color,ring-color,color] duration-300 ease-out group-hover:bg-white/80 group-hover:text-purple-700 group-hover:ring-purple-100">
                     <span aria-hidden="true">"📖"</span>
                     <span>{course_count}</span>
                 </div>
 
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 rounded-full bg-white/50 px-3 py-1.5 text-sm ring-1 ring-purple-100/0 transition-[background-color,ring-color,color] duration-300 ease-out group-hover:bg-white/80 group-hover:text-purple-700 group-hover:ring-purple-100">
                     <span aria-hidden="true">"⏱️"</span>
                     <span>{duration}</span>
                 </div>
             </div>
 
-            <div class="mb-4">
+            <div class="relative mb-4">
                 <div class="mb-2 flex items-center justify-between">
-                    <span class="text-sm text-gray-700">"Path Progress"</span>
-                    <span class="text-sm font-bold text-gray-700">{progress_label}</span>
+                    <span class="text-sm text-gray-700 transition-colors duration-300 ease-out group-hover:text-purple-800">"Path Progress"</span>
+                    <span class="text-sm font-bold text-gray-700 transition-colors duration-300 ease-out group-hover:text-purple-900">{progress_label}</span>
                 </div>
 
-                <div class="h-2 w-full overflow-hidden rounded-full bg-purple-900/30">
+                <div class="h-2 w-full overflow-hidden rounded-full bg-purple-900/30 ring-1 ring-purple-900/0 transition-[background-color,ring-color] duration-300 ease-out group-hover:bg-purple-900/20 group-hover:ring-purple-200/70">
                     <div
-                        class="h-full rounded-full bg-purple-500 transition-[width] duration-300 ease-out"
+                        class="relative h-full overflow-hidden rounded-full bg-purple-500 transition-[width,background-color] duration-500 ease-out group-hover:bg-purple-600"
                         style=format!("width: {}%;", progress_percent)
-                    />
+                    >
+                        <span class="absolute inset-y-0 left-0 w-10 -translate-x-full bg-linear-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[220%]"></span>
+                    </div>
                 </div>
             </div>
 
-            <button class="w-full rounded-xl bg-purple-700 py-3 font-semibold text-white transition hover:bg-purple-600">
-                {cta_label}
+            <button class="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-purple-700 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-purple-600">
+                <span class="relative">{cta_label}</span>
+                <span class="relative transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">"→"</span>
             </button>
         </article>
     }
