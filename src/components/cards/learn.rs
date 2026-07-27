@@ -19,7 +19,7 @@ pub fn ContinueLearningCard(
     view! {
         <article class="rounded-2xl border border-purple-200 bg-linear-to-br from-purple-100 to-indigo-100 p-6 shadow-md md:px-8 md:py-7">
             <div class="flex gap-6 ">
-                <div class="w-50 xl:w-64 max-md:hidden">
+                <div class="w-64 max-md:hidden">
                     <img
                         src = {img_link}
                         alt="Continue Learning"
