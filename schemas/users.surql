@@ -6,5 +6,6 @@ DEFINE FIELD IF NOT EXISTS role ON users TYPE string
 	ASSERT $value IN ['app_admin', 'mosque_supervisor', 'education_supervisor','educator', 'regular']
 	DEFAULT 'regular';
 DEFINE FIELD IF NOT EXISTS display_name ON users TYPE string;
+DEFINE FIELD IF NOT EXISTS default_mosque ON users TYPE option<record<mosques>>;
 DEFINE FIELD IF NOT EXISTS created_at ON users TYPE datetime DEFAULT time::now();
 DEFINE FIELD IF NOT EXISTS updated_at ON users TYPE datetime DEFAULT time::now();
