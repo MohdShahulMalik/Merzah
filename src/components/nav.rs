@@ -12,7 +12,6 @@ pub fn Nav() -> impl IntoView {
 
     view! {
         <nav class = "fixed bottom-0 right-0 left-0 border-t border-gray-200 bg-white shadow-lg lg:sticky lg:top-0 lg:flex lg:text-left lg:w-[17vw] lg:min-w-fit lg:h-screen lg:flex-col lg:self-start lg:border-t-0 lg:border-r lg:py-6 lg:px-4 lg:shadow-md z-10">
-
             <div class="gap-2 mb-4 hidden lg:flex lg:pl-4 lg:p-3 lg:items-center lg:mb-6">
                 <img class="w-auto h-10 rounded-full" src="/assets/logo.png" />
                 <img class="w-auto h-8" src="/assets/logo-text.png" alt="Merzah <logo>" />
@@ -95,6 +94,26 @@ pub fn Nav() -> impl IntoView {
                     </button>
                 </li>
             </ul>
+
+            <div class="max-lg:hidden lg:mt-auto lg:w-full">
+                <div
+                    class=account_card_class
+                    role="button"
+                    tabindex="0"
+                >
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                            <path d="M20 21a8 8 0 0 0-16 0" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+
+                    <div class="min-w-0">
+                        <p class="truncate text-sm font-semibold text-gray-900">{user_name}</p>
+                        <p class="truncate text-xs font-medium text-gray-500">Account</p>
+                    </div>
+                </div>
+            </div>
         </nav>
     }
 }
