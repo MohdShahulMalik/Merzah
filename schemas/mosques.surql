@@ -4,6 +4,7 @@ DEFINE FIELD IF NOT EXISTS name ON mosques TYPE option<string>;
 DEFINE FIELD IF NOT EXISTS location ON mosques TYPE geometry<point>;
 DEFINE FIELD IF NOT EXISTS street ON mosques TYPE option<string>;
 DEFINE FIELD IF NOT EXISTS city ON mosques TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS cover_img ON mosques TYPE option<string>;
 
 DEFINE FIELD IF NOT EXISTS imam ON mosques TYPE option<record<users>>;
 DEFINE FIELD IF NOT EXISTS muazzin ON mosques TYPE option<record<users>>;
