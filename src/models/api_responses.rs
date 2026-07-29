@@ -36,6 +36,7 @@ pub struct MosqueResponse {
     pub name: Option<String>,
     pub street: Option<String>,
     pub city: Option<String>,
+    pub cover_img: Option<String>,
     pub adhan_times: Option<PrayerTimes>,
     pub jamat_times: Option<PrayerTimes>,
     pub imam: Option<UserOnClient>,
