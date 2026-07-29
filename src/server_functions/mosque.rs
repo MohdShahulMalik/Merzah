@@ -148,10 +148,19 @@ pub async fn add_mosques_of_region(
                 _ => return None,
             };
             let location = Geometry::Point((lon, lat).into());
-            let (name, city, street) = elem
+            let (name, city, street, wikimedia_commons) = elem
                 .tags
-                .map(|tags| (tags.name, tags.street, tags.city))
-                .unwrap_or((None, None, None));
+                .map(|tags| (tags.name, tags.street, tags.city, tags.wikimedia_commons))
+                .unwrap_or((None, None, None, None));
+
+            let cover_img = match wikimedia_commons {
+                Some(ref filename) if !filename.is_empty() => Some(
+                    format!(
+                    "https://commons.wikimedia.org/wiki/Special:FilePath/{}",
+                    filename
+                )),
+                _ => None,
+            };
 
             Some(MosqueFromOverpass {
                 id: RecordId::from(("mosques", elem.id)),
@@ -159,6 +168,7 @@ pub async fn add_mosques_of_region(
                 location,
                 street,
                 city,
+                cover_img,
             })
         })
         .collect();
