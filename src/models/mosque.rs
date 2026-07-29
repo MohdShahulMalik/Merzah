@@ -19,6 +19,7 @@ pub struct MosqueFromOverpass {
     pub location: Geometry,
     pub street: Option<String>,
     pub city: Option<String>,
+    pub cover_img: Option<String>,
 }
 
 #[cfg(feature = "ssr")]
@@ -34,6 +35,7 @@ pub struct MosqueSearchResult {
     pub jamat_times: Option<PrayerTimes>,
     pub imam: Option<User>,
     pub muazzin: Option<User>,
+    pub cover_img: Option<String>,
 }
 
 #[cfg(feature = "ssr")]
@@ -45,6 +47,7 @@ pub struct MosqueRecord {
     pub name: Option<String>,
     pub street: Option<String>,
     pub city: Option<String>,
+    pub cover_img: Option<String>,
     pub adhan_times: Option<PrayerTimes>,
     pub jamat_times: Option<PrayerTimes>,
 }
@@ -83,6 +86,7 @@ impl MosqueSearchResult {
             name: self.name,
             street: self.street,
             city: self.city,
+            cover_img: self.cover_img,
             adhan_times: self.adhan_times,
             jamat_times: self.jamat_times,
             imam_contact: vec![],
@@ -122,6 +126,7 @@ pub struct Tags {
     pub street: Option<String>,
     #[serde(rename = "addr:city")]
     pub city: Option<String>,
+    pub wikimedia_commons: Option<String>,
 }
 
 /// Prayer times stored in the database as strings ("HH:MM:SS" format)
