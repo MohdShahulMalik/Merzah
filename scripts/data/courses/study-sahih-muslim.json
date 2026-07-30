@@ -1,0 +1,34 @@
+{
+  "title": "Study Sahih Muslim",
+  "slug": "study-sahih-muslim",
+  "description": "Study Sahih Muslim, compiled by Imam Abu al-Husayn Muslim ibn al-Hajjaj al-Qushayri al-Naysaburi (821-875 CE), is the second most authentic hadith collection in Sunni Islam. Born in Nishapur (modern-day Iran), Imam Muslim spent years traveling to collect hadiths from scholars across the Islamic world. His collection contains approximately 7,500 hadiths organized into 56 books, with minimal repetition compared to other collections. Sahih Muslim is renowned for its scholarly methodology and precise grading of hadith chains, making it an indispensable reference for Islamic jurisprudence.",
+  "short_description": "Explore Sahih Muslim, the second most authentic hadith collection, on Sunnah.com",
+  "track_slug": "quran",
+  "educator_id": "PLACEHOLDER",
+  "level": "intermediate",
+  "language": "en",
+  "thumbnail_url": "https://sunnah.com/images/logo/sunnah_logo.png",
+  "modules": [
+    {
+      "title": "Sahih Muslim",
+      "description": "Access the complete Sahih Muslim collection on Sunnah.com",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Browse Sahih Muslim on Sunnah.com",
+          "content_type": "external_link",
+          "content": "Access the full Sahih Muslim hadith collection on Sunnah.com. Includes 7,500 hadiths across 56 books covering Faith, Purification, Prayer, and more.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": "https://sunnah.com/muslim",
+          "thumbnail_url": null,
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": true
+        }
+      ]
+    }
+  ]
+}

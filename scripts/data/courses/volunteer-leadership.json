@@ -1,0 +1,153 @@
+{
+  "title": "Volunteer Leadership",
+  "slug": "volunteer-leadership",
+  "description": "This course develops the skills and mindset needed for effective volunteer leadership in Muslim communities. Students will learn the Islamic foundations of service, how to organize community events, manage nonprofit initiatives, and develop youth leadership programs.\n\nThe course examines the concept of sadaqah jariyah (ongoing charity) as motivation for volunteer work, studies the Prophetic model of servant leadership, and provides practical skills for community organizing. Participants will understand that volunteering is not just community service but a form of worship with spiritual reward.\n\nPractical modules cover event planning, fundraising, team building, and measuring impact, all grounded in Islamic principles. The course prepares participants to lead volunteer initiatives that serve both the Muslim community and society at large.",
+  "short_description": "Develop leadership skills for volunteer work and community service initiatives",
+  "track_slug": "community",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "Islamic Foundations of Service",
+      "description": "Understanding the spiritual and communal basis for volunteer work",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Sadaqah Jariyah: Ongoing Charity",
+          "content_type": "text",
+          "content": "The concept of sadaqah jariyah (صدقة جارية) provides profound motivation for volunteer work. The Prophet (ﷺ) said: 'When a person dies, their deeds come to an end except for three: ongoing charity, knowledge that benefits others, and a righteous child who prays for them.' (Sahih Muslim, 1631). This hadith establishes that some good deeds continue to earn reward after death.\n\nVolunteer work that benefits the community can qualify as sadaqah jariyah. This includes: teaching knowledge that benefits others, building community infrastructure, supporting educational programs, and any effort that continues to help people after the volunteer's involvement ends.\n\nImam Al-Nawawi in his commentary on Sahih Muslim explains that 'ongoing charity' refers to acts whose benefit persists, unlike one-time donations. This makes volunteering particularly valuable, as its impact often continues indefinitely.\n\nUnderstanding sadaqah jariyah transforms volunteer work from mere community service to an investment in the afterlife. This spiritual motivation can sustain volunteers through difficulties and inspire greater dedication to serving others.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 18,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "The Prophetic Model of Servant Leadership",
+          "content_type": "text",
+          "content": "Prophet Muhammad (ﷺ) exemplified servant leadership, putting others' needs before his own despite being the leader of the Muslim community. Aisha narrated: 'The Messenger of Allah used to patch his shoes, mend his clothes, and do what men do in their homes.' (Sahih al-Bukhari, 5580). This shows his humility and willingness to serve.\n\nThe Prophet (ﷺ) said: 'The leader of a people is their servant.' (Sunan al-Darimi, 267). This profound statement establishes that true leadership in Islam is defined by service, not authority or privilege.\n\nImam Ibn Taymiyyah in 'Minhaj al-Sunnah' explains that the Prophet's leadership was based on his willingness to serve others. He would carry food to the poor, visit the sick, and even help with manual labor when needed.\n\nThis model of leadership contrasts sharply with authoritarian or self-serving leadership. Volunteer leaders should prioritize serving their communities, being accessible, and sharing in the work rather than merely directing it. The best leaders are those who lead by example through service.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Organizing Community Events",
+      "description": "Practical skills for planning and executing effective community programs",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Planning Effective Community Programs",
+          "content_type": "text",
+          "content": "Effective community programs begin with clear objectives and careful planning. The Quranic principle of shura (consultation) applies to program planning: 'And their affair is [determined by] consultation among themselves.' (42:38). This verse establishes that community decisions should involve collective input.\n\nKey planning steps include: identifying community needs, setting realistic objectives, developing a timeline, assigning responsibilities, and creating contingency plans. Each step should involve relevant stakeholders and reflect the community's actual needs.\n\nImam Al-Ghazali in 'Ihya Ulum al-Din' emphasizes that planning should be accompanied by tawakkul (reliance on Allah) after making effort. This balance means doing your best while trusting Allah for the outcome.\n\nPractical considerations include: budgeting, venue selection, promotion, volunteer coordination, and follow-up. Documenting successful programs creates templates for future events and helps transfer knowledge between volunteer teams.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 22,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Team Building and Volunteer Management",
+          "content_type": "text",
+          "content": "Building effective volunteer teams requires understanding human motivation and creating supportive environments. The Quran describes believers as: 'Like a grain which produces seven ears, in each ear a hundred grains.' (2:261). This metaphor of multiplicity illustrates how small volunteer efforts can grow into large impacts.\n\nEffective team building involves: matching volunteers to appropriate roles, providing necessary training, recognizing contributions, and creating opportunities for growth. Volunteers are more likely to stay engaged when they feel valued and see their impact.\n\nImam Al-Nawawi in 'Riyadh al-Salihin' lists the qualities of good leadership: justice, compassion, humility, and consultation. These qualities apply equally to volunteer team leaders.\n\nPractical strategies include: regular team meetings, clear communication channels, conflict resolution procedures, and celebrating milestones. Creating a positive team culture where volunteers enjoy their work is essential for long-term sustainability.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Nonprofit Management for Community Initiatives",
+      "description": "Organizational skills for sustainable community service projects",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Creating Sustainable Community Organizations",
+          "content_type": "text",
+          "content": "Sustainable community organizations require sound management, clear vision, and ongoing development. The Quranic principle of ahl al-dhikr (people of remembrance) reminds Muslims to seek guidance from those with knowledge and experience: 'So ask the people of knowledge if you do not know.' (16:43).\n\nKey elements of sustainable organizations include: clear mission and vision statements, effective governance structures, financial accountability, and succession planning. These elements ensure that organizations survive beyond their founders.\n\nImam Ibn Khaldun in 'al-Muqaddimah' discusses the importance of organizational structures in building lasting civilizations. While his focus was broader, his principles apply to community organizations: strong institutions outlast individuals.\n\nPractical considerations include: legal registration, financial transparency, volunteer handover procedures, and documentation of processes. These systems create reliability that builds community trust and attracts support.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 22,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Fundraising and Financial Management",
+          "content_type": "text",
+          "content": "Ethical fundraising is essential for community organizations. The Prophet (ﷺ) said: 'The honest, trustworthy merchant will be with the prophets, the truthful, and the martyrs.' (Sunan al-Tirmidhi, 1209). This hadith establishes that financial integrity is a mark of faithfulness.\n\nIslamic fundraising principles include: transparency about how funds will be used, avoiding deception or pressure, giving donors clear information, and maintaining strict accountability. The Quran commands: 'O you who have believed, do not consume one another's wealth unjustly.' (4:29).\n\nImam Al-Shafi'i's legal opinions on financial transactions provide guidelines for fundraising that avoids prohibited elements like riba (interest) or gharar (excessive uncertainty). Modern organizations should follow these principles while adapting to contemporary financial systems.\n\nPractical strategies include: creating donation systems, organizing fundraising events, applying for grants, building relationships with donors, and maintaining transparent financial reporting. These practices build trust and ensure long-term sustainability.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 18,
+          "sort_order": 2,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Youth Leadership Development",
+      "description": "Mentoring and empowering young Muslim leaders",
+      "sort_order": 4,
+      "lessons": [
+        {
+          "title": "Mentoring Young Muslims",
+          "content_type": "text",
+          "content": "The Prophet (ﷺ) invested significantly in mentoring young Muslims, recognizing their potential to lead the community. He said: 'Whoever teaches some good, he will have the reward of the one who does it.' (Sunan Ibn Majah, 240). This hadith establishes that mentoring others in good deeds earns equal reward.\n\nEffective mentoring involves: building genuine relationships, providing consistent support, sharing experiences, and creating opportunities for growth. Mentors should be approachable, honest, and willing to share both successes and failures.\n\nImam Al-Ghazali in 'Ihya Ulum al-Din' discusses the importance of choosing righteous companions and mentors, noting that youth are particularly influenced by those they admire. This places great responsibility on mentors.\n\nPractical mentoring strategies include: regular one-on-one meetings, group activities, skill-building opportunities, and connecting youth with positive role models. The goal is to develop confident, capable young leaders who can serve their communities effectively.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Youth-Led Community Initiatives",
+          "content_type": "text",
+          "content": "Empowering youth to lead community initiatives develops their skills while serving the community. The Quran describes the people of the cave (Ashab al-Kahf) as young people who stood for truth: 'We have related their story to you in truth.' (18:13). Their example shows that youth can be champions of righteousness.\n\nYouth-led initiatives require: adult guidance without micromanagement, appropriate responsibility, room for mistakes, and recognition of achievements. These elements build confidence while maintaining accountability.\n\nImam Ibn Hajar al-Asqalani notes that the Prophet (ﷺ) appointed young companions like Usamah ibn Zaid to lead expeditions, demonstrating trust in youth capabilities. This trust, when given appropriately, inspires greater responsibility.\n\nSuccessful youth programs include: youth-led da'wah projects, community service initiatives, educational programs, and social activities. These initiatives should be designed with youth input and leadership, not merely delegated to them. Youth ownership creates lasting engagement and develops future community leaders.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 18,
+          "sort_order": 2,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

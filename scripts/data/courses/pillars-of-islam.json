@@ -1,0 +1,265 @@
+{
+  "title": "Pillars of Islam",
+  "slug": "pillars-of-islam",
+  "description": "A comprehensive guide to the five pillars of Islam: Shahada, Salah, Zakat, Sawm, and Hajj. Learn the historical context, practical implementation, and spiritual significance of each pillar in a Muslim's life. This course covers the foundational beliefs and practices that form the core of Islamic faith, with detailed explanations of each pillar's requirements, wisdoms, and common questions.",
+  "short_description": "Comprehensive guide to the five pillars: Shahada, Salah, Zakat, Sawm, and Hajj",
+  "track_slug": "faith-worship",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "Introduction to the Pillars",
+      "description": "Understanding the foundation of Islamic practice",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "What Are the Pillars of Islam?",
+          "content_type": "text",
+          "content": "The five pillars of Islam are the fundamental acts of worship that every Muslim must fulfill. They form the foundation of a Muslim's life and faith. The Prophet Muhammad (peace be upon him) said: 'Islam is built upon five [pillars]: testifying that there is no deity worthy of worship except Allah and that Muhammad is the Messenger of Allah, establishing the prayer, paying the Zakat, making the pilgrimage to the House (Hajj), and fasting in Ramadan.' (Sahih al-Bukhari)",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "The Historical Context of the Five Pillars",
+          "content_type": "video",
+          "content": "Explore how the five pillars were established during the Prophet's mission and their evolution over time.",
+          "video_url": "https://example.com/videos/pillars-history.mp4",
+          "video_duration_seconds": 1200,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Shahada: The Declaration of Faith",
+      "description": "Understanding the testimony of faith",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "The Meaning of Shahada",
+          "content_type": "text",
+          "content": "The Shahada is the most fundamental pillar of Islam. It consists of two parts: 'La ilaha illallah' (There is no god but Allah) and 'Muhammadun rasulullah' (Muhammad is the Messenger of Allah). This declaration encompasses monotheism, prophethood, and the acceptance of Islam as a complete way of life.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Conditions and Levels of Shahada",
+          "content_type": "text",
+          "content": "The Shahada has seven conditions: knowledge, certainty, acceptance, submission, truthfulness, sincerity, and love. Understanding these conditions helps a Muslim internalize the meaning of the Shahada and live according to its principles.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Common Questions About Shahada",
+          "content_type": "text",
+          "content": "This lesson addresses frequently asked questions about the Shahada, including its role in conversion, its daily recitation, and its significance in a Muslim's life.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Salah: The Prayer",
+      "description": "Detailed guide to the daily prayers",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "The Importance of Salah",
+          "content_type": "text",
+          "content": "Salah is the second pillar of Islam and the most important act of worship after the Shahada. The Prophet Muhammad (peace be upon him) said: 'The first thing that Allah will ask a servant about on the Day of Judgment is the Salah. If it is good, then the rest of his deeds will be good, and if it is corrupt, then the rest of his deeds will be corrupt.'",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "How to Perform Wudu (Ablution)",
+          "content_type": "video",
+          "content": "Step-by-step guide to performing wudu, the ritual purification before prayer.",
+          "video_url": "https://example.com/videos/wudu-guide.mp4",
+          "video_duration_seconds": 600,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 10,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Five Daily Prayers",
+          "content_type": "text",
+          "content": "Detailed guide to Fajr, Dhuhr, Asr, Maghrib, and Isha prayers, including their times, rak'ahs, and special considerations.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Jumu'ah (Friday Prayer)",
+          "content_type": "text",
+          "content": "Understanding the Friday congregational prayer, its requirements, and the khutbah (sermon).",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Zakat: The Obligatory Charity",
+      "description": "Understanding the third pillar of Islam",
+      "sort_order": 4,
+      "lessons": [
+        {
+          "title": "What is Zakat?",
+          "content_type": "text",
+          "content": "Zakat is the obligatory charity that every Muslim must pay on their wealth if it exceeds the nisab threshold for one lunar year. It is typically 2.5% of one's savings and is one of the five pillars of Islam.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Calculating Zakat",
+          "content_type": "text",
+          "content": "Learn how to calculate your Zakat obligation, including what types of wealth are Zakatable, the nisab threshold, and the Hijri year calculation.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 2,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Sawm: Fasting in Ramadan",
+      "description": "The spiritual and practical aspects of fasting",
+      "sort_order": 5,
+      "lessons": [
+        {
+          "title": "The Purpose of Fasting",
+          "content_type": "text",
+          "content": "Fasting in Ramadan is the fourth pillar of Islam. It teaches self-discipline, empathy for the less fortunate, and strengthens one's relationship with Allah. Allah says in the Quran: 'O you who believe, fasting is prescribed for you as it was prescribed for those before you, that you may achieve Taqwa (God-consciousness).' (Quran 2:183)",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Rules of Fasting",
+          "content_type": "text",
+          "content": "What invalidates a fast, who is exempt, and how to make up missed fasts.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Hajj: The Pilgrimage",
+      "description": "Complete guide to the pilgrimage to Makkah",
+      "sort_order": 6,
+      "lessons": [
+        {
+          "title": "The Fifth Pillar: Hajj",
+          "content_type": "text",
+          "content": "Hajj is the pilgrimage to Makkah that every Muslim must perform at least once in their lifetime if they are physically and financially able. It is the fifth pillar of Islam and takes place during the Islamic month of Dhul Hijjah.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Steps of Hajj",
+          "content_type": "text",
+          "content": "A step-by-step guide to performing Hajj, from entering Ihram to the farewell Tawaf.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

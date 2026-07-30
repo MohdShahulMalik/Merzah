@@ -1,0 +1,34 @@
+{
+  "title": "Hisn al-Muslim: Fortress of the Muslim",
+  "slug": "hisn-al-muslim",
+  "description": "Study Hisn al-Muslim (Fortress of the Muslim), compiled by Sa'id ibn Wahf al-Qahtani. This widely beloved collection organizes daily supplications (duas) and remembrances (athkar) for various occasions throughout the day and night, from waking up to going to sleep. Hisn al-Muslim has become one of the most popular Islamic reference works for daily prayers and supplications, drawing its hadiths from authentic sources including Sahih al-Bukhari, Sahih Muslim, and other canonical collections.",
+  "short_description": "Master daily supplications and remembrances from Hisn al-Muslim on Sunnah.com",
+  "track_slug": "faith-worship",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://sunnah.com/images/logo/sunnah_logo.png",
+  "modules": [
+    {
+      "title": "Hisn al-Muslim",
+      "description": "Access the complete Hisn al-Muslim collection on Sunnah.com",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Browse Hisn al-Muslim on Sunnah.com",
+          "content_type": "external_link",
+          "content": "Access the full Hisn al-Muslim collection on Sunnah.com. Includes supplications for waking up, entering/leaving the mosque, eating, traveling, and many more daily occasions.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": "https://sunnah.com/hisn",
+          "thumbnail_url": null,
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": true
+        }
+      ]
+    }
+  ]
+}

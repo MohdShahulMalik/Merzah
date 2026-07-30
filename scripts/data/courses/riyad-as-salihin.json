@@ -1,0 +1,34 @@
+{
+  "title": "Riyad as-Salihin: Gardens of the Righteous",
+  "slug": "riyad-as-salihin",
+  "description": "Study Riyad as-Salihin (Gardens of the Righteous), compiled by Imam Muhyi ad-Din Abu Zakariyya Yahya ibn Sharaf an-Nawawi (1233-1277 CE). This renowned collection focuses on moral teachings and spiritual practices, drawing hadiths primarily from the two most authentic sources: Sahih al-Bukhari and Sahih Muslim. Imam an-Nawawi organized the hadiths into topical chapters covering matters of worship, ethics, and spiritual purification, making it one of the most widely read hadith collections in the Muslim world.",
+  "short_description": "Explore Riyad as-Salihin, a collection of hadiths on spiritual and moral teachings, on Sunnah.com",
+  "track_slug": "character",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://sunnah.com/images/logo/sunnah_logo.png",
+  "modules": [
+    {
+      "title": "Riyad as-Salihin",
+      "description": "Access the complete Riyad as-Salihin collection on Sunnah.com",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Browse Riyad as-Salihin on Sunnah.com",
+          "content_type": "external_link",
+          "content": "Access the full Riyad as-Salihin hadith collection on Sunnah.com. Includes hadiths from Bukhari and Muslim organized by topics including Intention, Repentance, Patience, and more.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": "https://sunnah.com/riyadussalihin",
+          "thumbnail_url": null,
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "title": "Sunan an-Nasa'i",
+  "slug": "study-sunan-an-nasai",
+  "description": "Study Sunan an-Nasa'i, compiled by Imam Abu Abd ar-Rahman Ahmad ibn Shu'ayb an-Nasa'i (829-915 CE), one of the six major hadith collections (Kutub al-Sittah) in Sunni Islam. Born in Nasa in the Khurasan region (modern-day Turkmenistan), Imam an-Nasa'i was renowned for his strict criteria in selecting authentic hadiths. His collection contains approximately 5,761 hadiths organized into 51 books, with emphasis on hadiths with shorter chains of narration (isnad). The collection focuses primarily on acts of worship and matters of jurisprudence, making it an essential reference for Islamic law.",
+  "short_description": "Explore Sunan an-Nasa'i, one of the six canonical hadith collections, on Sunnah.com",
+  "track_slug": "quran",
+  "educator_id": "PLACEHOLDER",
+  "level": "intermediate",
+  "language": "en",
+  "thumbnail_url": "https://sunnah.com/images/logo/sunnah_logo.png",
+  "modules": [
+    {
+      "title": "Sunan an-Nasa'i",
+      "description": "Access the complete Sunan an-Nasa'i collection on Sunnah.com",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Browse Sunan an-Nasa'i on Sunnah.com",
+          "content_type": "external_link",
+          "content": "Access the full Sunan an-Nasa'i hadith collection on Sunnah.com. Includes 5,761 hadiths across 51 books covering purification, prayer, Zakat, fasting, and more.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": "https://sunnah.com/nasai",
+          "thumbnail_url": null,
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": true
+        }
+      ]
+    }
+  ]
+}

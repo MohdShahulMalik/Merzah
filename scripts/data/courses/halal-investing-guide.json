@@ -1,0 +1,209 @@
+{
+  "title": "Halal Investing Guide",
+  "slug": "halal-investing-guide",
+  "description": "A comprehensive intermediate-level course on building a Shariah-compliant investment portfolio. Learn how to screen stocks, evaluate Islamic funds, invest in real estate, and diversify your wealth while maintaining compliance with Islamic principles. This course covers AAOIFI screening standards, sector analysis, and practical portfolio construction techniques.\n\nThis course bridges the gap between classical Islamic jurisprudence and modern investment practices. You will learn the two-stage screening process used by major Islamic index providers, understand the financial ratios that determine permissibility, and explore various asset classes available to Muslim investors. Each lesson includes practical examples and real-world applications.\n\nBy the end of this course, you will have the knowledge and tools to build a diversified, halal investment portfolio that generates returns while staying true to your values. Whether you are a beginner investor or looking to transition your existing portfolio to Shariah compliance, this course provides the guidance you need.",
+  "short_description": "Build a Shariah-compliant investment portfolio with confidence using Islamic screening criteria",
+  "track_slug": "finance",
+  "educator_id": "PLACEHOLDER",
+  "level": "intermediate",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "Foundations of Halal Investing",
+      "description": "Understanding the principles that guide Islamic investment decisions",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Why Invest? The Islamic Perspective on Growing Wealth",
+          "content_type": "text",
+          "content": "Islam encourages the acquisition and growth of wealth through halal means. The Prophet Muhammad (peace be upon him) said: 'The upper hand is better than the lower hand. The upper hand is the one that gives, and the lower hand is the one that begs.' (Sahih al-Bukhari) This hadith establishes that earning and investing is preferable to depending on others.\n\nThe Quran acknowledges that wealth is a trial: 'Beautified for people is the love of that which they desire — of women and sons, heaped-up sums of gold and silver, fine branded horses, and cattle and tilled land. That is the enjoyment of worldly life, but Allah has with Him the best return.' (Quran 3:14) While wealth is a test, Islam does not advocate poverty or rejection of worldly means. Instead, it teaches Muslims to earn, invest, and spend wealth responsibly.\n\nInvesting is a means of preserving and growing wealth to meet future needs, provide for one's family, and fulfill religious obligations. The Quran states: 'And give them from the wealth of Allah which He has given you.' (Quran 24:33) This verse implies that one must have wealth to give, which requires earning and potentially investing.\n\nThe Islamic approach to investing emphasizes ethical conduct, risk-sharing, and social responsibility. Unlike speculative approaches that seek quick profits through gambling-like methods, Islamic investing focuses on long-term wealth creation through productive economic activity. This aligns with the Maqasid al-Shariah (objectives of Islamic law), which include the preservation of wealth and the promotion of economic justice.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "The Two-Stage Screening Process",
+          "content_type": "text",
+          "content": "Halal investing uses a two-stage screening process to evaluate whether a company is Shariah-compliant. The first stage is qualitative (sector-based) screening, and the second stage is quantitative (financial ratio) screening. This methodology is used by major Islamic index providers such as MSCI, S&P, and Dow Jones.\n\nThe first stage eliminates companies whose primary business involves prohibited (haram) activities. These include: conventional financial services (banking, insurance, interest-based lending), alcohol production and distribution, pork and non-halal food products, tobacco, gambling and gaming, adult entertainment, weapons and defense, and conventional media that promotes immorality.\n\nThe second stage applies financial ratio thresholds to companies that pass the first stage. These ratios ensure that even permissible companies do not have excessive exposure to interest-bearing debt or impure income. The most commonly used ratios are: debt-to-market capitalization ratio (typically below 33%), cash-to-market capitalization ratio (typically below 33%), and impure income ratio (typically below 5%).\n\nThe Accounting and Auditing Organization for Islamic Financial Institutions (AAOIFI) has established specific standards for these ratios. AAOIFI Standard No. 21 (Financial Papers) provides detailed guidance on the screening criteria and thresholds. These standards are developed in consultation with qualified Shariah scholars and are regularly updated to address new financial developments.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Understanding Shariah-Compliant Indices",
+          "content_type": "text",
+          "content": "Shariah-compliant indices are stock market indices that include only companies meeting Islamic screening criteria. These indices provide Muslim investors with ready-made investment options that align with their values. The first Shariah-compliant index, the Dow Jones Islamic Market Index, was launched in 1999.\n\nMajor Shariah-compliant indices include: MSCI Islamic Index Series (covering developed and emerging markets), S&P Shariah Indices, FTSE4Good Islamic Index, and regional indices like the Bursa Malaysia Syariah Index. These indices cover various market capitalizations, sectors, and geographic regions, providing diversification opportunities for Muslim investors.\n\nShariah-compliant indices typically exclude companies involved in haram activities and apply financial ratio screening. The methodology may vary slightly between index providers, but the core principles are consistent. For example, the MSCI Islamic Index Series excludes companies with significant involvement in alcohol, tobacco, gambling, weapons, and conventional financial services.\n\nMuslim investors can access Shariah-compliant indices through exchange-traded funds (ETFs) that track these indices. These ETFs provide a convenient and cost-effective way to invest in a diversified portfolio of halal stocks without having to individually screen each company. Examples include the iShares MSCI World Islamic ETF and the SP Funds S&P 500 Sharia Industry Exclusions ETF.\n\nHowever, some scholars caution that not all Shariah-compliant indices are equal. The screening criteria may be more or less stringent, and the rebalancing frequency affects compliance. Muslim investors should understand the methodology behind any index they invest in and consult with qualified scholars if they have doubts.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Stock Market Investing",
+      "description": "How to evaluate and invest in individual halal stocks",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Fundamental Analysis for Halal Stocks",
+          "content_type": "text",
+          "content": "Fundamental analysis is essential for halal stock investing because it helps investors evaluate whether a company is both Shariah-compliant and financially sound. This analysis involves examining a company's financial statements, business model, competitive position, and growth prospects.\n\nWhen conducting fundamental analysis for halal stocks, investors should first verify that the company passes the qualitative screening criteria. This means examining the company's primary business activities to ensure they do not involve haram products or services. The company's annual report, website, and industry reports can provide this information.\n\nThe second step is to calculate the financial ratio thresholds. Key ratios include: Total Debt / Market Capitalization (should be below 33%), Cash and Interest-Bearing Securities / Market Capitalization (should be below 33%), and Accounts Receivable / Market Capitalization (should be below 45% in some methodologies). These ratios ensure that the company is not overly dependent on interest-bearing debt and does not hold excessive impure assets.\n\nThe third step is to evaluate the company's financial health and growth prospects. This includes analyzing revenue growth, profitability margins, return on equity, debt levels, and competitive position. A company that is both Shariah-compliant and financially strong is the ideal investment candidate. The Quran states: 'O you who believe, when the prayer has been concluded, disperse within the land and seek from the bounty of Allah.' (Quran 62:10) This verse encourages Muslims to engage in productive economic activity, which includes investing in viable businesses.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Sector Analysis: Which Industries to Consider",
+          "content_type": "text",
+          "content": "Understanding which sectors are generally Shariah-compliant helps investors narrow their search for halal investment opportunities. While individual companies must still be screened, certain sectors are more likely to produce Shariah-compliant investments.\n\nTechnology is generally considered Shariah-compliant because most technology companies do not involve haram products or services. However, some technology companies may have significant cash holdings or interest-bearing investments that could push them above the financial ratio thresholds. Healthcare and pharmaceuticals are also generally permissible, with the exception of companies involved in prohibited products.\n\nManufacturing, industrials, and consumer goods sectors contain many Shariah-compliant companies, but investors must verify that the products are halal. For example, a food company that produces only halal products would be compliant, while one that produces pork products would not be. Similarly, a pharmaceutical company that produces only halal medications is compliant, while one involved in prohibited substances is not.\n\nReal estate, infrastructure, and utilities are often considered Shariah-compliant because they involve tangible assets and productive economic activity. However, investors should verify that the company does not have excessive interest-bearing debt or rental income from haram tenants.\n\nSectors to avoid include: conventional banking and insurance, alcohol production and distribution, pork products, tobacco, gambling, adult entertainment, and weapons manufacturing. These sectors are considered haram regardless of their financial ratios because their primary business involves prohibited activities.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Purification of Income (Tanzeel)",
+          "content_type": "text",
+          "content": "Even after screening, a Shariah-compliant company may have some impure income from interest or other haram sources. Purification (tanzeel) is the process of calculating and donating this impure income to charity to ensure that the investor's returns are entirely halal.\n\nThe purification process involves calculating the percentage of the company's income that comes from haram sources and donating that proportion of one's investment returns to charity. For example, if a company earns 3% of its income from interest on cash deposits, and an investor receives $100 in dividends from that company, the investor should donate $3 (3% of $100) to charity.\n\nThe Prophet (peace be upon him) said: 'Indeed, Allah is pure and He accepts only what is pure.' (Sahih Muslim) This hadith establishes the principle that Muslims must ensure their wealth and transactions are pure. Purification is a practical application of this principle in the context of equity investing.\n\nThere are different scholarly opinions on the calculation method for purification. Some scholars recommend using the company's total revenue as the denominator, while others use net income. The most common approach is to use the ratio of impure income to total income, then apply that ratio to the investor's returns. Muslim investors should follow the guidance of qualified scholars and be consistent in their purification methodology.\n\nPurification should be done regularly, ideally at the end of each investment year or when significant impure income is identified. The donated amount should go to legitimate charitable causes, such as helping the poor, supporting Islamic education, or funding community projects. This ensures that the impure wealth is replaced with blessings (barakah) and that the investor maintains a clean financial record.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Islamic Funds and Investment Vehicles",
+      "description": "Understanding the various Shariah-compliant investment options available",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Mutual Funds: Shariah-Compliant Options",
+          "content_type": "text",
+          "content": "Islamic mutual funds pool money from multiple investors to invest in a diversified portfolio of Shariah-compliant assets. These funds are managed by professional fund managers who apply Islamic screening criteria and ensure ongoing compliance.\n\nThere are several types of Islamic mutual funds: equity funds (investing in Shariah-compliant stocks), sukuk funds (investing in Islamic bonds), balanced funds (mixing stocks and sukuk), real estate funds (investing in property), and commodity funds (investing in gold and other halal commodities). Each type serves different investment objectives and risk tolerance levels.\n\nWhen evaluating Islamic mutual funds, investors should consider: the fund's Shariah compliance methodology (which screening criteria are used), the fund manager's track record and expertise in Islamic finance, the fund's expense ratio and fees, the fund's performance relative to its benchmark, and the fund's liquidity and minimum investment requirements.\n\nThe Accounting and Auditing Organization for Islamic Financial Institutions (AAOIFI) has established standards for Islamic funds, including AAOIFI Standard No. 22 (Investment Funds). These standards govern fund structure, valuation, distribution of income, and disclosure requirements. Investors should prefer funds that comply with AAOIFI standards for greater assurance of Shariah compliance.\n\nSome well-known Islamic fund families include: Amana Funds (US), Wahed Invest (global), Islamic Fund of Fund Managers (Malaysia), and various funds offered by Islamic banks in the Middle East and Southeast Asia. These funds provide convenient access to diversified halal portfolios for investors who prefer professional management.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Real Estate Investment",
+          "content_type": "text",
+          "content": "Real estate is generally considered Shariah-compliant because it involves tangible assets and productive economic activity. The Prophet (peace be upon him) said: 'Whoever acquires a piece of land, Allah will raise his status in Paradise by a area equal to it or more.' (Narrated by Abu Hurairah, though some scholars discuss its authenticity, the principle of land ownership is well-established in Islamic law).\n\nMuslims can invest in real estate through direct ownership (purchasing property to rent or sell), real estate investment trusts (REITs) that comply with Islamic principles, and real estate crowdfunding platforms that offer Shariah-compliant options. Each method has different risk and return characteristics.\n\nWhen investing in real estate, Muslims should ensure that the property is not used for haram purposes (such as bars, nightclubs, or gambling establishments). Rental income from tenants who use the property for halal activities is permissible. If a property is leased to a tenant who engages in haram activities, the rental income should be purified by donating the equivalent percentage to charity.\n\nIslamic home financing allows Muslims to purchase homes without conventional interest-based mortgages. Common Shariah-compliant home financing methods include: Murabaha (cost-plus sale), where the bank buys the home and sells it to the customer at a markup; Ijarah (leasing), where the bank leases the home to the customer with an option to purchase; and Musharakah Mutanaqisah (diminishing partnership), where the bank and customer jointly own the home, and the customer gradually buys the bank's share.\n\nReal estate investment provides several benefits for Muslim investors: it generates regular income through rent, it provides diversification from stock market volatility, it serves as a hedge against inflation, and it can be financed through Shariah-compliant methods. However, it also requires careful due diligence and ongoing management.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Gold, Commodities, and Alternative Investments",
+          "content_type": "text",
+          "content": "Gold has a special place in Islamic finance as a store of value and medium of exchange. The Quran mentions gold as one of the adornments of Paradise: 'But those who believe and do righteous deeds — We will admit them to gardens beneath which rivers flow, wherein they abide forever. For them there are purified spouses, and We will admit them to a shading shade.' (Quran 4:57) While this verse describes Paradise, it reflects the value placed on gold in Islamic culture.\n\nThe Prophet (peace be upon him) said: 'Gold for gold, silver for silver, wheat for wheat, barley for barley, dates for dates, salt for salt — like for like, equal for equal, hand to hand. If these types differ, then sell them however you like if it is hand to hand.' (Sahih Muslim) This hadith establishes the rules for trading in gold and other commodities, emphasizing that same-type exchanges must be equal and immediate.\n\nMuslims can invest in gold through physical ownership (coins or bars), gold ETFs that comply with Islamic principles, and gold-backed Islamic accounts. Physical gold provides tangible ownership but requires secure storage. Gold ETFs offer convenience but may involve Gharar if not structured properly.\n\nSilver follows similar principles to gold and is often recommended as a more affordable alternative. Silver has historical significance in Islamic monetary history, as the Islamic dirham was a silver coin. Investing in silver can provide diversification and serve as a hedge against economic uncertainty.\n\nOther halal commodities include agricultural products, energy (oil and gas), and industrial metals. However, investing in commodities through futures contracts or derivatives may involve Gharar and Maysir, making them problematic under Islamic law. Muslims should invest in commodities through physical ownership or Shariah-compliant funds that hold the actual assets.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Portfolio Construction and Management",
+      "description": "Building and maintaining a diversified halal investment portfolio",
+      "sort_order": 4,
+      "lessons": [
+        {
+          "title": "Asset Allocation for Halal Portfolios",
+          "content_type": "text",
+          "content": "Asset allocation is the process of dividing your investment portfolio among different asset classes (stocks, bonds/sukuk, real estate, cash) to balance risk and return according to your goals, risk tolerance, and time horizon. For Muslim investors, asset allocation must also consider Shariah compliance.\n\nA typical halal portfolio might include: 60% equities (Shariah-compliant stocks), 20% sukuk (Islamic bonds), 10% real estate, and 10% cash or gold. However, this allocation should be customized based on individual circumstances. Younger investors with longer time horizons may allocate more to equities, while older investors may prefer more sukuk and real estate for stability.\n\nThe principle of diversification (tawazzun) is supported by Islamic teachings. The Prophet (peace be upon him) advised: 'Tie your camel and trust in Allah.' (Sunan al-Tirmidhi) This hadith teaches that Muslims should take practical precautions (like diversification) while also relying on Allah for outcomes. Diversification reduces risk by spreading investments across different assets, sectors, and geographic regions.\n\nMuslim investors should also consider their overall financial picture when constructing a portfolio. This includes emergency savings (which should be in halal savings accounts), insurance (through Takaful providers), and debt obligations (which should be free of Riba). A comprehensive financial plan ensures that investments serve the broader goal of financial security and religious compliance.\n\nThe rebalancing process involves periodically adjusting the portfolio to maintain the target asset allocation. For example, if stocks have outperformed and now represent 70% of the portfolio instead of 60%, the investor should sell some stocks and buy sukuk to restore the balance. Rebalancing is typically done annually or when allocations deviate significantly from targets.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Risk Management and Tawakkul",
+          "content_type": "text",
+          "content": "Risk management in halal investing combines practical financial principles with the Islamic concept of tawakkul (trust in Allah). While Muslims are encouraged to take precautions and plan wisely, they also recognize that ultimate outcomes are in Allah's hands.\n\nThe Quran states: 'And when you have decided, then rely upon Allah. Indeed, Allah loves those who rely [upon Him].' (Quran 3:159) This verse establishes that planning and decision-making come first, followed by trust in Allah. In investment terms, this means conducting thorough research, diversifying properly, and managing risk — then leaving the outcome to Allah.\n\nPractical risk management strategies include: diversification across asset classes and sectors, maintaining an emergency fund to avoid forced selling during market downturns, setting realistic return expectations, investing for the long term rather than trading frequently, and avoiding excessive leverage or margin trading (which may involve Riba).\n\nThe concept of halal risk-sharing is central to Islamic finance. Unlike conventional insurance, which transfers risk from one party to another, Islamic risk management through Takaful involves mutual cooperation. Participants contribute to a pool that covers claims, and any surplus is distributed among participants or donated to charity.\n\nMuslim investors should also consider the spiritual dimension of risk. The Prophet (peace be upon him) said: 'If you put your trust in Allah in the true manner, He will provide for you as He provides for the birds; they go out hungry in the morning and come back full in the evening.' (Sunan al-Tirmidhi) This hadith teaches that relying on Allah while taking action is the ideal approach to both spiritual and financial life.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Building Your Halal Investment Plan",
+          "content_type": "text",
+          "content": "Creating a halal investment plan involves several steps: defining your financial goals, assessing your risk tolerance, selecting appropriate Shariah-compliant investments, and establishing a monitoring and review process. This plan should integrate Islamic principles at every stage.\n\nThe first step is to define clear financial goals. These might include: saving for retirement, purchasing a home, funding children's education, building an emergency fund, or generating passive income. Each goal should have a specific amount, time horizon, and priority level. The Prophet (peace be upon him) said: 'The wise person is one who holds himself accountable and strives for that which comes after death, and the foolish person is one who follows his desires and then entertains false hopes about Allah.' (Sunan al-Tirmidhi) This hadith encourages long-term thinking and planning.\n\nThe second step is to assess your risk tolerance. This depends on factors such as your income stability, time horizon, financial obligations, and personal comfort with volatility. Conservative investors may prefer sukuk and real estate, while aggressive investors may allocate more to equities. The key is to choose an allocation that allows you to sleep at night while working toward your goals.\n\nThe third step is to select specific investments. This involves screening individual stocks or choosing Islamic funds, evaluating real estate opportunities, and determining the appropriate allocation for each asset class. The screening criteria discussed in this course should be applied rigorously to ensure compliance.\n\nThe fourth step is to establish a monitoring and review process. This includes: reviewing the portfolio quarterly or semi-annually, rebalancing when allocations drift from targets, updating the plan as goals or circumstances change, and maintaining accurate records for Zakat calculation. The Quran states: 'O you who believe, when a debt is due from one of you, then write it down.' (Quran 2:282) This verse emphasizes the importance of documentation in financial matters.\n\nA halal investment plan should also include provisions for charitable giving. Regular charity (Sadaqah) and annual Zakat purify wealth and bring barakah (blessings) to one's finances. Some investors allocate a portion of their portfolio specifically for charitable purposes, ensuring that their wealth serves both personal and community goals.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

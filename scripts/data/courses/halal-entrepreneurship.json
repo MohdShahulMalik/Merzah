@@ -1,0 +1,209 @@
+{
+  "title": "Halal Entrepreneurship",
+  "slug": "halal-entrepreneurship",
+  "description": "This comprehensive course explores the foundations of entrepreneurship through the lens of Islamic teachings, combining timeless wisdom from the Quran and Sunnah with modern business practices. Students will learn how to identify halal business opportunities, build ethical business models, and scale their ventures while maintaining Islamic principles of honesty, fairness, and social responsibility.\n\nThe course draws upon rich Islamic heritage of trade and commerce, which has a long history dating back to the Prophet Muhammad (peace be upon him) and his companions. From the bustling markets of Madinah to modern entrepreneurial ecosystems, the principles of halal business remain remarkably relevant and applicable.\n\nStudents will gain practical knowledge and actionable strategies for starting and growing halal businesses in today's competitive landscape, all while ensuring their ventures are pleasing to Allah (Subhanahu Wa Ta'ala) and beneficial to society.",
+  "short_description": "Learn how to build successful halal businesses grounded in Islamic principles and ethical practices.",
+  "track_slug": "business",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "Foundations of Halal Entrepreneurship",
+      "description": "Understand the Islamic framework for business and entrepreneurship",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "The Islamic Perspective on Business",
+          "content_type": "text",
+          "content": "Business and trade hold a respected position in Islam. The Quran explicitly permits trade and commerce while prohibiting interest (riba). Allah says in Surah Al-Baqarah: \"But Allah has permitted trade and has forbidden interest\" (Quran 2:275). This establishes the fundamental principle that commerce is not merely allowed but is a blessed activity when conducted in accordance with Islamic law.\n\nThe Prophet Muhammad (peace be upon him) was himself a merchant before prophethood, and his wife Khadijah (may Allah be pleased with her) was one of the most successful businesswomen of Makkah. The hadith literature contains numerous references to trade and commerce, indicating the importance of business in Islamic civilization. The Prophet (pbuh) said: \"The truthful, trustworthy merchant is with the prophets, the truthful, and the martyrs\" (Tirmidhi 1209).\n\nThis hadith establishes the high spiritual status of honest businesspeople, placing them alongside prophets, truthful individuals, and martyrs. This shows that entrepreneurship is not separate from religious practice but is an integral part of it. The Islamic worldview integrates worship (ibadah) with all aspects of life, including business.\n\nUnderstanding this foundational perspective is essential for every Muslim entrepreneur. When we approach business with the intention of pleasing Allah and serving humanity, our work becomes an act of worship. This mindset transforms how we view challenges, profits, and our relationship with customers, partners, and employees.\n\nThe course begins by establishing this spiritual and ethical foundation before moving into practical business applications. By grounding our entrepreneurship in Islamic values, we create businesses that are sustainable, ethical, and meaningful.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Understanding Halal Business Models",
+          "content_type": "text",
+          "content": "Halal business models are those that operate within the boundaries of Islamic law (Shari'ah). This includes avoiding prohibited elements such as riba (interest), gharar (excessive uncertainty), maysir (gambling), and dealing in haram (forbidden) goods or services. A halal business must also adhere to principles of fairness, transparency, and social responsibility.\n\nThe Quran emphasizes the importance of clear and honest transactions: \"O you who believe! Fear Allah and give up what remains of your demand for usury, if you are indeed believers. If you do not, then be warned of a war from Allah and His Messenger\" (Quran 2:278-279). This warning underscores the seriousness with which Islam views financial integrity.\n\nModern halal business models include halal food and beverage, Islamic finance and banking, modest fashion, halal tourism, and ethical technology ventures. Each of these sectors must comply with specific halal standards and certifications. For example, the global halal food industry is worth trillions of dollars and requires rigorous certification processes.\n\nBeyond product compliance, the business model itself must be ethical. This means fair pricing, transparent contracts, proper disclosure of terms, and avoidance of deceptive marketing practices. The Prophet (pbuh) said: \"The seller has the right to give the product until the buyer leaves the shop\" (Muslim). This hadith establishes that transactions have proper conditions and mutual rights.\n\nUnderstanding halal business models helps entrepreneurs make informed decisions about which opportunities to pursue and how to structure their ventures in compliance with Islamic principles.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Spiritual Dimension of Entrepreneurship",
+          "content_type": "text",
+          "content": "Entrepreneurship in Islam is not merely about financial success; it carries spiritual significance. Every business transaction conducted with integrity becomes an act of worship (ibadah). The intention (niyyah) behind our work matters greatly in Islam. When we start a business with the intention of providing for our families, serving the community, and earning halal income to support acts of worship, our work becomes blessed.\n\nThe hadith of intention is central to understanding this: \"Actions are but by intentions, and every person shall have only what they intended\" (Bukhari and Muslim). This principle applies directly to entrepreneurship. A Muslim entrepreneur who starts a business with the right intention will find barakah (blessings) in their work, even if the financial outcome is modest.\n\nThe Quran mentions the concept of \"ihsan\" (excellence or perfection) in all things we do: \"Indeed, Allah orders ihsan (excellence in conduct)\" (Quran 16:90). This principle applies to business as well. A Muslim entrepreneur should strive for excellence in products, services, customer relations, and workplace environment. This pursuit of excellence becomes a form of worship when done with the right intention.\n\nThe spiritual dimension also involves understanding that wealth is a trust (amanah) from Allah. We are not owners of our wealth but merely stewards (khulafaa). This perspective shapes how we earn, spend, and invest. The wealthy are tested more than others because of their greater responsibility. The Prophet (pbuh) said: \"Richness is not having many possessions, but richness is the richness of the soul\" (Bukhari and Muslim).\n\nBy integrating spiritual awareness into entrepreneurship, Muslim business owners can navigate the challenges of business with patience, gratitude, and trust in Allah's plan. This spiritual foundation provides resilience during difficult times and humility during periods of success.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 18,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Identifying Halal Business Opportunities",
+      "description": "Learn to identify and evaluate halal business ideas",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Market Research with Islamic Values",
+          "content_type": "text",
+          "content": "Market research is a crucial first step in identifying business opportunities. For Muslim entrepreneurs, this process should be guided by Islamic values while maintaining professional rigor. The Quran encourages observation and reflection: \"Say, 'Travel through the land and observe how He began creation'\" (Quran 29:20). This principle of observation and analysis applies directly to market research.\n\nHalal market research involves understanding the needs and desires of consumers while ensuring that the proposed products or services comply with Islamic law. This requires knowledge of halal standards, consumer behavior, and market trends. The Muslim consumer market is growing rapidly, with the global halal industry estimated to be worth over $2 trillion.\n\nKey areas of opportunity include halal food and beverages, Islamic finance and insurance (takaful), modest fashion, halal tourism and hospitality, halal cosmetics and personal care, Islamic education and media, and halal technology solutions. Each of these sectors has specific requirements and standards that entrepreneurs must understand.\n\nWhen conducting market research, Muslim entrepreneurs should also consider the social impact of their potential business. The Prophet (pbuh) said: \"The best of people are those who are most beneficial to people\" (Tabarani). This hadith suggests that business opportunities should be evaluated not only by their profit potential but also by their social benefit.\n\nEffective market research also involves understanding competition, identifying gaps in the market, and assessing the feasibility of the business idea. By combining professional market research with Islamic values, entrepreneurs can identify opportunities that are both profitable and spiritually rewarding.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Evaluating Business Ideas Against Islamic Principles",
+          "content_type": "text",
+          "content": "Not all business ideas are compatible with Islamic principles. Muslim entrepreneurs must evaluate potential business opportunities against clear criteria derived from the Quran and Sunnah. The primary criterion is whether the product or service is halal (permissible) or haram (prohibited).\n\nThe Quran provides clear guidance on what is prohibited: \"He has only forbidden to you dead animals, blood, the flesh of swine, and that which has been dedicated to other than Allah\" (Quran 2:173). This prohibition extends to businesses that deal in haram products or services, including alcohol, pork, gambling, interest-based financial services, and other prohibited activities.\n\nBeyond the product itself, the business model must be evaluated. This includes examining the financing method (avoiding interest), the marketing approach (avoiding deception), the employment practices (ensuring fairness), and the environmental impact (ensuring sustainability). The Quran says: \"Do not consume one another's wealth unjustly\" (Quran 4:29). This verse requires that business dealings be conducted with justice and fairness.\n\nThe concept of maslaha (public interest) is also important in evaluating business ideas. A business that benefits the community and aligns with Islamic values of social welfare is preferred over one that is merely profitable but socially harmful. The Prophet (pbuh) said: \"Whoever relieves a believer of a burden from the burdens of this world, Allah will relieve him of a burden from the burdens of the Day of Judgment\" (Muslim).\n\nA practical evaluation framework includes assessing: 1) Product/service halal status, 2) Business model compliance with Shari'ah, 3) Social and environmental impact, 4) Financial sustainability, and 5) Alignment with the entrepreneur's skills and values. By systematically evaluating business ideas against these criteria, Muslim entrepreneurs can make informed decisions about which opportunities to pursue.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 22,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Starting Small: The Sunnah Approach",
+          "content_type": "text",
+          "content": "Islam encourages starting small and growing gradually. The Prophet Muhammad (pbuh) himself began his mission with small steps, starting with private preaching before public declaration. This approach reduces risk and allows for learning and adaptation. The hadith states: \"Be in this world as though you were a stranger or a traveler\" (Bukhari). This mindset encourages prudence and caution, which are valuable in entrepreneurship.\n\nStarting small has several advantages from an Islamic perspective. It allows the entrepreneur to build skills and experience gradually, reduces financial risk, and provides time to ensure that the business is operating in full compliance with Islamic principles. The Quran says: \"And whatever the Messenger has given you - take; and what he has forbidden you - refrain from\" (Quran 59:7). This principle of following guidance applies to business as well.\n\nThe concept of \"tawakkul\" (trust in Allah) is important here. While we are encouraged to plan and work hard, we must also trust in Allah's decree. Starting small allows us to exercise both effort and trust, without overextending ourselves financially or emotionally. The Prophet (pbuh) said: \"Tie your camel and trust in Allah\" (Tirmidhi). This hadith perfectly captures the balance between planning and trust.\n\nPractical steps for starting small include: beginning as a sole proprietor, using personal savings or halal financing, testing the market with a minimum viable product, building a customer base gradually, and reinvesting profits for growth. This approach is consistent with the Islamic principle of moderation (wasat) and avoids the extremes of overconfidence or excessive caution.\n\nBy starting small, Muslim entrepreneurs can build sustainable businesses that grow organically and remain true to Islamic principles throughout their development.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 18,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Islamic Business Ethics and Values",
+      "description": "Master the ethical foundations of Islamic business",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Honesty and Transparency in Business",
+          "content_type": "text",
+          "content": "Honesty (sidq) and transparency (wadah) are fundamental Islamic business ethics. The Quran emphasizes truthfulness: \"O you who believe, fear Allah and be with those who are true\" (Quran 9:119). This commandment applies directly to business dealings, where honesty in representation, pricing, and communication is essential.\n\nThe Prophet Muhammad (pbuh) was known for his exceptional honesty, even before prophethood. People in Makkah trusted him with their valuables, calling him \"Al-Amin\" (the trustworthy). This reputation for integrity was a cornerstone of his success as a merchant. The hadith states: \"Truthfulness leads to righteousness, and righteousness leads to Paradise\" (Bukhari and Muslim). This shows that honesty is not only an ethical requirement but also leads to success in this life and the next.\n\nTransparency in business means providing clear and accurate information to customers, partners, and employees. This includes honest advertising, clear pricing, proper disclosure of terms and conditions, and open communication about business practices. The Quran warns against deception: \"O you who believe, do not consume one another's wealth unjustly but only [in lawful] business by mutual consent\" (Quran 4:29).\n\nThe concept of \"gharar\" (excessive uncertainty) in Islamic jurisprudence relates to transparency as well. Contracts and transactions should be clear and unambiguous. The Prophet (pbuh) prohibited transactions involving gharar (Muslim). This means that all terms of a deal should be clearly understood by all parties before agreement.\n\nIn modern business, honesty and transparency build customer loyalty, reduce legal risks, and create a positive brand reputation. Muslim entrepreneurs who prioritize these values not only comply with Islamic law but also build stronger, more sustainable businesses.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Fair Dealing and Justice in Commerce",
+          "content_type": "text",
+          "content": "Justice (adl) is a central principle in Islam that applies to all aspects of life, including business. The Quran commands: \"O you who believe, be persistently standing firm in justice, witnesses for Allah, even if it be against yourselves or parents and relatives\" (Quran 4:135). This commandment requires fairness and impartiality in all business dealings.\n\nIn business, justice means treating all parties fairly - customers, employees, suppliers, and competitors. This includes fair pricing, fair wages, fair contracts, and fair competition. The Prophet (pbuh) said: \"Allah has cursed the one who pays a bribe and the one who receives it\" (Tirmidhi). This hadith condemns corruption and unfair practices that distort the market.\n\nFair dealing also extends to how we treat employees. Islam requires that workers be paid promptly and fairly. The Prophet (pbuh) said: \"Give the worker his wages before his sweat dries\" (Ibn Majah). This commandment emphasizes the importance of timely and fair compensation for labor.\n\nThe concept of \"muamalat\" (business transactions) in Islamic jurisprudence requires that all dealings be conducted with fairness and mutual consent. This means no coercion, no deception, and no exploitation. The Quran says: \"O you who believe, do not consume one another's wealth unjustly but only [in lawful] business by mutual consent\" (Quran 4:29).\n\nJustice in business also means being fair to competitors. Islam prohibits monopolies, hoarding, and price manipulation. The Prophet (pbuh) said: \"Whoever withholds goods to increase their price has committed a sin\" (Muslim). These teachings promote a fair and competitive marketplace that benefits all participants.\n\nBy practicing justice in business, Muslim entrepreneurs create ethical enterprises that contribute to a just and equitable society.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Avoiding Fraud and Deception",
+          "content_type": "text",
+          "content": "Fraud and deception are among the gravest sins in Islam. The Quran warns: \"O you who believe, do not consume one another's wealth unjustly but only [in lawful] business by mutual consent\" (Quran 4:29). This prohibition extends to all forms of cheating, misrepresentation, and fraudulent practices in business.\n\nThe Prophet Muhammad (pbuh) strongly condemned fraud and deception. In a famous hadith, he was passing by a pile of food and put his hand into it, finding moisture on the surface. He said: \"What is this, O seller of food?\" The man replied: \"It was rained upon, O Messenger of Allah.\" The Prophet (pbuh) said: \"Why didn't you put it on top so that people could see it? He who cheats is not one of us\" (Muslim). This hadith establishes that deception in any form is incompatible with Islam.\n\nModern business fraud takes many forms, including false advertising, misrepresentation of products, accounting fraud, Ponzi schemes, and intellectual property theft. All of these are prohibited in Islam and carry severe spiritual consequences. The Quran says: \"And do not think that Allah is unaware of what the wrongdoers do. He only delays them for a Day when eyes will stare [in horror]\" (Quran 14:42).\n\nIslamic jurisprudence (fiqh) provides detailed guidance on avoiding fraud in business transactions. This includes requirements for clear description of goods, accurate measurement and weighing, honest representation of quality, and proper disclosure of defects. The Prophet (pbuh) said: \"The buyer and the seller have the option of canceling the deal as long as they have not parted, and if they both have told the truth and made clear the defects, then their transaction will be blessed\" (Bukhari and Muslim).\n\nAvoiding fraud is not just about compliance with Islamic law; it is also good business practice. Honest businesses build trust, reputation, and customer loyalty. Fraudulent businesses, on the other hand, face legal consequences, loss of reputation, and spiritual ruin.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 22,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Scaling and Sustaining a Halal Business",
+      "description": "Learn to grow your business while maintaining Islamic principles",
+      "sort_order": 4,
+      "lessons": [
+        {
+          "title": "Halal Financing and Investment",
+          "content_type": "text",
+          "content": "Financing is one of the most critical aspects of halal entrepreneurship. Islam strictly prohibits riba (interest) in all its forms. The Quran states: \"Allah has permitted trade and has forbidden interest\" (Quran 2:275). This means that Muslim entrepreneurs cannot use conventional interest-based loans or investments.\n\nFortunately, Islamic finance offers a variety of halal financing alternatives. These include murabaha (cost-plus financing), ijara (leasing), musharakah (partnership), mudarabah (profit-sharing), and sukuk (Islamic bonds). Each of these instruments has specific requirements and applications, and their use depends on the nature of the business and its financing needs.\n\nThe concept of profit-and-loss sharing is central to Islamic finance. In a musharakah or mudarabah arrangement, profits and losses are shared according to pre-agreed ratios. This promotes fairness and reduces risk for all parties. The Prophet (pbuh) himself engaged in mudarabah partnerships during his trading career with Khadijah (may Allah be pleased with her).\n\nIslamic banking and finance have grown into a global industry, with institutions offering a full range of financial services compliant with Shari'ah. Muslim entrepreneurs can access these services for business financing, working capital, equipment purchases, and expansion. Islamic microfinance is also available for small businesses and entrepreneurs.\n\nBeyond formal financing, Muslim entrepreneurs can also seek investment from angel investors, venture capitalists, and crowdfunding platforms that specialize in halal investments. The key is to ensure that all financing arrangements are free from interest and comply with Islamic principles of fairness and transparency.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 22,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Ethical Marketing and Branding",
+          "content_type": "text",
+          "content": "Marketing and branding are essential for business growth, but they must be conducted ethically and in accordance with Islamic principles. The Quran says: \"O you who believe, do not consume one another's wealth unjustly but only [in lawful] business by mutual consent\" (Quran 4:29). This principle of lawful business applies to marketing as well.\n\nIslamic marketing ethics require truthfulness, transparency, and avoiding deception. This means no false claims, no misleading advertising, no hidden terms, and no exploitation of vulnerabilities. The Prophet (pbuh) said: \"Truthfulness leads to righteousness, and righteousness leads to Paradise\" (Bukhari and Muslim). This hadith applies to marketing communications as well.\n\nEthical marketing also involves respecting customer privacy, avoiding manipulative tactics, and providing genuine value. In the digital age, this includes responsible use of data, transparent use of cookies and tracking, and honest communication about data practices. The Quran emphasizes the importance of trust: \"Indeed, Allah commands you to render trusts to whom they are due\" (Quran 4:58).\n\nBranding from an Islamic perspective should reflect the values of the business. A halal brand should communicate integrity, quality, and social responsibility. The Prophet (pbuh) was known for his excellent character and service to others, and this should be reflected in how Muslim businesses present themselves to the world.\n\nEffective halal marketing also involves building relationships based on trust and mutual respect. The concept of \"silaturrahim\" (maintaining family ties and relationships) applies to business relationships as well. Muslim entrepreneurs should build long-term relationships with customers, suppliers, and partners based on honesty and goodwill.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Social Impact and Corporate Responsibility",
+          "content_type": "text",
+          "content": "Islam emphasizes social responsibility and giving back to the community. The Quran says: \"You are the best nation produced [as an example] for mankind. You enjoin what is right and forbid what is wrong and believe in Allah\" (Quran 3:110). This verse establishes the Muslim community's responsibility to promote good and prevent harm, which extends to businesses.\n\nCorporate social responsibility (CSR) from an Islamic perspective goes beyond legal compliance to include voluntary contributions to social welfare. This can take many forms, including charitable giving (sadaqah), zakat (obligatory alms), community development, environmental stewardship, and social entrepreneurship. The Prophet (pbuh) said: \"The believer's shade on the Day of Resurrection will be his charity\" (Tirmidhi).\n\nEnvironmental stewardship is an important aspect of Islamic corporate responsibility. The Quran describes humans as \"khalifah\" (stewards) on Earth: \"And [mention, O Muhammad], when your Lord said to the angels, 'Indeed, I am going to place a successive authority (khalifah) on Earth'\" (Quran 2:30). This responsibility requires businesses to minimize environmental impact and promote sustainability.\n\nEmployee welfare is another critical aspect of corporate responsibility. Islam requires fair wages, safe working conditions, respectful treatment, and opportunities for development. The Prophet (pbuh) said: \"Your employees are your brothers whom Allah has placed under your authority. Whoever has a brother under his authority should feed him with the same food he eats and clothe him with the same clothes he wears\" (Muslim).\n\nSocial impact businesses, which aim to solve social problems while generating profit, are highly encouraged in Islam. The Prophet (pbuh) said: \"The best of people are those who are most beneficial to people\" (Tabarani). Muslim entrepreneurs should consider how their businesses can contribute to solving social problems and improving the well-being of their communities.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 22,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

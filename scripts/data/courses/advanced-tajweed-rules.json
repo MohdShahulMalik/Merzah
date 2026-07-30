@@ -1,0 +1,223 @@
+{
+  "title": "Advanced Tajweed Rules",
+  "slug": "advanced-tajweed-rules",
+  "description": "This advanced course covers the complex rules of tajweed that go beyond the basics. Students will study the detailed rules of Madd (prolongation), Waqf (stopping), Qalqalah (echoing), Tafkheem/Tarqeeq (heavy and light pronunciation), and other advanced topics. This course is designed for students who have already mastered the basics of tajweed and wish to achieve a higher level of recitation.\n\nThe advanced rules of tajweed are essential for proper recitation of the Quran, particularly for those who wish to recite according to the seven modes of recitation (Qira'at). These rules ensure that every letter is pronounced with its correct characteristics and that the recitation flows smoothly and beautifully. The Prophet (peace be upon him) demonstrated these advanced rules in his recitation, and the scholars have preserved them in detailed manuals.\n\nThis course draws on classical tajweed works including 'al-Muqaddimah al-Jazariyyah' by Ibn al-Jazari (d. 833 AH), 'al-Tuhfah al-Saniyyah' by al-Jazari (d. 833 AH), and 'al-Muqaddimah' by Ibn al-Qayyim (d. 751 AH). Students will learn the theoretical rules and practice their application through recitation of Quranic passages. By the end of this course, students will have the knowledge and skills to recite the Quran with advanced tajweed rules.",
+  "short_description": "Master the advanced rules of Quranic recitation including Madd, Waqf, and Qalqalah.",
+  "track_slug": "quran",
+  "educator_id": "PLACEHOLDER",
+  "level": "advanced",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "Madd (Prolongation) Rules",
+      "description": "Detailed study of the various types of Madd and their applications.",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Types of Madd: Natural and Conditional",
+          "content_type": "text",
+          "content": "Madd (مد) refers to the prolongation or stretching of a vowel sound in Quran recitation. The scholars have classified Madd into two main categories: Madd Lazim (obligatory prolongation) and Madd Munfasil (separable prolongation). Each category has subcategories with specific rules regarding the duration and conditions of prolongation.\n\nMadd Lazim (مدد لازم) occurs when a Madd letter (alif, waw, or ya) is followed by a hamzah in the same word. This type of Madd is called 'lazim' (obligatory) because it must always be prolonged, regardless of whether the reciter pauses or continues. The duration is either four, five, or six harakat (counts), depending on the specific situation. For example, in the word 'al-'aakhirah' (the Hereafter), the alif is followed by hamzah, requiring Madd Lazim.\n\nMadd Munfasil (مد منفصل) occurs when a Madd letter at the end of a word is followed by a hamzah at the beginning of the next word. This type of Madd is called 'munfasil' (separable) because the two letters are in different words. The reciter has the option of prolonging the sound for two, four, or five harakat. When reciting without pausing, two harakat is sufficient. When pausing, four or five harakat is preferred.\n\nThe scholars have also identified other types of Madd, including Madd 'Arid li'l-Sukun (prolongation due to a temporary sukoon), Madd Badal (substitution Madd), and Madd Silah (connection Madd). Each of these has specific rules and applications that must be learned and practiced. Imam Ibn al-Jazari (d. 833 AH) emphasized that mastering these Madd rules is essential for proper recitation and that they must be practiced regularly to become second nature.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Madd Lazim: Harfi and Kalimi",
+          "content_type": "text",
+          "content": "Madd Lazim is further divided into two categories: Madd Lazim Harfi (letter-based Madd) and Madd Lazim Kalimi (word-based Madd). Understanding the distinction between these two is crucial for proper application of the rules.\n\nMadd Lazim Harfi (مد لازم حرفي) occurs when a Madd letter is followed by a hamzah in the same letter (harf). This occurs in specific letters of the mu'awwidhatayn (Surahs Al-Falaq and An-Nas). For example, in the letter 'qul' (say), the waw is followed by a lam, which is considered a Madd Lazim Harfi situation. This requires prolongation of six harakat (counts), which is the maximum duration of Madd in the Quran.\n\nMadd Lazim Kalimi (مد لازم كليمي) occurs when a Madd letter is followed by a hamzah in the same word (kalimah). This is more common than the Harfi type. For example, in the word 'al-'aakhirah' (the Hereafter), the alif is followed by hamzah, requiring prolongation of either four, five, or six harakat depending on the specific recitation mode (Qira'ah).\n\nThe scholars have explained that the difference in duration between Madd Lazim Harfi and Madd Lazim Kalimi is based on the different Qira'at (modes of recitation). In the Hafs 'an 'Asim recitation (the most common mode), Madd Lazim Kalimi is prolonged for four harakat, while Madd Lazim Harfi is prolonged for six harakat. In other modes, such as Warsh 'an Nafi', the durations may differ. Students should learn the specific rules for their chosen mode of recitation.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Madd 'Arid li'l-Sukun and Madd Badal",
+          "content_type": "text",
+          "content": "Madd 'Arid li'l-Sukun (مد عارض للسكون) is a temporary Madd that occurs when a Madd letter receives a sukun (absence of vowel) due to stopping (waqf) at the end of a word. This Madd is called 'arid' (temporary) because it only occurs when the reciter stops at that point. If the reciter continues reciting without stopping, the Madd disappears.\n\nFor example, in the word 'rahman' (merciful), the alif after the ra is a Madd letter. If the reciter stops at 'rahman,' the alif receives a temporary sukoon, and the sound is prolonged for two harakat. If the reciter continues reciting (e.g., 'rahman al-rahim'), the Madd is not applied, and the alif is pronounced as a regular alif.\n\nMadd Badal (مد بدل) is a type of Madd that occurs when a hamzah is converted to a Madd letter. This happens in certain words where the original hamzah is changed to alif, waw, or ya for ease of pronunciation. For example, the word 'aaman' (believed) is originally 'a'mana' with a hamzah, but it is pronounced with an alif as a Madd Badal. This Madd is prolonged for two harakat.\n\nThe scholars have noted that Madd Badal is one of the most common types of Madd in the Quran. It occurs frequently in verb forms and nominal sentences. The reciter should be aware of when Madd Badal occurs and apply the correct duration of prolongation. Imam al-Jazari (d. 833 AH) explained that Madd Badal serves a practical purpose—it makes the recitation smoother and more melodious by avoiding the harsh sound of consecutive hamzahs.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Practical Application of Madd Rules",
+          "content_type": "text",
+          "content": "Applying the Madd rules correctly requires extensive practice and attention. The reciter must be able to identify the type of Madd in each situation and apply the correct duration of prolongation. This can be challenging because the same letter may be a Madd in one situation and not in another, depending on the surrounding letters.\n\nA practical approach to mastering Madd is to practice reciting short surahs that contain various types of Madd. Surah Al-Fatihah, for example, contains Madd Lazim, Madd Munfasil, and Madd Badal. By reciting this surah repeatedly and focusing on the Madd rules, students can develop the ability to apply them automatically.\n\nAnother practical exercise is to mark the Madd in a mushaf using colored highlighting or notation. This visual aid helps the reciter identify the types of Madd and their durations. Many tajweed mushafs already include such markings, and students should use these as learning tools. Over time, the markings become unnecessary as the rules become internalized.\n\nThe Prophet (peace be upon him) demonstrated perfect application of Madd rules in his recitation. The Companions reported that his recitation was characterized by clear prolongation where required and smooth transition where appropriate. Students should listen to recordings of qualified reciters who follow the rules strictly and compare their own recitation to these models. Regular practice and feedback from a qualified teacher are essential for mastering the advanced Madd rules.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Waqf (Stopping) Rules",
+      "description": "Learn the proper rules for stopping and pausing during recitation.",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "The Importance of Waqf",
+          "content_type": "text",
+          "content": "Waqf (وقف) refers to stopping or pausing during Quran recitation. Proper waqf is essential for clear recitation because it allows the listener to absorb the meaning of each verse and prevents confusion between different verses. The scholars have emphasized that the Quran should be recited with pauses that respect the meaning and grammatical structure of the text.\n\nThe Prophet (peace be upon him) recited the Quran with appropriate pauses. Aisha (may Allah be pleased with him) reported that he would stop at the end of each verse, saying 'Allahu akbar' (Allah is the greatest) between verses. This practice demonstrates the importance of pausing at the end of verses to allow the meaning to settle.\n\nThe scholars have classified waqf into three categories: waqf lazim (obligatory stopping), where stopping is required; waqf ja'iz (permissible stopping), where stopping is allowed; and waqf mamnu' (prohibited stopping), where stopping is forbidden. Understanding these categories is essential for proper recitation.\n\nWaqf lazim occurs at the end of a verse, where the reciter must stop before continuing to the next verse. Waqf ja'iz occurs at various points within a verse where the reciter may stop for breath or emphasis. Waqf mamnu' occurs at points where stopping would change the meaning or create confusion. For example, stopping in the middle of a word is always forbidden because it creates a different word or an meaningless sound.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Types of Waqf and Their Symbols",
+          "content_type": "text",
+          "content": "The scholars of tajweed have developed a system of symbols to indicate the different types of waqf in the mushaf. These symbols help the reciter know where to stop, where to continue, and where stopping is prohibited. Understanding these symbols is essential for reading from a tajweed mushaf.\n\nThe most common symbols include: the small circle (°) indicating waqf mutlaq (absolute stopping), where the reciter should stop; the letter 'jeem' (ج) indicating waqf ja'iz (permissible stopping), where the reciter may stop or continue; the letter 'qaf' (ق) indicating waqf lazim (obligatory stopping), where the reciter must stop; and the letter 'laam' (ل) indicating waqf mamnu' (prohibited stopping), where the reciter must not stop.\n\nThere are also symbols for continuation: the letter 'qaf-laam' (ql) indicating that the reciter should continue without stopping; and the small 'seen' (ص) indicating that continuing is preferred. These symbols are typically found in the margins of tajweed mushafs and are used by reciters of all levels.\n\nThe scholars have emphasized that these symbols are guidelines based on the principles of tajweed, not arbitrary rules. The underlying principles include: stopping at the end of verses, not stopping in the middle of words, not stopping where it would change the meaning, and stopping where it would clarify the meaning. The symbols encode these principles in a visual format that is easy to follow during recitation.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Waqf and the Rules of Ghunnah",
+          "content_type": "text",
+          "content": "When stopping at certain letters, the reciter must apply the rules of ghunnah (nasalization). This is particularly important for the letters Meem and Noon, which have special rules when followed by sukoon or when they are at the end of a word where the reciter stops.\n\nWhen stopping at a word that ends with Meem Mushaddad (meem with shaddah), the reciter should apply ghunnah for approximately two beats. For example, when stopping at the word 'rahman' (merciful), the Meem is pronounced with ghunnah. This creates a beautiful nasal sound that is characteristic of Quran recitation.\n\nWhen stopping at a word that ends with Noon Saakinah (noon without a vowel), the reciter should apply ghunnah if the stopping occurs after a Tanween (double vowel). For example, when stopping at the word 'raheim' (merciful), the Noon at the end is pronounced with ghunnah. However, if the word ends with a regular Noon Saakinah (not Tanween), the ghunnah is not applied.\n\nThe scholars have explained that these rules serve both aesthetic and practical purposes. Aesthetically, the ghunnah adds beauty and musicality to the recitation. Practically, it helps distinguish between different types of endings and prevents confusion. The Prophet (peace be upon him) demonstrated these rules in his recitation, and the scholars have preserved them in their tajweed manuals.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Qalqalah and Advanced Letter Rules",
+      "description": "Detailed study of Qalqalah and other advanced letter characteristics.",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Qalqalah: Types and Application",
+          "content_type": "text",
+          "content": "Qalqalah (قلقلة) is the echoing or vibrating sound produced when certain letters are pronounced with sukoon. The five letters of Qalqalah are: Ba (ب), Jeem (ج), Dal (د), Taa (ط), and Qaf (ق). When these letters have sukoon and are recited clearly, they produce a distinctive bouncing sound that adds beauty and clarity to the recitation.\n\nThe scholars have classified Qalqalah into three types based on the position and context of the letter. Qalqalah Kubra (major Qalqalah) occurs when the Qalqalah letter has sukoon and is followed by a silent letter. This is the strongest form and requires a clear, pronounced echo. For example, in the word 'yakhruju' (he goes out), the Jeem has sukoon and is followed by a silent letter, requiring strong Qalqalah.\n\nQalqalah Wusta (medium Qalqalah) occurs when the Qalqalah letter is at the end of a word and the reciter stops. This is the most common form and requires a moderate echo. For example, when stopping at the word 'qad' (already), the Dal should have medium Qalqalah. The reciter should pronounce the letter clearly with a moderate bounce.\n\nQalqalah Sughra (minor Qalqalah) occurs when the Qalqalah letter has sukoon and is followed by a moving letter (a letter with a vowel). This is the weakest form and requires a slight echo. For example, in the word 'yabghu' (he seeks), the Qaf has sukoon but is followed by a moving letter, requiring only slight Qalqalah. The scholars have emphasized that all three types should be pronounced clearly, but the intensity varies based on the context.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Tafkheem and Tarqeeq (Heaviness and Lightness)",
+          "content_type": "text",
+          "content": "Tafkheem (تفخيم) refers to the heavy or thick pronunciation of a letter, while Tarqeeq (ترقيق) refers to the light or thin pronunciation. These two characteristics are particularly important for the letters Sad (ص), Dad (ض), Taa (ط), and Dhaa (ظ), which are called the 'emphatic' or 'heavy' letters. These letters are pronounced with the tongue pressed against the roof of the mouth, creating a thicker sound.\n\nThe scholars have explained that Tafkheem and Tarqeeq are relative terms. A letter is considered 'heavy' when it is pronounced with the characteristic thick sound of the emphatic letters, and 'light' when it is pronounced without this characteristic. For example, the letter Sad (ص) is always heavy, while the letter Seen (س) is always light. However, the degree of heaviness can vary depending on the context.\n\nThe rules of Tafkheem and Tarqeeq are particularly important when these letters are followed by the letter Ra (ر). The scholars have established that if the emphatic letter comes before Ra, the Ra becomes heavy. If the light letter comes before Ra, the Ra becomes light. For example, in the word 'qur'an' (recitation), the Qaf is heavy, so the Ra becomes heavy. In the word 'ra'uf' (compassionate), the Ra is light because it is not preceded by an emphatic letter.\n\nThe Prophet (peace be upon him) demonstrated perfect Tafkheem and Tarqeeq in his recitation. The Companions reported that his pronunciation was clear and distinct, with each letter having its proper characteristics. The scholars have emphasized that mastering Tafkheem and Tarqeeq is essential for proper Quran recitation and that regular practice with a qualified teacher is necessary to develop the correct pronunciation.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lam and Ra: Special Rules",
+          "content_type": "text",
+          "content": "The letters Lam (ل) and Ra (ر) have special rules in tajweed that distinguish them from other letters. These rules are particularly important because these letters appear frequently in the Quran and their correct pronunciation affects the overall quality of recitation.\n\nThe letter Lam has two pronunciations: Tafkheem (heavy) and Tarqeeq (light). The Lam is heavy when it comes after the letters Dhaa (ظ), Taa (ط), Sad (ص), Dad (ض), Kha (خ), Ghayn (غ), or 'Ayn (ع). For example, in the word 'Allah,' the Lam is heavy because it comes after the Hamzah which is followed by a Madd letter. The Lam is light in all other situations.\n\nThe letter Ra has three pronunciations: Tafkheem (heavy), Tarqeeq (light), and Tawassut (intermediate). The Ra is heavy when it comes after the letters Dhaa, Taa, Sad, Dad, or when it has a Fathah and is followed by a heavy letter. The Ra is light when it comes after a light letter or when it has a Kasrah. The intermediate pronunciation occurs in situations that are between heavy and light.\n\nThe scholars have provided detailed rules for the pronunciation of Lam and Ra in various contexts. These rules are based on the linguistic characteristics of Arabic and the prophetic tradition. Imam Ibn al-Jazari (d. 833 AH) compiled comprehensive rules for Lam and Ra pronunciation in his works, and these rules continue to be taught in tajweed classes today. Students should practice these rules extensively to develop correct pronunciation.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Advanced Application and Integration",
+      "description": "Integrating all advanced rules into fluent, correct recitation.",
+      "sort_order": 4,
+      "lessons": [
+        {
+          "title": "Combining Multiple Rules",
+          "content_type": "text",
+          "content": "One of the greatest challenges in advanced tajweed is combining multiple rules that may apply to the same passage. In any given passage of the Quran, several rules may be operating simultaneously—Madd rules, Idgham rules, Qalqalah rules, and others. The reciter must apply all applicable rules correctly and simultaneously, which requires extensive practice and mental agility.\n\nFor example, consider the phrase 'Bismillah al-Rahman al-Rahim.' This phrase contains multiple Madd rules (the alif after Ba in Bismillah, the alif after Ra in Rahman), a Noon Mushaddad with ghunnah (the Noon in Rahman), and various letter characteristics. The reciter must apply all of these rules correctly while maintaining a smooth, flowing recitation.\n\nThe scholars have recommended that students practice combining rules by reciting longer passages of the Quran. Rather than focusing on individual rules in isolation, students should recite entire surahs, applying all the rules they have learned. This approach helps develop the ability to process multiple rules simultaneously and produces a more natural, fluent recitation.\n\nThe Prophet (peace be upon him) demonstrated perfect integration of all tajweed rules in his recitation. The Companions reported that his recitation was characterized by its smoothness, clarity, and beauty. This integration was the result of years of practice and the Prophet's unique connection with the Quran. Students should aspire to achieve a similar level of integration, understanding that it requires consistent effort and dedication.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Common Mistakes and How to Avoid Them",
+          "content_type": "text",
+          "content": "Even advanced students of tajweed make mistakes. Understanding the most common errors and how to avoid them is essential for improving recitation quality. The scholars have identified several categories of mistakes that recur frequently, even among experienced reciters.\n\nOne common mistake is the incorrect application of Madd rules. Students often confuse the different types of Madd or apply the wrong duration. For example, reciting Madd Lazim with two harakat instead of four or six is a common error. To avoid this, students should review the Madd rules regularly and practice identifying the type of Madd in each situation.\n\nAnother common mistake is the incorrect pronunciation of Qalqalah letters. Students sometimes pronounce the Qalqalah too weakly or too strongly, or they fail to apply it when needed. For example, pronouncing the word 'qad' without Qalqalah at the Dal is a common error. To avoid this, students should practice the Qalqalah letters in isolation and in context until the correct pronunciation becomes automatic.\n\nA third common mistake is improper Waqf (stopping). Students sometimes stop in the middle of a word, or they fail to stop at the end of a verse. They may also stop at a point where stopping is forbidden. To avoid this, students should learn the Waqf symbols and practice reciting from a tajweed mushaf that includes these symbols. Regular recitation with a qualified teacher who can correct mistakes is essential for improvement.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Continuous Improvement and Mastery",
+          "content_type": "text",
+          "content": "Achieving mastery in tajweed is a lifelong pursuit. The scholars have emphasized that even the greatest reciters continued to improve their recitation throughout their lives. The Prophet (peace be upon him) said: 'The best among you are those who learn the Quran and teach it' (Sahih al-Bukhari, 5027). This hadith indicates that learning and teaching the Quran are ongoing processes that never end.\n\nThe scholars have recommended several practices for continuous improvement. First, regular recitation of the Quran, ideally completing the entire Quran at least once a month. This provides consistent practice and helps maintain memorization and recitation quality. Second, listening to recordings of qualified reciters who follow tajweed rules strictly. This provides a model for correct recitation and helps identify areas for improvement.\n\nThird, seeking feedback from a qualified teacher or peer. Even advanced students benefit from external feedback because they may have developed habits that are difficult to detect on their own. The Prophet (peace be upon him) encouraged seeking knowledge from qualified sources and accepting correction with humility. Fourth, studying the advanced tajweed works to deepen understanding of the theoretical principles.\n\nThe ultimate goal of advanced tajweed is to recite the Quran in the way it was revealed—clearly, beautifully, and correctly. This is not merely a technical achievement but a spiritual one. When a reciter applies all the rules of tajweed correctly, the Quran touches the hearts of listeners and the reciter experiences a profound connection with Allah's words. This spiritual dimension is the true purpose of tajweed, and it is what makes the pursuit of mastery so rewarding.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

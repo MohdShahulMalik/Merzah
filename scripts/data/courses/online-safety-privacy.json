@@ -1,0 +1,237 @@
+{
+  "title": "Online Safety and Privacy",
+  "slug": "online-safety-privacy",
+  "description": "A comprehensive course on protecting yourself and your family in the digital world. Learn essential security practices including password management, privacy settings, social media safety, and recognizing online scams. This course connects Islamic principles of protection (hifz) and caution (ihtiyat) with modern cybersecurity best practices.\n\nFrom securing your accounts to protecting your children online, this course covers practical strategies for maintaining your digital safety. Each module provides actionable steps you can implement immediately, along with explanations of why these practices are important from both technical and Islamic perspectives.\n\nWhether you are concerned about personal privacy, protecting your family, or securing your financial information online, this course gives you the knowledge and tools to navigate the digital world safely and confidently.",
+  "short_description": "Essential online security practices with Islamic principles for personal and family protection",
+  "track_slug": "technology",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "Password Security and Account Protection",
+      "description": "Creating and managing strong passwords to protect your accounts",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Why Password Security Matters",
+          "content_type": "text",
+          "content": "Your password is the first line of defense for your digital accounts. Weak or reused passwords are one of the most common ways accounts are compromised.\n\nThe Quran emphasizes the importance of protection: 'Indeed, Allah is ever, over you, a Guardian and a Protector.' (Quran 4:45) While we trust in Allah's protection, we are also commanded to take practical measures to safeguard ourselves and our belongings.\n\nCommon password mistakes include: using simple or obvious passwords (like '123456' or 'password'), reusing the same password across multiple accounts, sharing passwords with others, and writing passwords down in unsecured locations. These habits make it easy for unauthorized persons to access your accounts.\n\nThe consequences of poor password security can be severe: unauthorized access to personal emails, financial theft, identity theft, and damage to your reputation. Taking password security seriously protects not only you but also those who communicate with you online.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Creating Strong Passwords",
+          "content_type": "text",
+          "content": "A strong password is long, complex, and unique. Follow these guidelines to create passwords that are difficult to guess or crack.\n\nThe Prophet (peace be upon him) said: 'The strong believer is better and more beloved to Allah than the weak believer, while there is good in both.' (Sahih Muslim) Being strong in password security is part of being a strong believer in protecting yourself.\n\nStrong password characteristics include: at least 12-16 characters long, combination of uppercase and lowercase letters, numbers, and special characters (!@#$%^&*), not based on personal information (names, birthdays, addresses), and not a common word or phrase.\n\nConsider using passphrases, which are longer and easier to remember but still very secure. For example, 'Quran2024isMyLight!' is stronger than 'Abcd1234' because of its length and complexity. Each account should have a unique password to prevent a breach of one account from compromising others.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Password Managers: Your Digital Keyring",
+          "content_type": "text",
+          "content": "Password managers are secure applications that store and manage your passwords. They generate strong, unique passwords for each account and automatically fill them in when needed.\n\nUsing a password manager aligns with the Islamic principle of using the best tools available. The Prophet (peace be upon him) encouraged excellence (ihsan) in all things: 'Allah loves that when one of you does a job, he does it with excellence.' (Authenticated by al-Albani)\n\nPopular password managers include: Bitwarden (free and open-source), 1Password (subscription-based), LastPass, and KeePass (offline option). Most password managers offer browser extensions and mobile apps for convenient access.\n\nBenefits of using a password manager include: generating unique strong passwords for every account, storing passwords securely with encryption, auto-filling login forms, alerting you to weak or compromised passwords, and syncing across all your devices. You only need to remember one master password.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Two-Factor Authentication (2FA)",
+          "content_type": "text",
+          "content": "Two-factor authentication adds an extra layer of security to your accounts by requiring two forms of verification: something you know (your password) and something you have (like your phone).\n\nThe concept of layers of protection is found throughout creation. Allah says: 'We made them leaders guiding by Our command.' (Quran 21:73) Just as leaders guide and protect, 2FA guides and protects your accounts.\n\nTypes of 2FA include: SMS text messages (codes sent to your phone), authenticator apps (Google Authenticator, Authy, Microsoft Authenticator), hardware security keys (YubiKey), and biometric verification (fingerprint, face recognition).\n\nEnable 2FA on all important accounts, especially email, banking, and social media. While SMS-based 2FA is better than nothing, authenticator apps are more secure because they are not vulnerable to SIM-swapping attacks. Many services now offer passkeys as a more secure alternative to traditional 2FA.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Privacy Settings and Data Protection",
+      "description": "Understanding and managing your digital privacy",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Understanding Digital Privacy",
+          "content_type": "text",
+          "content": "Digital privacy refers to the control you have over your personal information online. Understanding what data is collected about you and how to manage it is essential for protecting your privacy.\n\nThe Quran teaches: 'O you who believe, avoid much suspicion. Indeed, some suspicion is sin.' (Quran 49:12) While this verse addresses interpersonal suspicion, it also reminds us to be thoughtful about what information we share with others.\n\nData collected about you includes: browsing history, search queries, location data, purchase history, social media activity, and device information. This data is used for targeted advertising, personalization, and in some cases, may be shared with third parties.\n\nUnderstanding privacy settings allows you to control what information is shared and with whom. While no online activity is completely private, taking steps to manage your privacy significantly reduces your digital footprint.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Social Media Privacy Settings",
+          "content_type": "text",
+          "content": "Social media platforms collect vast amounts of personal data. Configuring your privacy settings helps you control who sees your posts, personal information, and activity.\n\nThe Prophet (peace be upon him) said: 'Whoever believes in Allah and the Last Day, let him speak good or remain silent.' (Sahih al-Bukhari) This guidance applies to what we share on social media.\n\nKey privacy settings to review on social media include: who can see your posts (public, friends, custom), who can send you friend requests, whether your profile is searchable, who can tag you in photos, and whether your location is shared with posts.\n\nReview these settings regularly, as platforms often update their privacy policies and default settings. Consider limiting your audience to people you know and trust. Be cautious about accepting friend requests from strangers, and think carefully before posting personal information like your address, phone number, or daily routines.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Browser Privacy and Cookies",
+          "content_type": "text",
+          "content": "Web browsers store cookies and other data that can be used to track your online activity. Understanding how to manage these settings helps protect your browsing privacy.\n\nAllah says: 'Indeed, Allah is Knowing of what you do.' (Quran 3:120) While Allah knows all our actions, we have the right to control what information others can gather about us.\n\nCookies are small files stored on your device that remember your preferences and activity. While some cookies are necessary for websites to function properly, others are used for tracking and advertising purposes.\n\nTo manage your privacy: use your browser's private or incognito mode for sensitive browsing, regularly clear your cookies and browsing history, consider using privacy-focused browsers (like Firefox with enhanced tracking protection), and use browser extensions that block trackers (like uBlock Origin or Privacy Badger). Search engines like DuckDuckGo do not track your searches, unlike some alternatives.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Recognizing and Avoiding Scams",
+      "description": "Identifying common online scams and protecting yourself from fraud",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Common Online Scams",
+          "content_type": "text",
+          "content": "Online scams come in many forms, from phishing emails to fake websites and fraudulent offers. Learning to recognize these scams is essential for protecting yourself.\n\nThe Quran warns: 'O you who believe, do not consume one another's wealth unjustly but only [in lawful] business by mutual consent.' (Quran 4:29) Scams violate this principle by attempting to take people's wealth through deception.\n\nCommon scams include: phishing emails pretending to be from banks or services, fake online stores that take payment without delivering products, lottery or inheritance scams promising large sums, romance scams that manipulate emotions for financial gain, and tech support scams that claim your device has problems.\n\nRed flags to watch for include: unsolicited contact, urgency or pressure to act quickly, requests for personal information or payment, too-good-to-be-true offers, grammatical errors, and unfamiliar sender addresses. When something feels wrong, trust your instincts and verify before taking action.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Email Phishing and How to Spot It",
+          "content_type": "text",
+          "content": "Phishing emails are designed to trick you into revealing personal information or clicking malicious links. They often appear to come from legitimate organizations.\n\nThe Prophet (peace be upon him) warned against deception: 'The one who cheats us is not one of us.' (Sahih Muslim) Being vigilant against deception protects both you and the community.\n\nSigns of phishing emails include: generic greetings instead of your name, email addresses that don't match the claimed sender, links that don't match the displayed text (hover to check), requests for passwords or personal information, threats or urgent demands, and unexpected attachments.\n\nIf you receive a suspicious email: do not click any links or download attachments, do not reply with personal information, verify the sender through another channel (like calling the organization directly), report the email as phishing, and delete it. When in doubt, contact the organization through their official website or phone number.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Safe Online Shopping and Transactions",
+          "content_type": "text",
+          "content": "Safe online shopping requires awareness of security indicators and careful verification of websites before making purchases.\n\nThe principle of mutual consent in transactions (Quran 4:29) requires that both parties are informed and honest. Online shopping requires extra vigilance since you cannot physically inspect products or verify sellers.\n\nBefore purchasing from a website: check for HTTPS in the URL (indicates secure connection), verify the website's reputation through reviews, look for contact information and return policies, research the company name, and use secure payment methods like credit cards or PayPal (which offer buyer protection).\n\nAvoid deals that seem too good to be true, never wire money to unknown sellers, use virtual credit card numbers when available, keep records of all transactions, and monitor your bank statements for unauthorized charges. Report suspicious websites to help protect others.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Protecting Your Family Online",
+      "description": "Strategies for keeping family members safe in the digital world",
+      "sort_order": 4,
+      "lessons": [
+        {
+          "title": "Online Safety for Children",
+          "content_type": "text",
+          "content": "Protecting children online requires a combination of technical tools, open communication, and education about safe behavior.\n\nThe Prophet (peace be upon him) said: 'All of you are guardians and each of you is responsible for those under his care.' (Sahih al-Bukhari and Muslim) This responsibility extends to children's online activities.\n\nStrategies for children's online safety include: using parental control software, setting up devices in common areas, establishing clear rules about internet use, teaching children not to share personal information online, and monitoring online friendships and activities.\n\nAge-appropriate guidelines are important. Young children should have supervised access only. Pre-teens and teenagers should have gradually increasing independence with regular check-ins. Keep communication open so children feel comfortable reporting uncomfortable experiences without fear of punishment.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Parental Controls and Monitoring Tools",
+          "content_type": "text",
+          "content": "Parental control tools help manage and monitor children's digital activities. These tools can filter content, set time limits, and provide activity reports.\n\nThe balance between protection and trust is important in parenting. The Quran says: 'O you who believe, protect yourselves and your families from a Fire.' (Quran 66:6) This verse emphasizes the importance of taking active measures to protect our families.\n\nTypes of parental controls include: content filters that block inappropriate websites, time limit controls that restrict usage hours, application controls that limit app usage, location tracking for safety, and activity reports that show online behavior.\n\nBuilt-in parental controls are available on most devices (Apple Screen Time, Google Family Link, Windows Family Safety). Third-party options like Qustodio, Net Nanny, and Bark offer additional features. Choose tools based on your children's ages and your family's needs, and explain to children why these tools are being used.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Teaching Digital Citizenship",
+          "content_type": "text",
+          "content": "Digital citizenship teaches children to use technology responsibly, ethically, and safely. It encompasses online behavior, privacy, and respect for others.\n\nThe Prophet (peace be upon him) was described as 'a walking Quran' because his character reflected Islamic teachings. We should strive to raise children whose digital behavior reflects Islamic values.\n\nKey digital citizenship concepts include: treating others with respect online, protecting personal information, thinking before posting, understanding that online actions have real consequences, and being a positive force in online communities.\n\nModel good digital behavior for your children. Show them how you verify information before sharing, how you treat others with respect in online interactions, and how you protect your privacy. Have regular conversations about their online experiences and challenges. Remember that education is more effective than restriction alone.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Creating a Family Internet Safety Plan",
+          "content_type": "text",
+          "content": "A family internet safety plan establishes guidelines and expectations for technology use in your household. Creating this plan together ensures everyone understands and agrees to the rules.\n\nThe Quranic principle of shura (consultation) applies to family decisions: 'And those who have responded to their lord and established prayer and whose affair is [determined by] consultation among themselves.' (Quran 42:38) Involving family members in creating the plan promotes buy-in and responsibility.\n\nComponents of a family internet safety plan include: acceptable use policies for each family member, guidelines for sharing family information online, rules about screen time and device use, procedures for reporting problems, and consequences for violating guidelines.\n\nReview and update the plan regularly as children grow and technology changes. The goal is not to create a restrictive environment but to foster responsible, safe, and purposeful technology use that aligns with your family's Islamic values.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

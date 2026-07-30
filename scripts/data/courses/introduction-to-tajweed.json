@@ -1,0 +1,251 @@
+{
+  "title": "Introduction to Tajweed",
+  "slug": "introduction-to-tajweed",
+  "description": "Tajweed (تجويد) refers to the set of rules governing the proper pronunciation and recitation of the Quran. The word tajweed comes from the Arabic root meaning 'to improve' or 'to make better.' This comprehensive course introduces students to the foundational principles of Quranic recitation as transmitted by the Prophet Muhammad (peace be upon him) through authentic chains of narration.\n\nThe Quran was revealed with specific rules of recitation to ensure its preservation and beautiful delivery. Allah commands in the Quran: 'And recite the Quran with measured recitation' (Quran 73:4). This course covers the essential knowledge every Muslim needs to recite the Quran correctly, including the articulation points (Makharij), letter characteristics (Sifat), and the rules that govern how letters interact with each other.\n\nStudents will learn from classical tajweed manuals and the works of renowned scholars such as Imam Ibn al-Jazari and Imam al-Qurtubi. Each lesson includes practical examples from the Quran and explanations connecting these rules to their spiritual significance. By the end of this course, students will have a solid foundation for proper Quranic recitation and will be prepared for intermediate studies.",
+  "short_description": "Master the fundamental rules of Quranic recitation with authentic tajweed principles.",
+  "track_slug": "quran",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "What is Tajweed and Its Importance",
+      "description": "Understanding the meaning, history, and spiritual significance of tajweed rules.",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Definition and History of Tajweed",
+          "content_type": "text",
+          "content": "Tajweed (تجويد) literally means 'to make better' or 'to improve.' In the context of Quran recitation, it refers to the rules and regulations that govern how letters should be pronounced, their articulation points, and their characteristics. The science of tajweed was developed to ensure the Quran is recited exactly as it was revealed to Prophet Muhammad (peace be upon him).\n\nThe Prophet (peace be upon him) learned the Quran directly from Angel Jibril (Gabriel), and the Companions learned from him. This chain of transmission continues unbroken to this day. Imam al-Shafi'i (may Allah have mercy on him) said: 'I heard from more than one reciter that they heard the Messenger of Allah (peace be upon him) reciting: Bismillah al-Rahman al-Rahim.' This establishes the importance of learning from qualified teachers.\n\nThe science of tajweed was codified by scholars such as Abu al-Hasan Ali ibn Isa al-Rummani (d. 384 AH), who wrote one of the earliest systematic works on tajweed. Later, scholars like Imam Ibn al-Jazari (d. 833 AH) refined and organized these rules. Today, tajweed remains essential for every Muslim who wishes to recite the Quran correctly.\n\nAllah commands believers to recite the Quran with measured recitation: 'And recite the Quran with measured recitation' (Quran 73:4, Surah Al-Muzzammil). This verse establishes the obligation of following tajweed rules when reciting the Quran, making its study a religious duty for every Muslim.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "The Spiritual Significance of Proper Recitation",
+          "content_type": "text",
+          "content": "Proper recitation of the Quran with tajweed is not merely a technical exercise but a profound act of worship that draws the believer closer to Allah. The Quran was revealed in Arabic to be recited, and its beauty is manifested when recited correctly. The Prophet (peace be upon him) said: 'Beautify the Quran with your voices' (Sahih Muslim).\n\nThe Companions of the Prophet (peace be upon him) were known for their beautiful recitation. Uthman ibn Affan (may Allah be pleased with him) would recite until his beard would be wet with tears. Abdullah ibn Masud (may Allah be pleased with him) said: 'Recite in the manner of those who came before you, for indeed the one who came after me will recite just as I recited.'\n\nWhen a reciter follows tajweed rules, the Quran touches the hearts of listeners and transforms the spiritual atmosphere. The Prophet (peace be upon him) said: 'Indeed, this Quran has a beautiful appearance and beautiful manners, so do not disgrace the manners of the Quran' (Reported by al-Tabari). Following tajweed is a way of honoring Allah's words.\n\nThe Prophet (peace be upon him) said: 'The best among you are those who learn the Quran and teach it' (Sahih al-Bukhari, 5027). Learning tajweed is the first step in this process, enabling Muslims to properly convey the Quran to others and to understand its message more deeply.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Obligation of Learning Tajweed",
+          "content_type": "text",
+          "content": "The majority of scholars agree that learning tajweed is an individual obligation (fard) for every Muslim who recites the Quran. This is based on the verse 'And recite the Quran with measured recitation' (Quran 73:4), which implies that recitation must be done correctly, requiring knowledge of proper pronunciation rules.\n\nImam Ibn Hajar al-Asqalani (may Allah have mercy on him) stated that learning the rules of tajweed is necessary to avoid making mistakes that could change the meaning of the Quran. For example, mispronouncing the letter 'Ta' (ت) as 'Ta' (ط) can change the meaning of words. Therefore, tajweed serves as a safeguard for the integrity of the Quran's message.\n\nThe Prophet (peace be upon him) said: 'Whoever recites a letter from the Book of Allah will have a good deed, and a good deed is multiplied by ten. I do not say Alif-Lam-Mim is one letter, but Alif is a letter, Lam is a letter, and Mim is a letter' (Reported by al-Tirmidhi). Learning tajweed ensures that these letters are recited correctly, maximizing the rewards of recitation.\n\nScholars have classified the types of tajweed knowledge into categories: what is obligatory for every Muslim to know, what is recommended but not required, and what is the level of expertise for reciters. This course focuses on the obligatory knowledge that every Muslim needs to recite the Quran correctly in their daily prayers and personal recitation.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Makharij al-Huruf (Articulation Points)",
+      "description": "Learn the physical articulation points where each Arabic letter originates.",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Overview of Makharij",
+          "content_type": "text",
+          "content": "Makharij al-Huruf (مخارج الحروف) refers to the articulation points or places of exit for Arabic letters. Each Arabic letter has a specific point in the mouth, throat, or nasal cavity where the sound originates. Understanding these points is essential for proper pronunciation of the Quran. The Quran was revealed with precision, and the Prophet (peace be upon him) demonstrated the correct articulation to his Companions.\n\nThere are five primary articulation areas: the throat (al-halq), the tongue (al-lisan), the lips (al-shafatan), the nose (al-khushum), and the deep throat (al-halq al-amm). Each area contains multiple articulation points for different letters. For example, the throat has three sections: the upper throat for letters like Hamza (ء) and Ha (ه), the middle throat for 'Ayn (ع) and Ha (ح), and the lower throat for Ghayn (غ) and Kha (خ).\n\nThe scholars who developed this science include Abu al-Hasan al-Rummani (d. 384 AH) and Abu al-Faraj al-Isfahani (d. 356 AH). Their works established the systematic study of letter pronunciation that continues to be taught today. These scholars studied the sounds produced by the letters based on both theoretical analysis and practical observation.\n\nMastering Makharij requires consistent practice and guidance from a qualified teacher. Each letter has subtle differences in its articulation point, and even small variations can affect the correctness of pronunciation. This module introduces the major articulation areas and provides guidelines for identifying and mastering each letter's sound.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Throat Letters (Huruf al-Halq)",
+          "content_type": "text",
+          "content": "The throat letters are divided into three groups based on their articulation point. The first group consists of letters that exit from the upper part of the throat: Hamza (ء), Ha (ه), and 'Ayn (ع). The Hamza is produced at the glottis, while the Ha is a soft sound from the upper throat, and 'Ayn is produced deeper in the throat.\n\nThe second group includes letters from the middle of the throat: Ha (ح), Kha (خ), and Ghayn (غ). The Ha is a voiceless, breathy sound, while the Kha has a rougher quality with more emphasis. The Ghayn is the voiced counterpart of Kha. These letters require careful attention to produce correctly.\n\nThe third group consists of letters from the deepest part of the throat: 'Ayn (ع), Ghayn (غ), and Ha (ه). The 'Ayn is one of the most distinctive Arabic letters, produced deep in the throat with a characteristic sound that does not exist in English. The Ghayn is similar but with a voiced quality.\n\nImam Ibn al-Jazari (d. 833 AH) emphasized that throat letters must be pronounced distinctly from one another. He noted in his work 'al-Muqaddimah al-Jazariyyah' that the three groups of throat letters are distinguished by their depth of articulation, and each letter within a group is distinguished by whether it is voiced or voiceless. Practicing these letters in isolation and within Quranic verses is essential for mastery.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Tongue and Lip Letters",
+          "content_type": "text",
+          "content": "The tongue letters are divided into seven articulation points, from the front of the tongue to the back. These include: Ta (ت), Dal (د), and Taa (ط) at the front tip; Sa (س), Zay (ز), Sad (ص), and Dad (ض) from the front and sides of the tongue; Noon (ن) and Lam (ل) from the middle; Kaf (ك) from the back; and Qaf (ق) from the very back of the tongue near the uvula.\n\nEach tongue letter has unique characteristics. For example, the Sad (ص) and Dad (ض) are distinguished by the tongue's position being pressed against the roof of the mouth, creating a heavier sound than their counterparts Sa (س) and Za (ز). The Qaf (ق) is produced with the back of the tongue touching the uvula, while the Kaf (ك) touches the roof of the mouth.\n\nThe lip letters are fewer in number but equally important. These include Ba (ب), Meem (م), and Waw (و) when used as a consonant. The Ba is produced with both lips coming together, the Meem with the lips pressed together, and the Waw with a rounding of the lips.\n\nThe Prophet (peace be upon him) demonstrated the correct pronunciation of these letters to his Companions. Abdullah ibn al-Sa'ib (may Allah be pleased with him) said: 'I recited to the Messenger of Allah (peace be upon him) and he said: Recite as the Bedouins recite, for I was sent reciting in a clear Arabic tongue' (Reported by al-Bukhari). This emphasizes the importance of clear, correct pronunciation of all letters.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Practical Application of Makharij",
+          "content_type": "text",
+          "content": "Understanding the theory of Makharij is only the first step; the true mastery comes through practice. Students should practice each letter individually, focusing on producing the sound from the correct articulation point. It is recommended to use a mirror to observe mouth movements and to record oneself for comparison with correct recitation.\n\nThe Quran provides excellent examples for practicing Makharij. Surah Al-Fatihah contains most of the Arabic letters, making it ideal for articulation practice. The phrase 'Bismillah al-Rahman al-Rahim' alone contains letters from multiple articulation points: Ba from the lips, Seen from the tongue, Meem from the lips, and the throat letters Ha and Ra.\n\nModern technology has made it easier to learn proper pronunciation through audio recordings and video lessons. However, nothing replaces the guidance of a qualified teacher (Muqri) who can listen to a student's recitation and correct errors. The Prophet (peace be upon him) personally taught his Companions how to recite, establishing the tradition of oral transmission that continues today.\n\nStudents are encouraged to practice regularly and to recite short passages from the Quran, applying the articulation points they have learned. The goal is to make correct pronunciation automatic so that when reading the Quran, the reciter can focus on the meaning and spiritual connection rather than struggling with letter sounds.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Sifat al-Huruf (Letter Characteristics)",
+      "description": "Learn the qualities and attributes that distinguish each Arabic letter.",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Understanding Sifat",
+          "content_type": "text",
+          "content": "Sifat al-Huruf (صفات الحروف) refers to the characteristics or qualities that distinguish one Arabic letter from another. While Makharij determine where a letter is produced, Sifat determine how it sounds. There are numerous Sifat, but scholars have categorized them into essential and non-essential characteristics. The essential Sifat are those that every letter possesses, while non-essential ones vary.\n\nThe primary Sifat include: Jalalah (loudness) vs. Khafalah (softness), Shiddah (strength) vs. Rakhawah (softness), Hams (breathiness) vs. Jahr (voicing), and Istifalah (emphatic) vs. Qalalah (non-emphatic). Each letter has a combination of these characteristics that defines its unique sound. For example, the letter Ba (ب) is soft, voiced, and non-emphatic, while the letter Qaf (ق) is loud, strong, and emphatic.\n\nImam al-Zarkashi (d. 794 AH) explained in his book 'al-Burhan fi Ulum al-Quran' that Sifat are essential for distinguishing letters that share the same Makharij. For instance, the letters Ta (ت), Tha (ث), Ba (ب), and Noon (ن) all originate from the same area of the tongue, but their different Sifat make them distinct sounds.\n\nUnderstanding Sifat is crucial for proper recitation because incorrect application of these characteristics can change the meaning of words. The Prophet (peace be upon him) was sent with 'a clear Arabic tongue' (Quran 26:195), and his recitation demonstrated the perfect balance of all letter characteristics.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Jalalah and Khafalah (Loudness and Softness)",
+          "content_type": "text",
+          "content": "Jalalah (جلالة) refers to the loudness or strength of a letter when recited, while Khafalah (خفة) refers to its softness. These two Sifat are opposites and are mutually exclusive—a letter cannot be both loud and soft at the same time. Understanding which letters are loud and which are soft is essential for proper Quran recitation.\n\nThe loud letters (Huruf al-Jahr) are: Hamza (ء), Ha (ه), 'Ayn (ع), Ghayn (غ), Ha (ح), Kha (خ), and Qaf (ق). These letters produce sound that is clearly audible and resonates in the mouth. The soft letters are all the remaining Arabic letters. When reciting soft letters, the sound should be gentle and not forceful.\n\nThe Prophet (peace be upon him) recited with clarity and appropriate volume. He said: 'Whoever does not chant the Quran, it is not from us' (Sahih Muslim). The word 'chant' here implies a recitation that follows proper tajweed rules, including the appropriate loudness or softness of each letter.\n\nImam Ibn al-Jazari (d. 833 AH) emphasized that the balance between Jalalah and Khafalah is what gives the Quran its beautiful rhythm. When a reciter correctly applies these characteristics, the recitation flows naturally and touches the hearts of listeners. Students should practice distinguishing between loud and soft letters by reciting passages that contain both types.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Hams and Jahr (Breathiness and Voicing)",
+          "content_type": "text",
+          "content": "Hams (همس) refers to the characteristic of breathiness or whispering quality in a letter, while Jahr (جهر) refers to voicing or a clear, resonant sound. When pronouncing a Hams letter, a small amount of air escapes, giving the letter a breathy quality. Jahr letters are produced with vocal cord vibration, making them clearly audible.\n\nThe Hams letters are: Fa (ف), Sad (ص), Seen (س), Sheen (ش), Ha (ح), Kha (خ), Ta (ت), Tha (ث), Sa (س), and Kaf (ك). These letters should be pronounced with a slight breathy quality, especially when they are followed by a Hams letter. When a Hams letter is followed by a Jahr letter, the breathiness is reduced but not entirely eliminated.\n\nThe Jahr letters include: Ba (ب), Jeem (ج), Dal (د), Ghayn (غ), Qaf (ق), Kaf (ك), Lam (ل), Meem (م), Noon (ن), Ra (ر), Waw (و), and Zay (ز). These letters should be pronounced clearly and without breathiness. The distinction between Hams and Jahr is particularly important in words where mispronunciation could change the meaning.\n\nThe Prophet (peace be upon him) demonstrated the correct application of these characteristics in his recitation. It was reported that when he recited, his Companions could clearly hear each letter and distinguish its characteristics. This clarity is a hallmark of proper Quran recitation that every student should strive to achieve.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Practical Application of Sifat",
+          "content_type": "text",
+          "content": "Applying the correct Sifat to each letter requires consistent practice and attention. Students should begin by reciting each letter in isolation, focusing on its specific characteristics. For example, when reciting the letter Ba (ب), ensure it is soft, voiced, and non-emphatic. When reciting Qaf (ق), ensure it is loud, strong, and emphatic.\n\nA useful exercise is to recite pairs of letters that share the same Makharij but differ in Sifat. For example, practice alternating between Sa (س) and Sad (ص), or between Ta (ت) and Taa (ط). This helps train the tongue and throat to produce distinct sounds. The Quran contains many examples of such letter pairs, particularly in Surah Al-Fatihah and Surah Al-Qalam.\n\nThe Prophet (peace be upon him) encouraged reciting the Quran slowly and carefully, paying attention to each letter. He said: 'Whoever reads the Quran beautifully and correctly, it will be with the noble, righteous scribes in paradise' (Sahih Muslim). The beauty of recitation comes from the correct application of all Sifat.\n\nStudents should also listen to recordings of famous reciters who follow tajweed rules strictly. By comparing their own recitation with these recordings, they can identify areas where their Sifat application needs improvement. Regular practice and feedback from a qualified teacher are essential for mastering the proper application of letter characteristics in Quran recitation.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Basic Tajweed Rules",
+      "description": "Learn the fundamental rules that govern letter interactions and recitation patterns.",
+      "sort_order": 4,
+      "lessons": [
+        {
+          "title": "Noon and Meem Mushaddad",
+          "content_type": "text",
+          "content": "The rules of Noon and Meem Mushaddad are among the first tajweed rules students learn. When a Noon (ن) or Meem (م) has a shaddah ( ّ ) over it, it is pronounced with emphasis (ghunnah), a nasal sound held for approximately two beats. This is one of the most frequently occurring rules in the Quran.\n\nFor example, in the phrase 'Bismillah al-Rahman al-Rahim' (بسم الله الرحمن الرحيم), the Meem in 'al-Rahman' has a shaddah, so it is recited with ghunnah. Similarly, in 'Allahu akbar' (الله أكبر), the Noon in 'akbar' when preceded by 'al-' has a shaddah and is recited with ghunnah.\n\nThe Prophet (peace be upon him) demonstrated this rule in his recitation. It was reported that he would extend the ghunnah for a duration that was comfortable and appropriate. The scholars have determined that the ghunnah should last approximately two beats, which is enough time to pronounce the nasal sound clearly.\n\nThis rule applies to both Noon and Meem. When reciting words like 'annahu' (أنه), 'minna' (منا), or 'bimaa' (بما), the ghunnah should be applied clearly. Mastering this rule is essential because it affects many words throughout the Quran, and its proper application contributes significantly to the beauty and correctness of recitation.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Ikhfa (Concealment) Rules",
+          "content_type": "text",
+          "content": "Ikhfa (إخفاء) refers to the partial concealment of the Noon Saakinah (نون ساكنة) or Tanween when followed by certain letters. When a Noon Saakinah or Tanween is followed by one of the fifteen Ikhfa letters, the Noon sound is partially hidden and replaced with a nasal ghunnah sound. This creates a smooth transition between letters.\n\nThe fifteen Ikhfa letters are: Ta (ت), Tha (ث), Jeem (ج), Dal (د), Thal (ذ), Zay (ز), Seen (س), Sheen (ش), Sad (ص), Dad (ض), Taa (ط), Dhaa (ظ), Fa (ف), Qaf (ق), and Kaf (ك). For example, in the word 'minka' (منك), the Noon Saakinah is followed by Kaf, so the Noon is concealed and replaced with a nasal sound.\n\nThe Prophet (peace be upon him) recited with Ikhfa when appropriate, demonstrating the correct application of this rule. The scholars have explained that the ghunnah in Ikhfa should last for approximately two beats, similar to the ghunnah in Noon Mushaddad. This consistency helps maintain the beautiful rhythm of Quran recitation.\n\nStudents should practice identifying Ikhfa situations in the Quran and applying the rule correctly. A common mistake is to either pronounce the Noon too strongly (which turns it into Idgham) or too weakly (which makes it unclear). The balance of partial concealment with clear ghunnah is the hallmark of proper Ikhfa application.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Idgham (Merging) Rules",
+          "content_type": "text",
+          "content": "Idgham (إدغام) refers to the merging of the Noon Saakinah or Tanween into the following letter. When a Noon Saakinah or Tanween is followed by one of the Idgham letters, the Noon sound is completely absorbed into the next letter, and the two letters are pronounced together as one emphasized letter. This creates a smooth, flowing recitation.\n\nThe Idgham letters are divided into two groups: Idgham with ghunnah and Idgham without ghunnah. Idgham with ghunnah occurs with the letters Ya (ي), Meem (م), Nun (ن), and Waw (و). When these letters follow a Noon Saakinah or Tanween, the merging produces a nasal ghunnah sound. For example, in 'min yawmin' (من يوم), the Noon merges with the Waw.\n\nIdgham without ghunnah occurs with the letters Lam (ل) and Ra (ر). When these letters follow a Noon Saakinah or Tanween, the merging produces no ghunnah. For example, in 'min rabbi' (من ربي), the Noon merges with the Ra without any nasal sound.\n\nThe Prophet (peace be upon him) demonstrated Idgham in his recitation. It was reported that he would merge the letters smoothly, creating a beautiful flow in his recitation. This rule is one of the most frequently applied in the Quran, and mastering it is essential for fluent, correct recitation. Students should practice identifying Idgham situations and applying the appropriate type of merging.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Qalqalah (Echoing)",
+          "content_type": "text",
+          "content": "Qalqalah (قلقلة) refers to the echoing or vibrating sound produced when certain letters are recited with sukoon (a diacritical mark indicating absence of a vowel). The letters that produce Qalqalah are: Ba (ب), Jeem (ج), Dal (د), Taa (ط), and Qaf (ق). When these letters have sukoon and are recited clearly, they produce a distinctive bouncing or echoing sound.\n\nThe Prophet (peace be upon him) recited these letters clearly, demonstrating the correct application of Qalqalah. For example, in the word 'yakhruju' (يخرج), the Jeem has sukoon and should be recited with Qalqalah. Similarly, in 'qad' (قد), the Dal should have Qalqalah when pronounced with sukoon.\n\nThere are three levels of Qalqalah: strong, medium, and mild. Strong Qalqalah occurs in the middle of a word when the letter is followed by a silent letter. Medium Qalqalah occurs at the end of a word when the letter is pronounced with sukoon. Mild Qalqalah occurs when the letter is at the end of a word with tanween. Understanding these variations is important for precise recitation.\n\nThe scholars have explained that Qalqalah serves an aesthetic function in Quran recitation, adding beauty and musicality to the recitation. It also serves a practical function, ensuring that these letters are not swallowed or unclear when recited with sukoon. Students should practice the Qalqalah letters until the echoing sound becomes natural and consistent.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

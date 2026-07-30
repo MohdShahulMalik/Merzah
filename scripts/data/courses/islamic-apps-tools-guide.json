@@ -1,0 +1,160 @@
+{
+  "title": "Islamic Apps and Tools Guide",
+  "slug": "islamic-apps-tools-guide",
+  "description": "A practical guide to the best Islamic applications and digital tools available today. From Quran apps with multiple recitations to prayer time calculators, hadith collections, and productivity tools designed for Muslim lifestyles, this course helps you find the right tools to enhance your Islamic practice.\n\nLearn how to evaluate and choose apps based on features, reliability, and alignment with mainstream Islamic scholarship. This course covers free and paid options for various needs, including daily worship, Islamic education, community building, and personal development.\n\nEach module provides hands-on guidance for using specific categories of apps, with recommendations from trusted sources and tips for getting the most out of these digital resources.",
+  "short_description": "Practical guide to Islamic apps and digital tools for worship, learning, and daily life",
+  "track_slug": "technology",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "Quran and Prayer Apps",
+      "description": "Essential apps for Quran recitation, study, and prayer management",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Quran Apps: Features and Recommendations",
+          "content_type": "text",
+          "content": "Modern Quran apps offer a wealth of features that make engaging with the Holy Quran easier than ever before. From multiple recitations to word-by-word translations, these tools support both daily recitation and deeper study.\n\nThe Quran itself encourages reflection and study: 'This is the Book about which there is no doubt, a guidance for those conscious of Allah.' (Quran 2:2) The right app can help you fulfill this guidance in your daily life.\n\nWhen choosing a Quran app, consider these features: multiple Quran reciters (such as Mishary Rashid Alafasy, Abdul Basit Abdul Samad, and Saud Al-Shuraim), translations in your preferred language, word-by-word translations, audio synchronization, bookmarks and notes, and offline access.\n\nPopular free Quran apps include Muslim Pro, Quran.com, Al Quran (Tafsir & by Word), and iQuran. Each offers different strengths, so explore a few to find the one that best suits your needs and reading habits.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Prayer Time Apps and Azan Notifications",
+          "content_type": "text",
+          "content": "Prayer time apps calculate accurate salah times based on your location and preferred calculation method. Many also provide the azan (call to prayer) audio and qibla direction.\n\nThe Prophet (peace be upon him) said: 'The best deed in the sight of Allah is the prayer at its proper time.' (Sahih al-Bukhari) Using a reliable prayer time app helps ensure you pray on time, wherever you are.\n\nKey features to look for in prayer time apps include: accurate calculations for your location, multiple calculation methods (e.g., Muslim World League, Islamic Society of North America, Umm al-Qura), adjustable prayer time notifications, qibla compass, and widget support for quick access.\n\nPopular options include Athan (by Islamic Finder), Muslim Pro, Prayer Times & Qibla, and HalalTrip. Many apps also include additional features like a tasbih counter, Quran reader, and Islamic calendar. Choose an app that provides accurate times for your region and allows customization of notification preferences.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Tajweed Apps for Quran Recitation",
+          "content_type": "text",
+          "content": "Tajweed is the science of proper Quran recitation, including rules for pronunciation, pauses, and intonation. Learning tajweed is essential for reciting the Quran correctly.\n\nAllah says: 'And recite the Quran with measured recitation.' (Quran 73:4) Tajweed apps help you learn and practice these rules with audio examples and visual guides.\n\nFeatures to look for in tajweed apps include: color-coded tajweed rules, audio recordings by qualified reciters, slow-motion playback for practice, word-by-word breakdown, and progress tracking. Some apps use artificial intelligence to analyze your recitation and provide feedback.\n\nRecommended tajweed apps include Tajweed Quran (with color coding), Learn Quran Tajweed, and Tarteel. These apps range from beginner-friendly to advanced, allowing you to progress at your own pace. Regular practice with a tajweed app can significantly improve your recitation quality.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Hadith and Islamic Knowledge Apps",
+      "description": "Digital resources for studying hadith and Islamic scholarship",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Hadith Collection Apps",
+          "content_type": "text",
+          "content": "Access to authentic hadith collections has been transformed by digital technology. Today, you can carry the complete works of Imam al-Bukhari, Muslim, and other scholars in your pocket.\n\nThe Prophet (peace be upon him) said: 'Whoever relieves a believer of a burden from the burdens of this world, Allah will relieve him of a burden from the burdens of the Day of Judgment.' (Sahih Muslim) Access to authentic hadith helps Muslims understand and practice their faith correctly.\n\nPopular hadith apps include Sahih al-Bukhari (with multiple translations), Sunnah.com (by Yaqeen Institute), Hadith Collection (by Islam 360), and Muwatta Imam Malik. These apps typically offer searchable text, multiple narrations, grading of hadith authenticity, and cross-referencing with other collections.\n\nWhen using hadith apps, look for those that provide chain of narration (isnad) information, grading by scholars, and context for each hadith. This helps ensure you are understanding the hadith in its proper context and avoiding misinterpretation.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Islamic Learning Platforms",
+          "content_type": "text",
+          "content": "Online Islamic learning platforms offer structured courses from qualified scholars, making Islamic education accessible to Muslims worldwide.\n\nAllah says: 'Are those who know equal to those who do not know?' (Quran 39:9) These platforms help bridge the gap between those who have access to Islamic scholars and those who do not.\n\nLeading platforms include SeekersGuidance (free courses from traditional scholars), Bayyinah TV (Quran and Arabic studies by Nouman Ali Khan), Islamic Online University (founded by Dr. Bilal Philips), and Qalam Institute. Many masjids and Islamic centers also offer online classes.\n\nWhen choosing a learning platform, consider the credentials of the instructors, the curriculum content, community features, and whether certificates are offered. Many platforms offer both free and paid courses, allowing you to start with introductory material before committing to advanced studies.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Islamic Reference and Dictionary Apps",
+          "content_type": "text",
+          "content": "Islamic reference apps provide quick access to essential information about Islamic terminology, scholars, historical events, and jurisprudential rulings.\n\nThe Prophet (peace be upon him) said: 'The scholars are the heirs of the prophets.' (Sunan al-Tirmidhi) Reference apps help preserve and传播 this scholarly heritage in the digital age.\n\nUseful reference apps include: Islamic Glossary (for Arabic terms and definitions), Encyclopedia of Islam (for historical and scholarly information), Fiqh apps (for understanding Islamic jurisprudence), and Islamic Calendar apps (for tracking important dates).\n\nThese tools are invaluable for students of Islamic knowledge, teachers, and anyone seeking to deepen their understanding of Islam. Look for apps that cite their sources and are developed by reputable Islamic organizations or scholars.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Productivity and Lifestyle Tools",
+      "description": "Apps and tools for Muslim daily life, productivity, and community",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Halal Product and Travel Apps",
+          "content_type": "text",
+          "content": "Finding halal food and Muslim-friendly services is easier with dedicated apps that help you locate halal restaurants, shops, and accommodations.\n\nAllah says: 'So eat of what Allah has provided for you, lawful and good.' (Quran 16:114) These apps help Muslims maintain their dietary requirements while traveling or dining out.\n\nPopular halal apps include HalalTrip (comprehensive halal travel app), Zabihah (halal restaurant directory), Halal Navi (for travelers), and Crescent Rating (Muslim-friendly travel ratings). These apps often include user reviews, certification information, and prayer facility locations.\n\nWhen using halal apps, verify the certification standards used and read reviews from other users. Certification standards vary by country, so it is important to understand what each certification means for your dietary needs.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Islamic Productivity and Habit Trackers",
+          "content_type": "text",
+          "content": "Productivity apps designed with Islamic principles in mind can help you manage your time, build good habits, and stay consistent in worship and self-improvement.\n\nThe Prophet (peace be upon him) said: 'Take up good deeds, take up good deeds, take up good deeds.' (Sahih Muslim) Productivity apps help you establish and maintain these good deeds consistently.\n\nApps like Muslim Habit Tracker, Salah Tracker, and Quran Companion help you monitor your daily worship and build consistent habits. General productivity apps like Todoist, Notion, and Habitica can also be adapted for Islamic goal-setting.\n\nEffective use of productivity tools includes: setting specific and measurable Islamic goals (e.g., reading one page of Quran daily), tracking your progress, celebrating consistency, and adjusting goals as needed. Remember that the intention (niyyah) behind your actions is most important in Islam.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Community and Charity Apps",
+          "content_type": "text",
+          "content": "Technology can strengthen Muslim community bonds and facilitate charitable giving. Community apps help connect Muslims for worship, learning, and social support.\n\nAllah says: 'The believers are but brothers.' (Quran 49:10) Digital tools help maintain these brotherly and sisterly bonds across distances.\n\nCommunity-focused apps include: Masjid apps (for local mosque information and events), Muzmatch and Minder (for halal matrimonial services), LaunchGood (crowdfunding for Muslim projects), and Islamic Relief (charity and donation platform). Many local Muslim communities also have dedicated apps for events and communication.\n\nWhen using community apps, prioritize your local Muslim community and mosque. While online connections are valuable, face-to-face relationships remain essential in Islam. Use digital tools to complement, not replace, in-person community involvement.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

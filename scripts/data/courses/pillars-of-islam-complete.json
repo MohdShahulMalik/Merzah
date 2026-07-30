@@ -1,0 +1,272 @@
+{
+  "title": "Pillars of Islam Complete",
+  "slug": "pillars-of-islam-complete",
+  "description": "A comprehensive study of the five pillars of Islam, the foundational acts of worship that define the Muslim's relationship with Allah (SWT). From the testimony of faith to the pilgrimage to Makkah, this course covers each pillar in depth with authentic Quranic and Prophetic references.\n\nThe Prophet Muhammad (peace be upon him) said: 'Islam is built upon five [pillars]: testifying that there is no deity worthy of worship except Allah and that Muhammad is the Messenger of Allah, establishing the prayer, paying the Zakat, making the pilgrimage to the House, and fasting in Ramadan.' (Sahih al-Bukhari 8, Sahih Muslim 16)\n\nThis course is designed for beginners and provides a solid foundation in Islamic worship. Each lesson includes real references from the Quran, Hadith collections, and classical scholarly works to ensure authenticity and depth.",
+  "short_description": "Learn the five foundational pillars of Islam with authentic Quranic and Prophetic references.",
+  "track_slug": "faith-worship",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "The Shahada: Testimony of Faith",
+      "description": "Understanding the first pillar of Islam - the declaration of faith in Allah and His Messenger.",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Meaning and Significance of the Shahada",
+          "content_type": "text",
+          "content": "The Shahada is the declaration: 'La ilaha illallah, Muhammadur Rasulullah' (There is no deity worthy of worship except Allah, Muhammad is the Messenger of Allah). This testimony is the gateway to Islam and the foundation upon which all other acts of worship are built.\n\nAllah (SWT) says in the Quran: 'Allah witnesses that there is no deity except Him, and [so do] the angels and those of knowledge [who are] in the establishment of justice. There is no deity except Him, the Exalted in Might, the Wise.' (Quran 3:18)\n\nThe Shahada has two parts. The first part, 'La ilaha illallah,' affirms monotheism (Tawhid) and rejects all forms of shirk (associating partners with Allah). The second part, 'Muhammadur Rasulullah,' affirms the prophethood of Muhammad (peace be upon him) and acceptance of his guidance.\n\nIbn Taymiyyah (رحمه الله) explained that the Shahada is not merely a statement of the tongue but must be accompanied by knowledge of the heart, acceptance by the heart, and submission by the limbs. The Shahada transforms a person's entire worldview and relationship with the Creator.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Conditions of the Shahada",
+          "content_type": "text",
+          "content": "The scholars of Islam have identified seven conditions that must be met for the Shahada to be valid and accepted. These conditions were derived from the Quran and Sunnah and are essential for understanding the depth of this testimony.\n\nThe conditions are: 1) Knowledge (al-'Ilm) - understanding what the Shahada negates and affirms. 2) Certainty (al-Yaqin) - having no doubt about its truth. 3) Acceptance (al-Qabul) - accepting all its implications. 4) Submission (al-Inqiyad) - acting in accordance with it. 5) Truthfulness (as-Sidq) - being sincere in declaring it. 6) Sincerity (al-Ikhlas) - performing it solely for Allah's pleasure. 7) Love (al-Mahabbah) - loving what the Shahada demands.\n\nImam al-Nawawi (رحمه الله) in his commentary on Sahih Muslim elaborates that these conditions differentiate between the mere utterance of the Shahada and its true implementation in a believer's life.\n\nThe Shahada is not a one-time declaration but a continuous commitment. A Muslim must live by its principles daily, making choices that align with monotheism and following the Sunnah of the Prophet (peace be upon him). The Shahada should be renewed frequently, especially in daily supplications and before sleep.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Shahada in Daily Life",
+          "content_type": "text",
+          "content": "The Shahada is not just a declaration made at the time of entering Islam; it is a lifelong commitment that permeates every aspect of a Muslim's existence. From the moment a Muslim wakes up to the time they sleep, the Shahada serves as a constant reminder of their purpose.\n\nThe Prophet (peace be upon him) said: 'The best remembrance (dhikr) is: La ilaha illallah.' (Sahih al-Bukhari 1162, Sahih Muslim 38). This hadith establishes that the Shahada is the most excellent form of remembrance of Allah.\n\nIn daily life, the Shahada influences how a Muslim conducts business, treats family, interacts with neighbors, and engages with society. It serves as a moral compass, directing all actions toward pleasing Allah (SWT) and avoiding His displeasure.\n\nThe Shahada also connects Muslims across the world, creating a universal brotherhood and sisterhood. Regardless of race, nationality, or social status, all Muslims share this common declaration, which transcends worldly distinctions. This unity is a manifestation of the Shahada's power to unite hearts and minds in the worship of the One True God.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "The Salah: Establishing Prayer",
+      "description": "The second pillar of Islam - the five daily prayers that form the backbone of a Muslim's spiritual life.",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "The Importance of Salah",
+          "content_type": "text",
+          "content": "Salah (prayer) is the second pillar of Islam and the first matter that a servant will be accountable for on the Day of Judgment. It is the direct connection between the worshipper and Allah (SWT), performed five times daily at prescribed times.\n\nAllah (SWT) says in the Quran: 'Indeed, I am Allah. There is no deity except Me, so worship Me and establish prayer for My remembrance.' (Quran 20:14)\n\nThe Prophet (peace be upon him) said: 'The first matter that the servant will be brought to account for on the Day of Judgment is the Salah. If it is good, then the rest of his deeds will be good. And if it is bad, then the rest of his deeds will be bad.' (At-Tirmidhi 413, graded Hasan)\n\nSalah is not merely a ritual but a comprehensive system of worship that encompasses physical postures, recitation of the Quran, supplication, and remembrance of Allah. It trains a Muslim in discipline, punctuality, and mindfulness of the Creator. The five daily prayers serve as regular checkpoints throughout the day, allowing the believer to pause, reflect, and reconnect with their purpose.\n\nThe Messenger of Allah (peace be upon him) said: 'When a Muslim performs Wudu and washes his face, every sin that he looked at with his eyes comes out from his face with the water. When he washes his hands, every sin they committed comes out from his hands with the water. When he washes his feet, every sin towards which his feet walked comes out with the water, until he comes out pure from all sins.' (Sahih Muslim 244)",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Times of the Five Daily Prayers",
+          "content_type": "text",
+          "content": "Allah (SWT) has prescribed five daily prayers at specific times throughout the day. Observing these times is obligatory and is part of the excellence of the prayer.\n\nAllah (SWT) says: 'Indeed, prayer has been decreed upon the believers a decree of specified times.' (Quran 4:103)\n\nThe five daily prayers and their times are:\n1. Fajr (Dawn): From the break of dawn until just before sunrise. The Prophet (peace be upon him) said: 'The time for Fajr prayer is from the break of dawn until the sun has not yet risen.' (Sahih Muslim 612)\n2. Dhuhr (Noon): From the sun passing its zenith until the shadow of an object equals its length. The Prophet (peace be upon him) said: 'The time for Dhuhr prayer is when the sun passes its zenith.' (Sahih Muslim 612)\n3. Asr (Afternoon): From when the shadow of an object equals its length until sunset. The Prophet (peace be upon him) said: 'The time for Asr prayer is when the sun becomes white and clear.' (Sahih Muslim 612)\n4. Maghrib (Sunset): From sunset until the twilight disappears. The Prophet (peace be upon him) said: 'The time for Maghrib prayer is when the sun sets and the fast is broken.' (Sahih Muslim 612)\n5. Isha (Night): From the disappearance of twilight until midnight. The Prophet (peace be upon him) said: 'The time for Isha prayer is until midnight.' (Sahih Muslim 612)\n\nUnderstanding and adhering to these times is essential for the validity and acceptance of the prayer. Muslims are encouraged to pray at the earliest time within each prayer window, as the Prophet (peace be upon him) consistently did.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Conditions and Pillars of Salah",
+          "content_type": "text",
+          "content": "For the Salah to be valid and accepted, certain conditions (shurut) and pillars (arkaan) must be fulfilled. Understanding these elements is crucial for every Muslim.\n\nThe conditions of Salah include: 1) Islam - the worshipper must be Muslim. 2) Sanity (aql) - the worshipper must be of sound mind. 3) Age of discernment (bulugh) - children are taught to pray from age seven. 4) Ritual purity (taharah) - both physical cleanliness and Wudu or Ghusl. 5) Covering the 'awrah (parts of the body that must be covered). 6) Facing the Qiblah (direction of Makkah). 7) Entering the prayer at its proper time.\n\nThe pillars of Salah, as mentioned in the hadith of Buraidah (may Allah be pleased with him), are: 'The pillars of the Salah are purification, saying 'Allahu Akbar', reciting Quran, bowing (ruku'), rising from bowing, standing upright after bowing, prostrating (sujud), sitting between prostrations, and performing the tashahhud in a state of complete calmness, and performing the taslim at the end.' (Musnad Ahmad, graded Sahih)\n\nThe obligatory actions (fard) of Salah include every movement and statement. The Sunnah actions are those performed by the Prophet (peace be upon him) regularly but are not strictly obligatory. The mustahabb (recommended) actions are those the Prophet sometimes performed and sometimes omitted.\n\nImam al-Qurtubi (رحمه الله) emphasized that the beauty of Salah lies in its comprehensive nature - it involves the body, tongue, and heart in the worship of Allah. Each movement carries meaning and symbolism that elevates the worshipper's spiritual state.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Common Errors in Salah and How to Correct Them",
+          "content_type": "text",
+          "content": "Many Muslims, whether new or long-time practitioners, make errors in their Salah that can affect its validity or reward. Understanding and correcting these errors is essential for improving the quality of one's worship.\n\nCommon errors include:\n1. Rushing through the prayer - The Prophet (peace be upon him) warned: 'The worst of thieves is the one who steals from his prayer.' When asked how he steals from his prayer, he said: 'By not completing its ruku' and sujud.' (Ahmad, graded Sahih)\n2. Not maintaining khushu' (humility and focus) - Allah (SWT) says: 'Indeed, the prayer prohibits immorality and mischief.' (Quran 29:45)\n3. Incorrect pronunciation of the Quran - While permissible to read with different qira'at, accuracy is important.\n4. Not completing the tashahhud - The tashahhud must be recited fully and with deliberation.\n5. Moving or fidgeting during prayer - This can invalidate the prayer according to some scholars.\n6. Making du'a (supplication) with hands raised inside the prayer - This is not from the Sunnah during the Salah itself.\n7. Neglecting the Sunnah prayers - The Prophet (peace be upon him) said: 'Whoever prays twelve rak'ahs of Sunnah prayer, Allah will build for him a house in Paradise.' (Sahih Muslim 728)\n\nThe scholars recommend recording oneself praying to identify errors, seeking knowledge from qualified teachers, and making sincere du'a for improvement. The Prophet (peace be upon him) said: 'When one of you prays, let him not spit in front of him, for Allah is in front of him.' (Sahih al-Bukhari 407)",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 20,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Zakat: Obligatory Charity",
+      "description": "The third pillar of Islam - the obligatory charity that purifies wealth and serves the needs of the community.",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "The Concept and Philosophy of Zakat",
+          "content_type": "text",
+          "content": "Zakat is the third pillar of Islam, an obligatory charity levied on the wealth of Muslims who meet the minimum threshold (nisab). It is not mere charity but a right that the poor have over the wealth of the rich.\n\nAllah (SWT) says in the Quran: 'And establish prayer and give Zakat, and whatever good you put forward for yourselves - you will find it with Allah.' (Quran 2:110)\n\nThe word 'Zakat' comes from the Arabic root meaning 'purification' and 'growth.' Just as water purifies, Zakat purifies one's wealth and soul from greed and selfishness. It is a means of social justice and economic balance in society.\n\nThe Prophet (peace be upon him) said: 'Zakat is the right of the poor over the wealth of the rich.' This understanding shifts the perspective from 'giving charity' to 'returning what rightfully belongs to others.' Zakat connects the rich with the poor, creating a bond of brotherhood and mutual responsibility.\n\nZakat is mentioned alongside prayer over 30 times in the Quran, emphasizing its integral role in Islam. It is one of the two types of Zakat mentioned: Zakat al-Mal (on wealth) and Zakat al-Fitr (on food at the end of Ramadan). The importance of Zakat is such that Abu Bakr Siddiq (رضي الله عنه) fought against those who refused to pay it after the death of the Prophet (peace be upon him).",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Nisab and Zakatable Assets",
+          "content_type": "text",
+          "content": "Understanding Nisab (minimum threshold) is crucial for determining when Zakat becomes obligatory. The Nisab is based on the value of gold and silver as established by the Prophet (peace be upon him).\n\nThe Prophet (peace be upon him) said: 'There is no Zakat on less than five awaq of silver or less than five wasaq of dates.' (Sahih al-Bukhari 1485) Five awaq of silver equals approximately 595 grams, and five wasaq of dates equals approximately 613 kilograms.\n\nZakatable assets include:\n1. Gold and silver (jewelry, coins, bullion)\n2. Cash and bank savings\n3. Business inventory and stock-in-trade\n4. Agricultural produce (5-10% depending on irrigation)\n5. Livestock (camels, cattle, sheep, goats)\n6. Trade goods and commercial property\n7. Money received from mining (20%)\n\nThe Nisab threshold for gold is 85 grams (approximately 2.6 troy ounces), and for silver it is 595 grams (approximately 19 troy ounces). Scholars differ on which Nisab to use for cash: the gold Nisab is approximately $4,500-$5,000, while the silver Nisab is approximately $400-$500. The majority of scholars recommend using the lower silver Nisab to ensure more people pay Zakat.\n\nZakat is calculated at 2.5% (1/40th) of the total Zakatable wealth that has been in one's possession for one lunar year (hawl). This calculation applies to cash, gold, silver, and business assets.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Recipients of Zakat",
+          "content_type": "text",
+          "content": "Allah (SWT) has specified eight categories of people who are eligible to receive Zakat. These categories are mentioned in Surah At-Tawbah, and it is not permissible to give Zakat to anyone outside of these categories.\n\nAllah (SWT) says: 'Zakat expenditures are only for the poor and for the needy and for those employed to collect [Zakat] and for bringing hearts together [for Islam] and for freeing captives [or slaves] and for those in debt and for the cause of Allah and for the [stranded] traveler. This is an obligation from Allah. And Allah is Knowing and Wise.' (Quran 9:60)\n\nThe eight categories are:\n1. Al-Fuqara' (the poor) - those who have little or nothing.\n2. Al-Masakin (the needy) - those who do not have enough to meet their basic needs.\n3. Al-Amilina 'Alayha (administrators of Zakat) - those employed to collect and distribute Zakat.\n4. Al-Mu'allafatu Qulubuhum (those whose hearts are to be reconciled) - new Muslims or those whose faith needs strengthening.\n5. Fi al-Riqab (freeing captives or slaves) - assisting in emancipation.\n6. Al-Gharimin (those in debt) - helping to pay off debts.\n7. Fi Sabilillah (in the cause of Allah) - general Islamic causes, including jihad, da'wah, and community projects.\n8. Ibn al-Sabil (the wayfarer) - travelers who are stranded.\n\nIt is important to note that Zakat cannot be given to the Prophet's family (Ahl al-Bayt) from the general Zakat pool, as they receive from the specific portion known as Khums. Scholars also differ on whether Zakat can be given to non-Muslims; the majority say it cannot, except in the case of Al-Mu'allafatu Qulubuhum.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Sawm: Fasting in Ramadan",
+      "description": "The fourth pillar of Islam - fasting during the month of Ramadan as an act of worship and self-purification.",
+      "sort_order": 4,
+      "lessons": [
+        {
+          "title": "The Spiritual Significance of Fasting",
+          "content_type": "text",
+          "content": "Sawm (fasting) is the fourth pillar of Islam, observed during the month of Ramadan. It is a unique form of worship that involves abstaining from food, drink, and other physical needs from dawn to sunset.\n\nAllah (SWT) says in the Quran: 'O you who have believed, decreed upon you is fasting as it was decreed upon those before you that you may become righteous.' (Quran 2:183)\n\nFasting is a means of developing taqwa (God-consciousness). By denying oneself basic desires during daylight hours, a Muslim trains their soul to resist temptation and strengthens their relationship with Allah (SWT). The Prophet (peace be upon him) said: 'Whoever fasts during Ramadan out of sincere faith and hoping to attain Allah's rewards, all his past sins will be forgiven.' (Sahih al-Bukhari 38)\n\nFasting is also a time of increased worship, charity, and community bonding. The Prophet (peace be upon him) was more generous than the blowing wind during Ramadan. The entire Muslim community comes together for Taraweeh prayers, breaking fasts, and acts of charity.\n\nFasting is not merely about abstaining from food and drink; it is a comprehensive spiritual exercise. The Prophet (peace be upon him) said: 'Whoever does not give up false speech and acting upon it, Allah has no need of his giving up food and drink.' (Sahih al-Bukhari 1903). This hadith emphasizes that fasting must be accompanied by moral conduct and spiritual purification.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "What Invalidates the Fast",
+          "content_type": "text",
+          "content": "Understanding what invalidates the fast is essential for every fasting Muslim. The scholars have categorized invalidators into two types: those that require qada (making up the fast) and those that require both qada and kaffarah (expiation).\n\nActions that invalidate the fast and require only qada (making up the day):\n1. Eating or drinking intentionally\n2. Intentional vomiting\n3. Sexual intercourse (if done intentionally)\n4. Menstruation or postpartum bleeding\n5. Apostasy from Islam\n\nActions that require both qada AND kaffarah (feeding 60 poor people or fasting 60 consecutive days):\n1. Intentional sexual intercourse during the day in Ramadan\n2. Eating, drinking, or smoking intentionally\n\nThe Prophet (peace be upon him) said: 'If someone eats or drinks (forgetfully) while fasting, let him complete his fast, for it was Allah who fed him or gave him drink.' (Sahih al-Bukhari 1933, Sahih Muslim 1155)\n\nThings that do NOT invalidate the fast include: unintentional eating or drinking, using miswak (tooth stick), taking blood tests, applying eye drops (according to some scholars), and swimming (with caution). The scholars have also discussed the ruling on using an inhaler for asthma, with many permitting it as it does not constitute eating or drinking in the conventional sense.\n\nIt is important to note that the niyyah (intention) must be made before Fajr for each day of Ramadan. The Prophet (peace be upon him) said: 'Whoever does not intend to fast before Fajr, there is no fast for him.' (Sahih al-Bukhari 1923)",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Laylatul Qadr and the Last Ten Nights",
+          "content_type": "text",
+          "content": "Laylatul Qadr (the Night of Decree) is the most blessed night of the year, occurring in the last ten nights of Ramadan. It is better than a thousand months of worship.\n\nAllah (SWT) says: 'The Night of Decree is better than a thousand months.' (Quran 97:3)\n\nThe Prophet (peace be upon him) used to strive hard in worship during the last ten nights of Ramadan more than at any other time. Aisha (رضي الله عنها) said: 'When the last ten days of Ramadan came, the Prophet (peace be upon him) would tighten his waist belt, pray all night, and wake his family.' (Sahih al-Bukhari 2025)\n\nLaylatul Qadr is a night of immense blessings, forgiveness, and divine mercy. The Prophet (peace be upon him) said: 'Whoever stands (in prayer) during Laylatul Qadr out of faith and seeking reward, his previous sins will be forgiven.' (Sahih al-Bukhari 1901)\n\nThe recommended acts during the last ten nights include:\n1. Increasing prayer (Salah) and Quran recitation\n2. Making abundant du'a and istighfar (seeking forgiveness)\n3. Giving charity each night\n4. Performing I'tikaf (spiritual retreat in the mosque)\n5. Seeking Laylatul Qadr on all odd nights, especially the 27th\n\nThe Prophet (peace be upon him) described Laylatul Qadr as 'a night of peace, free from all evil, until the dawn breaks.' (Sahih al-Bukhari 1902). Muslims are encouraged to maximize their worship during this precious time, as the reward is equivalent to worshipping for over 83 years.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Hajj: The Pilgrimage to Makkah",
+      "description": "The fifth pillar of Islam - the pilgrimage to Makkah that every able Muslim must perform at least once in their lifetime.",
+      "sort_order": 5,
+      "lessons": [
+        {
+          "title": "The Obligation and Virtues of Hajj",
+          "content_type": "text",
+          "content": "Hajj is the fifth pillar of Islam, obligatory once in a lifetime for every Muslim who is physically and financially able. It is a journey of a lifetime that combines worship, sacrifice, and unity.\n\nAllah (SWT) says: 'And [due] to Allah from the people is a pilgrimage to the House - for whoever is able to find thereto a way.' (Quran 3:97)\n\nThe Prophet (peace be upon him) said: 'Islam is built on five [pillars]: testifying that there is no deity worthy of worship except Allah and that Muhammad is the Messenger of Allah, establishing the prayer, paying the Zakat, making the pilgrimage to the House, and fasting in Ramadan.' (Sahih al-Bukhari 8, Sahih Muslim 16)\n\nHajj is a comprehensive act of worship that involves physical, financial, and spiritual sacrifice. It is a rehearsal for the Day of Judgment, where millions of Muslims gather in simple white garments, standing before Allah (SWT) as equals regardless of race, wealth, or status.\n\nThe virtues of Hajj are immense. The Prophet (peace be upon him) said: 'Whoever performs Hajj and does not commit any obscenity or transgression shall return [free from sins] as on the day his mother gave birth to him.' (Sahih al-Bukhari 1521, Sahih Muslim 1350). This hadith illustrates the tremendous spiritual purification that Hajj offers.\n\nHajj is also a unifying experience for the global Muslim community (Ummah). When millions gather at the Ka'bah, it is a preview of the gathering on the Day of Judgment, where all of humanity will stand before Allah (SWT).",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Types of Hajj",
+          "content_type": "text",
+          "content": "There are three types of Hajj, and it is essential to specify which type one intends to perform. Each type has different rules and requirements.\n\n1. Hajj al-Qiran (Combination Hajj): This involves performing both Umrah and Hajj together with a single Ihram. The pilgrim remains in the state of Ihram from the time of entering until the day of sacrifice (Yawm al-Nahr). This is the most comprehensive type.\n\n2. Hajj al-Tamattu' (Enjoyment Hajj): This involves performing Umrah first, then exiting Ihram, and then re-entering Ihram for Hajj on the 8th of Dhul Hijjah. The Prophet (peace be upon him) recommended this type for his companions and said it was the best. He said: 'Perform Umrah and then exit Ihram, and then make Hajj and sacrifice an animal.' (Sahih al-Bukhari 1787)\n\n3. Hajj al-Ifrad (Single Hajj): This involves performing Hajj only without Umrah. The pilgrim enters Ihram specifically for Hajj and remains in that state until the day of sacrifice.\n\nThe scholars differ on which type is best. The majority of scholars recommend Hajj al-Tamattu' because it allows the pilgrim to enjoy the benefits of both Umrah and Hajj. The Prophet (peace be upon him) said: 'I have not performed Hajj except Tamattu', so whoever wants to perform Hajj, let him do Tamattu'.' (Sahih al-Bukhari 1807)\n\nIt is important for the pilgrim to make the correct niyyah (intention) before entering Ihram, as this determines the type of Hajj and the associated obligations.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Day of Arafat and Standing",
+          "content_type": "text",
+          "content": "The 9th of Dhul Hijjah is known as the Day of Arafat, the most important day of Hajj. Standing at Arafat (Wuquf) is the essence of Hajj, and without it, Hajj is invalid.\n\nThe Prophet (peace be upon him) said: 'Hajj is Arafat.' (Sunan an-Nasa'i 3016, graded Sahih). This hadith emphasizes the centrality of Wuquf to the Hajj experience.\n\nOn this day, millions of pilgrims gather on the plain of Arafat from noon until sunset, making du'a (supplication), seeking forgiveness, and calling upon Allah (SWT). It is a day of intense spiritual connection and humility before the Creator.\n\nThe Prophet (peace be upon him) stood at Arafat and said: 'The best du'a is the du'a of the Day of Arafat, and the best thing that I and the Prophets before me have said is: La ilaha illallah wahdahu la sharika lahu, lahul mulku wa lahul hamdu, wa huwa 'ala kulli shay'in qadir.' (There is no deity worthy of worship except Allah alone, with no partner. His is the dominion and His is the praise, and He has power over all things.) (At-Tirmidhi 3585, graded Hasan)\n\nAfter sunset at Arafat, the pilgrims proceed to Muzdalifah, where they spend the night under the open sky, collecting pebbles for the Jamarat (stoning). This journey from Arafat to Muzdalifah is done on foot, following the Sunnah of the Prophet (peace be upon him). The experience of Wuquf at Arafat is often described as a preview of the Day of Judgment, where all of humanity will stand before Allah (SWT).",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 15,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

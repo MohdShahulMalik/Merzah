@@ -1,0 +1,209 @@
+{
+  "title": "Islamic Inheritance Planning",
+  "slug": "islamic-inheritance-planning",
+  "description": "A comprehensive intermediate-level course on the Islamic law of inheritance (Mirath), one of the most detailed and precise areas of Islamic jurisprudence. Learn the Quranic shares, calculation methods, and practical application of Islamic inheritance principles to modern estate planning scenarios.\n\nThis course covers the foundational principles of Islamic inheritance, including the fixed shares (fard) prescribed in the Quran, the role of Wasiyyah (bequest), and how to apply classical inheritance rules to contemporary situations such as debts, mixed assets, and cross-border estates. Each lesson includes real-world examples and calculation exercises.\n\nWhether you are planning your own estate or seeking to understand the rights of your family members, this course provides the knowledge and tools to ensure that your wealth is distributed according to divine guidance. The Islamic inheritance system is designed to promote justice, family cohesion, and social welfare, and this course explains how to achieve these objectives.",
+  "short_description": "Master Islamic inheritance laws including Quranic shares, Wasiyyah, and estate planning",
+  "track_slug": "finance",
+  "educator_id": "PLACEHOLDER",
+  "level": "intermediate",
+  "language": "en",
+  "thumbnail_url": null,
+  "modules": [
+    {
+      "title": "Foundations of Islamic Inheritance",
+      "description": "Understanding the principles and objectives of Mirath",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "The Islamic System of Inheritance: An Overview",
+          "content_type": "text",
+          "content": "Islamic inheritance law (Mirath) is one of the most comprehensive and divinely prescribed systems of wealth distribution in any legal tradition. The Quran specifies detailed shares for relatives, ensuring that the deceased's wealth is distributed justly among family members. The Quran states: 'Allah instructs you regarding your children: for the male, a share equal to that of two females. If there are [only] daughters, two or more, for them is two thirds of the inheritance. And if there is one, for her is a half. And to his parents, to each one of them, a sixth of his inheritance if he has a child. But if he has no child and his parents inherit from him, then for his mother is a third. And if he has brothers [and/or sisters], for his mother is a sixth, after any bequest he [may have] made or debt. Your parents or your children — you do not know which of them is nearest to you in benefit. [These shares are] an obligation from Allah. Indeed, Allah is ever Knowing and Wise.' (Quran 4:11)\n\nThe Islamic inheritance system differs fundamentally from secular systems in several ways: it is divinely ordained (not subject to human modification), it has fixed shares (not discretionary), it considers both the number and gender of heirs, it provides for a wide range of relatives (not just spouse and children), and it includes provisions for debts and bequests before distribution.\n\nThe objectives of Islamic inheritance law include: ensuring that the deceased's family is provided for, promoting family cohesion by recognizing the rights of all relatives, preventing the concentration of wealth in few hands, establishing clear rules that reduce disputes, and honoring the deceased's wishes within divine limits.\n\nThe Prophet Muhammad (peace be upon him) emphasized the importance of Islamic inheritance: 'Learn the inheritance laws and teach them to the people, for they are one half of all knowledge.' (Narrated by Ibn 'Abbas, discussed in Sunan al-Tirmidhi) This hadith highlights that inheritance law is a major area of Islamic knowledge that every Muslim should understand.\n\nIslamic inheritance law applies to Muslims who die with assets after paying debts and fulfilling bequests. Non-Muslim heirs may inherit from Muslim deceased under certain conditions, and Muslim heirs may inherit from non-Muslim deceased according to their respective legal systems. The details of cross-faith inheritance vary among scholars and legal jurisdictions.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "The Order of Distribution: Debts, Bequests, and Shares",
+          "content_type": "text",
+          "content": "The distribution of an estate in Islamic law follows a specific order that must be respected. This order ensures that the deceased's obligations are fulfilled before their wealth is distributed to heirs. The Quran states: 'It is an obligation from Allah. And Allah is Knowing and Wise.' (Quran 4:11)\n\nThe first step in estate distribution is to pay all outstanding debts. The Prophet (peace be upon him) said: 'The soul of the believer is suspended until his debts are paid.' (Sunan al-Nasa'i) This hadith emphasizes the seriousness of debts and the priority they receive in estate distribution. All debts, including loans, unpaid bills, and obligations to Allah (such as unpaid Zakat), must be paid before any distribution to heirs.\n\nThe second step is to fulfill any Wasiyyah (bequest) left by the deceased. A Wasiyyah is a testamentary gift that the deceased directs to be given to a specific person or cause after their death. The Quran permits bequests but limits them to one-third of the estate: 'It is prescribed for you, when death approaches any of you and he leaves behind wealth, to bequeath to parents and near relatives according to just proportion. This is an obligation upon the righteous.' (Quran 2:180) The Prophet (peace be upon him) said: 'Allah has given you a right, so give your heirs their right. The third remains, the third remains.' (Sunan Abu Dawud) This hadith confirms the one-third limit for bequests.\n\nThe third step is to calculate and distribute the fixed shares (fard) to the eligible heirs. The Quran specifies the shares for each category of heir, and these shares must be distributed exactly as prescribed. The Quran states: 'These are the limits set by Allah, and whoever obeys Allah and His Messenger will be admitted to gardens beneath which rivers flow, abiding eternally; and that is the great success. And whoever disobeys Allah and His Messenger and transgresses His limits — He will put him into the Fire to abide eternally therein, and he will have a humiliating punishment.' (Quran 4:13-14)\n\nIf there are no heirs in certain categories, their shares may be redistributed to other heirs according to specific rules of Islamic inheritance jurisprudence. These redistribution rules (called Awb or returns) vary among the four Sunni schools of law (Hanafi, Maliki, Shafi'i, and Hanbali). The executor of the estate (Wasi) is responsible for ensuring that the distribution follows these rules correctly.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Who Are the Heirs? Categories and Classification",
+          "content_type": "text",
+          "content": "Islamic inheritance law classifies heirs into several categories, each with specific rules for inheritance. Understanding these categories is essential for correctly calculating shares and distributing the estate.\n\nThe primary categories of heirs are: 1) Sharikat al-Fard (partners in fixed shares) — these are heirs whose shares are specified in the Quran, including the spouse, parents, and daughters. 2) Asabat (residual heirs) — these are heirs who receive whatever remains after the fixed shares are distributed, including sons, father, and male agnatic relatives. 3) Dhawu al-Arham (uterine heirs) — these are heirs related through the mother only, such as siblings from the mother's side.\n\nThe Quran specifies the following fixed shares: spouse (husband or wife), parents (father and mother), and daughters. The husband receives one-quarter if there are children, or one-half if there are no children. The wife receives one-eighth if there are children, or one-fourth if there are no children. The father receives one-sixth if there are children, or one-third if there are no children. The mother receives one-sixth if there are children, or one-third if there are no children (which becomes one-sixth if there are two or more siblings).\n\nDaughters receive fixed shares: one-half if there is one daughter, or two-thirds if there are two or more daughters. Sons are Ashab (residual heirs) who receive whatever remains after the fixed shares are distributed. The presence of sons affects the shares of daughters, as daughters receive half the share of sons in the residuary distribution.\n\nThe Quran also specifies shares for more distant relatives in certain circumstances, such as siblings, grandparents, and uncles. These shares apply when there are no closer heirs. The detailed rules for these shares vary among the four Sunni schools of law, and Muslims should follow the school of jurisprudence that they adhere to.\n\nThe classification of heirs is important because it determines who inherits and how much they receive. The Quran states: 'For men is a share of what the parents and close relatives leave, and for women is a share of what the parents and close relatives leave, be it little or much, as an obligatory share.' (Quran 4:7) This verse establishes that both male and female relatives have inheritance rights, though the amounts may differ based on the Islamic principles of financial responsibility.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Quranic Shares: Detailed Calculation",
+      "description": "Mastering the fixed shares prescribed in the Quran",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Shares of the Spouse",
+          "content_type": "text",
+          "content": "The Quran specifies clear shares for surviving spouses, which vary depending on whether the deceased had children. The Quran states: 'For you is a half of what your wives leave if they have no child. But if they have a child, for you is a quarter of what they leave, after any bequest they [may have] made or debt. And for the wives is a fourth of what you leave if you have no child. But if you have a child, then for them is an eighth of what you leave, after any bequest you [may have] made or debt.' (Quran 4:12)\n\nThe husband's share: If the deceased wife has children, the husband receives one-quarter (1/4) of the estate. If the deceased wife has no children, the husband receives one-half (1/2) of the estate. This difference reflects the husband's greater financial responsibility for the family.\n\nThe wife's share: If the deceased husband has children, the wife receives one-eighth (1/8) of the estate. If the deceased husband has no children, the wife receives one-quarter (1/4) of the estate. Again, the difference reflects the different financial responsibilities of each spouse.\n\nThese shares are calculated after paying all debts and fulfilling any bequests (Wasiyyah). The Prophet (peace be upon him) confirmed these shares when he distributed the estate of Sa'd ibn Abi Waqqas (may Allah be pleased with him): 'The Prophet (peace be upon him) gave the husband one-quarter and the wife one-eighth.' (Sahih al-Bukhari) This hadith establishes the practical application of the Quranic shares.\n\nThe spouse's share is calculated based on the net estate (after debts and bequests). If the net estate is $100,000 and the deceased had children, the wife would receive $100,000 × 1/8 = $12,500, and the husband would receive $100,000 × 1/4 = $25,000. The remaining amount would be distributed to the children according to the Quranic rules.\n\nIt is important to note that the spouse's share is a minimum entitlement. If the deceased left a bequest to the spouse (within the one-third limit), the spouse would receive both the bequest and the Quranic share. However, the bequest cannot exceed one-third of the estate, and it cannot be given to an heir who is already entitled to a Quranic share, unless the other heirs consent.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Shares of Parents and Children",
+          "content_type": "text",
+          "content": "The Quran specifies shares for parents and children that reflect the family structure and financial responsibilities in Islam. The detailed rules ensure that both parents and children receive appropriate portions of the estate.\n\nFather's share: If the deceased has children, the father receives one-sixth (1/6) of the estate. If the deceased has no children, the father receives one-third (1/3) of the estate. The father's share is calculated after the spouse's share is deducted. This rule is based on the hadith of the Prophet (peace be upon him) distributing the estate of Sa'd ibn Abi Waqqas.\n\nMother's share: If the deceased has children (or two or more siblings), the mother receives one-sixth (1/6) of the estate. If the deceased has no children and no siblings, the mother receives one-third (1/3) of the estate. The reduction from one-third to one-sixth when siblings are present is based on the Quranic verse: 'But if he has brothers [and/or sisters], for his mother is a sixth.' (Quran 4:11)\n\nDaughters' shares: If there is one daughter, she receives one-half (1/2) of the estate (after the spouse's share). If there are two or more daughters, they collectively receive two-thirds (2/3) of the estate. If there are sons as well, the daughters' shares are reduced, as they receive half the share of each son in the residuary distribution.\n\nSons' shares: Sons are Ashab (residual heirs) who receive whatever remains after the fixed shares are distributed. The Quran states: 'The male will have twice the share of the female.' (Quran 4:11) This principle applies when there are both sons and daughters. For example, if the estate is divided among a wife, mother, one son, and one daughter, the wife receives 1/8, the mother receives 1/6, and the remainder is divided between the son and daughter with the son receiving twice the daughter's share.\n\nThe distribution of shares among parents and children is designed to ensure that all family members are provided for. The Prophet (peace be upon him) said: 'Fear Allah and treat your children justly.' (Sahih al-Bukhari) This hadith emphasizes the importance of fairness in family matters, including inheritance.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Shares of Siblings, Grandparents, and Other Relatives",
+          "content_type": "text",
+          "content": "The Quran and Sunnah specify shares for more distant relatives in certain circumstances. These shares apply when there are no closer heirs (such as children or parents) to inherit the entire estate.\n\nGrandparents: The Quran mentions parents but does not explicitly mention grandparents. However, the Prophet (peace be upon him) said: 'Give the share to the father and then to the closest relative.' (Sunan Abu Dawud) This hadith is used by scholars to establish the inheritance rights of grandparents. The paternal grandfather receives a share similar to the father's, while the maternal grandmother receives one-sixth (1/6) if there are children or two or more siblings.\n\nFull siblings (brothers and sisters from both parents): Siblings inherit only if there are no children or parents. The Quran specifies that siblings receive shares when the mother's share is reduced: 'But if he has brothers [and/or sisters], for his mother is a sixth.' (Quran 4:11) Full brothers receive residuary shares, while full sisters receive one-half (1/2) if there is one sister or two-thirds (2/3) if there are two or more sisters.\n\nHalf-siblings (from the father's side only): These siblings are treated similarly to full siblings in inheritance. They receive shares when there are no children or parents. Half-brothers from the father's side receive residuary shares, while half-sisters from the father's side receive one-half or two-thirds.\n\nHalf-siblings (from the mother's side only): These siblings receive one-sixth (1/6) collectively if there are no children or parents. This is based on the hadith: 'The Prophet (peace be upon him) gave the uterine siblings one-sixth.' (Sunan al-Nasa'i)\n\nUncles, aunts, nephews, and nieces: These relatives are considered Dhawu al-Arham (uterine heirs) and may inherit in certain circumstances when there are no closer heirs. Their shares are specified in detail by the four Sunni schools of law, and the exact calculation varies among the schools.\n\nThe complexity of these rules highlights the importance of consulting qualified scholars for estate planning. The Prophet (peace be upon him) said: 'Learn the inheritance laws and teach them to the people, for they are one half of all knowledge.' (Narrated by Ibn 'Abbas) This hadith emphasizes that inheritance law is a major area of Islamic knowledge that requires study and expertise.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Wasiyyah (Bequest) and Estate Planning",
+      "description": "Understanding the role of bequests in Islamic inheritance",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "What is Wasiyyah? Rules and Limitations",
+          "content_type": "text",
+          "content": "A Wasiyyah (bequest) is a testamentary gift that a person directs to be given to a specific person or cause after their death. The Quran permits bequests but establishes strict rules to prevent them from being used to circumvent the fixed inheritance shares. The Quran states: 'It is prescribed for you, when death approaches any of you and he leaves behind wealth, to bequeath to parents and near relatives according to just proportion. This is an obligation upon the righteous.' (Quran 2:180)\n\nThe primary limitation on Wasiyyah is that it cannot exceed one-third (1/3) of the estate. The Prophet (peace be upon him) said: 'Allah has given you a right, so give your heirs their right. The third remains, the third remains.' (Sunan Abu Dawud) This hadith confirms the one-third limit and emphasizes that the remaining two-thirds must be distributed according to the Quranic shares.\n\nThe second limitation is that a bequest cannot be given to an heir who is already entitled to a Quranic share, unless the other heirs consent. This prevents the deceased from using bequests to increase one heir's share at the expense of others. If the other heirs consent, the bequest is valid, but the consent must be given after the testator's death (not before).\n\nThe third limitation is that the bequest must not be for a purpose that is haram (prohibited) or against public policy. A bequest to fund a mosque, Islamic school, or charitable cause is valid, as long as it does not exceed the one-third limit. A bequest to fund activities that are prohibited in Islam would be invalid.\n\nThe executor of the estate (Wasi) is responsible for ensuring that the bequest is fulfilled according to the testator's wishes, within the limits established by Shariah. The Quran states: 'It is prescribed for you, when death approaches any of you and he leaves behind wealth, to bequeath to parents and near relatives according to just proportion.' (Quran 2:180) This verse establishes the Wasiyyah as a means of providing for relatives and causes that the testator cares about.\n\nThe Wasiyyah should be written down and witnessed to ensure that it is fulfilled. The Prophet (peace be upon him) said: 'It is not permissible for any Muslim who has something to bequeath to remain two nights without having his will written down.' (Sahih al-Bukhari) This hadith emphasizes the importance of documenting one's wishes.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "The Role of the Executor (Wasi)",
+          "content_type": "text",
+          "content": "The Wasi (executor) is the person responsible for administering the estate of the deceased according to Islamic law. The Quran mentions the Wasi in the context of bequests: 'It is prescribed for you, when death approaches any of you and he leaves behind wealth, to bequeath to parents and near relatives according to just proportion.' (Quran 2:180) The Wasi ensures that the deceased's wishes are fulfilled and that the estate is distributed correctly.\n\nThe Wasi should be a trustworthy, competent person who understands Islamic inheritance law. The Prophet (peace be upon him) appointed Umm Salamah (may Allah be pleased with him) as the executor of his estate, demonstrating that women can serve as executors. The Wasi can be a family member, a friend, or a professional executor (such as a lawyer or Islamic estate planner).\n\nThe Wasi's responsibilities include: paying all outstanding debts of the deceased, fulfilling any bequests (Wasiyyah) within the one-third limit, calculating and distributing the Quranic shares to the heirs, managing the estate during the administration period (which can be several months), and resolving any disputes among the heirs.\n\nThe Wasi should act with transparency and fairness. The Quran states: 'O you who believe, be persistently standing firm in justice, witnesses for Allah, even if it be against yourselves or parents and relatives.' (Quran 4:135) This verse emphasizes the importance of justice in all matters, including estate administration.\n\nIf there is no designated Wasi, the court or Islamic authority may appoint one. In many Muslim-majority countries, Islamic courts oversee estate administration and ensure that the distribution follows Shariah. In non-Muslim countries, Muslims may need to work with lawyers who understand Islamic inheritance law to ensure that their estate is administered correctly.\n\nThe Wasi is entitled to reasonable compensation for their services, which is paid from the estate before distribution to the heirs. The amount of compensation should be fair and agreed upon before the Wasi begins their work. If the Wasi is a family member, they may choose to serve without compensation as an act of charity.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 25,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Writing Your Islamic Will",
+          "content_type": "text",
+          "content": "Writing an Islamic will (Wasiyyah) is an important act of worship and responsibility. The Prophet (peace be upon him) said: 'It is not permissible for any Muslim who has something to bequeath to remain two nights without having his will written down.' (Sahih al-Bukhari) This hadith establishes that writing a will is not optional but obligatory for Muslims who have assets.\n\nAn Islamic will should include the following elements: a declaration of faith (Shahada), appointment of a Wasi (executor), instructions for paying debts, instructions for fulfilling bequests (within the one-third limit), and a statement that the estate should be distributed according to Islamic inheritance law.\n\nThe will should be clear, specific, and witnessed. It should specify: the names of all heirs, the assets to be distributed, the debts to be paid, the bequests to be fulfilled, and any special instructions for the executor. The will should be signed by the testator and witnessed by at least two trustworthy witnesses.\n\nIn non-Muslim countries, it may be necessary to have both an Islamic will and a secular will that complies with local laws. The Islamic will specifies the distribution according to Shariah, while the secular will ensures that the estate is administered according to local legal requirements. A lawyer who understands both Islamic and secular law can help draft documents that serve both purposes.\n\nMuslims should review and update their wills regularly, especially after major life events such as marriage, divorce, birth of children, or acquisition of significant assets. The will should reflect the current family situation and asset portfolio. The Prophet (peace be upon him) said: 'A Muslim should not remain two nights without his will being written.' (Sunan Abu Dawud) This hadith emphasizes the importance of keeping one's will up to date.\n\nThe will should also include provisions for charitable giving (Sadaqah) beyond the required bequests. Muslims can direct that a portion of their estate be given to charity after debts are paid and bequests are fulfilled. This charitable giving is in addition to the Quranic shares and can support causes that the testator cares about, such as Islamic education, healthcare, or poverty relief.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Practical Scenarios and Modern Applications",
+      "description": "Applying Islamic inheritance rules to real-world situations",
+      "sort_order": 4,
+      "lessons": [
+        {
+          "title": "Scenario: Single Person with Parents",
+          "content_type": "text",
+          "content": "This scenario examines the inheritance distribution when a single Muslim dies leaving behind parents but no spouse or children. This is a common situation for young adults and highlights the importance of planning even when one's estate is modest.\n\nLet's consider the case of Ahmed, a single Muslim who dies with an estate of $100,000 after debts. Ahmed has a living father and mother. In this case, the mother receives one-third (1/3) because there are no children or siblings, and the father receives one-sixth (1/6) because there are no children. The remaining amount goes to the residuary heirs.\n\nCalculation: Mother's share = $100,000 × 1/3 = $33,333. Father's share = $100,000 × 1/6 = $16,667. Total distributed = $50,000. Remaining = $50,000. Since there are no siblings or other relatives mentioned, the residuary amount goes to the father as the closest male relative (Asaba).\n\nIn this scenario, the father receives $16,667 + $50,000 = $66,667, and the mother receives $33,333. This distribution reflects the Quranic principle that males generally receive more than females when there are no children, based on the male's greater financial responsibility for the family.\n\nIf Ahmed had siblings, the distribution would change. For example, if Ahmed had one full brother and one full sister, the mother's share would be reduced to one-sixth (1/6) instead of one-third (1/3) because siblings are present. The brother would receive residuary shares, and the sister would receive one-half of what the brother receives.\n\nThis scenario illustrates the importance of understanding Islamic inheritance law even for young Muslims who may not think they have significant assets. The Quran states: 'For men is a share of what the parents and close relatives leave, and for women is a share of what the parents and close relatives leave, be it little or much, as an obligatory share.' (Quran 4:7) This verse emphasizes that inheritance rights apply regardless of the size of the estate.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Scenario: Married Person with Children",
+          "content_type": "text",
+          "content": "This scenario examines the inheritance distribution when a married Muslim dies leaving behind a spouse and children. This is one of the most common inheritance scenarios and involves multiple Quranic shares.\n\nLet's consider the case of Fatima, a married Muslim woman who dies with an estate of $200,000 after debts. Fatima has a husband, two sons, and one daughter. In this case, the husband receives one-quarter (1/4) because Fatima has children. The mother (Fatima's mother) receives one-sixth (1/6) because Fatima has children. The children share the remainder, with each son receiving twice the share of each daughter.\n\nCalculation: Husband's share = $200,000 × 1/4 = $50,000. Mother's share = $200,000 × 1/6 = $33,333. Total distributed to spouse and mother = $83,333. Remaining = $116,667. The two sons and one daughter share this amount, with each son receiving twice the daughter's share. Let the daughter's share be x. Then each son's share is 2x. Total = x + 2x + 2x = 5x = $116,667. Therefore, x = $23,333. Daughter's share = $23,333. Each son's share = $46,667.\n\nIn this scenario, the husband receives $50,000, the mother receives $33,333, the daughter receives $23,333, and each son receives $46,667. This distribution reflects the Quranic principle that males receive twice the share of females when there are both sons and daughters.\n\nIf Fatima had only daughters (no sons), the distribution would be different. For example, if Fatima had one daughter, the daughter would receive one-half (1/2) of the estate (after the spouse's and mother's shares). If Fatima had two daughters, they would collectively receive two-thirds (2/3) of the estate.\n\nThis scenario illustrates the complexity of Islamic inheritance calculations and the importance of careful planning. The Quran states: 'These are the limits set by Allah, and whoever obeys Allah and His Messenger will be admitted to gardens beneath which rivers flow, abiding eternally; and that is the great success.' (Quran 4:13) This verse emphasizes that following the Quranic inheritance rules is an act of obedience to Allah.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Modern Challenges in Islamic Inheritance",
+          "content_type": "text",
+          "content": "Modern Muslims face several challenges in applying classical Islamic inheritance rules to contemporary circumstances. Understanding these challenges and the scholarly opinions on how to address them is essential for proper estate planning.\n\nChallenge 1: Cross-border estates. Muslims who live in non-Muslim countries may have assets in multiple jurisdictions with different inheritance laws. For example, a Muslim living in the United States may have property in the US and assets in their home country. The distribution may be governed by different legal systems, creating complexity and potential conflicts. Scholars generally recommend that Muslims in non-Muslim countries write wills that comply with both Islamic and local law, and that they seek legal advice from professionals who understand both systems.\n\nChallenge 2: Digital assets. The rise of digital assets (cryptocurrency, online accounts, digital media) presents new challenges for estate planning. These assets may not be easily identified or valued, and their treatment under Islamic inheritance law is still being discussed by scholars. Muslims should include digital assets in their estate planning and ensure that their Wasi is aware of all digital accounts and passwords.\n\nChallenge 3: Business ownership. Muslims who own businesses face complex inheritance issues, including how to value the business, how to distribute shares among heirs, and how to ensure business continuity. Some scholars recommend that business owners consider establishing a company structure (such as a corporation or LLC) that allows for smoother transfer of ownership upon death. Others recommend using Islamic partnership (Shirkah) agreements that specify inheritance provisions.\n\nChallenge 4: Mixed-faith families. When a Muslim dies leaving non-Muslim heirs, the inheritance rules become complex. The Quran states that Muslims inherit from non-Muslims and vice versa under certain conditions, but the specific rules vary among scholars. Muslims in mixed-faith families should consult with qualified scholars to determine the correct distribution.\n\nChallenge 5: Disputes among heirs. Despite the clear Quranic guidelines, disputes among heirs are not uncommon. These disputes can arise from misunderstandings of the rules, disagreements about the value of assets, or personal conflicts. The Quran advises seeking resolution through wise counsel: 'And if you fear discord between the two, send an arbitrator from his family and an arbitrator from her family. If they both desire reconciliation, Allah will cause it between them.' (Quran 4:35) While this verse specifically addresses marital disputes, the principle of seeking wise counsel applies to all family disputes, including inheritance disagreements.\n\nMuslims can avoid many of these challenges by planning their estates early, seeking qualified advice, and documenting their wishes in a clear and comprehensive will.",
+          "video_url": null,
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": null,
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}
