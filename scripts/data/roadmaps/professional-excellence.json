@@ -1,0 +1,43 @@
+{
+  "title": "Professional Excellence",
+  "slug": "professional-excellence",
+  "description": "A learning path for Muslims seeking to achieve professional excellence while maintaining Islamic values. This roadmap covers effective communication, time management rooted in Islamic principles, workplace ethics, leadership guided by Islamic values, and halal entrepreneurship. Learners will develop skills to thrive in their careers while upholding the highest standards of integrity and faith.",
+  "image_url": null,
+  "track_slug": "career",
+  "difficulty": "beginner",
+  "estimated_weeks": 20,
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "courses": [
+    {
+      "course_slug": "professional-communication",
+      "sort_order": 1,
+      "is_required": true,
+      "note": "Building effective communication skills grounded in Islamic manners"
+    },
+    {
+      "course_slug": "time-management-islamic",
+      "sort_order": 2,
+      "is_required": true,
+      "note": "Productivity and time management inspired by the Sunnah"
+    },
+    {
+      "course_slug": "workplace-ethics-islam",
+      "sort_order": 3,
+      "is_required": true,
+      "note": "Islamic principles for ethical conduct in professional environments"
+    },
+    {
+      "course_slug": "leadership-islamic-values",
+      "sort_order": 4,
+      "is_required": true,
+      "note": "Leadership qualities modeled after prophetic examples"
+    },
+    {
+      "course_slug": "halal-entrepreneurship",
+      "sort_order": 5,
+      "is_required": true,
+      "note": "Starting and growing businesses in accordance with Shariah principles"
+    }
+  ]
+}

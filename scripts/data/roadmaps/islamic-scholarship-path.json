@@ -1,0 +1,49 @@
+{
+  "title": "Islamic Scholarship Path",
+  "slug": "islamic-scholarship-path",
+  "description": "A rigorous learning path for those seeking deep Islamic knowledge and scholarly pursuits. This roadmap begins with Quranic recitation and effective study habits, progressing through Quran memorization, Arabic language acquisition, tafsir methodology, and Islamic research methods. Designed for serious students of knowledge, this path builds the skills and knowledge necessary for meaningful engagement with Islamic texts and scholarship.",
+  "image_url": null,
+  "track_slug": "quran",
+  "difficulty": "beginner",
+  "estimated_weeks": 32,
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "courses": [
+    {
+      "course_slug": "introduction-to-tajweed",
+      "sort_order": 1,
+      "is_required": true,
+      "note": "Foundation in Quranic recitation rules"
+    },
+    {
+      "course_slug": "effective-study-habits",
+      "sort_order": 2,
+      "is_required": true,
+      "note": "Developing productive learning techniques for Islamic studies"
+    },
+    {
+      "course_slug": "how-to-memorize-quran",
+      "sort_order": 3,
+      "is_required": true,
+      "note": "Structured approach to Quran memorization"
+    },
+    {
+      "course_slug": "learning-arabic-second-language",
+      "sort_order": 4,
+      "is_required": true,
+      "note": "Essential Arabic language skills for accessing classical Islamic texts"
+    },
+    {
+      "course_slug": "tafsir-methodology",
+      "sort_order": 5,
+      "is_required": true,
+      "note": "Principles and methods of Quranic interpretation"
+    },
+    {
+      "course_slug": "islamic-research-methodology",
+      "sort_order": 6,
+      "is_required": true,
+      "note": "Advanced research methods for Islamic scholarship and writing"
+    }
+  ]
+}
