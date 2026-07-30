@@ -1,0 +1,72 @@
+{
+  "title": "Personal Development Framework",
+  "slug": "personal-development-framework",
+  "description": "A holistic framework for personal growth rooted in Islamic values, covering character development, family and relationship skills, and professional excellence guided by Islamic ethics.",
+  "image_url": null,
+  "track_slug": "character",
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "milestones": [
+    {
+      "title": "Character Building",
+      "description": "Develop core Islamic virtues including patience, gratitude, honesty, and proper etiquette for a well-rounded Muslim character.",
+      "sort_order": 1,
+      "courses": [
+        {
+          "course_slug": "building-patience-sabr",
+          "is_required": true
+        },
+        {
+          "course_slug": "art-of-gratitude-shukr",
+          "is_required": true
+        },
+        {
+          "course_slug": "honesty-integrity-islam",
+          "is_required": true
+        },
+        {
+          "course_slug": "islamic-manners-etiquette",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "title": "Family & Relationships",
+      "description": "Build strong family bonds through Islamic guidance on marriage, parenting, and fulfilling the rights and responsibilities of family members.",
+      "sort_order": 2,
+      "courses": [
+        {
+          "course_slug": "marriage-in-islam",
+          "is_required": true
+        },
+        {
+          "course_slug": "parenting-islamic-values",
+          "is_required": true
+        },
+        {
+          "course_slug": "family-rights-responsibilities",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "title": "Professional Growth",
+      "description": "Excel in the workplace through effective communication, time management aligned with Islamic principles, and ethical professional conduct.",
+      "sort_order": 3,
+      "courses": [
+        {
+          "course_slug": "professional-communication",
+          "is_required": true
+        },
+        {
+          "course_slug": "time-management-islamic",
+          "is_required": true
+        },
+        {
+          "course_slug": "workplace-ethics-islam",
+          "is_required": true
+        }
+      ]
+    }
+  ]
+}
