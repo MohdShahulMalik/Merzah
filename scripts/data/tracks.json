@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Quran",
+    "slug": "quran",
+    "description": "Quranic studies including tajweed, memorization, tafsir, and understanding the message of the Quran.",
+    "icon": "📖",
+    "image_url": null,
+    "sort_order": 1
+  },
+  {
+    "name": "Faith & Worship",
+    "slug": "faith-worship",
+    "description": "Strengthen your aqeedah, learn the pillars of Islam, and master the acts of worship.",
+    "icon": "🕌",
+    "image_url": null,
+    "sort_order": 2
+  },
+  {
+    "name": "Seerah",
+    "slug": "seerah",
+    "description": "Study the life of Prophet Muhammad (peace be upon him) and draw lessons for contemporary life.",
+    "icon": "📜",
+    "image_url": null,
+    "sort_order": 3
+  },
+  {
+    "name": "Character",
+    "slug": "character",
+    "description": "Islamic ethics, manners, and personal development based on the Quran and Sunnah.",
+    "icon": "💎",
+    "image_url": null,
+    "sort_order": 4
+  },
+  {
+    "name": "Family",
+    "slug": "family",
+    "description": "Marriage, parenting, family dynamics, and building strong Muslim households.",
+    "icon": "👨‍👩‍👧‍👦",
+    "image_url": null,
+    "sort_order": 5
+  },
+  {
+    "name": "Finance",
+    "slug": "finance",
+    "description": "Halal investing, zakat, sadaqah, and ethical wealth management from an Islamic perspective.",
+    "icon": "💰",
+    "image_url": null,
+    "sort_order": 6
+  },
+  {
+    "name": "Career",
+    "slug": "career",
+    "description": "Professional development, communication skills, and career growth guided by Islamic values.",
+    "icon": "💼",
+    "image_url": null,
+    "sort_order": 7
+  },
+  {
+    "name": "Study Skills",
+    "slug": "study-skills",
+    "description": "How to learn effectively, memorize the Quran, take notes, and build productive study habits.",
+    "icon": "🎓",
+    "image_url": null,
+    "sort_order": 8
+  },
+  {
+    "name": "Technology",
+    "slug": "technology",
+    "description": "Digital literacy, Islamic technology tools, and using technology for beneficial purposes.",
+    "icon": "💻",
+    "image_url": null,
+    "sort_order": 9
+  },
+  {
+    "name": "Business",
+    "slug": "business",
+    "description": "Halal entrepreneurship, ethical business practices, and building ventures with Islamic principles.",
+    "icon": "🏢",
+    "image_url": null,
+    "sort_order": 10
+  },
+  {
+    "name": "Community",
+    "slug": "community",
+    "description": "Community building, da'wah, social justice, and serving humanity based on Islamic values.",
+    "icon": "🤝",
+    "image_url": null,
+    "sort_order": 11
+  }
+]
