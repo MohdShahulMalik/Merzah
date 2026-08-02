@@ -75,6 +75,7 @@ pub struct Course {
     pub status: CourseStatus,
     pub language: String,
     pub thumbnail_url: Option<String>,
+    pub video_url: Option<String>,
     pub duration_minutes: i32,
     pub lesson_count: i32,
     pub enrollment_count: i32,
@@ -96,6 +97,7 @@ pub struct CourseRecord {
     pub status: CourseStatus,
     pub language: String,
     pub thumbnail_url: Option<String>,
+    pub video_url: Option<String>,
     pub duration_minutes: i32,
     pub lesson_count: i32,
     pub enrollment_count: i32,
@@ -126,6 +128,8 @@ pub struct UpdatedCourseRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_url: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_minutes: Option<i32>,
     pub updated_at: Datetime,
 }
@@ -138,6 +142,7 @@ pub struct CourseOnClient {
     pub short_description: String,
     pub level: CourseLevel,
     pub thumbnail_url: Option<String>,
+    pub video_url: Option<String>,
     pub duration_minutes: i32,
     pub lesson_count: i32,
     pub enrollment_count: i32,
@@ -153,6 +158,7 @@ pub struct CourseDetail {
     pub short_description: String,
     pub level: CourseLevel,
     pub thumbnail_url: Option<String>,
+    pub video_url: Option<String>,
     pub duration_minutes: i32,
     pub lesson_count: i32,
     pub enrollment_count: i32,
@@ -379,6 +385,8 @@ pub struct CreateCourse {
     pub language: String,
     #[garde(skip)]
     pub thumbnail_url: Option<String>,
+    #[garde(skip)]
+    pub video_url: Option<String>,
 }
 
 #[derive(Debug, Validate, Deserialize, Serialize, Clone)]
@@ -410,6 +418,9 @@ pub struct UpdateCourse {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(skip)]
     pub thumbnail_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[garde(skip)]
+    pub video_url: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[garde(skip)]
     pub duration_minutes: Option<i32>,

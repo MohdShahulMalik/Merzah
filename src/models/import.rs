@@ -48,6 +48,7 @@ pub struct ImportCourse {
     pub level: CourseLevel,
     pub language: Option<String>,
     pub thumbnail_url: Option<String>,
+    pub video_url: Option<String>,
     pub modules: Vec<ImportModule>,
 }
 

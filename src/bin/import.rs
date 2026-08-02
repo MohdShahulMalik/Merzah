@@ -94,6 +94,7 @@ async fn import_courses(base: &Path) -> anyhow::Result<()> {
             status: CourseStatus::Published,
             language: course.language.unwrap_or_else(|| "en".to_string()),
             thumbnail_url: course.thumbnail_url,
+            video_url: course.video_url,
             duration_minutes: 0,
             lesson_count: 0,
             enrollment_count: 0,
