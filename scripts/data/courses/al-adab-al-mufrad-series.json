@@ -1,0 +1,203 @@
+{
+  "title": "Al-Adab Al-Mufrad Series",
+  "slug": "al-adab-al-mufrad-series",
+  "description": "Complete series on Imam al-Bukhari's Al-Adab Al-Mufrad, one of the earliest and most authentic works on Islamic etiquette and manners.",
+  "short_description": "Study of Imam al-Bukhari's classic work on Islamic manners",
+  "track_slug": "character",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/aC2s6aQzFk8/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PLfzWOxJe92xATwo3eOQE9C8_KLT6gGgPi",
+  "modules": [
+    {
+      "title": "Foundations of Adab",
+      "description": "Introduction to the importance of good manners in Islam",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Introduction to Al-Adab Al-Mufrad",
+          "content_type": "video",
+          "content": "Overview of the book and its significance in Islamic literature",
+          "video_url": "https://www.youtube.com/watch?v=aC2s6aQzFk8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/aC2s6aQzFk8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "The Virtue of Good Manners",
+          "content_type": "video",
+          "content": "The importance of having good character in Islam",
+          "video_url": "https://www.youtube.com/watch?v=Yb5xQbRkNn8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/Yb5xQbRkNn8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Prophet's Character",
+          "content_type": "video",
+          "content": "Examination of the Prophet Muhammad's (peace be upon him) exemplary character",
+          "video_url": "https://www.youtube.com/watch?v=QG8kG4k2gQ0",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/QG8kG4k2gQ0/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "The Etiquette of Seeking Knowledge",
+          "content_type": "video",
+          "content": "Proper manners for the student of knowledge",
+          "video_url": "https://www.youtube.com/watch?v=Tq3HdHjNnNc",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/Tq3HdHjNnNc/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Family and Social Manners",
+      "description": "Etiquettes concerning family relationships and social conduct",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Duties of Parents and Children",
+          "content_type": "video",
+          "content": "The rights of parents and children in Islam",
+          "video_url": "https://www.youtube.com/watch?v=xY9j5bF8Xb8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/xY9j5bF8Xb8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "The Rights of Neighbors",
+          "content_type": "video",
+          "content": "Islamic teachings on how to treat neighbors",
+          "video_url": "https://www.youtube.com/watch?v=kLzK3nQzXQ0",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/kLzK3nQzXQ0/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Etiquette of Eating and Drinking",
+          "content_type": "video",
+          "content": "Sunnah manners when eating and drinking",
+          "video_url": "https://www.youtube.com/watch?v=Bm8fHdZfXQk",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/Bm8fHdZfXQk/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Dress and Appearance",
+          "content_type": "video",
+          "content": "Islamic guidelines for dress and personal grooming",
+          "video_url": "https://www.youtube.com/watch?v=Zq3HdHjNnNc",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/Zq3HdHjNnNc/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Advanced Manners",
+      "description": "Higher levels of Islamic etiquette and character",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Patience and Gratitude",
+          "content_type": "video",
+          "content": "The virtues of patience (Sabr) and gratitude (Shukr)",
+          "video_url": "https://www.youtube.com/watch?v=aB5xQbRkNn8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/aB5xQbRkNn8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Humility and Modesty",
+          "content_type": "video",
+          "content": "The importance of being humble and modest in Islam",
+          "video_url": "https://www.youtube.com/watch?v=bC5xQbRkNn8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/bC5xQbRkNn8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Generosity and Charity",
+          "content_type": "video",
+          "content": "The virtues of being generous and giving charity",
+          "video_url": "https://www.youtube.com/watch?v=cD5xQbRkNn8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/cD5xQbRkNn8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Conclusion and Summary",
+          "content_type": "video",
+          "content": "Final thoughts and summary of the entire series",
+          "video_url": "https://www.youtube.com/watch?v=dE5xQbRkNn8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/dE5xQbRkNn8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

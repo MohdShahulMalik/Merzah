@@ -1,0 +1,203 @@
+{
+  "title": "Learn How to Read the Quran",
+  "slug": "learn-reading-quran",
+  "description": "Learn to read the Quran from scratch using Noorani Qaida (\u0627\u0644\u0642\u0627\u0639\u062f\u0629 \u0627\u0644\u0646\u0648\u0631\u0627\u0646\u064a\u0629), the essential foundation before memorization (Hifz). This course covers the Arabic alphabet, vowels, tanween, sukoon, shaddah, and madd letters for proper Quran recitation.",
+  "short_description": "Learn Quran reading with Noorani Qaida from scratch",
+  "track_slug": "study-skills",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/P_R4cImZ4ew/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PLMkZnvaDGY6_FuUQBmUWBmRs-pnykHtm5",
+  "modules": [
+    {
+      "title": "Arabic Alphabet & Basic Letters",
+      "description": "Introduction to Arabic alphabet (\u062d\u0631\u0648\u0641 \u0627\u0644\u0647\u062c\u0627\u0621) and basic letter recognition",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Introduction to Noorani Qaida",
+          "content_type": "video",
+          "content": "Introduction to the Noorani Qaida method and course overview",
+          "video_url": "https://www.youtube.com/watch?v=P_R4cImZ4ew",
+          "video_duration_seconds": 89,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/P_R4cImZ4ew/hqdefault.jpg",
+          "duration_minutes": 2,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Lesson 1: The Arabic Alphabet",
+          "content_type": "video",
+          "content": "Introduction to the Arabic alphabet and individual letter pronunciation",
+          "video_url": "https://www.youtube.com/watch?v=0Isyy_ZvZR8",
+          "video_duration_seconds": 171,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/0Isyy_ZvZR8/hqdefault.jpg",
+          "duration_minutes": 3,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 1 - Each Letter 3 Times",
+          "content_type": "video",
+          "content": "Practice pronouncing each Arabic letter three times for mastery",
+          "video_url": "https://www.youtube.com/watch?v=jGsojxo-3Xo",
+          "video_duration_seconds": 225,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/jGsojxo-3Xo/hqdefault.jpg",
+          "duration_minutes": 4,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 1 - Repeated Ranges",
+          "content_type": "video",
+          "content": "Practice Arabic letters in repeated ranges for better retention",
+          "video_url": "https://www.youtube.com/watch?v=9FO0IzhVEs0",
+          "video_duration_seconds": 201,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/9FO0IzhVEs0/hqdefault.jpg",
+          "duration_minutes": 3,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Joined Letters & Vowels",
+      "description": "Learning to join Arabic letters and understanding vowels (\u0627\u0644\u062d\u0631\u0643\u0627\u062a)",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Lesson 1 - Unordered Letters (Very Important)",
+          "content_type": "video",
+          "content": "Practice recognizing Arabic letters in random order for fluency",
+          "video_url": "https://www.youtube.com/watch?v=dSzGk2WquDo",
+          "video_duration_seconds": 131,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/dSzGk2WquDo/hqdefault.jpg",
+          "duration_minutes": 2,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 2: The Arabic Letters - Joined",
+          "content_type": "video",
+          "content": "Learning how Arabic letters connect when written together",
+          "video_url": "https://www.youtube.com/watch?v=2UN-gb9OVro",
+          "video_duration_seconds": 401,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/2UN-gb9OVro/hqdefault.jpg",
+          "duration_minutes": 7,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 2 Practice",
+          "content_type": "video",
+          "content": "Practice exercises for joined Arabic letters",
+          "video_url": "https://www.youtube.com/watch?v=pMdnp61u4Ew",
+          "video_duration_seconds": 1004,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/pMdnp61u4Ew/hqdefault.jpg",
+          "duration_minutes": 17,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 3: The Disjointed Letters",
+          "content_type": "video",
+          "content": "The disjointed letters (\u0627\u0644\u062d\u0631\u0648\u0641 \u0627\u0644\u0645\u0642\u0637\u0639\u0629) found at the beginning of some Quran chapters",
+          "video_url": "https://www.youtube.com/watch?v=SHUs-UPgH7E",
+          "video_duration_seconds": 833,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/SHUs-UPgH7E/hqdefault.jpg",
+          "duration_minutes": 14,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Vowels, Tanween & Sukoon",
+      "description": "Understanding Arabic vowels (\u0627\u0644\u062d\u0631\u0643\u0627\u062a), tanween (\u0627\u0644\u062a\u0646\u0648\u064a\u0646), and sukoon (\u0627\u0644\u0633\u0643\u0648\u0646)",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Lesson 4: Vowels",
+          "content_type": "video",
+          "content": "Introduction to Arabic vowels - Fatha, Kasra, and Damma",
+          "video_url": "https://www.youtube.com/watch?v=dAvd7H6Rriw",
+          "video_duration_seconds": 170,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/dAvd7H6Rriw/hqdefault.jpg",
+          "duration_minutes": 3,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 4 Practice",
+          "content_type": "video",
+          "content": "Practice exercises for Arabic vowels",
+          "video_url": "https://www.youtube.com/watch?v=wBasHq-h3tE",
+          "video_duration_seconds": 246,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/wBasHq-h3tE/hqdefault.jpg",
+          "duration_minutes": 4,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 5: Tanween",
+          "content_type": "video",
+          "content": "Understanding Tanween (\u0627\u0644\u062a\u0646\u0648\u064a\u0646) - Fathatan, Kasratan, and Dammatan",
+          "video_url": "https://www.youtube.com/watch?v=74knNkAdC04",
+          "video_duration_seconds": 205,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/74knNkAdC04/hqdefault.jpg",
+          "duration_minutes": 3,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 5 Practice",
+          "content_type": "video",
+          "content": "Practice exercises for Tanween",
+          "video_url": "https://www.youtube.com/watch?v=9KpqUXrdBuY",
+          "video_duration_seconds": 297,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/9KpqUXrdBuY/hqdefault.jpg",
+          "duration_minutes": 5,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

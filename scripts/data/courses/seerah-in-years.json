@@ -1,0 +1,161 @@
+{
+  "title": "A Study of The Seerah In Years",
+  "slug": "seerah-in-years",
+  "description": "A comprehensive study of the Seerah (biography) of Prophet Muhammad (peace be upon him) year by year, from his birth until his death. This course covers the major events, battles, and revelations in chronological order, providing a deep understanding of the Prophet's life and mission.",
+  "short_description": "A chronological study of the Prophet Muhammad's biography from birth to death",
+  "track_slug": "seerah",
+  "educator_id": "PLACEHOLDER",
+  "level": "intermediate",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_1/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+  "modules": [
+    {
+      "title": "The Makkan Period: Birth to Prophethood",
+      "description": "This module covers the early years of Prophet Muhammad (peace be upon him), from his noble birth in Makkah, his childhood with Halimah al-Sa'diyyah, his work as a shepherd, his marriage to Khadijah bint Khuwaylid (may Allah be pleased with her), and the beginning of the divine revelation in the Cave of Hira.",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "The Birth and Lineage of Prophet Muhammad",
+          "content_type": "video",
+          "content": "The noble birth of Prophet Muhammad (peace be upon him) in the Year of the Elephant, his lineage from Ismail (peace be upon him), and the signs that accompanied his birth. Learn about the tradition of sending children to wet nurses and his time with Halimah al-Sa'diyyah.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_1&list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_1/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Childhood and Youth in Makkah",
+          "content_type": "video",
+          "content": "The formative years of Prophet Muhammad (peace be upon him) in Makkah, including his work as a shepherd, his travels with Abu Talib to Syria, and his reputation for truthfulness (Al-Amin) and trustworthiness (As-Sadiq) among the Quraysh.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_2&list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_2/hqdefault.jpg",
+          "duration_minutes": 25,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Marriage to Khadijah and the Night of Power",
+          "content_type": "video",
+          "content": "The marriage of Prophet Muhammad (peace be upon him) to Khadijah bint Khuwaylid (may Allah be pleased with her), their blessed household, and the momentous Night of Power (Laylat al-Qadr) when the first revelation came to him through Jibreel (peace be upon him) in the Cave of Hira.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_3&list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_3/hqdefault.jpg",
+          "duration_minutes": 35,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "The Makkan Period: Persecution and Migration",
+      "description": "This module covers the early years of da'wah (calling to Islam), the severe persecution of the early Muslims by the Quraysh, the torture of Bilal ibn Rabah (may Allah be pleased with him), the boycott of Banu Hashim, and the Prophet's journey to Ta'if.",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "The Early Da'wah and Secret Call to Islam",
+          "content_type": "video",
+          "content": "The beginning of the Prophet Muhammad's (peace be upon him) public call to Islam, the secret gatherings of the early Muslims, the conversion of prominent figures like Abu Bakr as-Siddiq (may Allah be pleased with him), and the Quraysh's initial reactions.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_4&list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_4/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "The Persecution of Early Muslims",
+          "content_type": "video",
+          "content": "The brutal persecution of the early Muslims by the Quraysh, including the torture of Bilal ibn Rabah (may Allah be pleased with him), the martyrdom of Sumayyah bint Khayyat, and the trials of other companions who held firm to their faith.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_5&list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_5/hqdefault.jpg",
+          "duration_minutes": 28,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Boycott and Journey to Ta'if",
+          "content_type": "video",
+          "content": "The economic and social boycott imposed on Banu Hashim by the Quraysh, the suffering of the early Muslims, and the Prophet's journey to Ta'if seeking support and refuge, where he was rejected and stoned by the inhabitants.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_6&list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_6/hqdefault.jpg",
+          "duration_minutes": 32,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "The Madinan Period: Hijrah and Establishment",
+      "description": "This module covers the Hijrah (migration) to Madinah, the brotherhood (Mu'akhah) between the Muhajirun and Ansar, the construction of Masjid an-Nabawi, the Battle of Badr, and the establishment of the Islamic state in Madinah.",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "The Hijrah to Madinah",
+          "content_type": "video",
+          "content": "The Prophet Muhammad's (peace be upon him) migration from Makkah to Madinah, the Quraish's plot to assassinate him, the hiding in the Cave of Thawr with Abu Bakr (may Allah be pleased with him), and the miraculous arrival in Madinah.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_7&list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_7/hqdefault.jpg",
+          "duration_minutes": 35,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "The Brotherhood and Construction of Masjid an-Nabawi",
+          "content_type": "video",
+          "content": "The establishment of brotherhood (Mu'akhah) between the Muhajirun (migrants) and Ansar (helpers), the construction of the Prophet's Mosque (Masjid an-Nabawi), and the Constitution of Madinah establishing a multi-faith community.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_8&list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Battle of Badr",
+          "content_type": "video",
+          "content": "The first major military engagement between the Muslims and the Quraysh at Badr, the numerical disadvantage of the Muslim forces, the divine intervention and victory, and the lessons of reliance on Allah (tawakkul) and firm determination.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_9&list=PLsUKO2WRzD75yJmTDZnjq7CRWw3UJYZsn",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_9/hqdefault.jpg",
+          "duration_minutes": 40,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "title": "Lessons From Seerah for Modern Life",
+  "slug": "lessons-from-seerah",
+  "description": "Extracting practical lessons from the Seerah of Prophet Muhammad (peace be upon him) for application in modern daily life. This course focuses on how the Prophet's teachings and example can guide Muslims in contemporary challenges and situations.",
+  "short_description": "Practical lessons from the Prophet's life for modern Muslims",
+  "track_slug": "seerah",
+  "educator_id": "PLACEHOLDER",
+  "level": "intermediate",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_34/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PLSgSF06ZggA5I67tRLh4QXfo0hsaZ7BxG",
+  "modules": [
+    {
+      "title": "Patience and Perseverance",
+      "description": "This module explores the lessons of patience (Sabr) and perseverance from the Seerah, showing how the Prophet (peace be upon him) and his companions dealt with trials and hardships.",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "The Prophet's Patience in Makkah",
+          "content_type": "video",
+          "content": "The exemplary patience of Prophet Muhammad (peace be upon him) during the years of persecution in Makkah, lessons for dealing with personal and social trials, and the virtue of steadfastness in the face of adversity.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_34&list=PLSgSF06ZggA5I67tRLh4QXfo0hsaZ7BxG",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_34/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Lessons from the Battle of Uhud",
+          "content_type": "video",
+          "content": "The lessons from the Battle of Uhud, including the importance of obedience to leadership, the dangers of greed, and how to deal with defeat and loss while maintaining faith in Allah.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_35&list=PLSgSF06ZggA5I67tRLh4QXfo0hsaZ7BxG",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_35/hqdefault.jpg",
+          "duration_minutes": 35,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Trench: Collective Effort",
+          "content_type": "video",
+          "content": "The digging of the Trench (Khandaq) as an example of collective effort and sacrifice, lessons for community building and cooperation in modern times.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_36&list=PLSgSF06ZggA5I67tRLh4QXfo0hsaZ7BxG",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_36/hqdefault.jpg",
+          "duration_minutes": 28,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Leadership and Governance",
+      "description": "This module draws lessons from the Prophet's leadership style and governance principles, applicable to modern leadership in families, communities, and organizations.",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "The Prophet as a Leader",
+          "content_type": "video",
+          "content": "The leadership qualities of Prophet Muhammad (peace be upon him), including consultation (Shura), justice, humility, and servant leadership, and how these principles apply to modern leadership.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_37&list=PLSgSF06ZggA5I67tRLh4QXfo0hsaZ7BxG",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_37/hqdefault.jpg",
+          "duration_minutes": 32,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "The Constitution of Madinah",
+          "content_type": "video",
+          "content": "The Constitution of Madinah as the first social contract, principles of pluralism and coexistence, and lessons for building diverse and harmonious communities today.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_38&list=PLSgSF06ZggA5I67tRLh4QXfo0hsaZ7BxG",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_38/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Justice and Equity in Islam",
+          "content_type": "video",
+          "content": "The principles of justice (Adl) and equity in Islamic governance, the Prophet's emphasis on fairness, and how these values can be applied in contemporary legal and social systems.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_39&list=PLSgSF06ZggA5I67tRLh4QXfo0hsaZ7BxG",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_39/hqdefault.jpg",
+          "duration_minutes": 28,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "title": "Tafsir Ibn Kathir",
+  "slug": "tafsir-ibn-kathir",
+  "description": "Comprehensive study of Tafsir Ibn Kathir, one of the most authoritative classical tafsir works. Covering Quranic commentary with authentic hadith explanations from the Salaf.",
+  "short_description": "Classical Quranic commentary with authentic hadith",
+  "track_slug": "quran",
+  "educator_id": "PLACEHOLDER",
+  "level": "intermediate",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/YPsc9ixDc2c/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PL7atYSa5SSm74UxAOEzBffKzDNG_HU-bG",
+  "modules": [
+    {
+      "title": "Introduction to Tafsir Ibn Kathir",
+      "description": "Foundational concepts of Tafsir Ibn Kathir methodology and approach to Quranic commentary.",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Overview of Tafsir Ibn Kathir",
+          "content_type": "video",
+          "content": "Introduction to the methodology of Imaam Ibn Kathir (\u0631\u062d\u0645\u0647 \u0627\u0644\u0644\u0647) in Quranic exegesis, including his reliance on Quran\u89e3\u91caQuran, authentic Sunnah, and statements of the Salaf.",
+          "video_url": "https://www.youtube.com/watch?v=YPsc9ixDc2c",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/YPsc9ixDc2c/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Tafsir of Surah Al-Fatihah",
+          "content_type": "video",
+          "content": "Detailed commentary on Surah Al-Fatihah (The Opening), the greatest Surah of the Quran, with explanation of its virtues and meanings.",
+          "video_url": "https://www.youtube.com/watch?v=7HC65rVhJC4",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/7HC65rVhJC4/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Tafsir of Surah Al-Baqarah (Part 1)",
+          "content_type": "video",
+          "content": "Beginning of the commentary on Surah Al-Baqah (The Cow), the longest Surah in the Quran, with lessons from the stories of Bani Isra'il.",
+          "video_url": "https://www.youtube.com/watch?v=At1XAaS8g3k",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/At1XAaS8g3k/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Stories of the Prophets",
+      "description": "Tafsir sections covering the narratives of the Anbiya (prophets) and their nations.",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Tafsir of Surah Aal-e-Imran",
+          "content_type": "video",
+          "content": "Commentary on Surah Aal-e-Imran (The Family of Imran) discussing the stories of Maryam (Mary), Isa (Jesus), and the People of the Book.",
+          "video_url": "https://www.youtube.com/watch?v=IYM3Umxy3xo",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/IYM3Umxy3xo/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Tafsir of Surah An-Nisa",
+          "content_type": "video",
+          "content": "Explanation of Surah An-Nisa (The Women) covering rulings on marriage, inheritance, and social justice in Islam.",
+          "video_url": "https://www.youtube.com/watch?v=iMgfoUPxEZ8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/iMgfoUPxEZ8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Tafsir of Surah Al-Ma'idah",
+          "content_type": "video",
+          "content": "Commentary on Surah Al-Ma'idah (The Table Spread) including laws of halal and haram, and the covenant of the prophets.",
+          "video_url": "https://www.youtube.com/watch?v=eYyE8ze_y8k",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/eYyE8ze_y8k/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Themes and Lessons from the Quran",
+      "description": "Exploring major themes and spiritual lessons derived from various Surahs of the Quran.",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Tafsir of Surah Al-An'am",
+          "content_type": "video",
+          "content": "Explanation of Surah Al-An'am (The Cattle) focusing on tawheed (monotheism) and refutation of shirk (polytheism).",
+          "video_url": "https://www.youtube.com/watch?v=SAi6zLG9V4Y",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/SAi6zLG9V4Y/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Tafsir of Surah Al-A'raf",
+          "content_type": "video",
+          "content": "Commentary on Surah Al-A'raf (The Heights) covering stories of Nuh (Noon), Hud, Salih, and other prophets.",
+          "video_url": "https://www.youtube.com/watch?v=eYyE8ze_y8k",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/eYyE8ze_y8k/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Tafsir of Surah Al-Anfal",
+          "content_type": "video",
+          "content": "Explanation of Surah Al-Anfal (The Spoils of War) discussing the Battle of Badr and guidelines for Muslim conduct in conflict.",
+          "video_url": "https://www.youtube.com/watch?v=IYM3Umxy3xo",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/IYM3Umxy3xo/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

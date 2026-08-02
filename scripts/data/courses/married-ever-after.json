@@ -1,0 +1,126 @@
+{
+  "title": "Married Ever After",
+  "slug": "married-ever-after",
+  "description": "A comprehensive course on marital relationships and building successful Muslim marriages based on the Quran and Sunnah. Based on the lectures of Ustadh Ali Hammuda, this course covers 20 timeless principles for preserving the fabric of marriage with real-life case studies and practical advice.",
+  "short_description": "Quran-based principles for building and maintaining a successful Muslim marriage",
+  "track_slug": "family",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/t5DF8Oy2oWw/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PL9OPVukugS7zpgJ8Unee_FvS3xgqnwFPe",
+  "modules": [
+    {
+      "title": "Foundations of Marriage",
+      "description": "Understanding the purpose and principles of marriage in Islam",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Introduction to Married Ever After",
+          "content_type": "video",
+          "content": "An introduction to the series on Quran-based principles for preserving the fabric of marriage with real-life case studies and practical advice.",
+          "video_url": "https://www.youtube.com/watch?v=t5DF8Oy2oWw",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/t5DF8Oy2oWw/hqdefault.jpg",
+          "duration_minutes": 50,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Principles 1 & 2: The Foundation of Marriage",
+          "content_type": "video",
+          "content": "Understanding the first two Quran-based principles for a successful marriage including viewing marriage as an act of worship.",
+          "video_url": "https://www.youtube.com/watch?v=CygUfFqDxgo",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/CygUfFqDxgo/hqdefault.jpg",
+          "duration_minutes": 55,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Principles 3 & 4: Building Trust and Respect",
+          "content_type": "video",
+          "content": "Learn about the third and fourth principles focusing on building trust and mutual respect in marriage.",
+          "video_url": "https://www.youtube.com/watch?v=CygUfFqDxgo",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/CygUfFqDxgo/hqdefault.jpg",
+          "duration_minutes": 65,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Principle 5: Effective Communication",
+          "content_type": "video",
+          "content": "Understanding the fifth principle of effective communication in marriage according to Islamic teachings.",
+          "video_url": "https://www.youtube.com/watch?v=CygUfFqDxgo",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/CygUfFqDxgo/hqdefault.jpg",
+          "duration_minutes": 55,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Strengthening the Marital Bond",
+      "description": "Practical principles for maintaining and strengthening the relationship",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Principles 6 & 7: Love and Mercy",
+          "content_type": "video",
+          "content": "Understanding the principles of love (mawaddah) and mercy (rahmah) in marriage as mentioned in the Quran.",
+          "video_url": "https://www.youtube.com/watch?v=CygUfFqDxgo",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/CygUfFqDxgo/hqdefault.jpg",
+          "duration_minutes": 45,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Principle 12: Patience and Understanding",
+          "content_type": "video",
+          "content": "The twelfth principle focusing on the importance of patience and understanding in marital life.",
+          "video_url": "https://www.youtube.com/watch?v=ONzgTdWEFck",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/ONzgTdWEFck/hqdefault.jpg",
+          "duration_minutes": 45,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Principles 18-20: Final Principles for Success",
+          "content_type": "video",
+          "content": "The final principles for building a successful and righteous marriage according to the Quran and Sunnah.",
+          "video_url": "https://www.youtube.com/watch?v=ONzgTdWEFck",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/ONzgTdWEFck/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

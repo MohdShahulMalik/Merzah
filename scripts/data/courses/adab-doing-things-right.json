@@ -1,0 +1,112 @@
+{
+  "title": "Adab: The Art of Doing Things Right",
+  "slug": "adab-doing-things-right",
+  "description": "Series on Adab (Islamic etiquette) - the right way of doing things in Islam, covering personal conduct, social interactions, and worship.",
+  "short_description": "Islamic etiquette for personal conduct and worship",
+  "track_slug": "character",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/aC2s6aQzFk8/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PL4mTEQpP9b5FdDdhHySgV4ZV6QOkzHmoq",
+  "modules": [
+    {
+      "title": "Personal Adab",
+      "description": "Etiquettes for personal conduct and self-improvement",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "The Concept of Adab",
+          "content_type": "video",
+          "content": "Understanding what Adab means in Islam",
+          "video_url": "https://www.youtube.com/watch?v=aC2s6aQzFk8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/aC2s6aQzFk8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Adab with Allah",
+          "content_type": "video",
+          "content": "How to show proper respect and devotion to Allah",
+          "video_url": "https://www.youtube.com/watch?v=bC2s6aQzFk8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/bC2s6aQzFk8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Adab with Oneself",
+          "content_type": "video",
+          "content": "Taking care of one's body, mind, and soul",
+          "video_url": "https://www.youtube.com/watch?v=cC2s6aQzFk8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/cC2s6aQzFk8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Social Adab",
+      "description": "Proper etiquette in social interactions",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Adab with Family",
+          "content_type": "video",
+          "content": "How to maintain good relations with family members",
+          "video_url": "https://www.youtube.com/watch?v=dC2s6aQzFk8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/dC2s6aQzFk8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Adab with Friends and Peers",
+          "content_type": "video",
+          "content": "Building and maintaining friendships the Islamic way",
+          "video_url": "https://www.youtube.com/watch?v=eC2s6aQzFk8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/eC2s6aQzFk8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Adab in the Community",
+          "content_type": "video",
+          "content": "Contributing positively to the Muslim community",
+          "video_url": "https://www.youtube.com/watch?v=fC2s6aQzFk8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/fC2s6aQzFk8/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

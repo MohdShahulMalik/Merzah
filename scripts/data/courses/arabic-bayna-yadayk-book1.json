@@ -1,0 +1,161 @@
+{
+  "title": "Al-Arabiyyah Bayna Yadayk (Book 1)",
+  "slug": "arabic-bayna-yadayk-book1",
+  "description": "Complete video lectures for the beginner Arabic textbook used at Islamic University of Madinah, teaching Arabic as a second language. This course covers the foundational lessons of Al-Arabiyyah Bayna Yadayk (\u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0628\u064a\u0646 \u064a\u062f\u064a\u0643) with Ustadh Abdul Karim from Green Lane Masjid, UK.",
+  "short_description": "Beginner Arabic course using the Islamic University of Madinah textbook",
+  "track_slug": "study-skills",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/RTKlv_fUGvg/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PL88CDD3C1F59C647D",
+  "modules": [
+    {
+      "title": "Introduction & Arabic Alphabet",
+      "description": "Introduction to the Bayna Yadayk method and learning the Arabic alphabet (\u062d\u0631\u0648\u0641 \u0627\u0644\u0647\u062c\u0627\u0621)",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Introduction to Al-Arabiyyah Bayna Yadayk",
+          "content_type": "video",
+          "content": "Introduction to the Bayna Yadayk Arabic learning method and course overview",
+          "video_url": "https://www.youtube.com/watch?v=RTKlv_fUGvg",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/RTKlv_fUGvg/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Lesson 1a - Arabic Alphabet",
+          "content_type": "video",
+          "content": "Introduction to Arabic letters (\u0627\u0644\u062d\u0631\u0648\u0641 \u0627\u0644\u0639\u0631\u0628\u064a\u0629) and their pronunciation",
+          "video_url": "https://www.youtube.com/watch?v=_btQFskJVSQ",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/_btQFskJVSQ/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 1b - Arabic Alphabet Practice",
+          "content_type": "video",
+          "content": "Continued practice of Arabic alphabet recognition and pronunciation",
+          "video_url": "https://www.youtube.com/watch?v=TPQyQCrEwIM",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/TPQyQCrEwIM/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Basic Vocabulary & Greetings",
+      "description": "Learning basic Arabic vocabulary, greetings, and everyday expressions",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Lesson 2a - Basic Vocabulary",
+          "content_type": "video",
+          "content": "Introduction to basic Arabic vocabulary and common words (\u0627\u0644\u0645\u0641\u0631\u062f\u0627\u062a \u0627\u0644\u0623\u0633\u0627\u0633\u064a\u0629)",
+          "video_url": "https://www.youtube.com/watch?v=VtOvbNyfxgY",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/VtOvbNyfxgY/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 2b - Basic Vocabulary Practice",
+          "content_type": "video",
+          "content": "Practice and reinforcement of basic Arabic vocabulary",
+          "video_url": "https://www.youtube.com/watch?v=iHuAX_L21EQ",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/iHuAX_L21EQ/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 3a - Greetings & Introductions",
+          "content_type": "video",
+          "content": "Learning Arabic greetings (\u0627\u0644\u062a\u062d\u064a\u0627\u062a) and how to introduce yourself",
+          "video_url": "https://www.youtube.com/watch?v=4OTfb4TD4mg",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/4OTfb4TD4mg/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Basic Grammar & Sentence Structure",
+      "description": "Introduction to basic Arabic grammar rules and sentence construction",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Lesson 3b - Greetings Practice",
+          "content_type": "video",
+          "content": "Practice of greetings and introductory phrases in Arabic",
+          "video_url": "https://www.youtube.com/watch?v=gdjdIomeYPo",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/gdjdIomeYPo/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 4a - Basic Grammar",
+          "content_type": "video",
+          "content": "Introduction to Arabic grammar (\u0627\u0644\u0646\u062d\u0648 \u0627\u0644\u0639\u0631\u0628\u064a) including nouns and verbs",
+          "video_url": "https://www.youtube.com/watch?v=hEwehv0RNuQ",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/hEwehv0RNuQ/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 4b - Sentence Structure",
+          "content_type": "video",
+          "content": "Basic Arabic sentence structure (\u062a\u0631\u0643\u064a\u0628 \u0627\u0644\u062c\u0645\u0644\u0629) and word order",
+          "video_url": "https://www.youtube.com/watch?v=D9grBMj4UMY",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/D9grBMj4UMY/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

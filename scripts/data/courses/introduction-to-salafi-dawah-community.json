@@ -1,0 +1,140 @@
+{
+  "title": "Introduction to the Salafi Dawah",
+  "slug": "introduction-to-salafi-dawah-community",
+  "description": "Understanding the Salafi methodology and the call to pure monotheism (Tawheed) upon the understanding of the Salaf (righteous predecessors). This course covers the foundations of the Salafi Da'wah (call) as understood by the scholars of Ahlus-Sunnah wal-Jama'ah, including the importance of adhering to the Quran and Sunnah upon the methodology of the Salaf as-Salih (righteous predecessors).",
+  "short_description": "Learn the foundations of the Salafi methodology and the call to pure Tawheed upon the understanding of the Salaf.",
+  "track_slug": "community",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/m6oV6I3xw2c/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PL5AB4616CBAEC9501",
+  "modules": [
+    {
+      "title": "Foundations of the Salafi Da'wah",
+      "description": "Understanding the core principles of the Salafi methodology and its connection to the pure monotheism (Tawheed) of the Salaf as-Salih.",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Introduction to the Salafi Da'wah",
+          "content_type": "video",
+          "content": "An overview of the Salafi Da'wah (call) and its importance in calling to pure Tawheed (monotheism) upon the understanding of the Salaf as-Salih (righteous predecessors).",
+          "video_url": "https://www.youtube.com/watch?v=m6oV6I3xw2c",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/m6oV6I3xw2c/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Who Are the Salaf?",
+          "content_type": "video",
+          "content": "Defining the term 'Salaf' (predecessors) and understanding their methodology in matters of Aqeedah (creed), 'Ibadah (worship), and transactions.",
+          "video_url": "https://www.youtube.com/watch?v=M99Wnr5jONY",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/M99Wnr5jONY/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Importance of Tawheed",
+          "content_type": "video",
+          "content": "Understanding the three categories of Tawheed: Tawheed ar-Ruboobiyyah (Lordship), Tawheed al-Uloohiyyah (Worship), and Tawheed al-Asmaa wa-Sifaat (Names and Attributes).",
+          "video_url": "https://www.youtube.com/watch?v=FilMrJMZEZw",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/FilMrJMZEZw/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "The Methodology of the Salaf",
+          "content_type": "video",
+          "content": "Understanding Manhaj (methodology) of the Salaf in understanding the Deen (religion), including adherence to the Quran and Sunnah and the importance of following the Companions (Sahabah).",
+          "video_url": "https://www.youtube.com/watch?v=71gvvaMCNho",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/71gvvaMCNho/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Core Principles of the Salafi Da'wah",
+      "description": "Exploring the essential principles that guide the Salafi Da'wah in calling to pure monotheism and correct Islamic practice.",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "The Concept of Da'wah (Calling to Allah)",
+          "content_type": "video",
+          "content": "Understanding the concept of Da'wah (calling to Allah) in Islam, its importance, and the qualities required of a Da'ee (caller).",
+          "video_url": "https://www.youtube.com/watch?v=Otun_9UMwbI",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/Otun_9UMwbI/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Avoiding Shirk (Polytheism) and Bid'ah (Innovations)",
+          "content_type": "video",
+          "content": "Learning about the dangers of Shirk (polytheism) and Bid'ah (innovations in the Deen) and how the Salaf protected the pure Tawheed.",
+          "video_url": "https://www.youtube.com/watch?v=io0dKRHF2CM",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/io0dKRHF2CM/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "The Importance of 'Ilm (Knowledge)",
+          "content_type": "video",
+          "content": "Understanding the importance of seeking authentic Islamic knowledge (Ilm) and its role in the Salafi Da'wah.",
+          "video_url": "https://www.youtube.com/watch?v=6qM41KyT7uQ",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/6qM41KyT7uQ/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "Unity upon the Quran and Sunnah",
+          "content_type": "video",
+          "content": "The importance of Tawheed (unity) upon the correct 'Aqeedah (creed) and Manhaj (methodology) as understood by the Salaf as-Salih.",
+          "video_url": "https://www.youtube.com/watch?v=L7ItKQgTXNs",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/L7ItKQgTXNs/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "title": "The Salafi Woman",
+  "slug": "the-salafi-woman",
+  "description": "Lectures on the role and status of women in Islam upon the methodology of the Salaf, including the wives of the Prophet (peace be upon him) and prominent women in Islamic history. This course covers the rights, responsibilities, and virtues of Muslim women according to authentic Islamic sources.",
+  "short_description": "Understanding the role and status of women in Islam",
+  "track_slug": "seerah",
+  "educator_id": "PLACEHOLDER",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_28/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PL35pL4_wOimr1hexvpJez76JeWORPxnKg",
+  "modules": [
+    {
+      "title": "The Wives of the Prophet (Peace Be Upon Him)",
+      "description": "This module covers the lives and virtues of the mothers of the believers (Ummahat al-Mu'minin), the wives of Prophet Muhammad (peace be upon him), their role in preserving Islam, and their exemplary character.",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Khadijah bint Khuwaylid (May Allah Be Pleased With Her)",
+          "content_type": "video",
+          "content": "The life and virtues of Khadijah bint Khuwaylid (may Allah be pleased with her), the first wife of the Prophet (peace be upon him), her support during the early revelation, and her status as one of the best women in Islam.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_28&list=PL35pL4_wOimr1hexvpJez76JeWORPxnKg",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_28/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Aisha bint Abi Bakr (May Allah Be Pleased With Her)",
+          "content_type": "video",
+          "content": "The life and virtues of Aisha bint Abi Bakr (may Allah be pleased with her), the 'Mother of the Believers,' her role in preserving the Sunnah, her scholarly contributions, and her exemplary knowledge of Islam.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_29&list=PL35pL4_wOimr1hexvpJez76JeWORPxnKg",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_29/hqdefault.jpg",
+          "duration_minutes": 35,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Hafsah bint Umar and Other Wives",
+          "content_type": "video",
+          "content": "The lives and virtues of Hafsah bint Umar (may Allah be pleased with her), the keeper of the first written Qur'an, and the other wives of the Prophet (peace be upon him) including Zaynab, Umm Salamah, and Safiyyah.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_30&list=PL35pL4_wOimr1hexvpJez76JeWORPxnKg",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_30/hqdefault.jpg",
+          "duration_minutes": 28,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Prominent Women in Islamic History",
+      "description": "This module covers the lives of prominent women in Islamic history who excelled in various fields, including scholarship, worship, and service to the Ummah, as role models for Muslim women today.",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "The Mothers of the Believers",
+          "content_type": "video",
+          "content": "An overview of all the wives of the Prophet (peace be upon him), their collective virtues, their role in teaching the Muslims, and lessons from their lives for contemporary Muslim women.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_31&list=PL35pL4_wOimr1hexvpJez76JeWORPxnKg",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_31/hqdefault.jpg",
+          "duration_minutes": 32,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Scholars and Teachers Among Women",
+          "content_type": "video",
+          "content": "The role of women in Islamic scholarship, including female scholars (faqihat) who taught men and women, their contributions to hadith transmission, and the importance of seeking knowledge for Muslim women.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_32&list=PL35pL4_wOimr1hexvpJez76JeWORPxnKg",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_32/hqdefault.jpg",
+          "duration_minutes": 30,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Women in the Da'wah Movement",
+          "content_type": "video",
+          "content": "The role of women in the spread of Islam, their sacrifices in the early da'wah, and contemporary examples of women who have contributed to the revival of authentic Islamic knowledge.",
+          "video_url": "https://www.youtube.com/watch?v=placeholder_video_33&list=PL35pL4_wOimr1hexvpJez76JeWORPxnKg",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/placeholder_video_33/hqdefault.jpg",
+          "duration_minutes": 25,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

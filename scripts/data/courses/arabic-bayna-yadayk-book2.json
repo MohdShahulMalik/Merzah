@@ -1,0 +1,161 @@
+{
+  "title": "Al-Arabiyyah Bayna Yadayk (Book 2)",
+  "slug": "arabic-bayna-yadayk-book2",
+  "description": "Continuation of the Bayna Yadayk series for intermediate Arabic learners, building upon the foundations learned in Book 1. This course covers intermediate Arabic grammar, vocabulary, and conversation skills with Ustadh Abdul Karim from Green Lane Masjid, UK.",
+  "short_description": "Intermediate Arabic course building on Book 1 foundations",
+  "track_slug": "study-skills",
+  "educator_id": "PLACEHOLDER",
+  "level": "intermediate",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/qukXx6l58ao/hqdefault.jpg",
+  "video_url": "https://www.youtube.com/playlist?list=PL05F6EF0E813B7971",
+  "modules": [
+    {
+      "title": "Review & Advanced Vocabulary",
+      "description": "Review of Book 1 concepts and introduction to advanced Arabic vocabulary",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "Lesson 1 - Review & Introduction",
+          "content_type": "video",
+          "content": "Review of Book 1 material and introduction to Book 2 topics",
+          "video_url": "https://www.youtube.com/watch?v=qukXx6l58ao",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/qukXx6l58ao/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Lesson 2 - Advanced Vocabulary",
+          "content_type": "video",
+          "content": "Introduction to advanced Arabic vocabulary and expressions",
+          "video_url": "https://www.youtube.com/watch?v=kgzLye-9ycc",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/kgzLye-9ycc/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 3 - Vocabulary Practice",
+          "content_type": "video",
+          "content": "Practice and reinforcement of advanced Arabic vocabulary",
+          "video_url": "https://www.youtube.com/watch?v=sc8n9fqwChI",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/sc8n9fqwChI/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Intermediate Grammar",
+      "description": "Intermediate Arabic grammar rules including verb conjugation and sentence patterns",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Lesson 4 - Verb Forms",
+          "content_type": "video",
+          "content": "Introduction to Arabic verb forms (\u0623\u0648\u0632\u0627\u0646 \u0627\u0644\u0641\u0639\u0644) and conjugation patterns",
+          "video_url": "https://www.youtube.com/watch?v=E1ZmuxJIgkg",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/E1ZmuxJIgkg/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 5 - Verb Conjugation",
+          "content_type": "video",
+          "content": "Advanced verb conjugation (\u062a\u0635\u0631\u064a\u0641 \u0627\u0644\u0641\u0639\u0644) in different tenses",
+          "video_url": "https://www.youtube.com/watch?v=45ZbDgACTwE",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/45ZbDgACTwE/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 6 - Sentence Patterns",
+          "content_type": "video",
+          "content": "Advanced Arabic sentence patterns and construction",
+          "video_url": "https://www.youtube.com/watch?v=T6Dk1yVtpfI",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/T6Dk1yVtpfI/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Conversational Arabic",
+      "description": "Practical Arabic conversation skills for everyday situations",
+      "sort_order": 3,
+      "lessons": [
+        {
+          "title": "Lesson 7 - Daily Conversations",
+          "content_type": "video",
+          "content": "Practice everyday Arabic conversations and dialogues",
+          "video_url": "https://www.youtube.com/watch?v=lhDN1rbG088",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/lhDN1rbG088/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 8 - Reading Practice",
+          "content_type": "video",
+          "content": "Reading comprehension and practice with Arabic texts",
+          "video_url": "https://www.youtube.com/watch?v=OC0jbjvj7p8",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/OC0jbjvj7p8/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Lesson 9 - Writing Practice",
+          "content_type": "video",
+          "content": "Arabic writing skills and practice exercises",
+          "video_url": "https://www.youtube.com/watch?v=DA9uGA16A6U",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/DA9uGA16A6U/hqdefault.jpg",
+          "duration_minutes": 60,
+          "sort_order": 3,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}
