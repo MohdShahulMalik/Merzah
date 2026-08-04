@@ -1,0 +1,43 @@
+{
+  "title": "Foundations of Faith",
+  "slug": "foundations-of-faith",
+  "description": "A comprehensive beginner roadmap covering core Islamic beliefs, pillars of worship, and the fundamentals of Salafi dawah.",
+  "image_url": null,
+  "track_slug": "faith-worship",
+  "difficulty": "beginner",
+  "estimated_weeks": 16,
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "courses": [
+    {
+      "course_slug": "introduction-to-salafi-dawah",
+      "sort_order": 1,
+      "is_required": true,
+      "note": "Start with understanding the methodology of the Salaf"
+    },
+    {
+      "course_slug": "aqeedah-tawheed",
+      "sort_order": 2,
+      "is_required": true,
+      "note": "Learn the foundational concept of Tawheed (monotheism)"
+    },
+    {
+      "course_slug": "aqeedah-series-tim-humble",
+      "sort_order": 3,
+      "is_required": true,
+      "note": "Deepen your understanding of Islamic creed with Tim Humble"
+    },
+    {
+      "course_slug": "fiqh-of-salah",
+      "sort_order": 4,
+      "is_required": true,
+      "note": "Master the rulings and proper performance of Salah"
+    },
+    {
+      "course_slug": "hajj-and-umrah-guide",
+      "sort_order": 5,
+      "is_required": true,
+      "note": "Complete your worship knowledge with Hajj and Umrah"
+    }
+  ]
+}
