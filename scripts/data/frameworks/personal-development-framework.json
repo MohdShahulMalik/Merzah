@@ -1,0 +1,56 @@
+{
+  "title": "Personal Development Framework",
+  "slug": "personal-development-framework",
+  "description": "Enhance your character, family life, and professional skills through Islamic principles.",
+  "image_url": null,
+  "track_slug": "character",
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "milestones": [
+    {
+      "title": "Character Building",
+      "description": "Develop noble character traits and patience through Islamic teachings.",
+      "sort_order": 1,
+      "courses": [
+        {
+          "course_slug": "al-adab-al-mufrad-series",
+          "is_required": true
+        },
+        {
+          "course_slug": "building-patience-sabr",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "title": "Family Life",
+      "description": "Strengthen family bonds and relationships with Islamic etiquette.",
+      "sort_order": 2,
+      "courses": [
+        {
+          "course_slug": "secrets-to-successful-marriage",
+          "is_required": true
+        },
+        {
+          "course_slug": "islamic-manners-etiquette",
+          "is_required": false
+        }
+      ]
+    },
+    {
+      "title": "Professional Skills",
+      "description": "Apply Islamic values to enhance your professional life and workplace conduct.",
+      "sort_order": 3,
+      "courses": [
+        {
+          "course_slug": "professional-communication",
+          "is_required": false
+        },
+        {
+          "course_slug": "time-management-islamic",
+          "is_required": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "title": "Islamic Studies Framework",
+  "slug": "islamic-studies-framework",
+  "description": "A comprehensive framework for studying core Islamic sciences from foundational aqeedah to advanced topics.",
+  "image_url": null,
+  "track_slug": "faith-worship",
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "milestones": [
+    {
+      "title": "Foundations of Islam",
+      "description": "Build a strong understanding of the core principles of the Islamic faith.",
+      "sort_order": 1,
+      "courses": [
+        {
+          "course_slug": "introduction-to-salafi-dawah",
+          "is_required": true
+        },
+        {
+          "course_slug": "aqeedah-tawheed",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "title": "Acts of Worship",
+      "description": "Learn the correct implementation of the pillars of Islam in daily life.",
+      "sort_order": 2,
+      "courses": [
+        {
+          "course_slug": "fiqh-of-salah",
+          "is_required": true
+        },
+        {
+          "course_slug": "hajj-and-umrah-guide",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "title": "Advanced Islamic Knowledge",
+      "description": "Deepen your understanding with specialized Islamic sciences and texts.",
+      "sort_order": 3,
+      "courses": [
+        {
+          "course_slug": "aqeedah-series-tim-humble",
+          "is_required": false
+        },
+        {
+          "course_slug": "nawaid-ul-islam",
+          "is_required": false
+        },
+        {
+          "course_slug": "qawaid-al-arba",
+          "is_required": false
+        },
+        {
+          "course_slug": "thalathat-ul-usul",
+          "is_required": false
+        }
+      ]
+    }
+  ]
+}

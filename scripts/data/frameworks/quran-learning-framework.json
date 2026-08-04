@@ -1,0 +1,48 @@
+{
+  "title": "Quran Learning Framework",
+  "slug": "quran-learning-framework",
+  "description": "A structured path to learn Quranic reading, recitation with Tajweed, and understanding its meaning.",
+  "image_url": null,
+  "track_slug": "quran",
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "milestones": [
+    {
+      "title": "Reading Basics",
+      "description": "Develop the fundamental skills needed to read the Quran.",
+      "sort_order": 1,
+      "courses": [
+        {
+          "course_slug": "learn-reading-quran",
+          "is_required": true
+        },
+        {
+          "course_slug": "quran-recitation-basics",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "title": "Tajweed Mastery",
+      "description": "Master the rules of Tajweed for beautiful and correct recitation.",
+      "sort_order": 2,
+      "courses": [
+        {
+          "course_slug": "introduction-to-tajweed",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "title": "Understanding the Quran",
+      "description": "Gain deeper insight into the meanings and interpretations of the Quran.",
+      "sort_order": 3,
+      "courses": [
+        {
+          "course_slug": "tafsir-ibn-kathir",
+          "is_required": false
+        }
+      ]
+    }
+  ]
+}
