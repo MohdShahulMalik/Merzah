@@ -1,0 +1,43 @@
+{
+  "title": "Seerah: Life of the Prophet",
+  "slug": "seerah-life-of-prophet",
+  "description": "An intermediate study of the Prophet Muhammad's life, the early Muslim community, and lessons from Islamic history.",
+  "image_url": null,
+  "track_slug": "seerah",
+  "difficulty": "intermediate",
+  "estimated_weeks": 20,
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "courses": [
+    {
+      "course_slug": "seerah-in-years",
+      "sort_order": 1,
+      "is_required": true,
+      "note": "Chronological overview of the Prophet's life"
+    },
+    {
+      "course_slug": "life-of-prophet-muhammad",
+      "sort_order": 2,
+      "is_required": true,
+      "note": "Detailed study of the Prophet's character and mission"
+    },
+    {
+      "course_slug": "rightly-guided-caliphs",
+      "sort_order": 3,
+      "is_required": true,
+      "note": "Learn about the era of the four Rightly Guided Caliphs"
+    },
+    {
+      "course_slug": "the-salafi-woman",
+      "sort_order": 4,
+      "is_required": false,
+      "note": "Optional: The role of women in early Islamic history"
+    },
+    {
+      "course_slug": "lessons-from-seerah",
+      "sort_order": 5,
+      "is_required": false,
+      "note": "Optional: Practical lessons and takeaways from the Seerah"
+    }
+  ]
+}

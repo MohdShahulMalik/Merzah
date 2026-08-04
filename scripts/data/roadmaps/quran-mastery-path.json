@@ -1,0 +1,37 @@
+{
+  "title": "Quran Mastery Path",
+  "slug": "quran-mastery-path",
+  "description": "A step-by-step journey from learning to read the Quran to understanding its interpretation through Tafsir.",
+  "image_url": null,
+  "track_slug": "quran",
+  "difficulty": "beginner",
+  "estimated_weeks": 24,
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "courses": [
+    {
+      "course_slug": "learn-reading-quran",
+      "sort_order": 1,
+      "is_required": true,
+      "note": "Begin with the basics of reading Arabic script for the Quran"
+    },
+    {
+      "course_slug": "quran-recitation-basics",
+      "sort_order": 2,
+      "is_required": true,
+      "note": "Develop fluency and proper pronunciation in recitation"
+    },
+    {
+      "course_slug": "introduction-to-tajweed",
+      "sort_order": 3,
+      "is_required": true,
+      "note": "Learn the rules of Tajweed for beautiful and accurate recitation"
+    },
+    {
+      "course_slug": "tafsir-ibn-kathir",
+      "sort_order": 4,
+      "is_required": false,
+      "note": "Optional: Gain deeper understanding through classical Tafsir"
+    }
+  ]
+}
