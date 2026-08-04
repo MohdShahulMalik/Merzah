@@ -1,0 +1,37 @@
+{
+  "title": "Family and Community Life",
+  "slug": "family-community-life",
+  "description": "Build a strong family and community life with courses on marriage, Islamic manners, and good character.",
+  "image_url": null,
+  "track_slug": "family",
+  "difficulty": "beginner",
+  "estimated_weeks": 10,
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "courses": [
+    {
+      "course_slug": "secrets-to-successful-marriage",
+      "sort_order": 1,
+      "is_required": true,
+      "note": "Learn the foundations of a successful Islamic marriage"
+    },
+    {
+      "course_slug": "married-ever-after",
+      "sort_order": 2,
+      "is_required": true,
+      "note": "Strengthen your marriage with ongoing practical advice"
+    },
+    {
+      "course_slug": "al-adab-al-mufrad-series",
+      "sort_order": 3,
+      "is_required": true,
+      "note": "Study Imam Al-Bukhari's classic on manners and character"
+    },
+    {
+      "course_slug": "islamic-manners-etiquette",
+      "sort_order": 4,
+      "is_required": false,
+      "note": "Optional: Expand your knowledge of Islamic etiquette"
+    }
+  ]
+}

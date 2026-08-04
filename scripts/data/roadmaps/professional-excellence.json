@@ -1,0 +1,37 @@
+{
+  "title": "Professional Excellence",
+  "slug": "professional-excellence",
+  "description": "Develop professional skills guided by Islamic values, including communication, time management, and leadership.",
+  "image_url": null,
+  "track_slug": "career",
+  "difficulty": "beginner",
+  "estimated_weeks": 12,
+  "status": "published",
+  "created_by": "PLACEHOLDER",
+  "courses": [
+    {
+      "course_slug": "professional-communication",
+      "sort_order": 1,
+      "is_required": true,
+      "note": "Master effective communication in professional settings"
+    },
+    {
+      "course_slug": "time-management-islamic",
+      "sort_order": 2,
+      "is_required": true,
+      "note": "Manage your time efficiently using Islamic principles"
+    },
+    {
+      "course_slug": "workplace-ethics-islam",
+      "sort_order": 3,
+      "is_required": true,
+      "note": "Navigate workplace challenges with Islamic ethics"
+    },
+    {
+      "course_slug": "leadership-islamic-values",
+      "sort_order": 4,
+      "is_required": false,
+      "note": "Optional: Develop leadership skills rooted in Islamic values"
+    }
+  ]
+}
