@@ -133,7 +133,7 @@ pub fn Learn() -> impl IntoView {
                         instructor_name="Qari Fatima Hassan".to_string()
                         cta_label="Continue Course".to_string()
                     />
-                    
+
                 </div>
             </section>
 
@@ -278,7 +278,7 @@ pub fn Learn() -> impl IntoView {
                         instructor_name="Qari Fatima Hassan".to_string()
                         cta_label="Continue Course".to_string()
                     />
-                    
+
                 </div>
             </section>
         </div>
