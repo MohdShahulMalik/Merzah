@@ -163,10 +163,11 @@ pub async fn login(form: LoginFormData) -> Result<ApiResponse<String>, ServerFnE
 
 #[server(input = Json, output = Json, prefix = "/auth", endpoint = "me")]
 pub async fn fetch_me() -> Result<ApiResponse<UserOnClient>, ServerFnError> {
-    let (response_options, _db, user) = match get_authenticated_user_and_context::<UserOnClient>().await {
-        Ok(ctx) => ctx,
-        Err(e) => return Ok(e),
-    };
+    let (response_options, _db, user) =
+        match get_authenticated_user_and_context::<UserOnClient>().await {
+            Ok(ctx) => ctx,
+            Err(e) => return Ok(e),
+        };
     let responder = ServerResponse::new(response_options);
 
     Ok(responder.ok(UserOnClient::from(user)))
