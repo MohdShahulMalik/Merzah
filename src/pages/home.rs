@@ -1,4 +1,6 @@
-use crate::components::cards::{EducationalResourceCard, MosqueEventCard, NearbyMosqueCard, NextPrayerReminderCard, PrayerCard};
+use crate::components::cards::{
+    EducationalResourceCard, MosqueEventCard, NearbyMosqueCard, NextPrayerReminderCard, PrayerCard,
+};
 use leptos::IntoView;
 use leptos::prelude::*;
 use leptos_router::components::A;
