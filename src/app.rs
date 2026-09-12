@@ -38,19 +38,21 @@ pub fn App() -> impl IntoView {
     provide_context(app_state);
 
     Effect::new(move |_| {
-        auth_user.map(|auth_user_response_result| match auth_user_response_result {
-            Ok(auth_user_response) => {
-                let auth_error = auth_user_response.error.clone();
-                app_state.user().set(auth_user_response.data.clone());
+        auth_user.map(
+            |auth_user_response_result| match auth_user_response_result {
+                Ok(auth_user_response) => {
+                    let auth_error = auth_user_response.error.clone();
+                    app_state.user().set(auth_user_response.data.clone());
 
-                if let Some(error) = auth_error {
-                    logging::log!("No authenticated user found. error: {:?}", error);
+                    if let Some(error) = auth_error {
+                        logging::log!("No authenticated user found. error: {:?}", error);
+                    }
                 }
-            }
-            Err(error) => {
-                logging::log!("Error fetching user data: {:?}", error);
-            }
-        });
+                Err(error) => {
+                    logging::log!("Error fetching user data: {:?}", error);
+                }
+            },
+        );
     });
 
     view! {
