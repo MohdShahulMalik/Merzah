@@ -70,15 +70,27 @@ pub fn AllEventCard(
     cta_label: String,
 ) -> impl IntoView {
     let border_class = match index % 3 {
-        0 => "absolute bottom-0 left-0 top-0 w-1 bg-violet-600 transition-all duration-200 group-hover:w-1.5",
-        1 => "absolute bottom-0 left-0 top-0 w-1 bg-fuchsia-500 transition-all duration-200 group-hover:w-1.5",
-        _ => "absolute bottom-0 left-0 top-0 w-1 bg-sky-500 transition-all duration-200 group-hover:w-1.5",
+        0 => {
+            "absolute bottom-0 left-0 top-0 w-1 bg-violet-600 transition-all duration-200 group-hover:w-1.5"
+        }
+        1 => {
+            "absolute bottom-0 left-0 top-0 w-1 bg-fuchsia-500 transition-all duration-200 group-hover:w-1.5"
+        }
+        _ => {
+            "absolute bottom-0 left-0 top-0 w-1 bg-sky-500 transition-all duration-200 group-hover:w-1.5"
+        }
     };
 
     let category_pill_class = match index % 3 {
-        0 => "inline-flex rounded-md bg-violet-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-violet-700 ring-1 ring-violet-200/70",
-        1 => "inline-flex rounded-md bg-fuchsia-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-fuchsia-700 ring-1 ring-fuchsia-200/70",
-        _ => "inline-flex rounded-md bg-sky-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-sky-700 ring-1 ring-sky-200/70",
+        0 => {
+            "inline-flex rounded-md bg-violet-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-violet-700 ring-1 ring-violet-200/70"
+        }
+        1 => {
+            "inline-flex rounded-md bg-fuchsia-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-fuchsia-700 ring-1 ring-fuchsia-200/70"
+        }
+        _ => {
+            "inline-flex rounded-md bg-sky-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-sky-700 ring-1 ring-sky-200/70"
+        }
     };
 
     view! {
