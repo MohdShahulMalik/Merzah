@@ -40,10 +40,11 @@ struct UserStreakWithUser {
 
 #[server(input = Json, output = Json, prefix = "/education", endpoint = "streak")]
 pub async fn fetch_streak() -> Result<ApiResponse<UserStreakOnClient>, ServerFnError> {
-    let (response_options, db, user) = match get_authenticated_user_and_context::<UserStreakOnClient>().await {
-        Ok(ctx) => ctx,
-        Err(e) => return Ok(e),
-    };
+    let (response_options, db, user) =
+        match get_authenticated_user_and_context::<UserStreakOnClient>().await {
+            Ok(ctx) => ctx,
+            Err(e) => return Ok(e),
+        };
     let responder = ServerResponse::new(response_options);
 
     let streak: Option<UserStreakOnClient> = db
