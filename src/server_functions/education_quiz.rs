@@ -92,11 +92,11 @@ pub async fn fetch_quiz_for_lesson(
 pub async fn submit_quiz(
     submission: QuizSubmission,
 ) -> Result<ApiResponse<QuizSubmissionResult>, ServerFnError> {
-    let (response_options, db, user) = match get_authenticated_user_and_context::<QuizSubmissionResult>().await
-    {
-        Ok(ctx) => ctx,
-        Err(e) => return Ok(e),
-    };
+    let (response_options, db, user) =
+        match get_authenticated_user_and_context::<QuizSubmissionResult>().await {
+            Ok(ctx) => ctx,
+            Err(e) => return Ok(e),
+        };
     let responder = ServerResponse::new(response_options);
 
     let quiz_id: RecordId = match parse_record_id(&submission.quiz_id, "quiz_id") {
