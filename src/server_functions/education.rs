@@ -680,10 +680,11 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
 pub async fn fetch_course_progress(
     course_id: String,
 ) -> Result<ApiResponse<EnrollmentProgress>, ServerFnError> {
-    let (response_options, db, user) = match get_authenticated_user_and_context::<EnrollmentProgress>().await {
-        Ok(ctx) => ctx,
-        Err(e) => return Ok(e),
-    };
+    let (response_options, db, user) =
+        match get_authenticated_user_and_context::<EnrollmentProgress>().await {
+            Ok(ctx) => ctx,
+            Err(e) => return Ok(e),
+        };
     let responder = ServerResponse::new(response_options);
 
     let course_id: RecordId = match parse_record_id(&course_id, "course_id") {
@@ -720,10 +721,11 @@ pub async fn fetch_course_progress(
 
 #[server(input = Json, output = Json, prefix = "/education/educator", endpoint = "courses")]
 pub async fn fetch_educator_courses() -> Result<ApiResponse<Vec<CourseOnClient>>, ServerFnError> {
-    let (response_options, db, user) = match get_authenticated_user_and_context::<Vec<CourseOnClient>>().await {
-        Ok(ctx) => ctx,
-        Err(e) => return Ok(e),
-    };
+    let (response_options, db, user) =
+        match get_authenticated_user_and_context::<Vec<CourseOnClient>>().await {
+            Ok(ctx) => ctx,
+            Err(e) => return Ok(e),
+        };
     let responder = ServerResponse::new(response_options);
 
     if let Err(_) = is_educator_or_admin(&user) {
