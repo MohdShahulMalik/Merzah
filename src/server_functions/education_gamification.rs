@@ -5,6 +5,8 @@ use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
 use serde::Deserialize;
 #[cfg(feature = "ssr")]
 use surrealdb::Datetime;
+#[cfg(feature = "ssr")]
+use tracing::error;
 
 use crate::models::api_responses::ApiResponse;
 #[cfg(feature = "ssr")]
@@ -47,11 +49,24 @@ pub async fn fetch_streak() -> Result<ApiResponse<UserStreakOnClient>, ServerFnE
         };
     let responder = ServerResponse::new(response_options);
 
-    let streak: Option<UserStreakOnClient> = db
+    let mut db_response = match db
         .query("SELECT current_streak, longest_streak, last_activity_date FROM user_streaks WHERE user = $user_id LIMIT 1")
         .bind(("user_id", user.id))
-        .await?
-        .take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch streak");
+            return Ok(responder.internal_server_error("Failed to fetch streak".to_string()));
+        }
+    };
+    let streak: Option<UserStreakOnClient> = match db_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse streak");
+            return Ok(responder.internal_server_error("Failed to parse streak".to_string()));
+        }
+    };
 
     let payload = streak.unwrap_or(UserStreakOnClient {
         current_streak: 0,
@@ -71,11 +86,24 @@ pub async fn fetch_achievements() -> Result<ApiResponse<Vec<AchievementOnClient>
         };
     let responder = ServerResponse::new(response_options);
 
-    let mut response = db
+    let mut db_response = match db
         .query("SELECT out, earned_at FROM earned WHERE in = $user_id FETCH out")
         .bind(("user_id", user.id))
-        .await?;
-    let rows: Vec<EarnedWithAchievement> = response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch achievements");
+            return Ok(responder.internal_server_error("Failed to fetch achievements".to_string()));
+        }
+    };
+    let rows: Vec<EarnedWithAchievement> = match db_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse achievements");
+            return Ok(responder.internal_server_error("Failed to parse achievements".to_string()));
+        }
+    };
 
     let payload = rows
         .into_iter()
@@ -103,11 +131,24 @@ pub async fn fetch_certificates() -> Result<ApiResponse<Vec<CertificateOnClient>
         };
     let responder = ServerResponse::new(response_options);
 
-    let mut response = db
+    let mut db_response = match db
         .query("SELECT * FROM certificates WHERE user = $user_id")
         .bind(("user_id", user.id))
-        .await?;
-    let certificates: Vec<Certificate> = response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch certificates");
+            return Ok(responder.internal_server_error("Failed to fetch certificates".to_string()));
+        }
+    };
+    let certificates: Vec<Certificate> = match db_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse certificates");
+            return Ok(responder.internal_server_error("Failed to parse certificates".to_string()));
+        }
+    };
 
     let payload = certificates
         .into_iter()
@@ -132,10 +173,23 @@ pub async fn fetch_leaderboard() -> Result<ApiResponse<Vec<LeaderboardEntry>>, S
         };
     let responder = ServerResponse::new(response_options);
 
-    let mut response = db
+    let mut db_response = match db
         .query("SELECT user, current_streak, longest_streak FROM user_streaks FETCH user ORDER BY current_streak DESC LIMIT 20")
-        .await?;
-    let rows: Vec<UserStreakWithUser> = response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch leaderboard");
+            return Ok(responder.internal_server_error("Failed to fetch leaderboard".to_string()));
+        }
+    };
+    let rows: Vec<UserStreakWithUser> = match db_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse leaderboard");
+            return Ok(responder.internal_server_error("Failed to parse leaderboard".to_string()));
+        }
+    };
 
     let payload = rows
         .into_iter()
