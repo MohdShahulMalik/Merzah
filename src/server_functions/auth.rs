@@ -64,34 +64,35 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
         return Ok(responder.conflict(format!("{}", error)));
     }
 
-    let registration_result = register_user(form.clone(), &db).await;
-
-    if let Err(error) = registration_result {
-        error!(?error, "Failed to register the user");
-        return Err(ServerFnError::ServerError(
-            "Failed to register the user".to_string(),
-        ));
+    let user_id = match register_user(form.clone(), &db).await {
+        Ok(id) => id,
+        Err(error) => {
+            error!(?error, "Failed to register the user");
+            return Ok(
+                responder.internal_server_error("Failed to register the user".to_string())
+            );
+        }
     };
 
-    let user_id = registration_result.ok();
-    let session_creation_result = create_session(user_id.unwrap(), &db).await;
-    if let Err(error) = session_creation_result {
-        error!(?error);
-        return Err(ServerFnError::ServerError(
-            "Failed to generate session tokens for the registered user".to_string(),
-        ));
-    }
-
-    let session_token = session_creation_result.ok().unwrap();
+    let session_token = match create_session(user_id, &db).await {
+        Ok(token) => token,
+        Err(error) => {
+            error!(?error);
+            return Ok(responder.internal_server_error(
+                "Failed to generate session tokens for the registered user".to_string(),
+            ));
+        }
+    };
 
     if let Platform::Web = form.platform {
-        let cookie_creation_result = set_session_cookie(&session_token);
-
-        if let Err(error) = cookie_creation_result {
-            error!(?error);
-            return Err(ServerFnError::ServerError(
-                "Failed to create appropriate cookies after registration".to_string(),
-            ));
+        match set_session_cookie(&session_token) {
+            Ok(()) => {},
+            Err(error) => {
+                error!(?error);
+                return Ok(responder.internal_server_error(
+                    "Failed to create appropriate cookies after registration".to_string(),
+                ));
+            }
         }
 
         Ok(responder.ok("The user has been registered successfully".to_string()))
@@ -139,13 +140,15 @@ pub async fn login(form: LoginFormData) -> Result<ApiResponse<String>, ServerFnE
         }
     };
 
-    let session_creation_result = create_session(user_id, &db).await;
-    if let Err(error) = session_creation_result {
-        error!(?error);
-        return Ok(responder.internal_server_error("Failed to create user session.".to_string()));
-    }
-
-    let session_token = session_creation_result.ok().unwrap();
+    let session_token = match create_session(user_id, &db).await {
+        Ok(token) => token,
+        Err(error) => {
+            error!(?error);
+            return Ok(
+                responder.internal_server_error("Failed to create user session.".to_string())
+            );
+        }
+    };
 
     if let Platform::Web = form.platform {
         let cookie_creation_result = set_session_cookie(&session_token);
@@ -340,8 +343,8 @@ pub async fn handle_google_callback(
     let user_id = match find_or_create_user(user_info, &db).await {
         Ok(id) => id,
         Err(e) => {
-            error!(error = %e, "Failed to find or create user");
-            return Err(ServerFnError::ServerError(format!(
+            error!(?e, "Failed to find or create user");
+            return Ok(responder.internal_server_error(format!(
                 "Failed to authenticate user: {:?}",
                 e
             )));
@@ -352,9 +355,7 @@ pub async fn handle_google_callback(
         Ok(token) => token,
         Err(e) => {
             error!(?e, "Failed to create session");
-            return Err(ServerFnError::ServerError(
-                "Failed to create session".to_string(),
-            ));
+            return Ok(responder.internal_server_error("Failed to create session".to_string()));
         }
     };
 
