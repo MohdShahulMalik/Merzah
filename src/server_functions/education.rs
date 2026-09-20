@@ -115,21 +115,51 @@ pub async fn fetch_tracks() -> Result<ApiResponse<Vec<TrackOnClient>>, ServerFnE
     };
     let responder = ServerResponse::new(response_options);
 
-    let mut response = db
+    let mut response = match db
         .query("SELECT * FROM tracks WHERE deleted = false ORDER BY sort_order ASC")
-        .await?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch tracks");
+            return Ok(responder.internal_server_error("Failed to fetch tracks".to_string()));
+        }
+    };
 
-    let tracks: Vec<Track> = response.take(0)?;
+    let tracks: Vec<Track> = match response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse tracks from db response");
+            return Ok(responder.internal_server_error("Failed to fetch tracks".to_string()));
+        }
+    };
     let mut payload = Vec::new();
 
     for track in tracks {
-        let mut count_response = db
+        let mut count_response = match db
             .query(
                 "SELECT count() AS count FROM courses WHERE track = $track AND status = \"published\" AND deleted = false",
             )
             .bind(("track", track.id.clone()))
-            .await?;
-        let counts: Vec<CountResult> = count_response.take(0)?;
+            .await
+        {
+            Ok(res) => res,
+            Err(e) => {
+                error!(?e, "Failed to fetch course count for track");
+                return Ok(
+                    responder.internal_server_error("Failed to fetch tracks".to_string())
+                );
+            }
+        };
+        let counts: Vec<CountResult> = match count_response.take(0) {
+            Ok(v) => v,
+            Err(e) => {
+                error!(?e, "Failed to parse course count from db response");
+                return Ok(
+                    responder.internal_server_error("Failed to fetch tracks".to_string())
+                );
+            }
+        };
         let count = counts.first().map(|c| c.count).unwrap_or(0) as usize;
 
         payload.push(TrackOnClient {
@@ -166,14 +196,27 @@ pub async fn fetch_track_courses(
         Err(e) => return Ok(e),
     };
 
-    let mut response = db
+    let mut response = match db
         .query(
             "SELECT id, title, slug, description, short_description, level, thumbnail_url, video_url, duration_minutes, lesson_count, enrollment_count, educator FROM courses WHERE track = $track_id AND status = \"published\" AND deleted = false FETCH educator",
         )
         .bind(("track_id", track_id))
-        .await?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch track courses");
+            return Ok(responder.internal_server_error("Failed to fetch courses".to_string()));
+        }
+    };
 
-    let courses: Vec<CourseWithEducator> = response.take(0)?;
+    let courses: Vec<CourseWithEducator> = match response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse track courses from db response");
+            return Ok(responder.internal_server_error("Failed to fetch courses".to_string()));
+        }
+    };
     let payload = courses
         .into_iter()
         .map(|course| CourseOnClient {
@@ -214,32 +257,83 @@ pub async fn fetch_course_details(
         Err(e) => return Ok(e),
     };
 
-    let mut response = db
+    let mut response = match db
         .query(
             "SELECT * FROM courses WHERE id = $course_id AND status = \"published\" AND deleted = false FETCH educator",
         )
         .bind(("course_id", course_id.clone()))
-        .await?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch course details");
+            return Ok(
+                responder.internal_server_error("Failed to fetch course details".to_string())
+            );
+        }
+    };
 
-    let course: Option<CourseWithEducator> = response.take(0)?;
+    let course: Option<CourseWithEducator> = match response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse course details from db response");
+            return Ok(
+                responder.internal_server_error("Failed to fetch course details".to_string())
+            );
+        }
+    };
     let course = match course {
         Some(course) => course,
         None => return Ok(responder.not_found("Course not found".to_string())),
     };
 
-    let mut module_response = db
+    let mut module_response = match db
         .query("SELECT * FROM modules WHERE course = $course_id AND deleted = false ORDER BY sort_order ASC")
         .bind(("course_id", course_id.clone()))
-        .await?;
-    let modules: Vec<Module> = module_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch course modules");
+            return Ok(
+                responder.internal_server_error("Failed to fetch course details".to_string())
+            );
+        }
+    };
+    let modules: Vec<Module> = match module_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse course modules from db response");
+            return Ok(
+                responder.internal_server_error("Failed to fetch course details".to_string())
+            );
+        }
+    };
 
     let mut module_payload = Vec::new();
     for module in modules {
-        let mut lesson_response = db
+        let mut lesson_response = match db
             .query("SELECT * FROM lessons WHERE module = $module_id AND deleted = false ORDER BY sort_order ASC")
             .bind(("module_id", module.id.clone()))
-            .await?;
-        let lessons: Vec<Lesson> = lesson_response.take(0)?;
+            .await
+        {
+            Ok(res) => res,
+            Err(e) => {
+                error!(?e, "Failed to fetch module lessons");
+                return Ok(
+                    responder.internal_server_error("Failed to fetch course details".to_string())
+                );
+            }
+        };
+        let lessons: Vec<Lesson> = match lesson_response.take(0) {
+            Ok(v) => v,
+            Err(e) => {
+                error!(?e, "Failed to parse module lessons from db response");
+                return Ok(
+                    responder.internal_server_error("Failed to fetch course details".to_string())
+                );
+            }
+        };
 
         let lessons_payload = lessons
             .into_iter()
@@ -308,33 +402,64 @@ pub async fn fetch_lesson_details(
         Err(e) => return Ok(e),
     };
 
-    let lesson: Option<Lesson> = db.select(lesson_id.clone()).await?;
+    let lesson: Option<Lesson> = match db.select(lesson_id.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson");
+            return Ok(responder.internal_server_error("Failed to fetch lesson".to_string()));
+        }
+    };
     let lesson = match lesson {
         Some(lesson) if !lesson.deleted => lesson,
         None => return Ok(responder.not_found("Lesson not found".to_string())),
         _ => return Ok(responder.not_found("Lesson not found".to_string())),
     };
 
-    let module: Option<Module> = db.select(lesson.module.clone()).await?;
+    let module: Option<Module> = match db.select(lesson.module.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson module");
+            return Ok(responder.internal_server_error("Failed to fetch module".to_string()));
+        }
+    };
     let module = match module {
         Some(module) if !module.deleted => module,
         None => return Ok(responder.not_found("Module not found".to_string())),
         _ => return Ok(responder.not_found("Module not found".to_string())),
     };
 
-    let course: Option<Course> = db.select(module.course.clone()).await?;
+    let course: Option<Course> = match db.select(module.course.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson course");
+            return Ok(responder.internal_server_error("Failed to fetch course".to_string()));
+        }
+    };
     let course = match course {
         Some(course) if !course.deleted && course.status == CourseStatus::Published => course,
         _ => return Ok(responder.not_found("Course not found".to_string())),
     };
 
-    let mut module_lessons_response = db
+    let mut module_lessons_response = match db
         .query(
             "SELECT * FROM lessons WHERE module = $module_id AND deleted = false ORDER BY sort_order ASC",
         )
         .bind(("module_id", module.id.clone()))
-        .await?;
-    let module_lessons: Vec<Lesson> = module_lessons_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch module lessons");
+            return Ok(responder.internal_server_error("Failed to fetch lesson".to_string()));
+        }
+    };
+    let module_lessons: Vec<Lesson> = match module_lessons_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse module lessons from db response");
+            return Ok(responder.internal_server_error("Failed to fetch lesson".to_string()));
+        }
+    };
 
     let mut next_lesson_id = None;
     let mut prev_lesson_id = None;
@@ -395,12 +520,25 @@ pub async fn search_courses(
         return Ok(responder.ok(Vec::new()));
     }
 
-    let mut response = db
+    let mut response = match db
         .query(
             "SELECT id, title, slug, description, short_description, level, thumbnail_url, video_url, duration_minutes, lesson_count, enrollment_count, educator FROM courses WHERE status = \"published\" AND deleted = false FETCH educator",
         )
-        .await?;
-    let courses: Vec<CourseWithEducator> = response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to search courses");
+            return Ok(responder.internal_server_error("Failed to search courses".to_string()));
+        }
+    };
+    let courses: Vec<CourseWithEducator> = match response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse searched courses from db response");
+            return Ok(responder.internal_server_error("Failed to search courses".to_string()));
+        }
+    };
 
     let filtered = courses
         .into_iter()
@@ -445,7 +583,13 @@ pub async fn enroll_course(course_id: String) -> Result<ApiResponse<String>, Ser
         Err(e) => return Ok(e),
     };
 
-    let course: Option<Course> = db.select(course_id.clone()).await?;
+    let course: Option<Course> = match db.select(course_id.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch course");
+            return Ok(responder.internal_server_error("Failed to fetch course".to_string()));
+        }
+    };
     let course = match course {
         Some(course) => course,
         None => return Ok(responder.not_found("Course not found".to_string())),
@@ -455,12 +599,25 @@ pub async fn enroll_course(course_id: String) -> Result<ApiResponse<String>, Ser
         return Ok(responder.not_found("Course not found".to_string()));
     }
 
-    let mut existing_response = db
+    let mut existing_response = match db
         .query("SELECT id FROM enrolled WHERE in = $user_id AND out = $course_id LIMIT 1")
         .bind(("user_id", user.id.clone()))
         .bind(("course_id", course_id.clone()))
-        .await?;
-    let existing: Option<RelationId> = existing_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to check existing enrollment");
+            return Ok(responder.internal_server_error("Failed to enroll in course".to_string()));
+        }
+    };
+    let existing: Option<RelationId> = match existing_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse existing enrollment from db response");
+            return Ok(responder.internal_server_error("Failed to enroll in course".to_string()));
+        }
+    };
     if existing.is_some() {
         return Ok(responder.conflict("Already enrolled in course".to_string()));
     }
@@ -500,10 +657,20 @@ pub async fn unenroll_course(course_id: String) -> Result<ApiResponse<String>, S
     };
 
     let delete_query = "DELETE enrolled WHERE in = $user_id AND out = $course_id";
-    db.query(delete_query)
+    match db
+        .query(delete_query)
         .bind(("user_id", user.id.clone()))
         .bind(("course_id", course_id.clone()))
-        .await?;
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to unenroll from course");
+            return Ok(
+                responder.internal_server_error("Failed to unenroll from course".to_string())
+            );
+        }
+    };
 
     let _ = update_course_enrollment_count(&course_id, &db).await;
 
@@ -519,12 +686,29 @@ pub async fn fetch_my_courses() -> Result<ApiResponse<Vec<EnrollmentProgress>>, 
         };
     let responder = ServerResponse::new(response_options);
 
-    let mut response = db
+    let mut response = match db
         .query("SELECT enrolled_at, progress_percent, last_accessed_at, out FROM enrolled WHERE in = $user_id FETCH out")
         .bind(("user_id", user.id.clone()))
-        .await?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch enrolled courses");
+            return Ok(
+                responder.internal_server_error("Failed to fetch enrolled courses".to_string())
+            );
+        }
+    };
 
-    let rows: Vec<EnrolledWithCourse> = response.take(0)?;
+    let rows: Vec<EnrolledWithCourse> = match response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse enrolled courses from db response");
+            return Ok(
+                responder.internal_server_error("Failed to fetch enrolled courses".to_string())
+            );
+        }
+    };
     let payload = rows
         .into_iter()
         .map(|row| {
@@ -559,14 +743,26 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
         Err(e) => return Ok(e),
     };
 
-    let lesson: Option<Lesson> = db.select(lesson_id.clone()).await?;
+    let lesson: Option<Lesson> = match db.select(lesson_id.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson");
+            return Ok(responder.internal_server_error("Failed to fetch lesson".to_string()));
+        }
+    };
     let lesson = match lesson {
         Some(lesson) if !lesson.deleted => lesson,
         None => return Ok(responder.not_found("Lesson not found".to_string())),
         _ => return Ok(responder.not_found("Lesson not found".to_string())),
     };
 
-    let module: Option<Module> = db.select(lesson.module.clone()).await?;
+    let module: Option<Module> = match db.select(lesson.module.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson module");
+            return Ok(responder.internal_server_error("Failed to fetch module".to_string()));
+        }
+    };
     let module = match module {
         Some(module) if !module.deleted => module,
         None => return Ok(responder.not_found("Module not found".to_string())),
@@ -574,12 +770,29 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
     };
 
     let course_id = module.course.clone();
-    let mut enrolled_response = db
+    let mut enrolled_response = match db
         .query("SELECT id FROM enrolled WHERE in = $user_id AND out = $course_id LIMIT 1")
         .bind(("user_id", user.id.clone()))
         .bind(("course_id", course_id.clone()))
-        .await?;
-    let enrolled: Option<RelationId> = enrolled_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch enrollment");
+            return Ok(
+                responder.internal_server_error("Failed to complete lesson".to_string())
+            );
+        }
+    };
+    let enrolled: Option<RelationId> = match enrolled_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse enrollment from db response");
+            return Ok(
+                responder.internal_server_error("Failed to complete lesson".to_string())
+            );
+        }
+    };
     let enrolled = match enrolled {
         Some(enrolled) => enrolled,
         None => {
@@ -587,29 +800,73 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
         }
     };
 
-    let mut completed_response = db
+    let mut completed_response = match db
         .query("SELECT id FROM completed WHERE in = $user_id AND out = $lesson_id LIMIT 1")
         .bind(("user_id", user.id.clone()))
         .bind(("lesson_id", lesson_id.clone()))
-        .await?;
-    let completed: Option<RelationId> = completed_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch completed lesson");
+            return Ok(
+                responder.internal_server_error("Failed to complete lesson".to_string())
+            );
+        }
+    };
+    let completed: Option<RelationId> = match completed_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse completed lesson from db response");
+            return Ok(
+                responder.internal_server_error("Failed to complete lesson".to_string())
+            );
+        }
+    };
 
     if completed.is_none() {
         let relate_query =
             "RELATE $user_id -> completed -> $lesson_id SET completed_at = time::now()";
-        db.query(relate_query)
+        match db
+            .query(relate_query)
             .bind(("user_id", user.id.clone()))
             .bind(("lesson_id", lesson_id.clone()))
-            .await?;
+            .await
+        {
+            Ok(_) => {},
+            Err(e) => {
+                error!(?e, "Failed to mark lesson as completed");
+                return Ok(
+                    responder.internal_server_error("Failed to complete lesson".to_string())
+                );
+            }
+        };
     }
 
-    let mut course_lessons_response = db
+    let mut course_lessons_response = match db
         .query(
             "SELECT * FROM lessons WHERE module IN (SELECT VALUE id FROM modules WHERE course = $course_id AND deleted = false) AND deleted = false ORDER BY sort_order ASC",
         )
         .bind(("course_id", course_id.clone()))
-        .await?;
-    let course_lessons: Vec<Lesson> = course_lessons_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch course lessons");
+            return Ok(
+                responder.internal_server_error("Failed to complete lesson".to_string())
+            );
+        }
+    };
+    let course_lessons: Vec<Lesson> = match course_lessons_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse course lessons from db response");
+            return Ok(
+                responder.internal_server_error("Failed to complete lesson".to_string())
+            );
+        }
+    };
     let total_lessons = course_lessons.len() as f32;
 
     let lesson_ids = course_lessons
@@ -617,11 +874,28 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
         .map(|lesson| lesson.id.to_string())
         .collect::<std::collections::HashSet<_>>();
 
-    let mut completed_rows_response = db
+    let mut completed_rows_response = match db
         .query("SELECT out FROM completed WHERE in = $user_id")
         .bind(("user_id", user.id.clone()))
-        .await?;
-    let completed_rows: Vec<EnrolledWithLessonId> = completed_rows_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch completed lessons");
+            return Ok(
+                responder.internal_server_error("Failed to complete lesson".to_string())
+            );
+        }
+    };
+    let completed_rows: Vec<EnrolledWithLessonId> = match completed_rows_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse completed lessons from db response");
+            return Ok(
+                responder.internal_server_error("Failed to complete lesson".to_string())
+            );
+        }
+    };
     let completed_lessons = completed_rows
         .into_iter()
         .filter(|row| lesson_ids.contains(&row.out.to_string()))
@@ -639,7 +913,8 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
     } else {
         None
     };
-    db.query("UPDATE ONLY $enrollment_id MERGE $record")
+    match db
+        .query("UPDATE ONLY $enrollment_id MERGE $record")
         .bind(("enrollment_id", enrolled.id.clone()))
         .bind((
             "record",
@@ -649,24 +924,60 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
                 completed_at,
             },
         ))
-        .await?;
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to update enrollment progress");
+            return Ok(
+                responder.internal_server_error("Failed to complete lesson".to_string())
+            );
+        }
+    };
 
     if progress_percent >= 100.0 {
-        let mut cert_response = db
+        let mut cert_response = match db
             .query(
                 "SELECT id FROM certificates WHERE user = $user_id AND course = $course_id LIMIT 1",
             )
             .bind(("user_id", user.id.clone()))
             .bind(("course_id", course_id.clone()))
-            .await?;
-        let existing_cert: Option<RelationId> = cert_response.take(0)?;
+            .await
+        {
+            Ok(res) => res,
+            Err(e) => {
+                error!(?e, "Failed to fetch existing certificate");
+                return Ok(
+                    responder.internal_server_error("Failed to complete lesson".to_string())
+                );
+            }
+        };
+        let existing_cert: Option<RelationId> = match cert_response.take(0) {
+            Ok(v) => v,
+            Err(e) => {
+                error!(?e, "Failed to parse certificate from db response");
+                return Ok(
+                    responder.internal_server_error("Failed to complete lesson".to_string())
+                );
+            }
+        };
         if existing_cert.is_none() {
             let cert_number = generate_token();
-            db.query("CREATE certificates CONTENT { user: $user_id, course: $course_id, certificate_number: $cert_number, issued_at: time::now() }")
+            match db
+                .query("CREATE certificates CONTENT { user: $user_id, course: $course_id, certificate_number: $cert_number, issued_at: time::now() }")
                 .bind(("user_id", user.id.clone()))
                 .bind(("course_id", course_id.clone()))
                 .bind(("cert_number", cert_number))
-                .await?;
+                .await
+            {
+                Ok(_) => {},
+                Err(e) => {
+                    error!(?e, "Failed to create certificate");
+                    return Ok(
+                        responder.internal_server_error("Failed to complete lesson".to_string())
+                    );
+                }
+            };
         }
     }
 
@@ -692,12 +1003,29 @@ pub async fn fetch_course_progress(
         Err(e) => return Ok(e),
     };
 
-    let mut response = db
+    let mut response = match db
         .query("SELECT enrolled_at, progress_percent, last_accessed_at, out FROM enrolled WHERE in = $user_id AND out = $course_id FETCH out")
         .bind(("user_id", user.id.clone()))
         .bind(("course_id", course_id.clone()))
-        .await?;
-    let row: Option<EnrolledWithCourse> = response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch course progress");
+            return Ok(
+                responder.internal_server_error("Failed to fetch course progress".to_string())
+            );
+        }
+    };
+    let row: Option<EnrolledWithCourse> = match response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse course progress from db response");
+            return Ok(
+                responder.internal_server_error("Failed to fetch course progress".to_string())
+            );
+        }
+    };
 
     let row = match row {
         Some(row) => row,
@@ -732,11 +1060,28 @@ pub async fn fetch_educator_courses() -> Result<ApiResponse<Vec<CourseOnClient>>
         return Ok(responder.unauthorized("Unauthorized".to_string()));
     }
 
-    let mut response = db
+    let mut response = match db
         .query("SELECT * FROM courses WHERE educator = $educator AND deleted = false")
         .bind(("educator", user.id.clone()))
-        .await?;
-    let courses: Vec<Course> = response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch educator courses");
+            return Ok(
+                responder.internal_server_error("Failed to fetch educator courses".to_string())
+            );
+        }
+    };
+    let courses: Vec<Course> = match response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse educator courses from db response");
+            return Ok(
+                responder.internal_server_error("Failed to fetch educator courses".to_string())
+            );
+        }
+    };
 
     let payload = courses
         .into_iter()
