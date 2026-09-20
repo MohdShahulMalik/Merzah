@@ -66,9 +66,18 @@ pub async fn add_mosques_of_region(
         "https://overpass.osm.ch/api/interpreter",
     ];
 
-    let client = reqwest::Client::builder()
+    let client = match reqwest::Client::builder()
         .timeout(std::time::Duration::from_secs(45))
-        .build()?;
+        .build()
+    {
+        Ok(client) => client,
+        Err(e) => {
+            error!(?e, "Failed to build reqwest client");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch mosques for the region".to_string(),
+            ));
+        }
+    };
 
     let mut response = None;
     let mut last_error = None;
@@ -124,13 +133,21 @@ pub async fn add_mosques_of_region(
     let response = match response {
         Some(res) => res,
         None => {
-            return Err(ServerFnError::ServerError(format!(
+            return Ok(responder.internal_server_error(format!(
                 "All Overpass API endpoints failed. Last error: {}",
-                last_error.unwrap()
+                last_error.unwrap_or_else(|| "unknown error".to_string())
             )));
         }
     };
-    let data: OverpassResponse = response.json().await?;
+    let data: OverpassResponse = match response.json().await {
+        Ok(data) => data,
+        Err(e) => {
+            error!(?e, "Failed to parse Overpass API response");
+            return Ok(responder.internal_server_error(
+                "Failed to parse mosques data for the region".to_string(),
+            ));
+        }
+    };
 
     let mosques: Vec<MosqueFromOverpass> = data
         .elements
@@ -173,23 +190,29 @@ pub async fn add_mosques_of_region(
 
     let insert_query = "INSERT INTO mosques $mosques";
 
-    db.query(insert_query).bind(("mosques", mosques)).await?;
+    match db.query(insert_query).bind(("mosques", mosques)).await {
+        Ok(_) => (),
+        Err(e) => {
+            error!(?e, "Failed to insert mosques of region into db");
+            return Ok(responder.internal_server_error(
+                "Failed to add mosques for the region due to database error".to_string(),
+            ));
+        }
+    }
 
-    Ok(ApiResponse {
-        data: Some(format!(
-            "Added {} mosques for the region {} {} {} {} successfully",
-            num_mosques, south, west, north, east
-        )),
-        error: None,
-    })
+    Ok(responder.ok(format!(
+        "Added {} mosques for the region {} {} {} {} successfully",
+        num_mosques, south, west, north, east
+    )))
 }
 
 #[server(input = Json, output = Json, prefix = "/mosques", endpoint = "fetch-mosques-for-location")]
 pub async fn fetch_mosques_for_location(
     lat: f64,
     lon: f64,
-) -> Result<ApiResponse<Vec<MosqueResponse>>, ServerFnError> {
-    let (_, db) = match get_server_context::<Vec<MosqueResponse>>().await {
+    single_closest: Option<bool>,
+) -> Result<ApiResponse<MixedMosqueResponse>, ServerFnError> {
+    let (response_option, db) = match get_server_context::<MixedMosqueResponse>().await {
         Ok(ctx) => ctx,
         Err(e) => {
             return Ok(ApiResponse {
@@ -198,7 +221,76 @@ pub async fn fetch_mosques_for_location(
             });
         }
     };
+
+    let responder = ServerResponse::new(response_option);
     let point = Geometry::Point((lon, lat).into());
+
+    if let Some(true) = single_closest {
+        let query = r#"
+            SELECT *, geo::distance(location, $point) AS distance FROM mosques
+            ORDER BY distance ASC
+            LIMIT 1
+            FETCH imam, muazzin
+        "#;
+        let nearby_mosque_response_result = db.query(query).bind(("point", point)).await;
+
+        let nearby_mosque_response = match nearby_mosque_response_result {
+            Ok(mut res) => res.take(0),
+            Err(e) => {
+                error!(
+                    ?e,
+                    "Some db error occured while quering for the closest mosque"
+                );
+                return Ok(responder.internal_server_error::<MixedMosqueResponse>(
+                    "DB error occured while getting the closest mosque".to_string(),
+                ));
+            }
+        };
+
+        let nearby_mosque: MosqueSearchResult = match nearby_mosque_response {
+            Ok(Some(mosque)) => mosque,
+            Ok(None) => {
+                return Ok(responder.not_found::<MixedMosqueResponse>(
+                    "No mosques found in the database".to_string(),
+                ));
+            }
+            Err(e) => {
+                error!(?e, "No mosques found in the database");
+                return Ok(responder.not_found::<MixedMosqueResponse>(
+                    "No mosques found in the database".to_string(),
+                ));
+            }
+        };
+
+        let mosque_responses_result =
+            enrich_mosques_with_contacts(vec![nearby_mosque], &db).await;
+
+        let mosque_responses: Vec<MosqueResponse> = match mosque_responses_result {
+            Ok(mosques) => mosques,
+            Err(e) => {
+                error!(
+                    ?e,
+                    "Unable to enrich the closest mosque with contacts"
+                );
+                return Ok(responder.internal_server_error::<MixedMosqueResponse>(
+                    "Unable to create enriched mosque data with contacts".to_string(),
+                ));
+            }
+        };
+
+        let single_mosque: MosqueResponse = match mosque_responses.into_iter().next() {
+            Some(mosque) => mosque,
+            None => {
+                return Ok(responder.not_found::<MixedMosqueResponse>(
+                    "No mosques found in the database".to_string(),
+                ));
+            }
+        };
+
+        return Ok(
+            responder.ok::<MixedMosqueResponse>(MixedMosqueResponse::SingleMosque(single_mosque)),
+        );
+    }
 
     let radius_in_meters = 5000;
     let query = r#"
@@ -207,20 +299,46 @@ pub async fn fetch_mosques_for_location(
         ORDER BY distance ASC
         FETCH imam, muazzin
     "#;
-    let mut response = db
+    let mut response = match db
         .query(query)
         .bind(("point", point))
         .bind(("radius", radius_in_meters))
-        .await?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(
+                ?e,
+                "Some db error occured while quering for nearby mosques"
+            );
+            return Ok(responder.internal_server_error::<MixedMosqueResponse>(
+                "DB error occured while getting nearby mosques".to_string(),
+            ));
+        }
+    };
 
-    let mosques: Vec<MosqueSearchResult> = response.take(0)?;
+    let mosques: Vec<MosqueSearchResult> = match response.take(0) {
+        Ok(mosques) => mosques,
+        Err(e) => {
+            error!(?e, "Failed to parse nearby mosques from db response");
+            return Ok(responder.internal_server_error::<MixedMosqueResponse>(
+                "DB error occured while getting nearby mosques".to_string(),
+            ));
+        }
+    };
 
-    let mosque_responses = enrich_mosques_with_contacts(mosques, &db).await?;
+    let mosque_responses: Vec<MosqueResponse> =
+        match enrich_mosques_with_contacts(mosques, &db).await {
+            Ok(mosques) => mosques,
+            Err(e) => {
+                error!(?e, "Unable to enrich nearby mosques with contacts");
+                return Ok(responder.internal_server_error::<MixedMosqueResponse>(
+                    "Unable to create enriched mosque data with contacts".to_string(),
+                ));
+            }
+        };
 
-    Ok(ApiResponse {
-        data: Some(mosque_responses),
-        error: None,
-    })
+    Ok(responder.ok::<MixedMosqueResponse>(MixedMosqueResponse::MosquesVec(mosque_responses)))
 }
 
 #[server(input = PatchJson, output = Json, prefix = "/mosques", endpoint = "update-adhan-jamat-times")]
@@ -253,9 +371,19 @@ pub async fn update_adhan_jamat_times(
         return Ok(responder.internal_server_error(msg));
     }
 
-    db.update::<Option<MosqueRecord>>(mosque_id)
+    match db
+        .update::<Option<MosqueRecord>>(mosque_id)
         .merge(prayer_times)
-        .await?;
+        .await
+    {
+        Ok(_) => (),
+        Err(e) => {
+            error!(?e, "Failed to update adhan and jamat times");
+            return Ok(responder.internal_server_error(
+                "Failed to update adhan and jamat times due to database error".to_string(),
+            ));
+        }
+    }
 
     Ok(responder.ok("Successfully updated jamat and adhan times".to_string()))
 }
@@ -308,7 +436,7 @@ pub async fn add_admin(
                 ?error,
                 "Failed to elevate the user to a mosque admin due to db error"
             );
-            return Err(ServerFnError::ServerError(
+            return Ok(responder.internal_server_error(
                 "Failed to elevate the user to a mosque admin due to db error".to_string(),
             ));
         }
@@ -356,7 +484,7 @@ pub async fn elevate_user_to_mosque_supervisor(
             }
             UserElevationError::DatabaseError(db_err) => {
                 error!(?db_err, "Database error during user elevation");
-                return Err(ServerFnError::ServerError(
+                return Ok(responder.internal_server_error(
                     "Internal server error during elevation".to_string(),
                 ));
             }
