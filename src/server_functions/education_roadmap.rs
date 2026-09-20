@@ -3,6 +3,8 @@ use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
 use serde::Deserialize;
 #[cfg(feature = "ssr")]
 use surrealdb::RecordId;
+#[cfg(feature = "ssr")]
+use tracing::error;
 
 use crate::models::api_responses::ApiResponse;
 #[cfg(feature = "ssr")]
@@ -51,10 +53,27 @@ pub async fn fetch_roadmaps() -> Result<ApiResponse<Vec<RoadmapOnClient>>, Serve
     };
     let responder = ServerResponse::new(response_options);
 
-    let mut response = db
+    let mut response = match db
         .query("SELECT * FROM roadmaps WHERE status = \"published\" AND deleted = false ORDER BY created_at DESC")
-        .await?;
-    let roadmaps: Vec<Roadmap> = response.take(0)?;
+        .await
+    {
+        Ok(response) => response,
+        Err(e) => {
+            error!(?e, "Failed to fetch roadmaps");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch roadmaps".to_string(),
+            ));
+        }
+    };
+    let roadmaps: Vec<Roadmap> = match response.take(0) {
+        Ok(roadmaps) => roadmaps,
+        Err(e) => {
+            error!(?e, "Failed to parse roadmaps");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch roadmaps".to_string(),
+            ));
+        }
+    };
 
     let payload = roadmaps
         .into_iter()
@@ -92,17 +111,45 @@ pub async fn fetch_roadmap_detail(
         Err(e) => return Ok(e),
     };
 
-    let roadmap: Option<Roadmap> = db.select(roadmap_id.clone()).await?;
+    let roadmap: Option<Roadmap> = match db
+        .select(roadmap_id.clone())
+        .await
+    {
+        Ok(roadmap) => roadmap,
+        Err(e) => {
+            error!(?e, "Failed to fetch roadmap");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch roadmap".to_string(),
+            ));
+        }
+    };
     let roadmap = match roadmap {
         Some(roadmap) if roadmap.status == RoadmapStatus::Published && !roadmap.deleted => roadmap,
         _ => return Ok(responder.not_found("Roadmap not found".to_string())),
     };
 
-    let mut courses_response = db
+    let mut courses_response = match db
         .query("SELECT out, sort_order, is_required, note FROM roadmap_courses WHERE in = $roadmap_id ORDER BY sort_order ASC FETCH out")
         .bind(("roadmap_id", roadmap_id))
-        .await?;
-    let courses: Vec<RoadmapCourseWithCourse> = courses_response.take(0)?;
+        .await
+    {
+        Ok(response) => response,
+        Err(e) => {
+            error!(?e, "Failed to fetch roadmap courses");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch roadmap".to_string(),
+            ));
+        }
+    };
+    let courses: Vec<RoadmapCourseWithCourse> = match courses_response.take(0) {
+        Ok(courses) => courses,
+        Err(e) => {
+            error!(?e, "Failed to parse roadmap courses");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch roadmap".to_string(),
+            ));
+        }
+    };
 
     let courses_payload = courses
         .into_iter()
@@ -144,17 +191,45 @@ pub async fn start_roadmap(roadmap_id: String) -> Result<ApiResponse<String>, Se
         Err(e) => return Ok(e),
     };
 
-    let roadmap: Option<Roadmap> = db.select(roadmap_id.clone()).await?;
+    let roadmap: Option<Roadmap> = match db
+        .select(roadmap_id.clone())
+        .await
+    {
+        Ok(roadmap) => roadmap,
+        Err(e) => {
+            error!(?e, "Failed to fetch roadmap");
+            return Ok(responder.internal_server_error(
+                "Failed to start roadmap".to_string(),
+            ));
+        }
+    };
     let _roadmap = match roadmap {
         Some(roadmap) if roadmap.status == RoadmapStatus::Published && !roadmap.deleted => roadmap,
         _ => return Ok(responder.not_found("Roadmap not found".to_string())),
     };
 
-    let mut courses_response = db
+    let mut courses_response = match db
         .query("SELECT out, is_required FROM roadmap_courses WHERE in = $roadmap_id ORDER BY sort_order ASC FETCH out")
         .bind(("roadmap_id", roadmap_id))
-        .await?;
-    let courses: Vec<RoadmapCourseWithCourse> = courses_response.take(0)?;
+        .await
+    {
+        Ok(response) => response,
+        Err(e) => {
+            error!(?e, "Failed to fetch roadmap courses");
+            return Ok(responder.internal_server_error(
+                "Failed to start roadmap".to_string(),
+            ));
+        }
+    };
+    let courses: Vec<RoadmapCourseWithCourse> = match courses_response.take(0) {
+        Ok(courses) => courses,
+        Err(e) => {
+            error!(?e, "Failed to parse roadmap courses");
+            return Ok(responder.internal_server_error(
+                "Failed to start roadmap".to_string(),
+            ));
+        }
+    };
 
     for course in courses {
         if !course.is_required {
@@ -187,10 +262,27 @@ pub async fn fetch_frameworks() -> Result<ApiResponse<Vec<FrameworkOnClient>>, S
     };
     let responder = ServerResponse::new(response_options);
 
-    let mut response = db
+    let mut response = match db
         .query("SELECT * FROM frameworks WHERE status = \"published\" AND deleted = false ORDER BY created_at DESC")
-        .await?;
-    let frameworks: Vec<Framework> = response.take(0)?;
+        .await
+    {
+        Ok(response) => response,
+        Err(e) => {
+            error!(?e, "Failed to fetch frameworks");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch frameworks".to_string(),
+            ));
+        }
+    };
+    let frameworks: Vec<Framework> = match response.take(0) {
+        Ok(frameworks) => frameworks,
+        Err(e) => {
+            error!(?e, "Failed to parse frameworks");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch frameworks".to_string(),
+            ));
+        }
+    };
 
     let payload = frameworks
         .into_iter()
@@ -226,27 +318,72 @@ pub async fn fetch_framework_detail(
         Err(e) => return Ok(e),
     };
 
-    let framework: Option<Framework> = db.select(framework_id.clone()).await?;
+    let framework: Option<Framework> = match db
+        .select(framework_id.clone())
+        .await
+    {
+        Ok(framework) => framework,
+        Err(e) => {
+            error!(?e, "Failed to fetch framework");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch framework".to_string(),
+            ));
+        }
+    };
     let framework = match framework {
         Some(framework) if framework.status == "published" && !framework.deleted => framework,
         _ => return Ok(responder.not_found("Framework not found".to_string())),
     };
 
-    let mut milestones_response = db
+    let mut milestones_response = match db
         .query("SELECT * FROM milestones WHERE framework = $framework_id ORDER BY sort_order ASC")
         .bind(("framework_id", framework_id))
-        .await?;
-    let milestones: Vec<Milestone> = milestones_response.take(0)?;
+        .await
+    {
+        Ok(response) => response,
+        Err(e) => {
+            error!(?e, "Failed to fetch framework milestones");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch framework".to_string(),
+            ));
+        }
+    };
+    let milestones: Vec<Milestone> = match milestones_response.take(0) {
+        Ok(milestones) => milestones,
+        Err(e) => {
+            error!(?e, "Failed to parse framework milestones");
+            return Ok(responder.internal_server_error(
+                "Failed to fetch framework".to_string(),
+            ));
+        }
+    };
 
     let mut milestone_payload = Vec::new();
     for milestone in milestones {
-        let mut courses_response = db
+        let mut courses_response = match db
             .query(
                 "SELECT out, is_required FROM milestone_courses WHERE in = $milestone_id FETCH out",
             )
             .bind(("milestone_id", milestone.id.clone()))
-            .await?;
-        let courses: Vec<MilestoneCourseWithCourse> = courses_response.take(0)?;
+            .await
+        {
+            Ok(response) => response,
+            Err(e) => {
+                error!(?e, "Failed to fetch milestone courses");
+                return Ok(responder.internal_server_error(
+                    "Failed to fetch framework".to_string(),
+                ));
+            }
+        };
+        let courses: Vec<MilestoneCourseWithCourse> = match courses_response.take(0) {
+            Ok(courses) => courses,
+            Err(e) => {
+                error!(?e, "Failed to parse milestone courses");
+                return Ok(responder.internal_server_error(
+                    "Failed to fetch framework".to_string(),
+                ));
+            }
+        };
 
         let courses_payload = courses
             .into_iter()
