@@ -1255,23 +1255,57 @@ pub async fn publish_course(course_id: String) -> Result<ApiResponse<String>, Se
         return Ok(responder.unauthorized("Unauthorized".to_string()));
     }
 
-    let mut module_count_response = db
+    let mut module_count_response = match db
         .query("SELECT count() AS count FROM modules WHERE course = $course_id AND deleted = false")
         .bind(("course_id", course_id.clone()))
-        .await?;
-    let module_counts: Vec<CountResult> = module_count_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch module count for publish check");
+            return Ok(
+                responder.internal_server_error("Failed to publish course".to_string())
+            );
+        }
+    };
+    let module_counts: Vec<CountResult> = match module_count_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse module count from db response");
+            return Ok(
+                responder.internal_server_error("Failed to publish course".to_string())
+            );
+        }
+    };
     let module_count = module_counts.first().map(|c| c.count).unwrap_or(0);
     if module_count == 0 {
         return Ok(responder.bad_request("Course must have at least one module".to_string()));
     }
 
-    let mut lesson_count_response = db
+    let mut lesson_count_response = match db
         .query(
             "SELECT count() AS count FROM lessons WHERE module IN (SELECT VALUE id FROM modules WHERE course = $course_id AND deleted = false) AND deleted = false",
         )
         .bind(("course_id", course_id.clone()))
-        .await?;
-    let lesson_counts: Vec<CountResult> = lesson_count_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson count for publish check");
+            return Ok(
+                responder.internal_server_error("Failed to publish course".to_string())
+            );
+        }
+    };
+    let lesson_counts: Vec<CountResult> = match lesson_count_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse lesson count from db response");
+            return Ok(
+                responder.internal_server_error("Failed to publish course".to_string())
+            );
+        }
+    };
     let lesson_count = lesson_counts.first().map(|c| c.count).unwrap_or(0);
     if lesson_count == 0 {
         return Ok(responder.bad_request("Course must have at least one lesson".to_string()));
@@ -1279,9 +1313,19 @@ pub async fn publish_course(course_id: String) -> Result<ApiResponse<String>, Se
 
     let update_query =
         "UPDATE ONLY $course_id SET status = \"published\", updated_at = time::now()";
-    db.query(update_query)
+    match db
+        .query(update_query)
         .bind(("course_id", course_id))
-        .await?;
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to publish course");
+            return Ok(
+                responder.internal_server_error("Failed to publish course".to_string())
+            );
+        }
+    };
 
     Ok(responder.ok("Course published".to_string()))
 }
@@ -1330,7 +1374,17 @@ pub async fn create_module(
     };
 
     let create_query = "CREATE ONLY modules CONTENT $module";
-    db.query(create_query).bind(("module", record)).await?;
+    match db
+        .query(create_query)
+        .bind(("module", record))
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to create module");
+            return Ok(responder.internal_server_error("Failed to create module".to_string()));
+        }
+    };
 
     Ok(responder.created("Module created".to_string()))
 }
@@ -1364,7 +1418,13 @@ pub async fn update_module(
         Err(e) => return Ok(e),
     };
 
-    let module: Option<Module> = db.select(module_id.clone()).await?;
+    let module: Option<Module> = match db.select(module_id.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch module");
+            return Ok(responder.internal_server_error("Failed to fetch module".to_string()));
+        }
+    };
     let module = match module {
         Some(module) if !module.deleted => module,
         _ => return Ok(responder.not_found("Module not found".to_string())),
@@ -1382,10 +1442,18 @@ pub async fn update_module(
     };
 
     let update_query = "UPDATE ONLY $module_id MERGE $record";
-    db.query(update_query)
+    match db
+        .query(update_query)
         .bind(("module_id", module_id))
         .bind(("record", record))
-        .await?;
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to update module");
+            return Ok(responder.internal_server_error("Failed to update module".to_string()));
+        }
+    };
 
     Ok(responder.ok("Module updated".to_string()))
 }
@@ -1403,7 +1471,13 @@ pub async fn delete_module(module_id: String) -> Result<ApiResponse<String>, Ser
         Err(e) => return Ok(e),
     };
 
-    let module: Option<Module> = db.select(module_id.clone()).await?;
+    let module: Option<Module> = match db.select(module_id.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch module");
+            return Ok(responder.internal_server_error("Failed to fetch module".to_string()));
+        }
+    };
     let module = match module {
         Some(module) if !module.deleted => module,
         _ => return Ok(responder.not_found("Module not found".to_string())),
@@ -1414,15 +1488,31 @@ pub async fn delete_module(module_id: String) -> Result<ApiResponse<String>, Ser
     }
 
     let update_query = "UPDATE ONLY $module_id SET deleted = true, updated_at = time::now()";
-    db.query(update_query)
+    match db
+        .query(update_query)
         .bind(("module_id", module_id))
-        .await?;
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to delete module");
+            return Ok(responder.internal_server_error("Failed to delete module".to_string()));
+        }
+    };
 
-    db.query(
-        "UPDATE lessons SET deleted = true, updated_at = time::now() WHERE module = $module_id",
-    )
-    .bind(("module_id", module.id.clone()))
-    .await?;
+    match db
+        .query(
+            "UPDATE lessons SET deleted = true, updated_at = time::now() WHERE module = $module_id",
+        )
+        .bind(("module_id", module.id.clone()))
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to delete module lessons");
+            return Ok(responder.internal_server_error("Failed to delete module".to_string()));
+        }
+    };
 
     let _ = update_course_lesson_count(&module.course, &db).await;
 
@@ -1457,7 +1547,13 @@ pub async fn create_lesson(
         Err(e) => return Ok(e),
     };
 
-    let module: Option<Module> = db.select(module_id.clone()).await?;
+    let module: Option<Module> = match db.select(module_id.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch module");
+            return Ok(responder.internal_server_error("Failed to fetch module".to_string()));
+        }
+    };
     let module = match module {
         Some(module) if !module.deleted => module,
         _ => return Ok(responder.not_found("Module not found".to_string())),
@@ -1488,7 +1584,17 @@ pub async fn create_lesson(
     };
 
     let create_query = "CREATE ONLY lessons CONTENT $lesson";
-    db.query(create_query).bind(("lesson", record)).await?;
+    match db
+        .query(create_query)
+        .bind(("lesson", record))
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to create lesson");
+            return Ok(responder.internal_server_error("Failed to create lesson".to_string()));
+        }
+    };
 
     let _ = update_course_lesson_count(&module.course, &db).await;
 
@@ -1524,13 +1630,25 @@ pub async fn update_lesson(
         Err(e) => return Ok(e),
     };
 
-    let lesson: Option<Lesson> = db.select(lesson_id.clone()).await?;
+    let lesson: Option<Lesson> = match db.select(lesson_id.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson");
+            return Ok(responder.internal_server_error("Failed to fetch lesson".to_string()));
+        }
+    };
     let lesson = match lesson {
         Some(lesson) if !lesson.deleted => lesson,
         _ => return Ok(responder.not_found("Lesson not found".to_string())),
     };
 
-    let module: Option<Module> = db.select(lesson.module.clone()).await?;
+    let module: Option<Module> = match db.select(lesson.module.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson module");
+            return Ok(responder.internal_server_error("Failed to fetch module".to_string()));
+        }
+    };
     let module = match module {
         Some(module) if !module.deleted => module,
         _ => return Ok(responder.not_found("Module not found".to_string())),
@@ -1557,10 +1675,18 @@ pub async fn update_lesson(
     };
 
     let update_query = "UPDATE ONLY $lesson_id MERGE $record";
-    db.query(update_query)
+    match db
+        .query(update_query)
         .bind(("lesson_id", lesson_id))
         .bind(("record", record))
-        .await?;
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to update lesson");
+            return Ok(responder.internal_server_error("Failed to update lesson".to_string()));
+        }
+    };
 
     let _ = update_course_lesson_count(&module.course, &db).await;
 
@@ -1580,13 +1706,25 @@ pub async fn delete_lesson(lesson_id: String) -> Result<ApiResponse<String>, Ser
         Err(e) => return Ok(e),
     };
 
-    let lesson: Option<Lesson> = db.select(lesson_id.clone()).await?;
+    let lesson: Option<Lesson> = match db.select(lesson_id.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson");
+            return Ok(responder.internal_server_error("Failed to fetch lesson".to_string()));
+        }
+    };
     let lesson = match lesson {
         Some(lesson) if !lesson.deleted => lesson,
         _ => return Ok(responder.not_found("Lesson not found".to_string())),
     };
 
-    let module: Option<Module> = db.select(lesson.module.clone()).await?;
+    let module: Option<Module> = match db.select(lesson.module.clone()).await {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to fetch lesson module");
+            return Ok(responder.internal_server_error("Failed to fetch module".to_string()));
+        }
+    };
     let module = match module {
         Some(module) if !module.deleted => module,
         _ => return Ok(responder.not_found("Module not found".to_string())),
@@ -1597,9 +1735,17 @@ pub async fn delete_lesson(lesson_id: String) -> Result<ApiResponse<String>, Ser
     }
 
     let update_query = "UPDATE ONLY $lesson_id SET deleted = true, updated_at = time::now()";
-    db.query(update_query)
+    match db
+        .query(update_query)
         .bind(("lesson_id", lesson_id))
-        .await?;
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to delete lesson");
+            return Ok(responder.internal_server_error("Failed to delete lesson".to_string()));
+        }
+    };
 
     let _ = update_course_lesson_count(&module.course, &db).await;
 
