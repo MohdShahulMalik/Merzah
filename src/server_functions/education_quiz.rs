@@ -3,6 +3,8 @@ use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "ssr")]
 use surrealdb::RecordId;
+#[cfg(feature = "ssr")]
+use tracing::error;
 
 use crate::models::api_responses::ApiResponse;
 #[cfg(feature = "ssr")]
@@ -51,21 +53,51 @@ pub async fn fetch_quiz_for_lesson(
         Err(e) => return Ok(e),
     };
 
-    let mut quiz_response = db
+    let mut quiz_response = match db
         .query("SELECT * FROM quizzes WHERE lesson = $lesson_id LIMIT 1")
         .bind(("lesson_id", lesson_id.clone()))
-        .await?;
-    let quiz: Option<Quiz> = quiz_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch quiz");
+            return Ok(responder.internal_server_error("Failed to fetch quiz".to_string()));
+        }
+    };
+    let quiz: Option<Quiz> = match quiz_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse quiz");
+            return Ok(responder.internal_server_error("Failed to parse quiz".to_string()));
+        }
+    };
     let quiz = match quiz {
         Some(quiz) => quiz,
         None => return Ok(responder.not_found("Quiz not found".to_string())),
     };
 
-    let mut question_response = db
+    let mut question_response = match db
         .query("SELECT * FROM quiz_questions WHERE quiz = $quiz_id ORDER BY sort_order ASC")
         .bind(("quiz_id", quiz.id.clone()))
-        .await?;
-    let questions: Vec<QuizQuestion> = question_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch quiz questions");
+            return Ok(
+                responder.internal_server_error("Failed to fetch quiz questions".to_string())
+            );
+        }
+    };
+    let questions: Vec<QuizQuestion> = match question_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse quiz questions");
+            return Ok(
+                responder.internal_server_error("Failed to parse quiz questions".to_string())
+            );
+        }
+    };
 
     let payload = QuizOnClient {
         id: quiz.id.to_string(),
@@ -104,34 +136,81 @@ pub async fn submit_quiz(
         Err(e) => return Ok(e),
     };
 
-    let mut quiz_response = db
+    let mut quiz_response = match db
         .query("SELECT * FROM quizzes WHERE id = $quiz_id LIMIT 1")
         .bind(("quiz_id", quiz_id.clone()))
-        .await?;
-    let quiz: Option<Quiz> = quiz_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch quiz");
+            return Ok(responder.internal_server_error("Failed to fetch quiz".to_string()));
+        }
+    };
+    let quiz: Option<Quiz> = match quiz_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse quiz");
+            return Ok(responder.internal_server_error("Failed to parse quiz".to_string()));
+        }
+    };
     let quiz = match quiz {
         Some(quiz) => quiz,
         None => return Ok(responder.not_found("Quiz not found".to_string())),
     };
 
-    let mut attempt_count_response = db
+    let mut attempt_count_response = match db
         .query(
             "SELECT count() AS count FROM quiz_attempts WHERE user = $user_id AND quiz = $quiz_id",
         )
         .bind(("user_id", user.id.clone()))
         .bind(("quiz_id", quiz_id.clone()))
-        .await?;
-    let counts: Vec<CountResult> = attempt_count_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch quiz attempts");
+            return Ok(
+                responder.internal_server_error("Failed to fetch quiz attempts".to_string())
+            );
+        }
+    };
+    let counts: Vec<CountResult> = match attempt_count_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse quiz attempts");
+            return Ok(
+                responder.internal_server_error("Failed to parse quiz attempts".to_string())
+            );
+        }
+    };
     let attempts = counts.first().map(|c| c.count).unwrap_or(0);
     if attempts >= quiz.max_attempts as i64 {
         return Ok(responder.bad_request("Max attempts reached".to_string()));
     }
 
-    let mut question_response = db
+    let mut question_response = match db
         .query("SELECT * FROM quiz_questions WHERE quiz = $quiz_id ORDER BY sort_order ASC")
         .bind(("quiz_id", quiz_id.clone()))
-        .await?;
-    let questions: Vec<QuizQuestion> = question_response.take(0)?;
+        .await
+    {
+        Ok(res) => res,
+        Err(e) => {
+            error!(?e, "Failed to fetch quiz questions");
+            return Ok(
+                responder.internal_server_error("Failed to fetch quiz questions".to_string())
+            );
+        }
+    };
+    let questions: Vec<QuizQuestion> = match question_response.take(0) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(?e, "Failed to parse quiz questions");
+            return Ok(
+                responder.internal_server_error("Failed to parse quiz questions".to_string())
+            );
+        }
+    };
 
     let mut correct_count = 0;
     for question in &questions {
@@ -164,9 +243,19 @@ pub async fn submit_quiz(
         passed,
     };
 
-    db.query("CREATE quiz_attempts CONTENT $attempt")
+    match db
+        .query("CREATE quiz_attempts CONTENT $attempt")
         .bind(("attempt", attempt_record))
-        .await?;
+        .await
+    {
+        Ok(_) => {},
+        Err(e) => {
+            error!(?e, "Failed to save quiz attempt");
+            return Ok(
+                responder.internal_server_error("Failed to save quiz attempt".to_string())
+            );
+        }
+    }
 
     let payload = QuizSubmissionResult {
         score,
