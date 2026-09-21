@@ -6,6 +6,7 @@ pub mod form;
 pub mod gamification;
 pub mod import;
 pub mod mosque;
+pub mod prayer;
 #[cfg(feature = "ssr")]
 pub mod oauth;
 pub mod quiz;
