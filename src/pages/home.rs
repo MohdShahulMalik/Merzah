@@ -4,6 +4,7 @@ use crate::components::cards::{
 use crate::models::api_responses::MixedMosqueResponse;
 use crate::server_functions::mosque::{fetch_mosques_for_location, get_favorite_mosque};
 use crate::utils::prayer::next_prayer_card_data;
+use crate::utils::prayer::pad2;
 use chrono::Datelike;
 use chrono::Local;
 use chrono::Weekday;
@@ -88,15 +89,41 @@ pub fn Home() -> impl IntoView {
 
     view! {
         <div class="space-y-8 mt-4 mr-4 mb-4">
-            <NextPrayerReminderCard
-                location="Brooklyn, NY".to_string()
-                mosque_name="Masjid Al-Farooq".to_string()
-                prayer_name="Maghrib".to_string()
-                iqamah_time="7:48 PM".to_string()
-                hours_remaining="02".to_string()
-                minutes_remaining="29".to_string()
-                seconds_remaining="23".to_string()
-            />
+            {move || {
+                let card = next_prayer.get();
+                let location = card
+                    .as_ref()
+                    .map(|card| card.location.clone())
+                    .unwrap_or_else(|| "Locating…".to_string());
+                let mosque_name = card
+                    .as_ref()
+                    .map(|card| card.mosque_name.clone())
+                    .unwrap_or_else(|| "Finding your mosque…".to_string());
+                let prayer_name = card
+                    .as_ref()
+                    .map(|card| card.prayer_name.clone())
+                    .unwrap_or_else(|| "—".to_string());
+                let iqamah_time = card
+                    .as_ref()
+                    .map(|card| card.iqamah_time.clone())
+                    .unwrap_or_else(|| "—".to_string());
+                let left = remaining.get();
+                let hours = pad2(left / 3600);
+                let minutes = pad2((left % 3600) / 60);
+                let seconds = pad2(left % 60);
+
+                view! {
+                    <NextPrayerReminderCard
+                        location=location
+                        mosque_name=mosque_name
+                        prayer_name=prayer_name
+                        iqamah_time=iqamah_time
+                        hours_remaining=hours
+                        minutes_remaining=minutes
+                        seconds_remaining=seconds
+                    />
+                }
+            }}
 
             <div class="flex flex-wrap gap-4">
                 <PrayerCard
