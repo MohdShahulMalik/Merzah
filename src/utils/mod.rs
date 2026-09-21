@@ -6,6 +6,7 @@ pub mod parsing;
 pub mod prayer;
 #[cfg(feature = "ssr")]
 pub mod ssr;
+#[cfg(feature = "ssr")]
 pub mod token_generator;
 #[cfg(feature = "ssr")]
 pub mod user_elevation;
