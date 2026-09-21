@@ -1,14 +1,90 @@
 use crate::components::cards::{
     EducationalResourceCard, MosqueEventCard, NearbyMosqueCard, NextPrayerReminderCard, PrayerCard,
 };
+use crate::models::api_responses::MixedMosqueResponse;
+use crate::server_functions::mosque::{fetch_mosques_for_location, get_favorite_mosque};
+use crate::utils::prayer::next_prayer_card_data;
+use chrono::Datelike;
+use chrono::Local;
+use chrono::Weekday;
 use leptos::IntoView;
 use leptos::prelude::*;
 use leptos_router::components::A;
+use leptos_use::UseGeolocationReturn;
+use leptos_use::use_geolocation;
+use leptos_use::use_interval_fn;
 
 #[component]
 pub fn Home() -> impl IntoView {
     let (is_current, _) = signal(true);
     let (is_not_current, _) = signal(false);
+
+    let UseGeolocationReturn { coords, error: geo_error, .. } = use_geolocation();
+    let user_pos = move || coords.get().map(|c| (c.latitude(), c.longitude()));
+
+    let mosque = Resource::new(user_pos, move |pos: Option<(f64, f64)>| async move {
+        match pos {
+            Some((lat, lon)) => {
+                let fav = get_favorite_mosque(Some(lat), Some(lon))
+                    .await
+                    .ok()
+                    .and_then(|res| res.data);
+                match fav {
+                    Some(MixedMosqueResponse::SingleMosque(mosque)) => Some(mosque),
+                    _ => {
+                        fetch_mosques_for_location(lat, lon, Some(true))
+                            .await
+                            .ok()
+                            .and_then(|res| res.data)
+                            .and_then(|mosques| match mosques {
+                                MixedMosqueResponse::SingleMosque(mosque) => Some(mosque),
+                                MixedMosqueResponse::MosquesVec(mosques) => mosques.into_iter().next(),
+                            })
+                    }
+                }
+            }
+            None => {
+                get_favorite_mosque(None, None)
+                    .await
+                    .ok()
+                    .and_then(|res| res.data)
+                    .and_then(|fav| match fav {
+                        MixedMosqueResponse::MosquesVec(mosques) => mosques.into_iter().next(),
+                        MixedMosqueResponse::SingleMosque(mosque) => Some(mosque),
+                    })
+            }
+        }
+    });
+
+    let (recompute, set_recompute) = signal(0_u32);
+    let (remaining, set_remaining) = signal(0_u64);
+
+    let next_prayer = Memo::new(move |_| {
+        recompute.get();
+        let now = Local::now();
+
+        mosque
+            .get()
+            .flatten()
+            .map(|mosque| next_prayer_card_data(&mosque, now.time(), now.weekday() == Weekday::Fri))
+    });
+
+    Effect::new(move |_| {
+        if let Some(card) = next_prayer.get() {
+            set_remaining.set(card.total_seconds);
+        }
+    });
+
+    use_interval_fn(
+        move || {
+            if remaining.get() > 0 {
+                set_remaining.update(|secs| *secs -= 1);
+            } else if next_prayer.get().is_some_and(|card| card.has_times) {
+                set_recompute.update(|value| *value += 1);
+            }
+        },
+        1000,
+    );
 
     view! {
         <div class="space-y-8 mt-4 mr-4 mb-4">
