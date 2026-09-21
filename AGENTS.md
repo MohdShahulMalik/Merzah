@@ -17,6 +17,9 @@
         .await
         .expect("failed to fetch");```
  - NEVER use types or functions like this `crate::models::user::User`, always use a type or a function after importing it at the top.
+ - NEVER initialize structs with struct literal syntax like `User { id, name }`, ALWAYS define an associated `new()` function on the struct and use it like `User::new(id, name)`.
+ - ALWAYS put structs and enums in their own files (either create a new file or put them in an existing file if that's more appropriate) in the models directory and import them in the files where they are used.
+ - ALWAYS put tests in the tests directory.
 
 ## Intructions When Asked A Question
  - DON't go and just start changing or writting code in the codebase, use every other tool that the write tool and just answer the question properly!
