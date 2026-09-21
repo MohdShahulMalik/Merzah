@@ -30,3 +30,57 @@ impl NextPrayerInfo {
         }
     }
 }
+
+/// Render-ready strings for `NextPrayerReminderCard`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct NextPrayerCardData {
+    pub mosque_name: String,
+    pub location: String,
+    pub prayer_name: String,
+    pub iqamah_time: String,
+    pub hours: String,
+    pub minutes: String,
+    pub seconds: String,
+    pub total_seconds: u64,
+    pub has_times: bool,
+}
+
+impl NextPrayerCardData {
+    pub fn new(
+        mosque_name: String,
+        location: String,
+        prayer_name: String,
+        iqamah_time: String,
+        hours: String,
+        minutes: String,
+        seconds: String,
+        total_seconds: u64,
+        has_times: bool,
+    ) -> Self {
+        Self {
+            mosque_name,
+            location,
+            prayer_name,
+            iqamah_time,
+            hours,
+            minutes,
+            seconds,
+            total_seconds,
+            has_times,
+        }
+    }
+
+    pub fn without_times(mosque_name: String, location: String) -> Self {
+        Self {
+            mosque_name,
+            location,
+            prayer_name: "Times not set".to_string(),
+            iqamah_time: "--".to_string(),
+            hours: "00".to_string(),
+            minutes: "00".to_string(),
+            seconds: "00".to_string(),
+            total_seconds: 0,
+            has_times: false,
+        }
+    }
+}
