@@ -3,6 +3,7 @@ pub mod education_auth;
 #[cfg(feature = "ssr")]
 pub mod mosque;
 pub mod parsing;
+pub mod prayer;
 #[cfg(feature = "ssr")]
 pub mod ssr;
 pub mod token_generator;
