@@ -8,6 +8,8 @@ use leptos_router::{
 use reactive_stores::Store;
 
 use crate::{
+    components::location::LocationProvider,
+    models::location::GeoPosition,
     models::user::UserOnClient,
     pages::{
         add_mosques_of_region::AddMosquesOfRegion,
@@ -26,13 +28,17 @@ use crate::{
 #[derive(Clone, Debug, Store)]
 pub struct AppState {
     user: Option<UserOnClient>,
+    coords: Option<GeoPosition>,
 }
 
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
-    let app_state = Store::new(AppState { user: None });
+    let app_state = Store::new(AppState {
+        user: None,
+        coords: None,
+    });
     let auth_user = OnceResource::new(async { fetch_me().await });
 
     provide_context(app_state);
@@ -67,6 +73,8 @@ pub fn App() -> impl IntoView {
 
         <Router>
             <main>
+                <LocationProvider />
+
                 <Routes fallback=move || "Not found.">
                     <ParentRoute path=path!("/") view=AppLayout>
                         <Route path=path!("home") view=Home/>
