@@ -22,7 +22,8 @@
  - ALWAYS put tests in the tests directory.
 
 ## Intructions When Asked A Question
- - DON't go and just start changing or writting code in the codebase, use every other tool than that the write tool and just answer the question properly!
+ - DON'T just go and start changing or writting code in the codebase, use every other tool than that the write tool and ONLY answer the question!
+ - DON'T make assumptions about things that you are not sure about, if you are not sure about something then just ask me and I will clarify it for you.
 
 ## THINGS TO NEVER DO
  - NEVER EVER TRY TO ACCESS THE .env FILE AT ALL!! not through the read tool or by bash like using cat command or by any other means.
