@@ -1,5 +1,5 @@
 use crate::components::cards::{EducationalResourceCard, MosqueEventCard, NearbyMosqueCard};
-use crate::components::sections::NextPrayerSection;
+use crate::components::sections::TopTwoDailyPrayersSections;
 use leptos::IntoView;
 use leptos::prelude::*;
 use leptos_router::components::A;
@@ -8,7 +8,7 @@ use leptos_router::components::A;
 pub fn Home() -> impl IntoView {
     view! {
         <div class="space-y-8 mt-4 mr-4 mb-4">
-            <NextPrayerSection />
+            <TopTwoDailyPrayersSections />
 
             <section class="space-y-5">
                 <div class="flex items-center justify-between">
