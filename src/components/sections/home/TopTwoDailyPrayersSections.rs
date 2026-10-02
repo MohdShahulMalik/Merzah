@@ -1,8 +1,10 @@
 use crate::app::AppState;
 use crate::app::AppStateStoreFields;
 use crate::components::cards::NextPrayerReminderCard;
+use crate::components::cards::PrayerCard;
 use crate::models::api_responses::MixedMosqueResponse;
 use crate::server_functions::mosque::{fetch_mosques_for_location, get_favorite_mosque};
+use crate::utils::prayer::format_iqamah;
 use crate::utils::prayer::next_prayer_card_data;
 use crate::utils::prayer::pad2;
 use chrono::Datelike;
@@ -105,16 +107,116 @@ pub fn TopTwoDailyPrayersSections() -> impl IntoView {
             let minutes = pad2((left % 3600) / 60);
             let seconds = pad2(left % 60);
 
+            let jamat_times = mosque.get()
+                .flatten()
+                .and_then(|mosque| mosque.jamat_times);
+            let adhan_times = mosque.get()
+                .flatten()
+                .and_then(|mosque| mosque.adhan_times);
+
+            let fajr_jamat_time = jamat_times
+                .as_ref()
+                .map(|times| format_iqamah(times.fajr))
+                .unwrap_or_else(|| "—".to_string());
+            let fajr_adhan_time = adhan_times
+                .as_ref()
+                .map(|times| format_iqamah(times.fajr))
+                .unwrap_or_else(|| "—".to_string());
+
+            let dhuhr_jamat_time = jamat_times
+                .as_ref()
+                .map(|times| format_iqamah(times.dhuhr))
+                .unwrap_or_else(|| "—".to_string());
+            let dhuhr_adhan_time = adhan_times
+                .as_ref()
+                .map(|times| format_iqamah(times.dhuhr))
+                .unwrap_or_else(|| "—".to_string());
+
+            let asr_jamat_time = jamat_times
+                .as_ref()
+                .map(|times| format_iqamah(times.asr))
+                .unwrap_or_else(|| "—".to_string());
+            let asr_adhan_time = adhan_times
+                .as_ref()
+                .map(|times| format_iqamah(times.asr))
+                .unwrap_or_else(|| "—".to_string());
+
+            let maghrib_jamat_time = jamat_times
+                .as_ref()
+                .map(|times| format_iqamah(times.maghrib))
+                .unwrap_or_else(|| "—".to_string());
+            let maghrib_adhan_time = adhan_times
+                .as_ref()
+                .map(|times| format_iqamah(times.maghrib))
+                .unwrap_or_else(|| "—".to_string());
+
+            let isha_jamat_time = jamat_times
+                .as_ref()
+                .map(|times| format_iqamah(times.isha))
+                .unwrap_or_else(|| "—".to_string());
+            let isha_adhan_time = adhan_times
+                .as_ref()
+                .map(|times| format_iqamah(times.isha))
+                .unwrap_or_else(|| "—".to_string());
+
+            let jumuah_jamat_time = jamat_times
+                .as_ref()
+                .map(|times| format_iqamah(times.jumuah))
+                .unwrap_or_else(|| "—".to_string());
+            let jumuah_adhan_time = adhan_times
+                .as_ref()
+                .map(|times| format_iqamah(times.jumuah))
+                .unwrap_or_else(|| "—".to_string());
+
             view! {
                 <NextPrayerReminderCard
                     location=location
                     mosque_name=mosque_name
-                    prayer_name=prayer_name
+                    prayer_name=prayer_name.clone()
                     iqamah_time=iqamah_time
                     hours_remaining=hours
                     minutes_remaining=minutes
                     seconds_remaining=seconds
                 />
+                <div class="flex flex-wrap gap-4">
+                    <PrayerCard
+                        prayer_name="Fajr".to_string()
+                        jamat_time=fajr_jamat_time
+                        adhan_time=fajr_adhan_time
+                        is_current=prayer_name.as_str() == "Fajr"
+                    />
+                    <PrayerCard
+                        prayer_name="Dhuhr".to_string()
+                        jamat_time=dhuhr_jamat_time
+                        adhan_time=dhuhr_adhan_time
+                        is_current=prayer_name.as_str() == "Dhuhr"
+                    />
+                    <PrayerCard
+                        prayer_name="Asr".to_string()
+                        jamat_time=asr_jamat_time
+                        adhan_time=asr_adhan_time
+                        is_current=prayer_name.as_str() == "Asr"
+                    />
+                    <PrayerCard
+                        prayer_name="Maghrib".to_string()
+                        jamat_time=maghrib_jamat_time
+                        adhan_time=maghrib_adhan_time
+                        is_current=prayer_name.as_str() == "Maghrib"
+                    />
+                    <PrayerCard
+                        prayer_name="Isha".to_string()
+                        jamat_time=isha_jamat_time
+                        adhan_time=isha_adhan_time
+                        is_current=prayer_name.as_str() == "Isha"
+                    />
+                    <PrayerCard
+                        prayer_name="Jumu'ah".to_string()
+                        jamat_time=jumuah_jamat_time
+                        adhan_time=jumuah_adhan_time
+                        is_current=prayer_name.as_str() == "Jumu'ah"
+                    />
+                </div>
+
             }
         }}
     }
