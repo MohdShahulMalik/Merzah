@@ -138,7 +138,7 @@ pub struct PrayerTimes {
     pub asr: NaiveTime,
     pub maghrib: NaiveTime,
     pub isha: NaiveTime,
-    pub jummah: NaiveTime,
+    pub jumuah: NaiveTime,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

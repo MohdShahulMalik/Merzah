@@ -521,7 +521,7 @@ async fn update_mosque_prayer_times() {
     let asr = NaiveTime::from_hms_opt(17, 0, 0).unwrap();
     let maghrib = NaiveTime::from_hms_opt(20, 15, 0).unwrap();
     let isha = NaiveTime::from_hms_opt(21, 45, 0).unwrap();
-    let jummah = NaiveTime::from_hms_opt(13, 15, 0).unwrap();
+    let jumuah = NaiveTime::from_hms_opt(13, 15, 0).unwrap();
 
     let new_times = PrayerTimes {
         fajr,
@@ -529,7 +529,7 @@ async fn update_mosque_prayer_times() {
         asr,
         maghrib,
         isha,
-        jummah,
+        jumuah,
     };
 
     let update_params = UpdatePrayerTimesParams {

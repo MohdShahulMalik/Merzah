@@ -8,12 +8,12 @@ use crate::models::prayer::NextPrayerInfo;
 
 /// First jamat strictly after `now`; wraps to tomorrow's Fajr.
 ///
-/// On Fridays `jummah` replaces `dhuhr`.
+/// On Fridays `jumuah` replaces `dhuhr`.
 pub fn next_jamat(jamat: &PrayerTimes, now: NaiveTime, is_friday: bool) -> NextPrayerInfo {
     let mut ordered: Vec<(&'static str, NaiveTime)> = if is_friday {
         vec![
             ("Fajr", jamat.fajr),
-            ("Jumu'ah", jamat.jummah),
+            ("Jumu'ah", jamat.jumuah),
             ("Asr", jamat.asr),
             ("Maghrib", jamat.maghrib),
             ("Isha", jamat.isha),
