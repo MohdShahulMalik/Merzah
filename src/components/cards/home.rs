@@ -6,10 +6,10 @@ pub fn PrayerCard(
     prayer_name: String,
     jamat_time: String,
     adhan_time: String,
-    is_current: ReadSignal<bool>,
+    is_current: bool,
 ) -> impl IntoView {
     let border_classes = move || {
-        if is_current.get() {
+        if is_current {
             "ring-3 ring-green-500"
         } else {
             ""
