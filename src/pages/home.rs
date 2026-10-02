@@ -1,5 +1,5 @@
 use crate::components::cards::{EducationalResourceCard, MosqueEventCard, NearbyMosqueCard};
-use crate::components::sections::TopTwoDailyPrayersSections;
+use crate::components::sections::{NearbyMosquesSection, TopTwoDailyPrayersSections};
 use leptos::IntoView;
 use leptos::prelude::*;
 use leptos_router::components::A;
@@ -15,6 +15,7 @@ pub fn Home() -> impl IntoView {
                     <h2 class="text-2xl font-bold text-purple-900">"Nearby Mosques"</h2>
                     <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">"View All →"</A>
                 </div>
+                <NearbyMosquesSection />
                 <div class="flex gap-5 overflow-x-scroll pb-4">
                     <NearbyMosqueCard
                         mosque_name="Masjid Al-Farooq".to_string()
