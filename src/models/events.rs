@@ -43,7 +43,7 @@ pub struct Event {
 }
 
 // To be used on client side, where we don't have access to RecordId
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub struct EventDetails {
     pub id: String,
     pub title: String,
@@ -51,6 +51,8 @@ pub struct EventDetails {
     pub category: EventCategory,
     pub date: DateTime<FixedOffset>,
     pub speaker: Option<String>,
+    #[serde(default)]
+    pub mosque_name: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -211,7 +213,7 @@ impl TryFrom<UpdatedEvent> for UpdatedEventRecord {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub struct PersonalEvent {
     pub event: EventDetails,
     pub rsvp: bool,

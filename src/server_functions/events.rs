@@ -199,7 +199,8 @@ pub async fn fetch_users_favorite_mosques_events(
                 description: description,
                 category: category,
                 date: date,
-                speaker: speaker
+                speaker: speaker,
+                mosque_name: mosque.name
             }
             FROM $user_id->favorited->mosques->hosts->events
         );
@@ -223,7 +224,8 @@ pub async fn fetch_users_favorite_mosques_events(
                 description: description,
                 category: category,
                 date: date,
-                speaker: speaker
+                speaker: speaker,
+                mosque_name: mosque.name
             }
             FROM events
             WHERE mosque IN $nearby_mosques
@@ -321,7 +323,8 @@ pub async fn fetch_mosque_events(
                     description: description,
                     category: category,
                     date: date,
-                    speaker: speaker
+                    speaker: speaker,
+                    mosque_name: mosque.name
                 } AS event,
 
                 array::len(<-attending)
@@ -349,7 +352,8 @@ pub async fn fetch_mosque_events(
                     description: description,
                     category: category,
                     date: date,
-                    speaker: speaker
+                    speaker: speaker,
+                    mosque_name: mosque.name
                 } AS event,
 
                 (array::len(<-attending WHERE in = $user_id) == 1)

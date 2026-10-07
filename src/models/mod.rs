@@ -16,3 +16,4 @@ pub mod roadmap;
 pub mod session;
 pub mod user;
 pub mod nearby_mosque;
+pub mod upcoming_event_item;
