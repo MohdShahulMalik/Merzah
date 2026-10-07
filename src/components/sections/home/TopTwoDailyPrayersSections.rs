@@ -31,7 +31,7 @@ pub fn TopTwoDailyPrayersSections() -> impl IntoView {
 
                 match fav {
                     Some(MixedMosqueResponse::SingleMosque(mosque)) => Some(mosque),
-                    _ => fetch_mosques_for_location(lat, lon, Some(true))
+                    _ => fetch_mosques_for_location(lat, lon, true)
                         .await
                         .ok()
                         .and_then(|res| res.data)

@@ -210,7 +210,7 @@ pub async fn add_mosques_of_region(
 pub async fn fetch_mosques_for_location(
     lat: f64,
     lon: f64,
-    single_closest: Option<bool>,
+    single_closest: bool,
 ) -> Result<ApiResponse<MixedMosqueResponse>, ServerFnError> {
     let (response_option, db) = match get_server_context::<MixedMosqueResponse>().await {
         Ok(ctx) => ctx,
@@ -225,7 +225,7 @@ pub async fn fetch_mosques_for_location(
     let responder = ServerResponse::new(response_option);
     let point = Geometry::Point((lon, lat).into());
 
-    if let Some(true) = single_closest {
+    if single_closest {
         let query = r#"
             SELECT *, geo::distance(location, $point) AS distance FROM mosques
             ORDER BY distance ASC

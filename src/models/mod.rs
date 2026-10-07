@@ -15,3 +15,4 @@ pub mod roadmap;
 #[cfg(feature = "ssr")]
 pub mod session;
 pub mod user;
+pub mod nearby_mosque;
