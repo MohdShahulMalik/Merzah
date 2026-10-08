@@ -7,3 +7,4 @@ pub mod home;
 pub mod layout;
 pub mod learn;
 pub mod microsoft_callback;
+pub mod mosques;

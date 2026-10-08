@@ -21,6 +21,7 @@ use crate::{
         layout::AppLayout,
         learn::Learn,
         microsoft_callback::MicrosoftCallback,
+        mosques::Mosques,
     },
     server_functions::auth::fetch_me,
 };
@@ -78,6 +79,7 @@ pub fn App() -> impl IntoView {
                 <Routes fallback=move || "Not found.">
                     <ParentRoute path=path!("/") view=AppLayout>
                         <Route path=path!("home") view=Home/>
+                        <Route path=path!("mosques") view=Mosques/>
                         <Route path=path!("events") view=Events/>
                         <Route path=path!("learn") view=Learn/>
                     </ParentRoute>
