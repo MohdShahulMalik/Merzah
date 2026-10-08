@@ -629,6 +629,17 @@ async fn test_fetch_users_favorite_mosques_events_includes_nearby_and_deduplicat
         !nearby_personal_event.rsvp,
         "Non-attending nearby event should have rsvp=false"
     );
+
+    assert_eq!(
+        favorite_personal_event.event.mosque_name.as_deref(),
+        Some("Favorite Near Mosque"),
+        "Favorite event should carry its mosque name"
+    );
+    assert_eq!(
+        nearby_personal_event.event.mosque_name.as_deref(),
+        Some("Nearby Non Favorite Mosque"),
+        "Nearby event should carry its mosque name"
+    );
 }
 
 #[tokio::test]
