@@ -31,7 +31,7 @@ pub struct Track {
     pub deleted: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct TrackOnClient {
     pub id: String,
     pub name: String,
@@ -134,7 +134,7 @@ pub struct UpdatedCourseRecord {
     pub updated_at: Datetime,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct CourseOnClient {
     pub id: String,
     pub title: String,
@@ -353,7 +353,7 @@ pub struct LessonDetail {
 
 // ===== ENROLLMENT & PROGRESS =====
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct EnrollmentProgress {
     pub course_id: String,
     pub course_title: String,
