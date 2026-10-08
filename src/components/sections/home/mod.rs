@@ -9,3 +9,7 @@ pub use nearby_mosques_section::*;
 #[path = "UpcomingEventsSection.rs"]
 pub mod upcoming_events_section;
 pub use upcoming_events_section::*;
+
+#[path = "RecommendedSection.rs"]
+pub mod recommended_section;
+pub use recommended_section::*;
