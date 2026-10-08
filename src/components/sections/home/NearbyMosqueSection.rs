@@ -10,6 +10,7 @@ use crate::app::AppState;
 use crate::app::AppStateStoreFields;
 use crate::components::cards::NearbyMosqueCard;
 use crate::models::api_responses::MixedMosqueResponse;
+use crate::models::location::GeoPosition;
 use crate::models::nearby_mosque::NearbyMosqueCardItem;
 use crate::server_functions::mosque::fetch_mosques_for_location;
 use crate::server_functions::mosque::get_favorite_mosque;
@@ -56,6 +57,8 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
             .flatten()
             .unwrap_or_default();
 
+        let user_pos = app_state.coords().map(|coords| coords.read().clone());
+
         let limited: Vec<NearbyMosqueCardItem> = all
             .into_iter()
             .take(if show_all.get() {
@@ -81,12 +84,22 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
                     })
                     .unwrap_or_else(|| ("Iqamah".to_string(), "--".to_string()));
 
+                let distance = user_pos
+                    .as_ref()
+                    .map(|pos| {
+                        pos.distance_km(&GeoPosition::new(
+                            mosque.location.0,
+                            mosque.location.1,
+                        ))
+                    })
+                    .unwrap_or(0.0);
+
                 NearbyMosqueCardItem::new(
                     mosque.id.clone(),
                     mosque_name,
                     iqamah_label,
                     iqamah_time,
-                    0.0,
+                    distance,
                     false,
                     mosque.cover_img.clone(),
                 )
