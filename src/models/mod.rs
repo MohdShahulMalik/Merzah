@@ -17,3 +17,6 @@ pub mod session;
 pub mod user;
 pub mod nearby_mosque;
 pub mod upcoming_event_item;
+pub mod recommended_course_item;
+pub mod event_page_item;
+pub mod catalog_entry;
