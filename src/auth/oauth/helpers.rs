@@ -149,12 +149,13 @@ impl OAuthCallback {
             }
         };
 
+        use crate::auth::session::session_max_age_secs;
         use actix_web::http::header::{HeaderValue, SET_COOKIE};
 
         let session_cookie = format!(
             "__Host-session={}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age={}",
             session_token,
-            24 * 60 * 60
+            session_max_age_secs()
         );
 
         let clear_state_cookie = format!(

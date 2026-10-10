@@ -1,9 +1,17 @@
+use surrealdb::RecordId;
+use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client;
-use surrealdb::{RecordId, Surreal};
 
-use crate::errors::oauth::{OAuthError, OAuthResult};
-use crate::models::oauth::{GoogleTokenResponse, GoogleUser};
-use crate::models::user::{CreateUser, User, UserIdentifier};
+use crate::auth::custom_auth::hash_password;
+use crate::errors::oauth::OAuthError;
+use crate::errors::oauth::OAuthResult;
+use crate::models::oauth::GoogleTokenResponse;
+use crate::models::oauth::GoogleUser;
+use crate::models::user::CreateUser;
+use crate::models::user::CreateUserIdentifier;
+use crate::models::user::Identifier;
+use crate::models::user::User;
+use crate::models::user::UserIdentifier;
 use crate::utils::token_generator::generate_token;
 
 pub fn get_authorization_url(state: &str) -> OAuthResult<String> {
@@ -87,7 +95,7 @@ pub async fn find_or_create_user(
     db: &Surreal<Client>,
 ) -> OAuthResult<RecordId> {
     let existing: Option<UserIdentifier> = db
-        .query("SELECT * FROM user_identifier WHERE identifier_type = 'google' AND identifier_value = $id")
+        .query("SELECT * FROM user_identifier WHERE identifier_type = 'google' AND identifier_value = $id LIMIT 1")
         .bind(("id", profile.id.clone()))
         .await?
         .take(0)?;
@@ -105,39 +113,33 @@ pub async fn find_or_create_user(
             .to_string()
     });
 
-    let placeholder_password = format!("oauth_google_{}", generate_token());
+    let raw_placeholder = format!("oauth_google_{}", generate_token());
+    let placeholder_hash = hash_password(&raw_placeholder)
+        .map_err(|e| OAuthError::ParseError(format!("Failed to hash OAuth placeholder: {}", e)))?;
 
-    let user = CreateUser {
-        display_name,
-        password_hash: placeholder_password,
-    };
+    let user = CreateUser::new(display_name, placeholder_hash);
 
-    let surql = r#"
-        BEGIN TRANSACTION;
-
-        LET $created_user = (CREATE ONLY users CONTENT $user_data);
-
-        CREATE user_identifier CONTENT {
-            user: $created_user.id,
-            identifier_type: 'google',
-            identifier_value: $provider_id
-        };
-
-        RETURN $created_user;
-        COMMIT TRANSACTION;
-    "#;
-
-    let mut result = db
-        .query(surql)
-        .bind(("user_data", user))
-        .bind(("provider_id", profile.id))
+    let created: Option<User> = db
+        .create("users")
+        .content(user)
         .await
         .map_err(|e| OAuthError::DatabaseError(Box::new(e)))?;
+    let created_user = created.ok_or(OAuthError::UserNotFound)?;
+    let user_id = created_user.id.clone();
 
-    let created_user: Option<User> = result
-        .take(0)
-        .map_err(|e| OAuthError::DatabaseError(Box::new(e)))?;
-    let user_id = created_user.ok_or(OAuthError::UserNotFound)?.id;
+    let identifier = Identifier::Google(profile.id);
+    let identifier_row = CreateUserIdentifier::new(identifier, user_id.clone());
+    let ident_result = db
+        .create::<Option<CreateUserIdentifier>>("user_identifier")
+        .content(identifier_row)
+        .await;
+    if let Err(e) = ident_result {
+        let _ = db
+            .query("DELETE ONLY $uid")
+            .bind(("uid", user_id.clone()))
+            .await;
+        return Err(OAuthError::DatabaseError(Box::new(e)));
+    }
 
     Ok(user_id)
 }
