@@ -14,6 +14,8 @@ pub mod quiz;
 pub mod roadmap;
 #[cfg(feature = "ssr")]
 pub mod session;
+#[cfg(feature = "ssr")]
+pub mod session_token;
 pub mod user;
 pub mod nearby_mosque;
 pub mod upcoming_event_item;
