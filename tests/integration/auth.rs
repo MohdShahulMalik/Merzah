@@ -16,9 +16,21 @@ pub struct RegisterationFormWrapper {
     pub form: RegistrationFormData,
 }
 
+impl RegisterationFormWrapper {
+    pub fn new(form: RegistrationFormData) -> Self {
+        Self { form }
+    }
+}
+
 #[derive(Serialize)]
 struct LoginFormWrapper {
     form: LoginFormData,
+}
+
+impl LoginFormWrapper {
+    pub fn new(form: LoginFormData) -> Self {
+        Self { form }
+    }
 }
 
 #[rstest]
@@ -37,14 +49,11 @@ async fn register_server_fn_successfully_register_a_user(
     let addr = spawn_app(db.clone());
     let relative_addr = format!("{}/auth/register", addr);
 
-    let body = RegisterationFormWrapper {
-        form: RegistrationFormData::new(
+    let body = RegisterationFormWrapper::new(RegistrationFormData::new(
             name.clone(),
             identifier.clone(),
             password.clone(),
-            Platform::Web,
-        ),
-    };
+            Platform::Web,));
 
     let response = client
         .post(relative_addr)
@@ -136,7 +145,7 @@ async fn logout_server_fn_successfully_logs_out_user() {
         "password123".to_string(),
         Platform::Web,
     );
-    let body = RegisterationFormWrapper { form };
+    let body = RegisterationFormWrapper::new(form);
 
     // 1. Register
     let response = client
@@ -230,7 +239,7 @@ async fn login_server_fn_successfully_logs_in_user() {
         password.clone(),
         Platform::Web,
     );
-    let reg_body = RegisterationFormWrapper { form: reg_form };
+    let reg_body = RegisterationFormWrapper::new(reg_form);
 
     let reg_response = client
         .post(&register_url)
@@ -282,12 +291,12 @@ async fn login_server_fn_successfully_logs_in_user() {
 
     let login_client = Client::new();
 
-    let login_form = LoginFormData {
-        identifier: Identifier::Email(email.clone()),
-        password: password.clone(),
-        platform: Platform::Web,
-    };
-    let login_body = LoginFormWrapper { form: login_form };
+    let login_form = LoginFormData::new(
+        Identifier::Email(email.clone()),
+        password.clone(),
+        Platform::Web,
+    );
+    let login_body = LoginFormWrapper::new(login_form);
 
     let login_response = login_client
         .post(&login_url)
@@ -359,7 +368,7 @@ async fn mobile_auth_flow_works_correctly() {
         password.clone(),
         Platform::Mobile,
     );
-    let reg_body = RegisterationFormWrapper { form: reg_form };
+    let reg_body = RegisterationFormWrapper::new(reg_form);
 
     let response = client
         .post(&register_url)
@@ -395,12 +404,12 @@ async fn mobile_auth_flow_works_correctly() {
     assert!(response.status().is_success());
 
     // 3. Login as Mobile
-    let login_form = LoginFormData {
-        identifier: Identifier::Email(email.clone()),
-        password: password.clone(),
-        platform: Platform::Mobile,
-    };
-    let login_body = LoginFormWrapper { form: login_form };
+    let login_form = LoginFormData::new(
+        Identifier::Email(email.clone()),
+        password.clone(),
+        Platform::Mobile,
+    );
+    let login_body = LoginFormWrapper::new(login_form);
 
     let response = client
         .post(&login_url)
@@ -429,10 +438,11 @@ async fn mobile_auth_flow_works_correctly() {
         "New session token should be different"
     );
 
-    // 4. Verify Session exists in DB
+    // 4. Verify Session exists in DB (stored as hash, not raw)
+    let token_hash = merzah::models::session_token::hash_session_token(&new_session_token);
     let mut session_result = db
         .query("SELECT * FROM sessions WHERE session_token = $t")
-        .bind(("t", new_session_token))
+        .bind(("t", token_hash))
         .await
         .expect("Failed to query sessions");
 
@@ -504,7 +514,7 @@ async fn test_authenticated_user_can_logout_with_any_method(#[case] auth_method:
         "password123".to_string(),
         platform,
     );
-    let body = RegisterationFormWrapper { form };
+    let body = RegisterationFormWrapper::new(form);
 
     let register_response = client
         .post(&register_url)
@@ -626,7 +636,7 @@ async fn test_auth_flow_registration_returns_correct_response_for_platform(
         "password123".to_string(),
         platform,
     );
-    let body = RegisterationFormWrapper { form };
+    let body = RegisterationFormWrapper::new(form);
 
     let response = client
         .post(&register_url)
