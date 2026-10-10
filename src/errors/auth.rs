@@ -21,4 +21,13 @@ pub enum AuthError {
 
     #[error("Requested user was not found")]
     UserNotFound,
+
+    #[error("Too many login attempts. Try again in {0} seconds")]
+    RateLimited(u64),
+
+    #[error("Password does not meet strength requirements: {0}")]
+    WeakPassword(String),
+
+    #[error("Password reset token is invalid or expired")]
+    InvalidResetToken,
 }
