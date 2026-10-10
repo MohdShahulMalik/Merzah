@@ -1,5 +1,7 @@
 #[path = "unit/auth.rs"]
 mod auth;
+#[path = "unit/auth_hardening.rs"]
+mod auth_hardening;
 mod common;
 #[path = "unit/recurrence.rs"]
 mod recurrence;
