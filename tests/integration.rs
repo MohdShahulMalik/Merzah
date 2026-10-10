@@ -1,5 +1,7 @@
 #[path = "integration/auth.rs"]
 mod auth;
+#[path = "integration/auth_hardening.rs"]
+mod auth_hardening;
 mod common;
 #[path = "integration/education.rs"]
 mod education;
