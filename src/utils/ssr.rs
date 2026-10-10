@@ -1,4 +1,6 @@
 #[cfg(feature = "ssr")]
+use crate::auth::session::extract_bearer_token;
+#[cfg(feature = "ssr")]
 use crate::auth::session::get_user_by_session;
 use crate::models::api_responses::ApiResponse;
 #[cfg(feature = "ssr")]
@@ -53,12 +55,13 @@ pub async fn get_authenticated_user_and_context<T>()
     let session_token = if let Some(cookie) = req.cookie("__Host-session") {
         cookie.value().to_string()
     } else if let Some(auth_header) = req.headers().get("Authorization") {
-        let auth_str = auth_header.to_str().unwrap_or("");
-        if auth_str.starts_with("Bearer ") {
-            auth_str.trim_start_matches("Bearer ").to_string()
-        } else {
-            response_options.set_status(StatusCode::UNAUTHORIZED);
-            return Err(ApiResponse::error("You are not logged in".to_string()));
+        let auth_str = auth_header.to_str().unwrap_or_default();
+        match extract_bearer_token(auth_str) {
+            Some(token) => token,
+            None => {
+                response_options.set_status(StatusCode::UNAUTHORIZED);
+                return Err(ApiResponse::error("You are not logged in".to_string()));
+            }
         }
     } else {
         response_options.set_status(StatusCode::UNAUTHORIZED);
@@ -161,6 +164,11 @@ impl ServerResponse {
 
     pub fn conflict<T>(&self, error: String) -> ApiResponse<T> {
         self.options.set_status(StatusCode::CONFLICT);
+        ApiResponse::error(error)
+    }
+
+    pub fn too_many_requests<T>(&self, error: String) -> ApiResponse<T> {
+        self.options.set_status(StatusCode::TOO_MANY_REQUESTS);
         ApiResponse::error(error)
     }
 

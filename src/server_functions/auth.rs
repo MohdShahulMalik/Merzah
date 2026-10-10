@@ -1,41 +1,81 @@
+use crate::models::auth::LoginFormData;
+use crate::models::password_reset::PasswordChangeRequest;
+use crate::models::password_reset::PasswordResetConfirm;
+use crate::models::password_reset::PasswordResetRequest;
+use crate::models::user::Identifier;
+use crate::models::user::UserOnClient;
+use crate::models::api_responses::ApiResponse;
+use crate::models::auth::Platform;
+use crate::models::auth::RegistrationFormData;
+use leptos::prelude::ServerFnError;
+use leptos::server_fn::codec::DeleteUrl;
+use leptos::server_fn::codec::Json;
+use leptos::*;
+
+#[cfg(feature = "ssr")]
+use crate::auth::custom_auth::authenticate;
+#[cfg(feature = "ssr")]
+use crate::auth::custom_auth::change_password;
+#[cfg(feature = "ssr")]
+use crate::auth::custom_auth::confirm_password_reset;
+#[cfg(feature = "ssr")]
+use crate::auth::custom_auth::register_user;
+#[cfg(feature = "ssr")]
+use crate::auth::custom_auth::request_password_reset;
 #[cfg(feature = "ssr")]
 use crate::auth::oauth::discord::DiscordProvider;
 #[cfg(feature = "ssr")]
 use crate::auth::oauth::helpers::OAuthCallback;
 #[cfg(feature = "ssr")]
 use crate::auth::oauth::microsoft::MicrosoftProvider;
-use crate::models::auth::LoginFormData;
 #[cfg(feature = "ssr")]
-use crate::models::auth::Platform;
+use crate::auth::oauth::google::exchange_code;
 #[cfg(feature = "ssr")]
-use crate::models::oauth::GoogleUser;
-use crate::models::{api_responses::ApiResponse, auth::RegistrationFormData, user::UserOnClient};
+use crate::auth::oauth::google::find_or_create_user;
 #[cfg(feature = "ssr")]
-use garde::Validate;
-use leptos::prelude::ServerFnError;
-use leptos::server_fn::codec::{DeleteUrl, Json};
-use leptos::*;
-
+use crate::auth::oauth::google::get_authorization_url;
 #[cfg(feature = "ssr")]
-use crate::auth::custom_auth::{authenticate, register_user};
+use crate::auth::oauth::google::get_user_info;
 #[cfg(feature = "ssr")]
-use crate::auth::oauth::google::{
-    exchange_code, find_or_create_user, get_authorization_url, get_user_info,
-};
+use crate::auth::oauth::state::generate_state;
 #[cfg(feature = "ssr")]
-use crate::auth::oauth::state::{generate_state, validate_state};
+use crate::auth::oauth::state::validate_state;
 #[cfg(feature = "ssr")]
-use crate::auth::session::{
-    create_session, delete_session, remove_session_cookie, set_session_cookie,
-};
+use crate::auth::session::create_session;
+#[cfg(feature = "ssr")]
+use crate::auth::session::delete_session;
+#[cfg(feature = "ssr")]
+use crate::auth::session::extract_bearer_token;
+#[cfg(feature = "ssr")]
+use crate::auth::session::remove_session_cookie;
+#[cfg(feature = "ssr")]
+use crate::auth::session::session_max_age_secs;
+#[cfg(feature = "ssr")]
+use crate::auth::session::set_session_cookie;
 #[cfg(feature = "ssr")]
 use crate::errors::auth::AuthError;
 #[cfg(feature = "ssr")]
 use crate::errors::session::SessionError;
 #[cfg(feature = "ssr")]
-use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context, get_server_context};
+use crate::models::oauth::GoogleUser;
+#[cfg(feature = "ssr")]
+use crate::models::rate_limit::check_login_rate_limit;
+#[cfg(feature = "ssr")]
+use crate::models::rate_limit::rate_limit_key;
+#[cfg(feature = "ssr")]
+use crate::models::rate_limit::record_login_failure;
+#[cfg(feature = "ssr")]
+use crate::models::rate_limit::record_login_success;
+#[cfg(feature = "ssr")]
+use crate::utils::ssr::ServerResponse;
+#[cfg(feature = "ssr")]
+use crate::utils::ssr::get_authenticated_user_and_context;
+#[cfg(feature = "ssr")]
+use crate::utils::ssr::get_server_context;
 #[cfg(feature = "ssr")]
 use actix_web::HttpRequest;
+#[cfg(feature = "ssr")]
+use garde::Validate;
 #[cfg(feature = "ssr")]
 use tracing::error;
 
@@ -61,12 +101,34 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
     let validation_result_for_uniqueness = form.validate_uniqueness(&db).await;
     if let Err(error) = validation_result_for_uniqueness {
         error!(?error);
+        if let Some(auth_err) = error.downcast_ref::<AuthError>() {
+            if let AuthError::NotUniqueError(_) = auth_err {
+                return Ok(responder.conflict("An account with this identifier already exists".to_string()));
+            }
+        }
         return Ok(responder.conflict(format!("{}", error)));
     }
 
     let user_id = match register_user(form.clone(), &db).await {
         Ok(id) => id,
         Err(error) => {
+            if let Some(auth_err) = error.downcast_ref::<AuthError>() {
+                if let AuthError::NotUniqueError(_) = auth_err {
+                    return Ok(
+                        responder.conflict("An account with this identifier already exists".to_string())
+                    );
+                }
+                if let AuthError::WeakPassword(msg) = auth_err {
+                    return Ok(responder.unprocessable_entity(msg.clone()));
+                }
+                if let AuthError::InvalidData(report) = auth_err {
+                    let errors = report
+                        .iter()
+                        .map(|(field, msg)| format!("{}, {}", field, msg))
+                        .collect::<Vec<_>>();
+                    return Ok(responder.unprocessable_entity(errors.join("\n")));
+                }
+            }
             error!(?error, "Failed to register the user");
             return Ok(
                 responder.internal_server_error("Failed to register the user".to_string())
@@ -103,15 +165,33 @@ pub async fn register(form: RegistrationFormData) -> Result<ApiResponse<String>,
 
 #[server(input = Json, output = Json, prefix = "/auth", endpoint = "login")]
 pub async fn login(form: LoginFormData) -> Result<ApiResponse<String>, ServerFnError> {
-    let (response_options, db, _user) = match get_authenticated_user_and_context::<String>().await {
+    let (response_options, db) = match get_server_context::<String>().await {
         Ok(ctx) => ctx,
         Err(e) => return Ok(e),
     };
     let responder = ServerResponse::new(response_options);
 
+    if let Err(report) = form.validate() {
+        let errors = report
+            .iter()
+            .map(|(field, msg)| format!("{}, {}", field, msg))
+            .collect::<Vec<_>>();
+        return Ok(responder.unprocessable_entity(errors.join("\n")));
+    }
+
+    let normalized = form.identifier.normalized();
+    let key = rate_limit_key(normalized.identifier_type_str(), normalized.identifier_value());
+    if let Err(retry_after) = check_login_rate_limit(&key) {
+        return Ok(responder.too_many_requests(format!(
+            "Too many login attempts. Try again in {} seconds",
+            retry_after
+        )));
+    }
+
     let user_id = match authenticate(form.clone(), &db).await {
         Ok(id) => id,
         Err(error) => {
+            record_login_failure(&key);
             if let Some(auth_error) = error.downcast_ref::<AuthError>() {
                 match auth_error {
                     AuthError::UserNotFound | AuthError::PasswordVerificationError(_) => {
@@ -119,6 +199,15 @@ pub async fn login(form: LoginFormData) -> Result<ApiResponse<String>, ServerFnE
                         return Ok(
                             responder.unauthorized("Invalid username or password.".to_string())
                         );
+                    }
+                    AuthError::RateLimited(secs) => {
+                        return Ok(responder.too_many_requests(format!(
+                            "Too many login attempts. Try again in {} seconds",
+                            secs
+                        )));
+                    }
+                    AuthError::InvalidData(_) => {
+                        return Ok(responder.unprocessable_entity("Invalid login data".to_string()));
                     }
                     AuthError::DatabaseError(_) | AuthError::PasswordHashError(_) => {
                         error!(?error, "Internal server error during authentication.");
@@ -139,6 +228,8 @@ pub async fn login(form: LoginFormData) -> Result<ApiResponse<String>, ServerFnE
             }
         }
     };
+
+    record_login_success(&key);
 
     let session_token = match create_session(user_id, &db).await {
         Ok(token) => token,
@@ -195,11 +286,12 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
     let session_token = if let Some(cookie) = req.cookie("__Host-session") {
         cookie.value().to_string()
     } else if let Some(auth_header) = req.headers().get("Authorization") {
-        let auth_str = auth_header.to_str().unwrap_or("");
-        if auth_str.starts_with("Bearer ") {
-            auth_str.trim_start_matches("Bearer ").to_string()
-        } else {
-            return Ok(responder.unauthorized("You are not logged in".to_string()));
+        let auth_str = auth_header.to_str().unwrap_or_default();
+        match extract_bearer_token(auth_str) {
+            Some(token) => token,
+            None => {
+                return Ok(responder.unauthorized("You are not logged in".to_string()));
+            }
         }
     } else {
         return Ok(responder.unauthorized("You are not logged in".to_string()));
@@ -211,6 +303,9 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
         if let Some(session_error) = session_error_option {
             match session_error {
                 SessionError::SessionExpired(_) => {
+                    if req.cookie("__Host-session").is_some() {
+                        let _ = remove_session_cookie();
+                    }
                     return Ok(responder.unauthorized("Your session has expired".to_string()));
                 }
                 SessionError::SessionNotFound => {
@@ -245,6 +340,90 @@ pub async fn logout() -> Result<ApiResponse<String>, ServerFnError> {
     }
 
     Ok(responder.ok("Successfully logged out the user".to_string()))
+}
+
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "change-password")]
+pub async fn change_password_fn(
+    payload: PasswordChangeRequest,
+) -> Result<ApiResponse<String>, ServerFnError> {
+    let (response_options, db, user) =
+        match get_authenticated_user_and_context::<String>().await {
+            Ok(ctx) => ctx,
+            Err(e) => return Ok(e),
+        };
+    let responder = ServerResponse::new(response_options);
+    match change_password(user.id, &payload.current_password, &payload.new_password, &db).await {
+        Ok(()) => Ok(responder.ok("Password changed successfully".to_string())),
+        Err(e) => {
+            if let Some(auth_err) = e.downcast_ref::<AuthError>() {
+                match auth_err {
+                    AuthError::PasswordVerificationError(_) | AuthError::UserNotFound => {
+                        return Ok(responder.unauthorized("Current password is incorrect".to_string()));
+                    }
+                    AuthError::WeakPassword(msg) => {
+                        return Ok(responder.unprocessable_entity(msg.clone()));
+                    }
+                    _ => {}
+                }
+            }
+            error!(?e, "Failed to change password");
+            Ok(responder.internal_server_error("Failed to change password".to_string()))
+        }
+    }
+}
+
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "request-reset")]
+pub async fn request_reset_fn(
+    payload: PasswordResetRequest,
+) -> Result<ApiResponse<String>, ServerFnError> {
+    let (response_options, db) = match get_server_context::<String>().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+    let responder = ServerResponse::new(response_options);
+    let identifier = if payload.identifier_type == "email" {
+        Identifier::Email(payload.identifier_value)
+    } else if payload.identifier_type == "mobile" {
+        Identifier::Mobile(payload.identifier_value)
+    } else {
+        return Ok(responder.bad_request("Unsupported identifier type".to_string()));
+    };
+    match request_password_reset(identifier, &db).await {
+        Ok(raw_token) => Ok(responder.ok(raw_token)),
+        Err(e) => {
+            error!(?e, "Password reset request failed");
+            Ok(responder.ok("If an account exists, a reset token has been created".to_string()))
+        }
+    }
+}
+
+#[server(input = Json, output = Json, prefix = "/auth", endpoint = "confirm-reset")]
+pub async fn confirm_reset_fn(
+    payload: PasswordResetConfirm,
+) -> Result<ApiResponse<String>, ServerFnError> {
+    let (response_options, db) = match get_server_context::<String>().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+    let responder = ServerResponse::new(response_options);
+    match confirm_password_reset(&payload.reset_token, &payload.new_password, &db).await {
+        Ok(()) => Ok(responder.ok("Password has been reset".to_string())),
+        Err(e) => {
+            if let Some(auth_err) = e.downcast_ref::<AuthError>() {
+                match auth_err {
+                    AuthError::InvalidResetToken => {
+                        return Ok(responder.bad_request("Reset token is invalid or expired".to_string()));
+                    }
+                    AuthError::WeakPassword(msg) => {
+                        return Ok(responder.unprocessable_entity(msg.clone()));
+                    }
+                    _ => {}
+                }
+            }
+            error!(?e, "Password reset confirm failed");
+            Ok(responder.bad_request("Reset token is invalid or expired".to_string()))
+        }
+    }
 }
 
 #[server(input = Json, output = Json, prefix = "/auth", endpoint = "google-url")]
@@ -364,7 +543,7 @@ pub async fn handle_google_callback(
     let session_cookie = format!(
         "__Host-session={}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age={}",
         session_token,
-        24 * 60 * 60
+        session_max_age_secs()
     );
 
     let clear_state_cookie =
