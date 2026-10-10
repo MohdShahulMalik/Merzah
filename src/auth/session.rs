@@ -1,32 +1,45 @@
-use actix_web::http::header::{HeaderValue, SET_COOKIE};
-use anyhow::{Context, Result};
-use chrono::{Duration, Utc};
+use actix_web::http::header::HeaderValue;
+use actix_web::http::header::SET_COOKIE;
+use anyhow::Context;
+use anyhow::Result;
+use chrono::Duration;
+use chrono::Utc;
 use leptos::prelude::expect_context;
 use leptos_actix::ResponseOptions;
+use surrealdb::RecordId;
+use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client;
 use surrealdb::sql::Datetime;
-use surrealdb::{RecordId, Surreal};
 
-use crate::{
-    errors::session::SessionError,
-    models::{
-        session::{CreateSession, Session, UpdateSession},
-        user::User,
-    },
-    utils::token_generator::generate_token,
-};
+use crate::errors::session::SessionError;
+use crate::models::session::CreateSession;
+use crate::models::session::MAX_SESSIONS_PER_USER;
+use crate::models::session::SESSION_DURATION_HOURS;
+use crate::models::session::Session;
+use crate::models::session::UpdateSession;
+use crate::models::session_token::hash_session_token;
+use crate::models::user::User;
+use crate::utils::token_generator::generate_token;
 
-static SESSION_DURATION_IN_HOURS: i64 = 1;
+pub fn session_max_age_secs() -> i64 {
+    SESSION_DURATION_HOURS * 60 * 60
+}
+
+pub fn extract_bearer_token(auth_header: &str) -> Option<String> {
+    auth_header
+        .strip_prefix("Bearer ")
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+}
 
 pub async fn create_session(user: RecordId, db: &Surreal<Client>) -> Result<String> {
     let session_token = generate_token();
-    let expires_at = Datetime::from(Utc::now() + Duration::hours(SESSION_DURATION_IN_HOURS));
+    let token_hash = hash_session_token(&session_token);
+    let expires_at = Datetime::from(Utc::now() + Duration::hours(SESSION_DURATION_HOURS));
 
-    let session = CreateSession {
-        user,
-        session_token: session_token.clone(),
-        expires_at,
-    };
+    enforce_session_limit(&user, db).await?;
+
+    let session = CreateSession::new(user, token_hash, expires_at);
 
     let _: Option<CreateSession> = db
         .create("sessions")
@@ -38,12 +51,32 @@ pub async fn create_session(user: RecordId, db: &Surreal<Client>) -> Result<Stri
     Ok(session_token)
 }
 
+async fn enforce_session_limit(user: &RecordId, db: &Surreal<Client>) -> Result<()> {
+    let mut result = db
+        .query("SELECT * FROM sessions WHERE user = $u ORDER BY created_at ASC")
+        .bind(("u", user.clone()))
+        .await
+        .map_err(|e| SessionError::DatabaseError(Box::new(e)))?;
+    let sessions: Vec<Session> = result.take(0).unwrap_or_default();
+    if sessions.len() >= MAX_SESSIONS_PER_USER {
+        let excess = sessions.len() + 1 - MAX_SESSIONS_PER_USER;
+        for old in sessions.iter().take(excess) {
+            let _ = db
+                .query("DELETE ONLY $id")
+                .bind(("id", old.id.clone()))
+                .await;
+        }
+    }
+    Ok(())
+}
+
 pub async fn get_user_by_session(session_token: &str, db: &Surreal<Client>) -> Result<User> {
     validate_session_token(session_token)?;
+    let token_hash = hash_session_token(session_token);
 
     let result_from_sessions_table: Option<crate::models::session::SessionWithUser> = db
-        .query("SELECT * FROM sessions WHERE session_token = $val FETCH user")
-        .bind(("val", session_token.to_string()))
+        .query("SELECT * FROM sessions WHERE session_token = $val LIMIT 1 FETCH user")
+        .bind(("val", token_hash))
         .await
         .map_err(|e| SessionError::DatabaseError(Box::new(e)))
         .with_context(|| "Failed to fetch the session details")?
@@ -51,6 +84,10 @@ pub async fn get_user_by_session(session_token: &str, db: &Surreal<Client>) -> R
 
     if let Some(session) = result_from_sessions_table {
         if session.expires_at <= Datetime::from(Utc::now()) {
+            let _ = db
+                .query("DELETE ONLY $id")
+                .bind(("id", session.id))
+                .await;
             Err(SessionError::SessionExpired(session.expires_at))?;
         }
 
@@ -62,10 +99,11 @@ pub async fn get_user_by_session(session_token: &str, db: &Surreal<Client>) -> R
 
 pub async fn delete_session(session_token: &str, db: &Surreal<Client>) -> Result<()> {
     validate_session_token(session_token)?;
+    let token_hash = hash_session_token(session_token);
 
     let response: Option<Session> = db
         .query("SELECT * FROM sessions WHERE session_token = $val LIMIT 1")
-        .bind(("val", session_token.to_string()))
+        .bind(("val", token_hash.clone()))
         .await
         .map_err(|e| SessionError::DatabaseError(Box::new(e)))
         .with_context(|| "Failed to fetch the session to delete")?
@@ -77,28 +115,33 @@ pub async fn delete_session(session_token: &str, db: &Surreal<Client>) -> Result
 
     let session = response.unwrap();
 
-    let is_expired = session.expires_at <= Datetime::from(Utc::now());
-
-    if is_expired {
-        Err(SessionError::SessionExpired(session.expires_at))?
-    }
-
     db.query("DELETE sessions WHERE session_token = $val")
-        .bind(("val", session_token.to_string()))
+        .bind(("val", token_hash))
         .await
         .map_err(|e| SessionError::DatabaseError(Box::new(e)))
         .with_context(|| "Failed to delete the session ")?;
 
+    if session.expires_at <= Datetime::from(Utc::now()) {
+        Err(SessionError::SessionExpired(session.expires_at))?
+    }
+
+    Ok(())
+}
+
+pub async fn delete_all_sessions_for_user(user_id: &RecordId, db: &Surreal<Client>) -> Result<()> {
+    db.query("DELETE sessions WHERE user = $u")
+        .bind(("u", user_id.clone()))
+        .await
+        .map_err(|e| SessionError::DatabaseError(Box::new(e)))
+        .with_context(|| "Failed to delete all sessions for user")?;
     Ok(())
 }
 
 pub async fn update_session_token(user_id: RecordId, db: &Surreal<Client>) -> Result<String> {
     let new_session_token = generate_token();
+    let new_hash = hash_session_token(&new_session_token);
 
-    let updated_session = UpdateSession {
-        session_token: Some(new_session_token.clone()),
-        expires_at: None,
-    };
+    let updated_session = UpdateSession::new(Some(new_hash), None);
 
     let _: Option<Session> = db
         .update(user_id.clone())
@@ -120,12 +163,9 @@ pub async fn update_session_expiry(user_id: RecordId, db: &Surreal<Client>) -> R
     let session = session.ok_or(SessionError::SessionNotFound)?;
     let old_expired_at: chrono::DateTime<Utc> = session.expires_at.into();
     let new_expired_at =
-        Datetime::from(old_expired_at + Duration::hours(SESSION_DURATION_IN_HOURS));
+        Datetime::from(old_expired_at + Duration::hours(SESSION_DURATION_HOURS));
 
-    let updated_session = UpdateSession {
-        session_token: None,
-        expires_at: Some(new_expired_at),
-    };
+    let updated_session = UpdateSession::new(None, Some(new_expired_at));
 
     let _: Option<Session> = db
         .update(user_id)
@@ -153,13 +193,11 @@ pub async fn update_session_expiry_and_token(
 
     let old_expired_at: chrono::DateTime<Utc> = session.expires_at.into();
     let new_expired_at =
-        Datetime::from(old_expired_at + Duration::hours(SESSION_DURATION_IN_HOURS));
+        Datetime::from(old_expired_at + Duration::hours(SESSION_DURATION_HOURS));
     let new_session_token = generate_token();
+    let new_hash = hash_session_token(&new_session_token);
 
-    let updated_session = UpdateSession {
-        session_token: Some(new_session_token.clone()),
-        expires_at: Some(new_expired_at),
-    };
+    let updated_session = UpdateSession::new(Some(new_hash), Some(new_expired_at));
 
     let _: Option<Session> = db
         .update(user_id)
@@ -186,7 +224,7 @@ pub fn set_session_cookie(session_token: &str) -> Result<()> {
     let cookie = format!(
         "__Host-session={}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age={}",
         session_token,
-        SESSION_DURATION_IN_HOURS * 60 * 60
+        session_max_age_secs()
     );
 
     response.insert_header(
