@@ -16,6 +16,9 @@ pub mod roadmap;
 pub mod session;
 #[cfg(feature = "ssr")]
 pub mod session_token;
+#[cfg(feature = "ssr")]
+pub mod rate_limit;
+pub mod password_reset;
 pub mod user;
 pub mod nearby_mosque;
 pub mod upcoming_event_item;
