@@ -89,41 +89,48 @@ pub fn UpcomingEventsSection(show_all: ReadSignal<bool>) -> impl IntoView {
         },
     );
 
-    let visible = Memo::new(move |_| {
-        let all: Vec<UpcomingEventItem> = events
-            .get()
-            .unwrap_or_default()
-            .iter()
-            .map(to_item)
-            .collect();
-
-        if show_all.get() {
-            all
-        } else {
-            all.into_iter().take(PREVIEW_SIZE).collect()
-        }
-    });
-
     view! {
         <div class="flex gap-5 overflow-x-scroll pb-4">
-            <For
-                each=move || visible.get()
-                key=|item| item.id.clone()
-                let(item)
-            >
-                <MosqueEventCard
-                    event_title=item.event_title.clone()
-                    event_type=item.event_type.clone()
-                    event_type_class=item.event_type_class.clone()
-                    mosque_name=item.mosque_name.clone()
-                    event_day=item.event_day.clone()
-                    event_time=item.event_time.clone()
-                    event_short_description=item.event_short_description.clone()
-                />
-            </For>
-            <Show when=move || visible.get().is_empty()>
-                <p class="text-sm text-foreground-600">"No upcoming events near you yet."</p>
-            </Show>
+            <Suspense fallback=move || view! {
+                <p class="text-sm text-foreground-600">"Loading events…"</p>
+            }>
+                {move || {
+                let all: Vec<UpcomingEventItem> = events
+                    .get()
+                    .unwrap_or_default()
+                    .iter()
+                    .map(to_item)
+                    .collect();
+
+                let items = if show_all.get() {
+                    all
+                } else {
+                    all.into_iter().take(PREVIEW_SIZE).collect()
+                };
+                let empty = items.is_empty();
+
+                view! {
+                    <For
+                        each=move || items.clone()
+                        key=|item| item.id.clone()
+                        let(item)
+                    >
+                        <MosqueEventCard
+                            event_title=item.event_title.clone()
+                            event_type=item.event_type.clone()
+                            event_type_class=item.event_type_class.clone()
+                            mosque_name=item.mosque_name.clone()
+                            event_day=item.event_day.clone()
+                            event_time=item.event_time.clone()
+                            event_short_description=item.event_short_description.clone()
+                        />
+                    </For>
+                    <Show when=move || empty>
+                        <p class="text-sm text-foreground-600">"No upcoming events near you yet."</p>
+                    </Show>
+                }
+                }}
+            </Suspense>
         </div>
     }
 }
