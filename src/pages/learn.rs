@@ -61,10 +61,6 @@ pub fn Learn() -> impl IntoView {
         },
     );
 
-    let enrolled_memo = Memo::new(move |_| enrolled.get().unwrap_or_default());
-    let tracks_memo = Memo::new(move |_| tracks.get().unwrap_or_default());
-    let catalog_memo = Memo::new(move |_| catalog.get().unwrap_or_default());
-
     let filter_groups = vec![
         FilterGroup::new(
             "Category:",
@@ -100,7 +96,14 @@ pub fn Learn() -> impl IntoView {
                 filter_groups=filter_groups
             />
 
-            <ContinueLearningSection courses=enrolled_memo />
+            <Suspense fallback=move || view! {
+                <p class="text-sm text-foreground-600">"Loading your courses…"</p>
+            }>
+                {move || {
+                    let courses = enrolled.get().unwrap_or_default();
+                    view! { <ContinueLearningSection courses=courses /> }
+                }}
+            </Suspense>
 
             <section class="space-y-6">
                 <div class="flex items-center justify-between gap-4">
@@ -110,7 +113,14 @@ pub fn Learn() -> impl IntoView {
                     </A>
                 </div>
 
-                <FeaturedCoursesSection catalog=catalog_memo />
+                <Suspense fallback=move || view! {
+                    <p class="text-sm text-foreground-600">"Loading featured courses…"</p>
+                }>
+                    {move || {
+                        let entries = catalog.get().unwrap_or_default();
+                        view! { <FeaturedCoursesSection catalog=entries /> }
+                    }}
+                </Suspense>
             </section>
 
             <section class="space-y-6">
@@ -121,17 +131,35 @@ pub fn Learn() -> impl IntoView {
                     </A>
                 </div>
 
-                <LearningPathsSection
-                    tracks=tracks_memo
-                    catalog=catalog_memo
-                    enrolled=enrolled_memo
-                />
+                <Suspense fallback=move || view! {
+                    <p class="text-sm text-foreground-600">"Loading learning paths…"</p>
+                }>
+                    {move || {
+                        let path_tracks = tracks.get().unwrap_or_default();
+                        let path_catalog = catalog.get().unwrap_or_default();
+                        let path_enrolled = enrolled.get().unwrap_or_default();
+                        view! {
+                            <LearningPathsSection
+                                tracks=path_tracks
+                                catalog=path_catalog
+                                enrolled=path_enrolled
+                            />
+                        }
+                    }}
+                </Suspense>
             </section>
 
             <section class="space-y-6">
                 <h1 class="text-3xl font-bold text-purple-900">"Recommended for You"</h1>
 
-                <RecommendedCoursesSection catalog=catalog_memo />
+                <Suspense fallback=move || view! {
+                    <p class="text-sm text-foreground-600">"Loading recommendations…"</p>
+                }>
+                    {move || {
+                        let entries = catalog.get().unwrap_or_default();
+                        view! { <RecommendedCoursesSection catalog=entries /> }
+                    }}
+                </Suspense>
             </section>
         </div>
     }
