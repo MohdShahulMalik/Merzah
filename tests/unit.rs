@@ -9,5 +9,7 @@ mod recurrence;
 mod prayer;
 #[path = "unit/session.rs"]
 mod session;
+#[path = "unit/ssr_geolocation.rs"]
+mod ssr_geolocation;
 #[path = "unit/user_elevation.rs"]
 mod user_elevation;
