@@ -3,6 +3,7 @@ use crate::app::AppStateStoreFields;
 use crate::components::cards::NextPrayerReminderCard;
 use crate::components::cards::PrayerCard;
 use crate::models::api_responses::MixedMosqueResponse;
+use crate::models::prayer::NextPrayerCardData;
 use crate::server_functions::mosque::{fetch_mosques_for_location, get_favorite_mosque};
 use crate::utils::prayer::format_iqamah;
 use crate::utils::prayer::next_prayer_card_data;
@@ -55,20 +56,22 @@ pub fn TopTwoDailyPrayersSections() -> impl IntoView {
 
     let (recompute, set_recompute) = signal(0_u32);
     let (remaining, set_remaining) = signal(0_u64);
+    let (has_times, set_has_times) = signal(false);
 
-    let next_prayer = Memo::new(move |_| {
+    // Reading the resource here is fine: effects never run while SSR HTML is
+    // being rendered, so this only syncs the countdown once data arrives.
+    Effect::new(move |_| {
         recompute.get();
         let now = Local::now();
 
-        mosque
-            .get()
-            .flatten()
-            .map(|mosque| next_prayer_card_data(&mosque, now.time(), now.weekday() == Weekday::Fri))
-    });
-
-    Effect::new(move |_| {
-        if let Some(card) = next_prayer.get() {
+        if let Some(found) = mosque.get().flatten() {
+            let card = next_prayer_card_data(
+                &found,
+                now.time(),
+                now.weekday() == Weekday::Fri,
+            );
             set_remaining.set(card.total_seconds);
+            set_has_times.set(card.has_times);
         }
     });
 
@@ -76,7 +79,7 @@ pub fn TopTwoDailyPrayersSections() -> impl IntoView {
         move || {
             if remaining.get() > 0 {
                 set_remaining.update(|secs| *secs -= 1);
-            } else if next_prayer.get().is_some_and(|card| card.has_times) {
+            } else if has_times.get() {
                 set_recompute.update(|value| *value += 1);
             }
         },
@@ -84,8 +87,16 @@ pub fn TopTwoDailyPrayersSections() -> impl IntoView {
     );
 
     view! {
-        {move || {
-            let card = next_prayer.get();
+        <Suspense fallback=move || view! {
+            <p class="text-sm text-foreground-600">"Loading prayer times…"</p>
+        }>
+            {move || {
+            recompute.get();
+            let now = Local::now();
+            let found = mosque.get().flatten();
+            let card: Option<NextPrayerCardData> = found.as_ref().map(|mosque| {
+                next_prayer_card_data(mosque, now.time(), now.weekday() == Weekday::Fri)
+            });
             let location = card
                 .as_ref()
                 .map(|card| card.location.clone())
@@ -107,12 +118,12 @@ pub fn TopTwoDailyPrayersSections() -> impl IntoView {
             let minutes = pad2((left % 3600) / 60);
             let seconds = pad2(left % 60);
 
-            let jamat_times = mosque.get()
-                .flatten()
-                .and_then(|mosque| mosque.jamat_times);
-            let adhan_times = mosque.get()
-                .flatten()
-                .and_then(|mosque| mosque.adhan_times);
+            let jamat_times = found
+                .as_ref()
+                .and_then(|mosque| mosque.jamat_times.clone());
+            let adhan_times = found
+                .as_ref()
+                .and_then(|mosque| mosque.adhan_times.clone());
 
             let fajr_jamat_time = jamat_times
                 .as_ref()
@@ -216,8 +227,9 @@ pub fn TopTwoDailyPrayersSections() -> impl IntoView {
                         is_current=prayer_name.as_str() == "Jumu'ah"
                     />
                 </div>
-
             }
-        }}
+
+            }}
+        </Suspense>
     }
 }
