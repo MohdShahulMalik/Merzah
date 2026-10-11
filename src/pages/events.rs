@@ -35,15 +35,6 @@ pub fn Events() -> impl IntoView {
         },
     );
 
-    let all = Memo::new(move |_| {
-        events
-            .get()
-            .unwrap_or_default()
-            .iter()
-            .map(EventPageItem::from_personal)
-            .collect::<Vec<_>>()
-    });
-
     let filter_groups = vec![
         FilterGroup::new(
             "Category:",
@@ -84,13 +75,37 @@ pub fn Events() -> impl IntoView {
                     <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">"View All →"</A>
                 </div>
 
-                <FeaturedEventsSection events=all />
+                <Suspense fallback=move || view! {
+                    <p class="text-sm text-foreground-600">"Loading featured events…"</p>
+                }>
+                    {move || {
+                        let items = events
+                            .get()
+                            .unwrap_or_default()
+                            .iter()
+                            .map(EventPageItem::from_personal)
+                            .collect::<Vec<_>>();
+                        view! { <FeaturedEventsSection events=items /> }
+                    }}
+                </Suspense>
             </section>
 
             <section class="space-y-6">
                 <h1 class="text-3xl font-bold text-purple-900">"All Events"</h1>
 
-                <AllEventsSection events=all />
+                <Suspense fallback=move || view! {
+                    <p class="text-sm text-foreground-600">"Loading events…"</p>
+                }>
+                    {move || {
+                        let items = events
+                            .get()
+                            .unwrap_or_default()
+                            .iter()
+                            .map(EventPageItem::from_personal)
+                            .collect::<Vec<_>>();
+                        view! { <AllEventsSection events=items /> }
+                    }}
+                </Suspense>
             </section>
         </div>
     }
