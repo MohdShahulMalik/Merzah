@@ -52,6 +52,8 @@ ssr = [
   "leptos/ssr",
   "leptos_meta/ssr",
   "leptos_router/ssr",
+  "leptos-use/ssr",
+  "leptos-leaflet/ssr",
   "dep:anyhow",
   "dep:argon2",
   "dep:rand",
