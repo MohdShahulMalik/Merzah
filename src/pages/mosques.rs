@@ -50,13 +50,20 @@ pub fn Mosques() -> impl IntoView {
             <div class="flex items-center justify-between">
                 <h1 class="text-2xl font-bold text-purple-900">"Nearby Mosques Map"</h1>
                 <p class="text-sm text-gray-500">
-                    {move || {
-                        let count = mosques.get().map(|m| m.len()).unwrap_or(0);
-                        format!("{} mosques nearby", count)
-                    }}
+                    <Suspense fallback=move || view! { "…" }>
+                        {move || {
+                            let count = mosques.get().map(|m| m.len()).unwrap_or(0);
+                            format!("{} mosques nearby", count)
+                        }}
+                    </Suspense>
                 </p>
             </div>
 
+            <Suspense fallback=move || view! {
+                <p class="text-sm text-gray-500">"Loading map…"</p>
+            }>
+                {move || {
+                    view! {
             <Show
                 when=move || has_pos.get()
                 fallback=|| {
@@ -145,6 +152,9 @@ pub fn Mosques() -> impl IntoView {
                     }
                 }}
             </Show>
+                    }
+                }}
+            </Suspense>
         </div>
     }
 }
