@@ -44,13 +44,17 @@ fn instructor_initials(name: &str) -> String {
 }
 
 #[component]
-pub fn FeaturedCoursesSection(catalog: Memo<Vec<CatalogEntry>>) -> impl IntoView {
+pub fn FeaturedCoursesSection(catalog: Vec<CatalogEntry>) -> impl IntoView {
+    let featured = catalog
+        .into_iter()
+        .take(FEATURED_COUNT)
+        .collect::<Vec<_>>();
+    let empty = featured.is_empty();
+
     view! {
         <div class="flex gap-6 w-full overflow-x-scroll scrollbar-hide pb-4">
             <ForEnumerate
-                each=move || {
-                    catalog.get().into_iter().take(FEATURED_COUNT).collect::<Vec<_>>()
-                }
+                each=move || featured.clone()
                 key=|entry| entry.course.id.clone()
                 let(idx, entry)
             >
@@ -76,7 +80,7 @@ pub fn FeaturedCoursesSection(catalog: Memo<Vec<CatalogEntry>>) -> impl IntoView
                         })
                 />
             </ForEnumerate>
-            <Show when=move || catalog.get().is_empty()>
+            <Show when=move || empty>
                 <p class="text-sm text-foreground-600">"No featured courses yet."</p>
             </Show>
         </div>

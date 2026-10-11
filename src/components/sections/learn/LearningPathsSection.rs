@@ -35,44 +35,49 @@ fn format_duration(minutes: i32) -> String {
 
 #[component]
 pub fn LearningPathsSection(
-    tracks: Memo<Vec<TrackOnClient>>,
-    catalog: Memo<Vec<CatalogEntry>>,
-    enrolled: Memo<Vec<EnrollmentProgress>>,
+    tracks: Vec<TrackOnClient>,
+    catalog: Vec<CatalogEntry>,
+    enrolled: Vec<EnrollmentProgress>,
 ) -> impl IntoView {
+    let empty = tracks.is_empty();
+
     view! {
         <div class="grid gap-6 md:grid-cols-2">
             <ForEnumerate
-                each=move || tracks.get()
+                each=move || tracks.clone()
                 key=|track| track.id.clone()
                 let(idx, track)
             >
                 {
                     let (title_class, description_class, icon_class) = style(idx.get());
-                    let catalog_items = catalog.get();
-                    let enrolled_items = enrolled.get();
-                    let course_ids: HashSet<String> = catalog_items
-                        .iter()
-                        .filter(|entry| entry.track_id == track.id)
-                        .map(|entry| entry.course.id.clone())
-                        .collect();
-                    let total_minutes: i32 = catalog_items
-                        .iter()
-                        .filter(|entry| entry.track_id == track.id)
-                        .map(|entry| entry.course.duration_minutes)
-                        .sum();
-                    let track_progress: Vec<f32> = enrolled_items
-                        .iter()
-                        .filter(|progress| course_ids.contains(&progress.course_id))
-                        .map(|progress| progress.progress_percent)
-                        .collect();
-                    let average = if track_progress.is_empty() {
-                        None
-                    } else {
-                        Some(
-                            track_progress.iter().sum::<f32>()
-                                / track_progress.len() as f32,
-                        )
+                    let progress = {
+                        let course_ids: HashSet<String> = catalog
+                            .iter()
+                            .filter(|entry| entry.track_id == track.id)
+                            .map(|entry| entry.course.id.clone())
+                            .collect();
+                        let total_minutes: i32 = catalog
+                            .iter()
+                            .filter(|entry| entry.track_id == track.id)
+                            .map(|entry| entry.course.duration_minutes)
+                            .sum();
+                        let track_progress: Vec<f32> = enrolled
+                            .iter()
+                            .filter(|progress| course_ids.contains(&progress.course_id))
+                            .map(|progress| progress.progress_percent)
+                            .collect();
+                        let average = if track_progress.is_empty() {
+                            None
+                        } else {
+                            Some(
+                                track_progress.iter().sum::<f32>()
+                                    / track_progress.len() as f32,
+                            )
+                        };
+
+                        (total_minutes, average)
                     };
+                    let (total_minutes, average) = progress;
 
                     view! {
                         <LearningPathCard
@@ -101,7 +106,7 @@ pub fn LearningPathsSection(
                     }
                 }
             </ForEnumerate>
-            <Show when=move || tracks.get().is_empty()>
+            <Show when=move || empty>
                 <p class="text-sm text-foreground-600">"No learning paths yet."</p>
             </Show>
         </div>

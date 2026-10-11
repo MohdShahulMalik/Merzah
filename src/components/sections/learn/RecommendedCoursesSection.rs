@@ -44,13 +44,16 @@ fn instructor_initials(name: &str) -> String {
 }
 
 #[component]
-pub fn RecommendedCoursesSection(catalog: Memo<Vec<CatalogEntry>>) -> impl IntoView {
+pub fn RecommendedCoursesSection(catalog: Vec<CatalogEntry>) -> impl IntoView {
+    let rest = catalog
+        .into_iter()
+        .skip(FEATURED_COUNT)
+        .collect::<Vec<_>>();
+    let empty = rest.is_empty();
     view! {
         <div class="flex gap-6 w-full overflow-x-scroll scrollbar-hide pb-4">
             <ForEnumerate
-                each=move || {
-                    catalog.get().into_iter().skip(FEATURED_COUNT).collect::<Vec<_>>()
-                }
+                each=move || rest.clone()
                 key=|entry| entry.course.id.clone()
                 let(idx, entry)
             >
@@ -76,9 +79,7 @@ pub fn RecommendedCoursesSection(catalog: Memo<Vec<CatalogEntry>>) -> impl IntoV
                         })
                 />
             </ForEnumerate>
-            <Show when=move || {
-                catalog.get().len() <= FEATURED_COUNT
-            }>
+            <Show when=move || empty>
                 <p class="text-sm text-foreground-600">"No more recommendations yet."</p>
             </Show>
         </div>

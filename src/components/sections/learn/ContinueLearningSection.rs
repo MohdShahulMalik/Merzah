@@ -33,8 +33,9 @@ fn lesson_progress(progress: &EnrollmentProgress) -> String {
 }
 
 #[component]
-pub fn ContinueLearningSection(courses: Memo<Vec<EnrollmentProgress>>) -> impl IntoView {
-    let selected = Memo::new(move |_| select_course(&courses.get()));
+pub fn ContinueLearningSection(courses: Vec<EnrollmentProgress>) -> impl IntoView {
+    let memo_courses = courses.clone();
+    let selected = Memo::new(move |_| select_course(&memo_courses));
 
     let details = Resource::new(
         move || selected.get().map(|course| course.course_id.clone()),
@@ -61,7 +62,10 @@ pub fn ContinueLearningSection(courses: Memo<Vec<EnrollmentProgress>>) -> impl I
                     }
                 }
             >
-                {move || {
+                <Suspense fallback=move || view! {
+                    <p class="text-sm text-foreground-600">"Loading your course…"</p>
+                }>
+                    {move || {
                     let progress = selected.get();
                     let detail = details.get().flatten();
                     match (progress, detail) {
@@ -98,7 +102,8 @@ pub fn ContinueLearningSection(courses: Memo<Vec<EnrollmentProgress>>) -> impl I
                                 .into_any()
                         }
                     }
-                }}
+                    }}
+                </Suspense>
             </Show>
         </section>
     }
