@@ -17,7 +17,7 @@ pub fn PrayerCard(
     };
 
     view! {
-        <div class=move || format!("group relative w-[10.25rem] overflow-hidden rounded-2xl bg-white border-t-white px-3 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.18)] hover:scale-[1.03] {}", border_classes())>
+        <div class=move || format!("group relative min-w-0 w-full overflow-hidden rounded-2xl bg-white border-t-white px-3 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.18)] hover:scale-[1.03] {}", border_classes())>
             <p class = "text-[1.05rem] font-semibold tracking-tight text-foreground-900 mb-3 text-center">{prayer_name}</p>
 
             <div class = "grid grid-cols-[1fr_auto_1fr] items-center gap-2">
@@ -57,7 +57,7 @@ pub fn NextPrayerReminderCard(
     seconds_remaining: String,
 ) -> impl IntoView {
     view! {
-        <section class="relative overflow-hidden rounded-4xl border border-violet-900/20 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.16),_transparent_28%),linear-gradient(135deg,_#23104a_0%,_#31105d_48%,_#24103f_100%)] px-6 py-7 text-white shadow-[0_1.5rem_4rem_rgba(37,16,79,0.22)]">
+        <section class="relative overflow-hidden rounded-2xl border border-violet-900/20 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.16),_transparent_28%),linear-gradient(135deg,_#23104a_0%,_#31105d_48%,_#24103f_100%)] px-4 py-6 text-white shadow-[0_1.5rem_4rem_rgba(37,16,79,0.22)] sm:rounded-4xl sm:px-6 sm:py-7">
             <div class="pointer-events-none absolute inset-0">
                 <svg class="absolute top-[12%] left-[8%]" width="3" height="3"><circle cx="1.5" cy="1.5" r="1.5" fill="white" opacity="0.8"/></svg>
                 <svg class="absolute top-[20%] left-[20%]" width="4" height="4"><circle cx="2" cy="2" r="2" fill="white" opacity="0.6"/></svg>
@@ -81,31 +81,31 @@ pub fn NextPrayerReminderCard(
             <div class="pointer-events-none absolute -left-12 top-10 h-36 w-36 rounded-full bg-amber-300/10 blur-3xl"></div>
             <div class="pointer-events-none absolute right-0 top-0 h-full w-full bg-[radial-gradient(circle_at_85%_25%,rgba(255,219,137,0.12),transparent_18%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.12),transparent_14%)]"></div>
 
-            <div class="relative flex gap-8 flex-row items-center justify-between">
-                <div class="flex max-w-2xl justify-center items-center">
+            <div class="relative flex min-w-0 flex-col gap-6 sm:gap-8 md:flex-row md:items-center md:justify-between">
+                <div class="flex min-w-0 max-w-2xl items-center justify-start">
                     <div class="mb-6 flex items-center gap-3 text-violet-100/85">
                     </div>
 
-                    <div class="space-y-3">
-                        <div class="inline-flex items-center rounded-full border border-white/12 bg-white/10 px-4 py-2 text-sm font-medium text-violet-50 shadow-[0_0.5rem_1rem_rgba(11,6,27,0.18)]">
-                            {mosque_name}
+                    <div class="min-w-0 space-y-3">
+                        <div class="inline-flex max-w-full items-center rounded-full border border-white/12 bg-white/10 px-4 py-2 text-sm font-medium text-violet-50 shadow-[0_0.5rem_1rem_rgba(11,6,27,0.18)]">
+                            <span class="truncate">{mosque_name}</span>
                         </div>
-                        <h2 class="text-[1.75rem] font-bold tracking-tight text-white md:text-[2.5rem] lg:text-[3rem] [text-shadow:0_0_30px_rgba(200,160,20,0.5),0_0_60px_rgba(200,160,20,0.25)]">
+                        <h2 class="text-2xl font-bold tracking-tight text-white sm:text-[1.75rem] md:text-[2.5rem] lg:text-[3rem] [text-shadow:0_0_30px_rgba(200,160,20,0.5),0_0_60px_rgba(200,160,20,0.25)] text-balance break-words">
                             {prayer_name}
                         </h2>
-                        <p class="text-base text-violet-100/78 md:text-lg flex gap-1 items-center">
+                        <p class="text-base text-violet-100/78 md:text-lg flex flex-wrap gap-1 items-center">
                             <span class="text-[0.75rem] text-violet-100/55">"IQAMAH"</span>
                             <span class="font-semibold text-amber-200">{iqamah_time}</span>
                         </p>
                     </div>
                 </div>
 
-                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[0.68rem] text-violet-100/60 max-[840px]:bottom-1">
+                <div class="flex items-center gap-1.5 pb-1 text-[0.68rem] text-violet-100/60 md:absolute md:bottom-4 md:left-1/2 md:-translate-x-1/2 md:pb-0">
                     <span>"📍"</span>
-                    <span>{location}</span>
+                    <span class="truncate">{location}</span>
                 </div>
 
-                <div class="grid grid-cols-3 gap-3 sm:gap-4">
+                <div class="grid shrink-0 grid-cols-3 gap-2 sm:gap-4">
                     {vec![
                         (hours_remaining, "Hrs"),
                         (minutes_remaining, "Min"),
@@ -114,9 +114,9 @@ pub fn NextPrayerReminderCard(
                     .into_iter()
                     .map(|(value, label)| {
                         view! {
-                            <div class="grid justify-items-center">
-                                <div class="rounded-[1.5rem] border border-white/10 bg-slate-950/45 px-4 py-4 text-center shadow-[0_0.75rem_1.6rem_rgba(8,5,20,0.24)] backdrop-blur">
-                                    <p class="text-4xl font-bold leading-none text-amber-100">{value}</p>
+                            <div class="grid min-w-0 justify-items-center">
+                                <div class="w-full rounded-2xl border border-white/10 bg-slate-950/45 px-2 py-3 text-center shadow-[0_0.75rem_1.6rem_rgba(8,5,20,0.24)] backdrop-blur sm:rounded-[1.5rem] sm:px-4 sm:py-4">
+                                    <p class="text-2xl font-bold leading-none text-amber-100 sm:text-4xl">{value}</p>
                                 </div>
                                 <p class="mt-1 text-[0.6rem] font-bold uppercase tracking-[0.26em] text-violet-100/55">
                                     {label}
@@ -146,8 +146,8 @@ pub fn NearbyMosqueCard(
     let image_alt = format!("{} mosque", mosque_name);
 
     view! {
-        <article class="group relative w-[18rem] overflow-hidden rounded-2xl bg-white ring-1 ring-indigo-950/5 transition-[background-color,ring-color] duration-500 ease-out hover:bg-[#fbf8ef] hover:ring-[#d8c07a]/70">
-            <div class="relative h-31 overflow-hidden bg-[#c9cef3]">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-2xl bg-white ring-1 ring-indigo-950/5 transition-[background-color,ring-color] duration-500 ease-out hover:bg-[#fbf8ef] hover:ring-[#d8c07a]/70 sm:w-[18rem]">
+            <div class="relative h-32 overflow-hidden bg-[#c9cef3]">
                 <img
                     src=image_url
                     alt=image_alt
@@ -222,7 +222,7 @@ pub fn MosqueEventCard(
     event_short_description: String,
 ) -> impl IntoView {
     view! {
-        <article class="group relative w-98 shrink-0 overflow-hidden rounded-xl bg-white p-4 ring-1 ring-indigo-950/10 transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-300/70">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-white p-4 ring-1 ring-indigo-950/10 transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-300/70 sm:w-98 sm:max-w-none">
 
             <div class="relative mb-3 flex items-start justify-between gap-3">
                 <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider transition-[transform,letter-spacing] duration-300 ease-out group-hover:tracking-[0.14em] {}", event_type_class)>
@@ -257,8 +257,8 @@ pub fn EducationalResourceCard(
     let image_alt = format!("{} resource cover", resource_title);
 
     view! {
-        <article class="group relative w-82 shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-indigo-950/5 transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-200">
-            <div class="relative h-34 overflow-hidden bg-[#211f55]">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-white ring-1 ring-indigo-950/5 transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-200 sm:w-82 sm:max-w-none">
+            <div class="relative h-36 overflow-hidden bg-[#211f55]">
                 <img
                     src=image_url
                     alt=image_alt
