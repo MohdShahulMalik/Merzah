@@ -69,3 +69,45 @@
 :root, :host {
   background-color: var(--color-surface-900);
 }
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+    min-width: 0;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    @apply outline-2 outline-offset-[3px] outline-[#7c3aed];
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      transition: none !important;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
