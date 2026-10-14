@@ -12,7 +12,7 @@ pub fn AllEventsSection(events: Vec<EventPageItem>) -> impl IntoView {
     let empty = rest.is_empty();
 
     view! {
-        <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+        <div class="grid min-w-0 gap-5 sm:grid-cols-2 sm:gap-8 xl:grid-cols-3">
             <ForEnumerate
                 each=move || rest.clone()
                 key=|item| item.id.clone()

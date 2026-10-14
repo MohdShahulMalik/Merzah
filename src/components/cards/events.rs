@@ -17,20 +17,20 @@ pub fn FeaturedEventCard(
     };
 
     view! {
-        <article class="relative overflow-hidden rounded-xl bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl">
+        <article class="relative min-w-0 overflow-hidden rounded-xl bg-white p-5 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-6">
             <div class=border_class />
 
-            <div class="space-y-4">
+            <div class="min-w-0 space-y-4">
                 <span class="inline-flex rounded-md bg-violet-50 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-violet-700 ring-1 ring-violet-200/70">
                     {badge}
                 </span>
 
-                <div class="space-y-3">
-                    <h2 class="font-serif text-xl font-bold leading-tight text-foreground-900 md:text-2xl">
+                <div class="min-w-0 space-y-3">
+                    <h2 class="min-w-0 font-serif text-lg font-bold leading-tight text-foreground-900 sm:text-xl md:text-2xl text-balance break-words">
                         {title}
                     </h2>
 
-                    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-foreground-700">
+                    <div class="flex min-w-0 flex-wrap items-center gap-x-6 gap-y-2 text-sm text-foreground-700">
                         <div class="flex items-center gap-2">
                             <span aria-hidden="true">"🗓️"</span>
                             <span>{date}</span>
@@ -43,13 +43,13 @@ pub fn FeaturedEventCard(
                     </div>
                 </div>
 
-                <p class="max-w-3xl text-sm leading-6 text-foreground-700">
+                <p class="min-w-0 max-w-3xl text-sm leading-6 text-foreground-700 break-words">
                     {description}
                 </p>
 
                 <a
                     href="#"
-                    class="inline-flex rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-violet-700"
+                    class="inline-flex min-h-[44px] items-center rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-violet-700"
                 >
                     {cta_label}" →"
                 </a>
@@ -94,23 +94,23 @@ pub fn AllEventCard(
     };
 
     view! {
-        <article class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-lg transition duration-200 ease-out hover:-translate-y-1 hover:shadow-xl">
+        <article class="group relative min-w-0 overflow-hidden rounded-xl bg-white p-5 shadow-lg transition duration-200 ease-out hover:-translate-y-1 hover:shadow-xl sm:p-6">
             <div class=border_class />
 
-            <div class="space-y-5 pl-2">
-                <div class="flex items-center justify-between gap-4">
+            <div class="min-w-0 space-y-5 pl-2">
+                <div class="flex min-w-0 flex-wrap items-center justify-between gap-2">
                     <span class=category_pill_class>
                         {category}
                     </span>
 
-                    <div class="flex items-center gap-2 text-sm text-foreground-600">
+                    <div class="flex shrink-0 items-center gap-2 text-sm text-foreground-600">
                         <span aria-hidden="true">"📍"</span>
                         <span>{distance}</span>
                     </div>
                 </div>
 
-                <div class="space-y-3">
-                    <h2 class="font-serif text-xl font-bold leading-tight text-foreground-900">
+                <div class="min-w-0 space-y-3">
+                    <h2 class="min-w-0 font-serif text-lg font-bold leading-tight text-foreground-900 sm:text-xl text-balance break-words">
                         {title}
                     </h2>
 
@@ -124,13 +124,13 @@ pub fn AllEventCard(
                     </div>
                 </div>
 
-                <p class="line-clamp-2 text-sm leading-6 text-foreground-700">
+                <p class="line-clamp-2 min-w-0 text-sm leading-6 text-foreground-700 break-words">
                     {description}
                 </p>
 
                 <a
                     href="#"
-                    class="inline-flex rounded-lg border-2 border-violet-200/80 bg-violet-50 px-5 py-2.5 text-sm font-bold text-violet-700 transition hover:bg-violet-100"
+                    class="inline-flex min-h-[44px] items-center rounded-lg border-2 border-violet-200/80 bg-violet-50 px-5 py-2.5 text-sm font-bold text-violet-700 transition hover:bg-violet-100"
                 >
                     {cta_label}" →"
                 </a>

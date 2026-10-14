@@ -62,17 +62,17 @@ pub fn Events() -> impl IntoView {
     ];
 
     view! {
-        <div class="mr-4 space-y-12 py-8">
+        <div class="min-w-0 space-y-8 py-6 sm:space-y-12 sm:py-8">
             <Filters
                 search_placeholder="Search events, topics, or mosques".to_string()
                 location_label="Detroit, MI".to_string()
                 filter_groups=filter_groups
             />
 
-            <section class="space-y-6">
-                <div class="flex items-center justify-between">
-                    <h1 class="text-3xl font-bold text-purple-900">"Featured Events"</h1>
-                    <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">"View All →"</A>
+            <section class="min-w-0 space-y-6">
+                <div class="flex min-w-0 flex-wrap items-center justify-between gap-2">
+                    <h1 class="min-w-0 text-2xl font-bold text-purple-900 sm:text-3xl text-balance">"Featured Events"</h1>
+                    <A href="#" attr:class="inline-flex min-h-[44px] shrink-0 items-center whitespace-nowrap font-medium text-purple-600 hover:text-purple-700">"View All →"</A>
                 </div>
 
                 <Suspense fallback=move || view! {
@@ -90,8 +90,8 @@ pub fn Events() -> impl IntoView {
                 </Suspense>
             </section>
 
-            <section class="space-y-6">
-                <h1 class="text-3xl font-bold text-purple-900">"All Events"</h1>
+            <section class="min-w-0 space-y-6">
+                <h1 class="min-w-0 text-2xl font-bold text-purple-900 sm:text-3xl text-balance">"All Events"</h1>
 
                 <Suspense fallback=move || view! {
                     <p class="text-sm text-foreground-600">"Loading events…"</p>

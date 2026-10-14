@@ -12,7 +12,7 @@ pub fn FeaturedEventsSection(events: Vec<EventPageItem>) -> impl IntoView {
     let empty = featured.is_empty();
 
     view! {
-        <div class="grid gap-8 lg:grid-cols-2">
+        <div class="grid min-w-0 gap-5 sm:gap-8 lg:grid-cols-2">
             <ForEnumerate
                 each=move || featured.clone()
                 key=|item| item.id.clone()
