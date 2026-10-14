@@ -52,7 +52,7 @@ pub fn FeaturedCoursesSection(catalog: Vec<CatalogEntry>) -> impl IntoView {
     let empty = featured.is_empty();
 
     view! {
-        <div class="flex gap-6 w-full overflow-x-scroll scrollbar-hide pb-4">
+        <div class="flex min-w-0 w-full snap-x snap-mandatory gap-4 overflow-x-auto scrollbar-hide pb-4 sm:gap-6">
             <ForEnumerate
                 each=move || featured.clone()
                 key=|entry| entry.course.id.clone()

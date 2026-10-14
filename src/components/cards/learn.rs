@@ -17,26 +17,26 @@ pub fn ContinueLearningCard(
     });
 
     view! {
-        <article class="rounded-2xl border border-purple-200 bg-linear-to-br from-purple-100 to-indigo-100 p-6 shadow-md md:px-8 md:py-7">
-            <div class="flex gap-6 ">
-                <div class="w-64 max-md:hidden">
+        <article class="min-w-0 rounded-2xl border border-purple-200 bg-linear-to-br from-purple-100 to-indigo-100 p-5 shadow-md sm:p-6 md:px-8 md:py-7">
+            <div class="flex min-w-0 flex-col gap-6 lg:flex-row">
+                <div class="w-full max-w-64 max-md:hidden lg:w-64 lg:shrink-0">
                     <img
                         src = {img_link}
                         alt="Continue Learning"
                         class="mb-4 w-full rounded-xl"
                     />
                 </div>
-                <div class = "items-center justify-center gap-6 w-full flex">
-                    <div class="flex-1">
+                <div class = "min-w-0 items-center justify-center gap-6 w-full flex flex-col sm:flex-row">
+                    <div class="min-w-0 w-full flex-1">
                         <span class="mb-3 inline-flex rounded-full bg-purple-600 px-3 py-1 text-xs font-semibold uppercase text-white">
                             {status}
                         </span>
 
-                        <h3 class="mb-2 text-2xl font-bold text-gray-900">
+                        <h3 class="mb-2 min-w-0 text-xl font-bold text-gray-900 sm:text-2xl text-balance break-words">
                             {title}
                         </h3>
 
-                        <p class="mb-4 text-gray-700">
+                        <p class="mb-4 min-w-0 text-gray-700 break-words">
                             {description}
                         </p>
 
@@ -67,8 +67,8 @@ pub fn ContinueLearningCard(
                         </div>
                     </div>
 
-                    <div>
-                        <button class="w-full rounded-xl bg-purple-600 px-8 py-4 font-semibold text-white shadow-lg transition hover:bg-purple-700 hover:shadow-xl xl:w-auto">
+                    <div class="w-full shrink-0 sm:w-auto">
+                        <button class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-purple-600 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-purple-700 hover:shadow-xl sm:w-auto xl:w-auto">
                             {cta_label}
                         </button>
                     </div>
@@ -118,16 +118,16 @@ pub fn CourseCard(
     });
 
     view! {
-        <article class="group w-90 shrink-0 rounded-2xl border border-purple-100 bg-white p-6 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)]">
+        <article class="group w-full max-w-[19rem] shrink-0 snap-start rounded-2xl border border-purple-100 bg-white p-5 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)] sm:w-90 sm:max-w-none sm:p-6">
             <div class="mb-5 overflow-hidden rounded-xl bg-purple-100">
                 <img
                     src=img_link
                     alt=image_alt
-                    class="md:h-50 h-40 w-full object-cover transition duration-300 ease-out group-hover:scale-105"
+                    class="h-40 w-full object-cover transition duration-300 ease-out group-hover:scale-105 md:h-50"
                 />
             </div>
 
-            <div class="mb-2 md:mb-4 flex items-start justify-between gap-3">
+            <div class="mb-2 flex min-w-0 flex-wrap items-start justify-between gap-2 md:mb-4">
                 <span class=format!("rounded-full px-3 py-1 text-xs font-semibold {}", category_class)>
                     {category}
                 </span>
@@ -137,11 +137,11 @@ pub fn CourseCard(
                 </span>
             </div>
 
-            <h3 class="mb-2 text-xl font-bold text-purple-900">
+            <h3 class="mb-2 min-w-0 text-lg font-bold text-purple-900 sm:text-xl text-balance break-words">
                 {title}
             </h3>
 
-            <p class="mb-4 line-clamp-2 text-sm text-gray-600 max-md:hidden!">
+            <p class="mb-4 line-clamp-2 min-w-0 text-sm text-gray-600 break-words">
                 {description}
             </p>
 
@@ -159,17 +159,17 @@ pub fn CourseCard(
 
             {progress_view}
 
-            <div class="mb-4 flex items-center gap-2">
-                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-purple-200 text-sm font-semibold text-purple-700 max-md:hidden!">
+            <div class="mb-4 flex min-w-0 items-center gap-2">
+                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-200 text-sm font-semibold text-purple-700">
                     {instructor_initials}
                 </div>
 
-                <span class="text-sm text-gray-700">
+                <span class="min-w-0 truncate text-sm text-gray-700">
                     {instructor_name}
                 </span>
             </div>
 
-            <button class="w-full rounded-xl bg-purple-600 py-3 font-semibold text-white transition hover:bg-purple-700">
+            <button class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-purple-600 py-3 font-semibold text-white transition hover:bg-purple-700">
                 {cta_label}
             </button>
         </article>
@@ -191,17 +191,17 @@ pub fn LearningPathCard(
     cta_label: String,
 ) -> impl IntoView {
     view! {
-        <article class="group relative overflow-hidden rounded-2xl bg-white bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-6 shadow-lg ring-2 ring-transparent transition-[background-position,background-color,ring-color] duration-700 ease-out hover:bg-[#fbfaff] hover:ring-purple-200 group-hover:[background-position:16px_16px] md:p-8">
+        <article class="group relative min-w-0 overflow-hidden rounded-2xl bg-white bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-5 shadow-lg ring-2 ring-transparent transition-[background-position,background-color,ring-color] duration-700 ease-out hover:bg-[#fbfaff] hover:ring-purple-200 group-hover:[background-position:16px_16px] sm:p-6 md:p-8">
             <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(168,85,247,0.13),transparent_28%),linear-gradient(135deg,rgba(240,189,37,0.08),transparent_42%)] opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100"></div>
             <div class="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-purple-300/0 to-transparent transition-colors duration-700 ease-out group-hover:via-purple-300/80"></div>
 
-            <div class="relative mb-4 flex items-start justify-between gap-4">
-                <div>
-                    <h3 class=format!("mb-2 text-2xl font-bold transition-colors duration-300 ease-out {}", title_class)>
+            <div class="relative mb-4 flex min-w-0 items-start justify-between gap-3">
+                <div class="min-w-0">
+                    <h3 class=format!("mb-2 min-w-0 text-xl font-bold sm:text-2xl text-balance break-words transition-colors duration-300 ease-out {}", title_class)>
                         {title}
                     </h3>
 
-                    <p class=format!("mb-4 transition-colors duration-300 ease-out {}", description_class)>
+                    <p class=format!("mb-4 min-w-0 text-sm sm:text-base break-words transition-colors duration-300 ease-out {}", description_class)>
                         {description}
                     </p>
                 </div>
@@ -242,7 +242,7 @@ pub fn LearningPathCard(
                 </div>
             </div>
 
-            <button class="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-purple-700 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-purple-600">
+            <button class="relative flex min-h-[44px] w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-purple-700 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-purple-600">
                 <span class="relative">{cta_label}</span>
                 <span class="relative transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">"→"</span>
             </button>

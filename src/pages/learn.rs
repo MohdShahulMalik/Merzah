@@ -90,7 +90,7 @@ pub fn Learn() -> impl IntoView {
     ];
 
     view! {
-        <div class="mr-4 space-y-12 py-8">
+        <div class="min-w-0 space-y-8 py-6 sm:space-y-12 sm:py-8">
             <Filters
                 search_placeholder="Search courses, lessons, topics, and educators...".to_string()
                 filter_groups=filter_groups
@@ -105,10 +105,10 @@ pub fn Learn() -> impl IntoView {
                 }}
             </Suspense>
 
-            <section class="space-y-6">
-                <div class="flex items-center justify-between gap-4">
-                    <h1 class="text-3xl font-bold text-purple-900">"Featured Courses"</h1>
-                    <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">
+            <section class="min-w-0 space-y-6">
+                <div class="flex min-w-0 flex-wrap items-center justify-between gap-2">
+                    <h1 class="min-w-0 text-2xl font-bold text-purple-900 sm:text-3xl text-balance">"Featured Courses"</h1>
+                    <A href="#" attr:class="inline-flex min-h-[44px] shrink-0 items-center whitespace-nowrap font-medium text-purple-600 hover:text-purple-700">
                         "View All →"
                     </A>
                 </div>
@@ -123,10 +123,10 @@ pub fn Learn() -> impl IntoView {
                 </Suspense>
             </section>
 
-            <section class="space-y-6">
-                <div class="flex items-center justify-between gap-4">
-                    <h1 class="text-3xl font-bold text-purple-900">"Guided Learning Paths"</h1>
-                    <A href="#" attr:class="font-medium text-purple-600 hover:text-purple-700">
+            <section class="min-w-0 space-y-6">
+                <div class="flex min-w-0 flex-wrap items-center justify-between gap-2">
+                    <h1 class="min-w-0 text-2xl font-bold text-purple-900 sm:text-3xl text-balance">"Guided Learning Paths"</h1>
+                    <A href="#" attr:class="inline-flex min-h-[44px] shrink-0 items-center whitespace-nowrap font-medium text-purple-600 hover:text-purple-700">
                         "View All →"
                     </A>
                 </div>
@@ -149,8 +149,8 @@ pub fn Learn() -> impl IntoView {
                 </Suspense>
             </section>
 
-            <section class="space-y-6">
-                <h1 class="text-3xl font-bold text-purple-900">"Recommended for You"</h1>
+            <section class="min-w-0 space-y-6">
+                <h1 class="min-w-0 text-2xl font-bold text-purple-900 sm:text-3xl text-balance">"Recommended for You"</h1>
 
                 <Suspense fallback=move || view! {
                     <p class="text-sm text-foreground-600">"Loading recommendations…"</p>

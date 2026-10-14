@@ -42,7 +42,7 @@ pub fn LearningPathsSection(
     let empty = tracks.is_empty();
 
     view! {
-        <div class="grid gap-6 md:grid-cols-2">
+        <div class="grid min-w-0 gap-5 sm:gap-6 md:grid-cols-2">
             <ForEnumerate
                 each=move || tracks.clone()
                 key=|track| track.id.clone()
