@@ -46,9 +46,9 @@ pub fn Mosques() -> impl IntoView {
 
     view! {
         <Stylesheet href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-        <div class="space-y-4 mt-4 mr-4 mb-4">
-            <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-purple-900">"Nearby Mosques Map"</h1>
+        <div class="min-w-0 space-y-4 mt-4 mb-4">
+            <div class="flex min-w-0 flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3">
+                <h1 class="min-w-0 text-xl font-bold text-purple-900 sm:text-2xl text-balance">"Nearby Mosques Map"</h1>
                 <p class="text-sm text-gray-500">
                     <Suspense fallback=move || view! { "…" }>
                         {move || {

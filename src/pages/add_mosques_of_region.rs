@@ -79,12 +79,13 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
     };
 
     view! {
-        <main>
-            <form on:submit=on_submit>
-                <h1>"Add Mosques in a Region"</h1>
-                <p>"Enter the bounding box coordinates to fetch and store mosques from OpenStreetMap."</p>
+        <div class="mx-auto w-full max-w-2xl min-w-0 px-4 py-6 sm:px-6 sm:py-8">
+            <form on:submit=on_submit class="min-w-0 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8">
+                <h1 class="min-w-0 text-2xl font-bold text-balance break-words sm:text-3xl">"Add Mosques in a Region"</h1>
+                <p class="mt-2 text-sm text-gray-600 sm:text-base">"Enter the bounding box coordinates to fetch and store mosques from OpenStreetMap."</p>
 
-                <div class="form-group">
+                <div class="mt-6 grid min-w-0 gap-4 sm:grid-cols-2">
+                <div class="form-group grid min-w-0">
                     <label for="south">"South"</label>
                     <input
                         type="text"
@@ -92,9 +93,10 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                         placeholder="-90.0"
                         node_ref=south_input
                         required
+                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-gray-300 px-3 py-2"
                     />
                 </div>
-                <div class="form-group">
+                <div class="form-group grid min-w-0">
                     <label for="west">"West"</label>
                     <input
                         type="text"
@@ -102,9 +104,10 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                         placeholder="-180.0"
                         node_ref=west_input
                         required
+                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-gray-300 px-3 py-2"
                     />
                 </div>
-                <div class="form-group">
+                <div class="form-group grid min-w-0">
                     <label for="north">"North"</label>
                     <input
                         type="text"
@@ -112,9 +115,10 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                         placeholder="90.0"
                         node_ref=north_input
                         required
+                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-gray-300 px-3 py-2"
                     />
                 </div>
-                <div class="form-group">
+                <div class="form-group grid min-w-0">
                     <label for="east">"East"</label>
                     <input
                         type="text"
@@ -122,25 +126,27 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                         placeholder="180.0"
                         node_ref=east_input
                         required
+                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-gray-300 px-3 py-2"
                     />
                 </div>
+                </div>
 
-                <button type="submit">"Fetch and Add Mosques"</button>
+                <button type="submit" class="mt-6 inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-purple-600 px-5 py-3 font-semibold text-white transition hover:bg-purple-700 sm:w-auto">"Fetch and Add Mosques"</button>
             </form>
 
             <Show
                 when=move || !error.get().is_empty()
                 fallback=|| view! { <p></p> }
             >
-                <p style="color: red;">{error.get()}</p>
+                <p class="mt-4 break-words text-sm text-red-600">{error.get()}</p>
             </Show>
 
             <Show
                 when=move || !success.get().is_empty()
                 fallback=|| view! { <p></p> }
             >
-                <p style="color: green;">{success.get()}</p>
+                <p class="mt-4 break-words text-sm text-green-700">{success.get()}</p>
             </Show>
-        </main>
+        </div>
     }
 }
