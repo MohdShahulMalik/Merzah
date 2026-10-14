@@ -50,7 +50,7 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
     });
 
     view! {
-        <div class="flex gap-5 overflow-x-scroll pb-4">
+        <div class="flex min-w-0 snap-x snap-mandatory gap-4 overflow-x-auto pb-4 sm:gap-5">
             <Suspense fallback=move || view! {
                 <p class="text-sm text-foreground-600">"Finding mosques near you…"</p>
             }>

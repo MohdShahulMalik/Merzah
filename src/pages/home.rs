@@ -12,14 +12,14 @@ pub fn Home() -> impl IntoView {
     let (show_all_courses, set_show_all_courses) = signal(false);
 
     view! {
-        <div class="space-y-8 mt-4 mr-4 mb-4">
+        <div class="min-w-0 space-y-8 mt-4 mb-4">
             <TopTwoDailyPrayersSections />
 
-            <section class="space-y-5">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-2xl font-bold text-purple-900">"Nearby Mosques"</h2>
+            <section class="min-w-0 space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 class="min-w-0 text-xl font-bold text-purple-900 sm:text-2xl">"Nearby Mosques"</h2>
                     <button
-                        class="font-medium text-purple-600 hover:text-purple-700"
+                        class="min-h-[44px] shrink-0 whitespace-nowrap text-sm font-medium text-purple-600 hover:text-purple-700 sm:text-base"
                         on:click=move |_| set_show_all.update(|value| *value = !*value)
                     >
                         {move || if show_all.get() { "Show less" } else { "View All →" }}
@@ -28,11 +28,11 @@ pub fn Home() -> impl IntoView {
                 <NearbyMosquesSection show_all=show_all />
             </section>
 
-            <section class="space-y-5">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-2xl font-bold text-purple-900">"Upcoming Events"</h2>
+            <section class="min-w-0 space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 class="min-w-0 text-xl font-bold text-purple-900 sm:text-2xl">"Upcoming Events"</h2>
                     <button
-                        class="font-medium text-purple-600 hover:text-purple-700"
+                        class="min-h-[44px] shrink-0 whitespace-nowrap text-sm font-medium text-purple-600 hover:text-purple-700 sm:text-base"
                         on:click=move |_| set_show_all_events.update(|value| *value = !*value)
                     >
                         {move || if show_all_events.get() { "Show less" } else { "View All →" }}
@@ -41,11 +41,11 @@ pub fn Home() -> impl IntoView {
                 <UpcomingEventsSection show_all=show_all_events />
             </section>
 
-            <section class="space-y-5">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-2xl font-bold text-purple-900">"Recommended"</h2>
+            <section class="min-w-0 space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 class="min-w-0 text-xl font-bold text-purple-900 sm:text-2xl">"Recommended"</h2>
                     <button
-                        class="font-medium text-purple-600 hover:text-purple-700"
+                        class="min-h-[44px] shrink-0 whitespace-nowrap text-sm font-medium text-purple-600 hover:text-purple-700 sm:text-base"
                         on:click=move |_| set_show_all_courses.update(|value| *value = !*value)
                     >
                         {move || if show_all_courses.get() { "Show less" } else { "View All →" }}

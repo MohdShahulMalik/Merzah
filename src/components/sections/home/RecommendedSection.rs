@@ -72,7 +72,7 @@ pub fn RecommendedSection(show_all: ReadSignal<bool>) -> impl IntoView {
     let courses = Resource::new(|| (), |_| async move { load_recommended().await });
 
     view! {
-        <div class="flex gap-5 overflow-x-scroll pb-4">
+        <div class="flex min-w-0 snap-x snap-mandatory gap-4 overflow-x-auto pb-4 sm:gap-5">
             <Suspense fallback=move || view! {
                 <p class="text-sm text-foreground-600">"Loading recommendations…"</p>
             }>
