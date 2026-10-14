@@ -4,6 +4,7 @@ pub mod discord_callback;
 pub mod events;
 pub mod google_callback;
 pub mod home;
+pub mod landing;
 pub mod layout;
 pub mod learn;
 pub mod microsoft_callback;

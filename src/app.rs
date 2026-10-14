@@ -18,6 +18,7 @@ use crate::{
         events::Events,
         google_callback::GoogleCallback,
         home::Home,
+        landing::Landing,
         layout::AppLayout,
         learn::Learn,
         microsoft_callback::MicrosoftCallback,
@@ -77,12 +78,15 @@ pub fn App() -> impl IntoView {
                 <LocationProvider />
 
                 <Routes fallback=move || "Not found.">
+                    <Route path=path!("/") view=Landing/>
+
                     <ParentRoute path=path!("/") view=AppLayout>
                         <Route path=path!("home") view=Home/>
                         <Route path=path!("mosques") view=Mosques/>
                         <Route path=path!("events") view=Events/>
                         <Route path=path!("learn") view=Learn/>
                     </ParentRoute>
+
                     <Route path=path!("/register") view=Register/>
                     <Route path=path!("/login") view=Login/>
                     <Route path=path!("/add-mosques") view=AddMosquesOfRegion/>
