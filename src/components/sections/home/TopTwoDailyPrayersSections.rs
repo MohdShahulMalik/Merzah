@@ -189,7 +189,7 @@ pub fn TopTwoDailyPrayersSections() -> impl IntoView {
                     minutes_remaining=minutes
                     seconds_remaining=seconds
                 />
-                <div class="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6">
+                <div class="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
                     <PrayerCard
                         prayer_name="Fajr".to_string()
                         jamat_time=fajr_jamat_time
