@@ -16,33 +16,61 @@ pub fn PrayerCard(
         }
     };
 
+    let (jamat_main, jamat_meridiem) = split_time_meridiem(&jamat_time);
+    let (adhan_main, adhan_meridiem) = split_time_meridiem(&adhan_time);
+    let jamat_has_meridiem = jamat_meridiem.is_some();
+    let adhan_has_meridiem = adhan_meridiem.is_some();
+    let jamat_meridiem_text = jamat_meridiem.unwrap_or_default();
+    let adhan_meridiem_text = adhan_meridiem.unwrap_or_default();
+
     view! {
-        <div class=move || format!("group relative min-w-0 w-full overflow-hidden rounded-2xl bg-white border-t-white px-3 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.18)] hover:scale-[1.03] {}", border_classes())>
+        <div class=move || format!("group relative min-w-0 w-full overflow-hidden rounded-2xl bg-white border-t-white px-2 py-3.5 sm:px-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.18)] hover:scale-[1.03] {}", border_classes())>
             <p class = "text-[1.05rem] font-semibold tracking-tight text-foreground-900 mb-3 text-center">{prayer_name}</p>
 
-            <div class = "grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-                <div class = "text-center">
-                    <span class = "block text-[1.25rem] font-semibold leading-none text-slate-900">
-                        {jamat_time}
+            <div class = "grid grid-cols-[1fr_auto_1fr] items-center gap-1 sm:gap-2">
+                <div class = "min-w-0 text-center">
+                    <span class = "block whitespace-nowrap text-lg sm:text-[1.35rem] font-semibold leading-none text-slate-900">
+                        {jamat_main}
                     </span>
-                    <span class = "mt-1.5 block text-[0.65rem] font-medium uppercase tracking-[0.16em] text-foreground-600">
+                    <Show when=move || jamat_has_meridiem>
+                        <span class = "mt-1 block text-[0.7rem] font-bold uppercase leading-none tracking-[0.22em] text-slate-500">
+                            {jamat_meridiem_text.clone()}
+                        </span>
+                    </Show>
+                    <span class = "mt-1.5 block text-[0.65rem] font-medium uppercase leading-none tracking-[0.16em] text-foreground-600">
                         "Iqamah"
                     </span>
                 </div>
 
-                <div class = "h-11 w-px rounded-full bg-gradient-to-b from-transparent via-slate-300 to-transparent"></div>
+                <div class = "h-14 w-px rounded-full bg-gradient-to-b from-transparent via-slate-300 to-transparent"></div>
 
-                <div class = "text-center">
-                    <span class = "block text-[1.25rem] font-semibold leading-none text-slate-900">
-                        {adhan_time}
+                <div class = "min-w-0 text-center">
+                    <span class = "block whitespace-nowrap text-lg sm:text-[1.35rem] font-semibold leading-none text-slate-900">
+                        {adhan_main}
                     </span>
-                    <span class = "mt-1.5 block text-[0.65rem] font-medium uppercase tracking-[0.16em] text-foreground-600">
+                    <Show when=move || adhan_has_meridiem>
+                        <span class = "mt-1 block text-[0.7rem] font-bold uppercase leading-none tracking-[0.22em] text-slate-500">
+                            {adhan_meridiem_text.clone()}
+                        </span>
+                    </Show>
+                    <span class = "mt-1.5 block text-[0.65rem] font-medium uppercase leading-none tracking-[0.16em] text-foreground-600">
                         "Adhan"
                     </span>
                 </div>
 
             </div>
         </div>
+    }
+}
+
+/// Splits `"12:45 PM"` into `("12:45", Some("PM"))` so the large figure fits
+/// narrow prayer cards with the meridiem stacked beneath it. Values without
+/// a meridiem (e.g. the `"—"` placeholder) return `None` and render no extra
+/// line.
+fn split_time_meridiem(value: &str) -> (String, Option<String>) {
+    match value.trim().rsplit_once(' ') {
+        Some((main, meridiem)) => (main.to_string(), Some(meridiem.to_string())),
+        None => (value.trim().to_string(), None),
     }
 }
 
@@ -168,10 +196,10 @@ pub fn NearbyMosqueCard(
                     </svg>
                 </div>
 
-                <div class="absolute inset-x-0 bottom-0 translate-y-full border-t border-white/15 bg-[#211f55]/88 px-4 py-3 text-white backdrop-blur-md transition-transform duration-500 ease-out group-hover:translate-y-0">
-                    <div class="flex items-center justify-between">
-                        <A href="#" attr:class="text-sm font-bold text-amber-200 hover:text-amber-100">"Directions →"</A>
-                        <A href="#" attr:class="text-sm font-bold text-amber-200 hover:text-amber-100">"View Mosque →"</A>
+                <div class="absolute inset-x-0 bottom-0 border-t border-white/15 bg-[#211f55]/88 px-4 py-1 text-white backdrop-blur-md transition-transform duration-500 ease-out translate-y-0 sm:translate-y-full sm:group-hover:translate-y-0">
+                    <div class="flex items-center justify-between gap-2">
+                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-amber-200 hover:text-amber-100">"Directions →"</A>
+                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-amber-200 hover:text-amber-100">"View Mosque →"</A>
                     </div>
                 </div>
             </div>

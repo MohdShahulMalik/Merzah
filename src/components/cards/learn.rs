@@ -19,11 +19,11 @@ pub fn ContinueLearningCard(
     view! {
         <article class="min-w-0 rounded-2xl border border-purple-200 bg-linear-to-br from-purple-100 to-indigo-100 p-5 shadow-md sm:p-6 md:px-8 md:py-7">
             <div class="flex min-w-0 flex-col gap-6 lg:flex-row">
-                <div class="w-full max-w-64 max-md:hidden lg:w-64 lg:shrink-0">
+                <div class="w-full overflow-hidden rounded-xl lg:w-64 lg:shrink-0 lg:self-stretch">
                     <img
                         src = {img_link}
                         alt="Continue Learning"
-                        class="mb-4 w-full rounded-xl"
+                        class="h-48 w-full object-cover sm:h-56 lg:h-full lg:min-h-64"
                     />
                 </div>
                 <div class = "min-w-0 items-center justify-center gap-6 w-full flex flex-col sm:flex-row">
