@@ -17,9 +17,9 @@ pub fn Home() -> impl IntoView {
 
             <section class="min-w-0 space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                    <h2 class="min-w-0 text-xl font-bold text-purple-900 sm:text-2xl">"Nearby Mosques"</h2>
+                    <h2 class="min-w-0 text-xl font-bold text-foreground-900 sm:text-2xl">"Nearby Mosques"</h2>
                     <button
-                        class="min-h-[44px] shrink-0 whitespace-nowrap text-sm font-medium text-purple-600 hover:text-purple-700 sm:text-base"
+                        class="min-h-[44px] shrink-0 whitespace-nowrap text-sm font-medium text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 sm:text-base"
                         on:click=move |_| set_show_all.update(|value| *value = !*value)
                     >
                         {move || if show_all.get() { "Show less" } else { "View All →" }}
@@ -30,9 +30,9 @@ pub fn Home() -> impl IntoView {
 
             <section class="min-w-0 space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                    <h2 class="min-w-0 text-xl font-bold text-purple-900 sm:text-2xl">"Upcoming Events"</h2>
+                    <h2 class="min-w-0 text-xl font-bold text-foreground-900 sm:text-2xl">"Upcoming Events"</h2>
                     <button
-                        class="min-h-[44px] shrink-0 whitespace-nowrap text-sm font-medium text-purple-600 hover:text-purple-700 sm:text-base"
+                        class="min-h-[44px] shrink-0 whitespace-nowrap text-sm font-medium text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 sm:text-base"
                         on:click=move |_| set_show_all_events.update(|value| *value = !*value)
                     >
                         {move || if show_all_events.get() { "Show less" } else { "View All →" }}
@@ -43,9 +43,9 @@ pub fn Home() -> impl IntoView {
 
             <section class="min-w-0 space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                    <h2 class="min-w-0 text-xl font-bold text-purple-900 sm:text-2xl">"Recommended"</h2>
+                    <h2 class="min-w-0 text-xl font-bold text-foreground-900 sm:text-2xl">"Recommended"</h2>
                     <button
-                        class="min-h-[44px] shrink-0 whitespace-nowrap text-sm font-medium text-purple-600 hover:text-purple-700 sm:text-base"
+                        class="min-h-[44px] shrink-0 whitespace-nowrap text-sm font-medium text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 sm:text-base"
                         on:click=move |_| set_show_all_courses.update(|value| *value = !*value)
                     >
                         {move || if show_all_courses.get() { "Show less" } else { "View All →" }}

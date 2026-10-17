@@ -15,7 +15,7 @@ pub fn Landing() -> impl IntoView {
                         />
                         <img src="/assets/logo-text.png" alt="Merzah" class="mt-6 h-14 md:h-16 w-auto" />
                     </a>
-                    <h1 class="mt-5 text-xl md:text-2xl font-semibold leading-snug text-purple-900 antialiased">
+                    <h1 class="mt-5 text-xl md:text-2xl font-semibold leading-snug text-foreground-900 antialiased">
                         "Growing in deen and dunya, together."
                     </h1>
                     <p class="mt-5 text-base md:text-lg leading-relaxed max-w-2xl text-foreground-600">
@@ -48,10 +48,10 @@ pub fn Landing() -> impl IntoView {
             <section aria-label="What Merzah brings together" class="relative z-10">
                 <div class="max-w-6xl mx-auto px-5 sm:px-8 -mt-24">
                     <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                        <div class="rounded-2xl bg-white p-6 ring-1 ring-indigo-950/10 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                            <span class="w-11 h-11 inline-flex items-center justify-center rounded-xl bg-violet-50 ring-1 ring-violet-200/70">
+                        <div class="rounded-2xl bg-surface-700 p-6 ring-1 ring-stroke-muted shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                            <span class="w-11 h-11 inline-flex items-center justify-center rounded-xl bg-sky-50 dark:bg-sky-400/10 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                                 <svg
-                                    class="w-6 h-6 text-violet-700"
+                                    class="w-6 h-6 text-sky-700 dark:text-sky-400"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
@@ -61,23 +61,23 @@ pub fn Landing() -> impl IntoView {
                                     <path stroke-linecap="round" d="M12 7.5V12l3 2" />
                                 </svg>
                             </span>
-                            <h2 class="mt-5 text-lg font-bold tracking-tight leading-tight text-purple-900">
+                            <h2 class="mt-5 text-lg font-bold tracking-tight leading-tight text-foreground-900">
                                 "Live Mosque Updates"
                             </h2>
-                            <p class="mt-2 text-[15px] leading-relaxed text-gray-600">
+                            <p class="mt-2 text-[15px] leading-relaxed text-foreground-600">
                                 "Live Adhan and Iqamah updates from your masjid."
                             </p>
                             <a
                                 href="#start"
-                                class="mt-4 inline-flex items-center text-sm font-bold text-violet-700 hover:text-violet-900"
+                                class="mt-4 inline-flex items-center text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300"
                             >
                                 "Get started " <span class="ml-1" aria-hidden="true">"→"</span>
                             </a>
                         </div>
-                        <div class="rounded-2xl bg-white p-6 ring-1 ring-indigo-950/10 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                            <span class="w-11 h-11 inline-flex items-center justify-center rounded-xl bg-violet-50 ring-1 ring-violet-200/70">
+                        <div class="rounded-2xl bg-surface-700 p-6 ring-1 ring-stroke-muted shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                            <span class="w-11 h-11 inline-flex items-center justify-center rounded-xl bg-sky-50 dark:bg-sky-400/10 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                                 <svg
-                                    class="w-6 h-6 text-violet-700"
+                                    class="w-6 h-6 text-sky-700 dark:text-sky-400"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
@@ -87,23 +87,23 @@ pub fn Landing() -> impl IntoView {
                                     <path stroke-linecap="round" d="M4 10h16M8.5 3.5v4M15.5 3.5v4" />
                                 </svg>
                             </span>
-                            <h2 class="mt-5 text-lg font-bold tracking-tight leading-tight text-purple-900">
+                            <h2 class="mt-5 text-lg font-bold tracking-tight leading-tight text-foreground-900">
                                 "Community Events"
                             </h2>
-                            <p class="mt-2 text-[15px] leading-relaxed text-gray-600">
+                            <p class="mt-2 text-[15px] leading-relaxed text-foreground-600">
                                 "Halaqahs, lectures, workshops, and local gatherings."
                             </p>
                             <a
                                 href="#community"
-                                class="mt-4 inline-flex items-center text-sm font-bold text-violet-700 hover:text-violet-900"
+                                class="mt-4 inline-flex items-center text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300"
                             >
                                 "Browse events " <span class="ml-1" aria-hidden="true">"→"</span>
                             </a>
                         </div>
-                        <div class="rounded-2xl bg-white p-6 ring-1 ring-indigo-950/10 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] sm:col-span-2 lg:col-span-1">
-                            <span class="w-11 h-11 inline-flex items-center justify-center rounded-xl bg-violet-50 ring-1 ring-violet-200/70">
+                        <div class="rounded-2xl bg-surface-700 p-6 ring-1 ring-stroke-muted shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] sm:col-span-2 lg:col-span-1">
+                            <span class="w-11 h-11 inline-flex items-center justify-center rounded-xl bg-sky-50 dark:bg-sky-400/10 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                                 <svg
-                                    class="w-6 h-6 text-violet-700"
+                                    class="w-6 h-6 text-sky-700 dark:text-sky-400"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
@@ -116,15 +116,15 @@ pub fn Landing() -> impl IntoView {
                                     />
                                 </svg>
                             </span>
-                            <h2 class="mt-5 text-lg font-bold tracking-tight leading-tight text-purple-900">
+                            <h2 class="mt-5 text-lg font-bold tracking-tight leading-tight text-foreground-900">
                                 "Learn for Deen and Dunya"
                             </h2>
-                            <p class="mt-2 text-[15px] leading-relaxed text-gray-600">
+                            <p class="mt-2 text-[15px] leading-relaxed text-foreground-600">
                                 "Guided paths in Islamic knowledge, career, and life skills."
                             </p>
                             <a
                                 href="#community"
-                                class="mt-4 inline-flex items-center text-sm font-bold text-violet-700 hover:text-violet-900"
+                                class="mt-4 inline-flex items-center text-sm font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300"
                             >
                                 "Explore paths " <span class="ml-1" aria-hidden="true">"→"</span>
                             </a>
@@ -137,10 +137,10 @@ pub fn Landing() -> impl IntoView {
             <section id="community" class="relative py-16 sm:py-24">
                 <div class="max-w-6xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-10 lg:gap-12 items-start">
                     <div>
-                        <span class="inline-flex rounded-md bg-violet-50 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-violet-700 ring-1 ring-violet-200/70">
+                        <span class="inline-flex rounded-md bg-sky-50 dark:bg-sky-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-sky-700 dark:text-sky-400 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                             "How it works"
                         </span>
-                        <h2 class="mt-4 text-3xl sm:text-4xl xl:text-5xl font-bold tracking-tight leading-tight text-purple-900">
+                        <h2 class="mt-4 text-3xl sm:text-4xl xl:text-5xl font-bold tracking-tight leading-tight text-foreground-900">
                             "Start in minutes."
                         </h2>
                         <p class="mt-6 text-base sm:text-lg leading-relaxed max-w-xl text-foreground-600">
@@ -161,8 +161,8 @@ pub fn Landing() -> impl IntoView {
                                     <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
                                 </svg>
                                 <span>
-                                    <strong class="font-bold text-purple-900">"Follow your masjid."</strong>
-                                    <span class="text-gray-600">
+                                    <strong class="font-bold text-foreground-900">"Follow your masjid."</strong>
+                                    <span class="text-foreground-600">
                                         " Get live Adhan and Iqamah updates straight from your imam."
                                     </span>
                                 </span>
@@ -181,8 +181,8 @@ pub fn Landing() -> impl IntoView {
                                     <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
                                 </svg>
                                 <span>
-                                    <strong class="font-bold text-purple-900">"Join the week."</strong>
-                                    <span class="text-gray-600">
+                                    <strong class="font-bold text-foreground-900">"Join the week."</strong>
+                                    <span class="text-foreground-600">
                                         " Find halaqahs, classes, and gatherings near you and show up."
                                     </span>
                                 </span>
@@ -201,16 +201,16 @@ pub fn Landing() -> impl IntoView {
                                     <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
                                 </svg>
                                 <span>
-                                    <strong class="font-bold text-purple-900">"Keep growing."</strong>
-                                    <span class="text-gray-600">
+                                    <strong class="font-bold text-foreground-900">"Keep growing."</strong>
+                                    <span class="text-foreground-600">
                                         " Follow guided paths for Quran, family, work, and life skills."
                                     </span>
                                 </span>
                             </li>
                         </ul>
                     </div>
-                    <div class="rounded-2xl bg-white p-6 sm:p-8 ring-1 ring-indigo-950/10 shadow-lg">
-                        <span class="inline-flex rounded-md bg-violet-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-violet-700 ring-1 ring-violet-200/70">
+                    <div class="rounded-2xl bg-surface-700 p-6 sm:p-8 ring-1 ring-stroke-muted shadow-lg">
+                        <span class="inline-flex rounded-md bg-sky-50 dark:bg-sky-400/10 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-400 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                             "From the founder"
                         </span>
                         <p class="font-serif mt-4 text-xl sm:text-2xl leading-snug font-bold text-foreground-900">
@@ -235,13 +235,13 @@ pub fn Landing() -> impl IntoView {
                     </div>
 
                     <div class="relative">
-                        <span class="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-violet-50">
+                        <span class="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-sky-50">
                             "For mosque admins"
                         </span>
                         <h2 class="mt-5 text-3xl sm:text-4xl xl:text-5xl font-bold tracking-tight leading-tight text-white">
                             "Run your mosque on Merzah."
                         </h2>
-                        <p class="mt-5 text-base sm:text-lg leading-relaxed text-violet-100/75 max-w-2xl">
+                        <p class="mt-5 text-base sm:text-lg leading-relaxed text-sky-100/75 max-w-2xl">
                             "Become admin for your mosque: keep Adhan and Iqamah times updated, list your imam and muazzin, and publish events with RSVPs, all in one place."
                         </p>
                         <div class="mt-9 flex w-full flex-col items-stretch gap-4 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">

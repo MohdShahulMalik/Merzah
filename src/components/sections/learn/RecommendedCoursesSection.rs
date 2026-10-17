@@ -10,7 +10,7 @@ fn category_class(index: usize) -> &'static str {
     match index % 6 {
         0 => "bg-green-100 text-green-700",
         1 => "bg-blue-100 text-blue-700",
-        2 => "bg-amber-100 text-amber-700",
+        2 => "bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-400",
         3 => "bg-rose-100 text-rose-700",
         4 => "bg-emerald-100 text-emerald-700",
         _ => "bg-orange-100 text-orange-700",
@@ -61,7 +61,7 @@ pub fn RecommendedCoursesSection(catalog: Vec<CatalogEntry>) -> impl IntoView {
                     category=entry.track_name.clone()
                     category_class=category_class(idx.get()).to_string()
                     badge=format!("{:?}", entry.course.level)
-                    badge_class="bg-purple-100 text-purple-700".to_string()
+                    badge_class="bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-400".to_string()
                     title=entry.course.title.clone()
                     description=entry.course.short_description.clone()
                     duration=format_duration(entry.course.duration_minutes)

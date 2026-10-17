@@ -17,11 +17,11 @@ pub fn FeaturedEventCard(
     };
 
     view! {
-        <article class="relative min-w-0 overflow-hidden rounded-xl bg-white p-5 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-6">
+        <article class="relative min-w-0 overflow-hidden rounded-xl bg-surface-700 p-5 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-6">
             <div class=border_class />
 
             <div class="min-w-0 space-y-4">
-                <span class="inline-flex rounded-md bg-violet-50 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-violet-700 ring-1 ring-violet-200/70">
+                <span class="inline-flex rounded-md bg-sky-50 dark:bg-sky-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-sky-700 dark:text-sky-400 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                     {badge}
                 </span>
 
@@ -83,7 +83,7 @@ pub fn AllEventCard(
 
     let category_pill_class = match index % 3 {
         0 => {
-            "inline-flex rounded-md bg-violet-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-violet-700 ring-1 ring-violet-200/70"
+            "inline-flex rounded-md bg-sky-50 dark:bg-sky-400/10 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-400 ring-1 ring-sky-200/70 dark:ring-sky-400/30"
         }
         1 => {
             "inline-flex rounded-md bg-fuchsia-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-fuchsia-700 ring-1 ring-fuchsia-200/70"
@@ -94,7 +94,7 @@ pub fn AllEventCard(
     };
 
     view! {
-        <article class="group relative min-w-0 overflow-hidden rounded-xl bg-white p-5 shadow-lg transition duration-200 ease-out hover:-translate-y-1 hover:shadow-xl sm:p-6">
+        <article class="group relative min-w-0 overflow-hidden rounded-xl bg-surface-700 p-5 shadow-lg transition duration-200 ease-out hover:-translate-y-1 hover:shadow-xl sm:p-6">
             <div class=border_class />
 
             <div class="min-w-0 space-y-5 pl-2">
@@ -130,7 +130,7 @@ pub fn AllEventCard(
 
                 <a
                     href="#"
-                    class="inline-flex min-h-[44px] items-center rounded-lg border-2 border-violet-200/80 bg-violet-50 px-5 py-2.5 text-sm font-bold text-violet-700 transition hover:bg-violet-100"
+                    class="inline-flex min-h-[44px] items-center rounded-lg border-2 border-sky-300/80 bg-sky-50 dark:bg-sky-400/10 px-5 py-2.5 text-sm font-bold text-sky-700 dark:text-sky-400 transition hover:bg-sky-100 dark:hover:bg-sky-400/15"
                 >
                     {cta_label}" →"
                 </a>

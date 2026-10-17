@@ -10,10 +10,10 @@ use crate::models::education::TrackOnClient;
 
 fn style(index: usize) -> (&'static str, &'static str, &'static str) {
     match index % 4 {
-        0 => ("text-purple-900", "text-purple-500", "text-purple-200"),
-        1 => ("text-indigo-900", "text-indigo-500", "text-indigo-200"),
-        2 => ("text-teal-900", "text-teal-500", "text-teal-200"),
-        _ => ("text-amber-900", "text-amber-500", "text-amber-200"),
+        0 => ("text-foreground-900", "text-rose-500 dark:text-rose-300", "text-rose-200 dark:text-rose-200"),
+        1 => ("text-foreground-900", "text-cyan-500 dark:text-cyan-300", "text-cyan-200 dark:text-cyan-200"),
+        2 => ("text-teal-900 dark:text-teal-300", "text-teal-500 dark:text-teal-300", "text-teal-200 dark:text-teal-200"),
+        _ => ("text-amber-900 dark:text-amber-300", "text-amber-500 dark:text-amber-300", "text-amber-200 dark:text-amber-200"),
     }
 }
 

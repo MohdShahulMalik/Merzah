@@ -39,7 +39,7 @@
     @variant dark {
       /* Surface colors (backgrounds) - 900 is darkest */
       --color-surface-700: oklch(0.2 0.055 279);
-      --color-surfac-750: oklch(0.1846 0.055 279);
+      --color-surface-750: oklch(0.1846 0.055 279);
       --color-surface-800: oklch(0.15 0.055 279);
       --color-surface-900: oklch(0.1 0.055 279);
 

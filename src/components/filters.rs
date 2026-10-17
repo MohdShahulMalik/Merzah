@@ -37,9 +37,9 @@ pub fn Filters(
     filter_groups: Vec<FilterGroup>,
 ) -> impl IntoView {
     view! {
-        <section class="min-w-0 rounded-2xl border border-violet-950/10 bg-white p-4 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] sm:p-5 md:p-7">
+        <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-4 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] sm:p-5 md:p-7">
             <div class="flex min-w-0 flex-col gap-3 md:flex-row">
-                <label class="flex min-h-[44px] min-w-0 flex-1 items-center gap-3 rounded-xl border border-violet-950/15 bg-white px-4 text-foreground-600 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
+                <label class="flex min-h-[44px] min-w-0 flex-1 items-center gap-3 rounded-xl border border-stroke-muted bg-surface-700 px-4 text-foreground-600 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
                     <span class="text-lg" aria-hidden="true">"🔍"</span>
                     <input
                         type="search"
@@ -50,7 +50,7 @@ pub fn Filters(
 
                 {location_label.map(|location_label| {
                     view! {
-                        <button class="inline-flex min-h-[44px] min-w-0 items-center justify-center gap-3 rounded-xl border border-violet-950/15 bg-surface-750 px-5 text-base font-medium text-foreground-900 transition-colors hover:bg-surface-900 md:min-w-44">
+                        <button class="inline-flex min-h-[44px] min-w-0 items-center justify-center gap-3 rounded-xl border border-stroke-muted bg-surface-750 px-5 text-base font-medium text-foreground-900 transition-colors hover:bg-surface-900 md:min-w-44">
                             <span aria-hidden="true">"📍"</span>
                             <span class="truncate">{location_label}</span>
                         </button>
@@ -72,7 +72,7 @@ pub fn Filters(
                                             let option_class = if option.is_active {
                                                 "bg-primary text-white border-primary shadow-sm"
                                             } else {
-                                                "bg-surface-750 text-foreground-900 border-violet-950/10 hover:border-primary/35 hover:bg-surface-900"
+                                                "bg-surface-750 text-foreground-900 border-stroke-muted hover:border-primary/35 hover:bg-surface-900"
                                             };
 
                                             view! {

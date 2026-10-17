@@ -48,8 +48,8 @@ pub fn Mosques() -> impl IntoView {
         <Stylesheet href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
         <div class="min-w-0 space-y-4 mt-4 mb-4">
             <div class="flex min-w-0 flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3">
-                <h1 class="min-w-0 text-xl font-bold text-purple-900 sm:text-2xl text-balance">"Nearby Mosques Map"</h1>
-                <p class="text-sm text-gray-500">
+                <h1 class="min-w-0 text-xl font-bold text-foreground-900 sm:text-2xl text-balance">"Nearby Mosques Map"</h1>
+                <p class="text-sm text-foreground-400">
                     <Suspense fallback=move || view! { "…" }>
                         {move || {
                             let count = mosques.get().map(|m| m.len()).unwrap_or(0);
@@ -60,7 +60,7 @@ pub fn Mosques() -> impl IntoView {
             </div>
 
             <Suspense fallback=move || view! {
-                <p class="text-sm text-gray-500">"Loading map…"</p>
+                <p class="text-sm text-foreground-400">"Loading map…"</p>
             }>
                 {move || {
                     view! {
@@ -68,9 +68,9 @@ pub fn Mosques() -> impl IntoView {
                 when=move || has_pos.get()
                 fallback=|| {
                     view! {
-                        <div class="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm">
-                            <p class="text-gray-700 font-medium">"Locating you…"</p>
-                            <p class="mt-1 text-sm text-gray-500">
+                        <div class="rounded-2xl border border-stroke-muted bg-surface-700 p-6 text-center shadow-sm">
+                            <p class="text-foreground-600 font-medium">"Locating you…"</p>
+                            <p class="mt-1 text-sm text-foreground-400">
                                 "Please allow location access to see mosques around you on the map."
                             </p>
                         </div>
@@ -80,7 +80,7 @@ pub fn Mosques() -> impl IntoView {
                 {move || {
                     let map_center = center.get();
                     view! {
-                        <div class="overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
+                        <div class="overflow-hidden rounded-2xl border border-stroke-muted shadow-sm">
                             <MapContainer
                                 style="height: 65vh; width: 100%; z-index: 0;"
                                 center=map_center

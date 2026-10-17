@@ -24,16 +24,16 @@ pub fn PrayerCard(
     let adhan_meridiem_text = adhan_meridiem.unwrap_or_default();
 
     view! {
-        <div class=move || format!("group relative min-w-0 w-full overflow-hidden rounded-2xl bg-white border-t-white px-2 py-3.5 sm:px-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.18)] hover:scale-[1.03] {}", border_classes())>
+        <div class=move || format!("group relative min-w-0 w-full overflow-hidden rounded-2xl bg-surface-700 border-t-transparent px-2 py-3.5 sm:px-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0.5rem_1.75rem_rgba(15,23,42,0.18)] hover:scale-[1.03] {}", border_classes())>
             <p class = "text-[1.05rem] font-semibold tracking-tight text-foreground-900 mb-3 text-center">{prayer_name}</p>
 
             <div class = "grid grid-cols-[1fr_auto_1fr] items-center gap-1 sm:gap-2">
                 <div class = "min-w-0 text-center">
-                    <span class = "block whitespace-nowrap text-lg sm:text-[1.35rem] font-semibold leading-none text-slate-900">
+                    <span class = "block whitespace-nowrap text-lg sm:text-[1.35rem] font-semibold leading-none text-foreground-900">
                         {jamat_main}
                     </span>
                     <Show when=move || jamat_has_meridiem>
-                        <span class = "mt-1 block text-[0.7rem] font-bold uppercase leading-none tracking-[0.22em] text-slate-500">
+                        <span class = "mt-1 block text-[0.7rem] font-bold uppercase leading-none tracking-[0.22em] text-foreground-600">
                             {jamat_meridiem_text.clone()}
                         </span>
                     </Show>
@@ -42,14 +42,14 @@ pub fn PrayerCard(
                     </span>
                 </div>
 
-                <div class = "h-14 w-px rounded-full bg-gradient-to-b from-transparent via-slate-300 to-transparent"></div>
+                <div class = "h-14 w-px rounded-full bg-gradient-to-b from-transparent via-stroke-muted to-transparent"></div>
 
                 <div class = "min-w-0 text-center">
-                    <span class = "block whitespace-nowrap text-lg sm:text-[1.35rem] font-semibold leading-none text-slate-900">
+                    <span class = "block whitespace-nowrap text-lg sm:text-[1.35rem] font-semibold leading-none text-foreground-900">
                         {adhan_main}
                     </span>
                     <Show when=move || adhan_has_meridiem>
-                        <span class = "mt-1 block text-[0.7rem] font-bold uppercase leading-none tracking-[0.22em] text-slate-500">
+                        <span class = "mt-1 block text-[0.7rem] font-bold uppercase leading-none tracking-[0.22em] text-foreground-600">
                             {adhan_meridiem_text.clone()}
                         </span>
                     </Show>
@@ -106,29 +106,29 @@ pub fn NextPrayerReminderCard(
                     <path d="M0,50 L0,40 L20,40 L20,32 L25,28 L30,32 L30,40 L50,40 L50,50 Z M70,50 L70,35 L80,35 L80,22 L90,12 L100,22 L100,35 L110,35 L110,50 Z M130,50 L130,42 L140,42 L140,38 L145,34 L150,38 L150,42 L160,42 L160,50 Z M180,50 L180,30 L190,30 L190,18 Q205,2 220,18 L220,30 L230,30 L230,50 Z M200,50 L200,38 Q200,30 210,30 Q220,30 220,38 L220,50 Z M250,50 L250,42 L260,42 L260,36 L265,32 L270,36 L270,42 L280,42 L280,50 Z M300,50 L300,35 L310,35 L310,26 L320,18 L330,26 L330,35 L340,35 L340,50 Z M360,50 L360,44 L370,44 L370,48 L380,48 L380,50 Z M385,50 L385,46 L395,46 L395,50 Z" />
                 </svg>
             </div>
-            <div class="pointer-events-none absolute -left-12 top-10 h-36 w-36 rounded-full bg-amber-300/10 blur-3xl"></div>
+            <div class="pointer-events-none absolute -left-12 top-10 h-36 w-36 rounded-full bg-sky-300/10 blur-3xl"></div>
             <div class="pointer-events-none absolute right-0 top-0 h-full w-full bg-[radial-gradient(circle_at_85%_25%,rgba(255,219,137,0.12),transparent_18%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.12),transparent_14%)]"></div>
 
             <div class="relative flex min-w-0 flex-col gap-6 sm:gap-8 md:flex-row md:items-center md:justify-between">
                 <div class="flex min-w-0 max-w-2xl items-center justify-start">
-                    <div class="mb-6 flex items-center gap-3 text-violet-100/85">
+                    <div class="mb-6 flex items-center gap-3 text-sky-100/85">
                     </div>
 
                     <div class="min-w-0 space-y-3">
-                        <div class="inline-flex max-w-full items-center rounded-full border border-white/12 bg-white/10 px-4 py-2 text-sm font-medium text-violet-50 shadow-[0_0.5rem_1rem_rgba(11,6,27,0.18)]">
+                        <div class="inline-flex max-w-full items-center rounded-full border border-white/12 bg-white/10 px-4 py-2 text-sm font-medium text-sky-50 shadow-[0_0.5rem_1rem_rgba(11,6,27,0.18)]">
                             <span class="truncate">{mosque_name}</span>
                         </div>
                         <h2 class="text-2xl font-bold tracking-tight text-white sm:text-[1.75rem] md:text-[2.5rem] lg:text-[3rem] [text-shadow:0_0_30px_rgba(200,160,20,0.5),0_0_60px_rgba(200,160,20,0.25)] text-balance break-words">
                             {prayer_name}
                         </h2>
-                        <p class="text-base text-violet-100/78 md:text-lg flex flex-wrap gap-1 items-center">
-                            <span class="text-[0.75rem] text-violet-100/55">"IQAMAH"</span>
-                            <span class="font-semibold text-amber-200">{iqamah_time}</span>
+                        <p class="text-base text-sky-100/78 md:text-lg flex flex-wrap gap-1 items-center">
+                            <span class="text-[0.75rem] text-sky-100/55">"IQAMAH"</span>
+                            <span class="font-semibold text-sky-200">{iqamah_time}</span>
                         </p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-1.5 pb-1 text-[0.68rem] text-violet-100/60 md:absolute md:bottom-4 md:left-1/2 md:-translate-x-1/2 md:pb-0">
+                <div class="flex items-center gap-1.5 pb-1 text-[0.68rem] text-sky-100/60 md:absolute md:bottom-4 md:left-1/2 md:-translate-x-1/2 md:pb-0">
                     <span>"📍"</span>
                     <span class="truncate">{location}</span>
                 </div>
@@ -144,9 +144,9 @@ pub fn NextPrayerReminderCard(
                         view! {
                             <div class="grid min-w-0 justify-items-center">
                                 <div class="w-full rounded-2xl border border-white/10 bg-slate-950/45 px-2 py-3 text-center shadow-[0_0.75rem_1.6rem_rgba(8,5,20,0.24)] backdrop-blur sm:rounded-[1.5rem] sm:px-4 sm:py-4">
-                                    <p class="text-2xl font-bold leading-none text-amber-100 sm:text-4xl">{value}</p>
+                                    <p class="text-2xl font-bold leading-none text-sky-100 sm:text-4xl">{value}</p>
                                 </div>
-                                <p class="mt-1 text-[0.6rem] font-bold uppercase tracking-[0.26em] text-violet-100/55">
+                                <p class="mt-1 text-[0.6rem] font-bold uppercase tracking-[0.26em] text-sky-100/55">
                                     {label}
                                 </p>
                             </div>
@@ -174,7 +174,7 @@ pub fn NearbyMosqueCard(
     let image_alt = format!("{} mosque", mosque_name);
 
     view! {
-        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-2xl bg-white ring-1 ring-indigo-950/5 transition-[background-color,ring-color] duration-500 ease-out hover:bg-[#fbf8ef] hover:ring-[#d8c07a]/70 sm:w-[18rem]">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-2xl bg-surface-700 ring-1 ring-stroke-muted transition-[background-color,ring-color] duration-500 ease-out hover:bg-[#fbf8ef] hover:ring-[#d8c07a]/70 sm:w-[18rem]">
             <div class="relative h-32 overflow-hidden bg-[#c9cef3]">
                 <img
                     src=image_url
@@ -198,8 +198,8 @@ pub fn NearbyMosqueCard(
 
                 <div class="absolute inset-x-0 bottom-0 border-t border-white/15 bg-[#211f55]/88 px-4 py-1 text-white backdrop-blur-md transition-transform duration-500 ease-out translate-y-0 sm:translate-y-full sm:group-hover:translate-y-0">
                     <div class="flex items-center justify-between gap-2">
-                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-amber-200 hover:text-amber-100">"Directions →"</A>
-                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-amber-200 hover:text-amber-100">"View Mosque →"</A>
+                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-sky-200 hover:text-sky-100">"Directions →"</A>
+                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-sky-200 hover:text-sky-100">"View Mosque →"</A>
                     </div>
                 </div>
             </div>
@@ -250,20 +250,20 @@ pub fn MosqueEventCard(
     event_short_description: String,
 ) -> impl IntoView {
     view! {
-        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-white p-4 ring-1 ring-indigo-950/10 transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-300/70 sm:w-98 sm:max-w-none">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-700 p-4 ring-1 ring-stroke-muted transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-300/70 sm:w-98 sm:max-w-none">
 
             <div class="relative mb-3 flex items-start justify-between gap-3">
                 <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider transition-[transform,letter-spacing] duration-300 ease-out group-hover:tracking-[0.14em] {}", event_type_class)>
                     {event_type}
                 </span>
-                <div class="rounded-lg px-2 py-1 text-right text-[#050047] transition-colors duration-300 ease-out group-hover:bg-indigo-50">
+                <div class="rounded-lg px-2 py-1 text-right text-[#050047] transition-colors duration-300 ease-out group-hover:bg-sky-50 dark:hover:bg-sky-400/10">
                     <p class="text-[0.85rem] font-bold">{event_day}</p>
                     <p class="mt-0.5 text-xs">{event_time}</p>
                 </div>
             </div>
             <div class="relative space-y-1.5">
-                <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-purple-900">{event_title}</h3>
-                <p class="text-xs text-foreground-600 transition-colors duration-300 ease-out group-hover:text-indigo-700">"🕌 "{mosque_name}</p>
+                <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-foreground-900">{event_title}</h3>
+                <p class="text-xs text-foreground-600 transition-colors duration-300 ease-out group-hover:text-sky-700">"🕌 "{mosque_name}</p>
                 <p class="text-[0.8rem] leading-relaxed text-[#302977]">{event_short_description}</p>
             </div>
         </article>
@@ -285,7 +285,7 @@ pub fn EducationalResourceCard(
     let image_alt = format!("{} resource cover", resource_title);
 
     view! {
-        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-white ring-1 ring-indigo-950/5 transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-200 sm:w-82 sm:max-w-none">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-700 ring-1 ring-stroke-muted transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-200 sm:w-82 sm:max-w-none">
             <div class="relative h-36 overflow-hidden bg-[#211f55]">
                 <img
                     src=image_url
@@ -300,7 +300,7 @@ pub fn EducationalResourceCard(
             </div>
 
             <div class="relative space-y-3 px-3 py-3">
-                <div class="pointer-events-none absolute inset-y-4 left-0 w-px bg-linear-to-b from-transparent via-amber-300 to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"></div>
+                <div class="pointer-events-none absolute inset-y-4 left-0 w-px bg-linear-to-b from-transparent via-sky-300 to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"></div>
 
                 <div class="flex flex-wrap gap-2">
                     <span class="rounded-full bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74] transition-colors duration-300 ease-out group-hover:text-[#4c1d95]">
@@ -312,11 +312,11 @@ pub fn EducationalResourceCard(
                 </div>
 
                 <div>
-                    <h3 class="relative inline-block text-base font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-purple-900">
+                    <h3 class="relative inline-block text-base font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-foreground-900">
                         <span>{resource_title}</span>
-                        <span class="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-amber-300 transition-transform duration-500 ease-out group-hover:scale-x-100"></span>
+                        <span class="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-sky-300 transition-transform duration-500 ease-out group-hover:scale-x-100"></span>
                     </h3>
-                    <p class="mt-2 text-sm text-[#17135f] transition-colors duration-300 ease-out group-hover:text-indigo-700">{resource_by}</p>
+                    <p class="mt-2 text-sm text-[#17135f] transition-colors duration-300 ease-out group-hover:text-sky-700">{resource_by}</p>
                 </div>
 
                 <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-purple-700">

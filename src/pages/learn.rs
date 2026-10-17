@@ -107,8 +107,8 @@ pub fn Learn() -> impl IntoView {
 
             <section class="min-w-0 space-y-6">
                 <div class="flex min-w-0 flex-wrap items-center justify-between gap-2">
-                    <h1 class="min-w-0 text-2xl font-bold text-purple-900 sm:text-3xl text-balance">"Featured Courses"</h1>
-                    <A href="#" attr:class="inline-flex min-h-[44px] shrink-0 items-center whitespace-nowrap font-medium text-purple-600 hover:text-purple-700">
+                    <h1 class="min-w-0 text-2xl font-bold text-foreground-900 sm:text-3xl text-balance">"Featured Courses"</h1>
+                    <A href="#" attr:class="inline-flex min-h-[44px] shrink-0 items-center whitespace-nowrap font-medium text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300">
                         "View All →"
                     </A>
                 </div>
@@ -125,8 +125,8 @@ pub fn Learn() -> impl IntoView {
 
             <section class="min-w-0 space-y-6">
                 <div class="flex min-w-0 flex-wrap items-center justify-between gap-2">
-                    <h1 class="min-w-0 text-2xl font-bold text-purple-900 sm:text-3xl text-balance">"Guided Learning Paths"</h1>
-                    <A href="#" attr:class="inline-flex min-h-[44px] shrink-0 items-center whitespace-nowrap font-medium text-purple-600 hover:text-purple-700">
+                    <h1 class="min-w-0 text-2xl font-bold text-foreground-900 sm:text-3xl text-balance">"Guided Learning Paths"</h1>
+                    <A href="#" attr:class="inline-flex min-h-[44px] shrink-0 items-center whitespace-nowrap font-medium text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300">
                         "View All →"
                     </A>
                 </div>
@@ -150,7 +150,7 @@ pub fn Learn() -> impl IntoView {
             </section>
 
             <section class="min-w-0 space-y-6">
-                <h1 class="min-w-0 text-2xl font-bold text-purple-900 sm:text-3xl text-balance">"Recommended for You"</h1>
+                <h1 class="min-w-0 text-2xl font-bold text-foreground-900 sm:text-3xl text-balance">"Recommended for You"</h1>
 
                 <Suspense fallback=move || view! {
                     <p class="text-sm text-foreground-600">"Loading recommendations…"</p>

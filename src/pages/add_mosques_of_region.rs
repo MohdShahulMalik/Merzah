@@ -80,9 +80,9 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
 
     view! {
         <div class="mx-auto w-full max-w-2xl min-w-0 px-4 py-6 sm:px-6 sm:py-8">
-            <form on:submit=on_submit class="min-w-0 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8">
+            <form on:submit=on_submit class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-5 text-foreground-900 shadow-sm sm:p-8">
                 <h1 class="min-w-0 text-2xl font-bold text-balance break-words sm:text-3xl">"Add Mosques in a Region"</h1>
-                <p class="mt-2 text-sm text-gray-600 sm:text-base">"Enter the bounding box coordinates to fetch and store mosques from OpenStreetMap."</p>
+                <p class="mt-2 text-sm text-foreground-600 sm:text-base">"Enter the bounding box coordinates to fetch and store mosques from OpenStreetMap."</p>
 
                 <div class="mt-6 grid min-w-0 gap-4 sm:grid-cols-2">
                 <div class="form-group grid min-w-0">
@@ -93,7 +93,7 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                         placeholder="-90.0"
                         node_ref=south_input
                         required
-                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-gray-300 px-3 py-2"
+                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-stroke-muted px-3 py-2"
                     />
                 </div>
                 <div class="form-group grid min-w-0">
@@ -104,7 +104,7 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                         placeholder="-180.0"
                         node_ref=west_input
                         required
-                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-gray-300 px-3 py-2"
+                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-stroke-muted px-3 py-2"
                     />
                 </div>
                 <div class="form-group grid min-w-0">
@@ -115,7 +115,7 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                         placeholder="90.0"
                         node_ref=north_input
                         required
-                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-gray-300 px-3 py-2"
+                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-stroke-muted px-3 py-2"
                     />
                 </div>
                 <div class="form-group grid min-w-0">
@@ -126,7 +126,7 @@ pub fn AddMosquesOfRegion() -> impl IntoView {
                         placeholder="180.0"
                         node_ref=east_input
                         required
-                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-gray-300 px-3 py-2"
+                        class="min-h-[44px] w-full min-w-0 rounded-xl border border-stroke-muted px-3 py-2"
                     />
                 </div>
                 </div>

@@ -16,19 +16,19 @@ const DESCRIPTION_PREVIEW_CHARS: usize = 120;
 
 fn category_label_and_class(category: &EventCategory) -> (String, &'static str) {
     let class = match category {
-        EventCategory::Halaqah => "bg-purple-100 text-purple-800",
+        EventCategory::Halaqah => "bg-teal-100 text-teal-800",
         EventCategory::Fundraiser => "bg-amber-100 text-amber-800",
         EventCategory::Youth => "bg-lime-100 text-lime-800",
         EventCategory::Lecture => "bg-[#7debf0] text-[#064f68]",
         EventCategory::Community => "bg-[#b9f4bd] text-[#11631c]",
         EventCategory::Workshop => "bg-orange-100 text-orange-800",
         EventCategory::Seminar => "bg-sky-100 text-sky-800",
-        EventCategory::Conference => "bg-indigo-100 text-indigo-800",
+        EventCategory::Conference => "bg-cyan-100 text-cyan-800",
         EventCategory::Sports => "bg-emerald-100 text-emerald-800",
         EventCategory::Social => "bg-pink-100 text-pink-800",
         EventCategory::Volunteer => "bg-teal-100 text-teal-800",
         EventCategory::Iftar => "bg-[#d9e0ff] text-[#18206d]",
-        EventCategory::Taraweeh => "bg-violet-100 text-violet-800",
+        EventCategory::Taraweeh => "bg-rose-100 text-rose-800",
         EventCategory::Eid => "bg-yellow-100 text-yellow-800",
     };
 

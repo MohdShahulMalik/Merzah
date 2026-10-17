@@ -32,15 +32,15 @@ pub fn ContinueLearningCard(
                             {status}
                         </span>
 
-                        <h3 class="mb-2 min-w-0 text-xl font-bold text-gray-900 sm:text-2xl text-balance break-words">
+                        <h3 class="mb-2 min-w-0 text-xl font-bold text-foreground-900 sm:text-2xl text-balance break-words">
                             {title}
                         </h3>
 
-                        <p class="mb-4 min-w-0 text-gray-700 break-words">
+                        <p class="mb-4 min-w-0 text-foreground-600 break-words">
                             {description}
                         </p>
 
-                        <div class="mb-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700">
+                        <div class="mb-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-foreground-600">
                             <div class="flex items-center gap-2">
                                 <span aria-hidden="true">"⏱️"</span>
                                 <span>{time_remaining}</span>
@@ -54,8 +54,8 @@ pub fn ContinueLearningCard(
 
                         <div class="mb-4">
                             <div class="mb-2 flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-700">"Progress"</span>
-                                <span class="text-sm font-bold text-gray-900">{progress_percent}"%"</span>
+                                <span class="text-sm font-medium text-foreground-600">"Progress"</span>
+                                <span class="text-sm font-bold text-foreground-900">{progress_percent}"%"</span>
                             </div>
 
                             <div class="h-2.5 w-full overflow-hidden rounded-full bg-purple-200">
@@ -103,8 +103,8 @@ pub fn CourseCard(
         view! {
             <div class="mb-4">
                 <div class="mb-2 flex items-center justify-between">
-                    <span class="text-xs text-gray-500">"Your Progress"</span>
-                    <span class="text-xs font-semibold text-purple-700">{progress_percent}"%"</span>
+                    <span class="text-xs text-foreground-400">"Your Progress"</span>
+                    <span class="text-xs font-semibold text-sky-700 dark:text-sky-400">{progress_percent}"%"</span>
                 </div>
 
                 <div class="h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
@@ -118,8 +118,8 @@ pub fn CourseCard(
     });
 
     view! {
-        <article class="group w-full max-w-[19rem] shrink-0 snap-start rounded-2xl border border-purple-100 bg-white p-5 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)] sm:w-90 sm:max-w-none sm:p-6">
-            <div class="mb-5 overflow-hidden rounded-xl bg-purple-100">
+        <article class="group w-full max-w-[19rem] shrink-0 snap-start rounded-2xl border border-stroke-muted bg-surface-700 p-5 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)] sm:w-90 sm:max-w-none sm:p-6">
+            <div class="mb-5 overflow-hidden rounded-xl bg-sky-100 dark:bg-sky-400/10">
                 <img
                     src=img_link
                     alt=image_alt
@@ -137,15 +137,15 @@ pub fn CourseCard(
                 </span>
             </div>
 
-            <h3 class="mb-2 min-w-0 text-lg font-bold text-purple-900 sm:text-xl text-balance break-words">
+            <h3 class="mb-2 min-w-0 text-lg font-bold text-foreground-900 sm:text-xl text-balance break-words">
                 {title}
             </h3>
 
-            <p class="mb-4 line-clamp-2 min-w-0 text-sm text-gray-600 break-words">
+            <p class="mb-4 line-clamp-2 min-w-0 text-sm text-foreground-600 break-words">
                 {description}
             </p>
 
-            <div class="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500">
+            <div class="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-foreground-400">
                 <div class="flex items-center gap-1">
                     <span aria-hidden="true">"⏱️"</span>
                     <span>{duration}</span>
@@ -160,11 +160,11 @@ pub fn CourseCard(
             {progress_view}
 
             <div class="mb-4 flex min-w-0 items-center gap-2">
-                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-200 text-sm font-semibold text-purple-700">
+                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-200 dark:bg-sky-400/20 text-sm font-semibold text-sky-700 dark:text-sky-400">
                     {instructor_initials}
                 </div>
 
-                <span class="min-w-0 truncate text-sm text-gray-700">
+                <span class="min-w-0 truncate text-sm text-foreground-600">
                     {instructor_name}
                 </span>
             </div>
@@ -191,7 +191,7 @@ pub fn LearningPathCard(
     cta_label: String,
 ) -> impl IntoView {
     view! {
-        <article class="group relative min-w-0 overflow-hidden rounded-2xl bg-white bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-5 shadow-lg ring-2 ring-transparent transition-[background-position,background-color,ring-color] duration-700 ease-out hover:bg-[#fbfaff] hover:ring-purple-200 group-hover:[background-position:16px_16px] sm:p-6 md:p-8">
+        <article class="group relative min-w-0 overflow-hidden rounded-2xl bg-surface-700 bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-5 shadow-lg ring-2 ring-transparent transition-[background-position,background-color,ring-color] duration-700 ease-out hover:bg-[#fbfaff] hover:ring-purple-200 group-hover:[background-position:16px_16px] sm:p-6 md:p-8">
             <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(168,85,247,0.13),transparent_28%),linear-gradient(135deg,rgba(240,189,37,0.08),transparent_42%)] opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100"></div>
             <div class="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-purple-300/0 to-transparent transition-colors duration-700 ease-out group-hover:via-purple-300/80"></div>
 
@@ -206,21 +206,21 @@ pub fn LearningPathCard(
                     </p>
                 </div>
 
-                <div class="relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/70 ring-1 ring-purple-100 transition-[background-color,ring-color] duration-500 ease-out group-hover:bg-white group-hover:ring-purple-200" aria-hidden="true">
-                    <div class="absolute inset-1 rounded-2xl bg-purple-200/0 blur-md transition-colors duration-500 ease-out group-hover:bg-purple-200/45"></div>
+                <div class="relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/70 ring-1 ring-stroke-muted transition-[background-color,ring-color] duration-500 ease-out group-hover:bg-white group-hover:ring-purple-200" aria-hidden="true">
+                    <div class="absolute inset-1 rounded-2xl bg-sky-200/0 blur-md transition-colors duration-500 ease-out group-hover:bg-sky-200/45"></div>
                     <div class=format!("relative text-4xl transition-[transform,filter] duration-500 ease-out group-hover:-rotate-3 group-hover:scale-105 group-hover:[filter:saturate(1.12)] {}", icon_class)>
                         {icon}
                     </div>
                 </div>
             </div>
 
-            <div class="relative mb-6 flex flex-wrap items-center gap-3 text-gray-400">
-                <div class="flex items-center gap-2 rounded-full bg-white/50 px-3 py-1.5 text-sm ring-1 ring-purple-100/0 transition-[background-color,ring-color,color] duration-300 ease-out group-hover:bg-white/80 group-hover:text-purple-700 group-hover:ring-purple-100">
+            <div class="relative mb-6 flex flex-wrap items-center gap-3 text-foreground-400">
+                <div class="flex items-center gap-2 rounded-full bg-white/50 px-3 py-1.5 text-sm ring-1 ring-stroke-muted/0 transition-[background-color,ring-color,color] duration-300 ease-out group-hover:bg-white/80 group-hover:text-sky-700 dark:hover:text-sky-300 group-hover:ring-stroke-muted">
                     <span aria-hidden="true">"📖"</span>
                     <span>{course_count}</span>
                 </div>
 
-                <div class="flex items-center gap-2 rounded-full bg-white/50 px-3 py-1.5 text-sm ring-1 ring-purple-100/0 transition-[background-color,ring-color,color] duration-300 ease-out group-hover:bg-white/80 group-hover:text-purple-700 group-hover:ring-purple-100">
+                <div class="flex items-center gap-2 rounded-full bg-white/50 px-3 py-1.5 text-sm ring-1 ring-stroke-muted/0 transition-[background-color,ring-color,color] duration-300 ease-out group-hover:bg-white/80 group-hover:text-sky-700 dark:hover:text-sky-300 group-hover:ring-stroke-muted">
                     <span aria-hidden="true">"⏱️"</span>
                     <span>{duration}</span>
                 </div>
@@ -228,8 +228,8 @@ pub fn LearningPathCard(
 
             <div class="relative mb-4">
                 <div class="mb-2 flex items-center justify-between">
-                    <span class="text-sm text-gray-700 transition-colors duration-300 ease-out group-hover:text-purple-800">"Path Progress"</span>
-                    <span class="text-sm font-bold text-gray-700 transition-colors duration-300 ease-out group-hover:text-purple-900">{progress_label}</span>
+                    <span class="text-sm text-foreground-600 transition-colors duration-300 ease-out group-hover:text-sky-700">"Path Progress"</span>
+                    <span class="text-sm font-bold text-foreground-600 transition-colors duration-300 ease-out group-hover:text-foreground-900">{progress_label}</span>
                 </div>
 
                 <div class="h-2 w-full overflow-hidden rounded-full bg-purple-900/30 ring-1 ring-purple-900/0 transition-[background-color,ring-color] duration-300 ease-out group-hover:bg-purple-900/20 group-hover:ring-purple-200/70">

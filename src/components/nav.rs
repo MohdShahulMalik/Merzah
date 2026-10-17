@@ -6,12 +6,12 @@ use leptos_router::components::A;
 pub fn Nav() -> impl IntoView {
     let user_name = "Armaan Ali";
 
-    let nav_link_class = "grid w-full min-h-[56px] content-center justify-items-center gap-1 px-1 py-2 text-xs font-medium text-gray-600 rounded-xl transition-all duration-200 hover:text-indigo-500 aria-[current=page]:text-indigo-700 aria-[current=page]:font-semibold aria-[current=page]:bg-indigo-50 sm:text-sm lg:aria-[current=page]:border-t-0 lg:flex lg:w-full lg:min-h-[44px] lg:items-center lg:justify-start lg:gap-4 lg:rounded-xl lg:px-4 lg:py-3 lg:text-base lg:hover:bg-indigo-50 lg:aria-[current=page]:bg-indigo-100 lg:aria-[current=page]:shadow-sm";
-    let mobile_account_button_class = "group grid w-full min-h-[56px] content-center justify-items-center gap-1 px-1 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 hover:text-indigo-500 sm:text-sm lg:hidden";
-    let account_card_class = "flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-gray-700 shadow-sm transition-all duration-200 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-md";
+    let nav_link_class = "grid w-full min-h-[56px] content-center justify-items-center gap-1 px-1 py-2 text-xs font-medium text-foreground-600 rounded-xl transition-all duration-200 hover:text-sky-600 dark:hover:text-sky-400 aria-[current=page]:text-sky-700 dark:aria-[current=page]:text-sky-300 aria-[current=page]:font-semibold aria-[current=page]:bg-sky-50 dark:aria-[current=page]:bg-sky-400/10 sm:text-sm lg:aria-[current=page]:border-t-0 lg:flex lg:w-full lg:min-h-[44px] lg:items-center lg:justify-start lg:gap-4 lg:rounded-xl lg:px-4 lg:py-3 lg:text-base lg:hover:bg-sky-50 dark:hover:bg-sky-400/10 lg:aria-[current=page]:bg-sky-100 dark:lg:aria-[current=page]:bg-sky-400/10 lg:aria-[current=page]:shadow-sm";
+    let mobile_account_button_class = "group grid w-full min-h-[56px] content-center justify-items-center gap-1 px-1 py-2 text-xs font-medium text-foreground-600 transition-colors duration-200 hover:text-sky-600 dark:hover:text-sky-400 sm:text-sm lg:hidden";
+    let account_card_class = "flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-stroke-muted bg-surface-700 px-4 py-3 text-foreground-600 shadow-sm transition-all duration-200 hover:border-sky-200 dark:hover:border-sky-400/30 hover:bg-sky-50 dark:hover:bg-sky-400/10 hover:text-sky-700 dark:hover:text-sky-300 hover:shadow-md";
 
     view! {
-        <nav class = "fixed bottom-0 right-0 left-0 border-t border-gray-200 bg-white shadow-lg lg:sticky lg:top-0 lg:flex lg:text-left lg:w-64 lg:shrink-0 lg:h-screen lg:flex-col lg:self-start lg:border-t-0 lg:border-r lg:py-6 lg:px-4 lg:shadow-md z-10">
+        <nav class = "fixed bottom-0 right-0 left-0 border-t border-stroke-muted bg-surface-700 shadow-lg lg:sticky lg:top-0 lg:flex lg:text-left lg:w-64 lg:shrink-0 lg:h-screen lg:flex-col lg:self-start lg:border-t-0 lg:border-r lg:py-6 lg:px-4 lg:shadow-md z-10">
             <div class="gap-2 mb-4 hidden lg:flex lg:pl-4 lg:p-3 lg:items-center lg:mb-6">
                 <img class="w-auto h-10 rounded-full" src="/assets/logo.png" />
                 <img class="w-auto h-8" src="/assets/logo-text.png" alt="Merzah <logo>" />
@@ -85,7 +85,7 @@ pub fn Nav() -> impl IntoView {
                         class=mobile_account_button_class
                         aria-label="Open account options"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 transition-colors duration-200 group-hover:text-indigo-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 transition-colors duration-200 group-hover:text-sky-600 dark:hover:text-sky-400">
                             <circle cx="12" cy="12" r="1" />
                             <circle cx="19" cy="12" r="1" />
                             <circle cx="5" cy="12" r="1" />
@@ -101,7 +101,7 @@ pub fn Nav() -> impl IntoView {
                     role="button"
                     tabindex="0"
                 >
-                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-700">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-400">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
                             <path d="M20 21a8 8 0 0 0-16 0" />
                             <circle cx="12" cy="7" r="4" />
@@ -109,8 +109,8 @@ pub fn Nav() -> impl IntoView {
                     </div>
 
                     <div class="min-w-0">
-                        <p class="truncate text-sm font-semibold text-gray-900">{user_name}</p>
-                        <p class="truncate text-xs font-medium text-gray-500">Account</p>
+                        <p class="truncate text-sm font-semibold text-foreground-900">{user_name}</p>
+                        <p class="truncate text-xs font-medium text-foreground-400">Account</p>
                     </div>
                 </div>
             </div>
