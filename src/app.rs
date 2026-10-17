@@ -63,6 +63,16 @@ pub fn App() -> impl IntoView {
         );
     });
 
+    Effect::new(move |_| {
+        if let Some(coords) = app_state.coords().get() {
+            logging::log!(
+                "User coordinates: latitude {}, longitude {}",
+                coords.latitude,
+                coords.longitude
+            );
+        }
+    });
+
     view! {
         <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"/>
 

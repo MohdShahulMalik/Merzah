@@ -177,7 +177,6 @@ pub fn Register() -> impl IntoView {
                         input_type = "text"
                         node_ref = name_input
                         error_signal = name_error
-                        hint = "Enter your full name"
                     />
 
                     <TextInput
@@ -187,7 +186,6 @@ pub fn Register() -> impl IntoView {
                         input_type = "text"
                         node_ref = email_or_mobile_input
                         error_signal = identifier_error
-                        hint = "Enter a valid email or mobile number"
                     />
 
                     <TextInput
@@ -216,7 +214,7 @@ pub fn Register() -> impl IntoView {
                 <div class="flex min-w-0 gap-2 mb-6 w-full">
                     <button
                         on:click = start_google_login
-                        class = "min-h-[44px] flex-1 flex min-h-[44px] items-center justify-center gap-2 bg-white text-gray-700 font-semibold py-2 px-2 rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors"
+                        class = "min-h-[44px] flex-1 flex min-h-[44px] items-center justify-center gap-2 bg-surface-700 text-foreground-600 font-semibold py-2 px-2 rounded-2xl border border-stroke-muted hover:bg-surface-800 transition-colors"
                     >
                         <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5" />
                     </button>
@@ -440,7 +438,6 @@ pub fn Login() -> impl IntoView {
                         input_type = "text"
                         node_ref = email_or_mobile_input
                         error_signal = identifier_error
-                        hint = "Enter a valid email or mobile number"
                     />
 
                     <div class="min-w-0">
@@ -475,7 +472,7 @@ pub fn Login() -> impl IntoView {
                 <div class="flex min-w-0 gap-2 mb-8 w-full">
                     <button
                         on:click = start_google_login
-                        class = "flex-1 flex min-h-[44px] items-center justify-center gap-2 bg-white text-gray-700 font-semibold py-2 px-2 rounded-2xl border border-gray-300 hover:bg-gray-50 transition-colors"
+                        class = "flex-1 flex min-h-[44px] items-center justify-center gap-2 bg-surface-700 text-foreground-600 font-semibold py-2 px-2 rounded-2xl border border-stroke-muted hover:bg-surface-800 transition-colors"
                     >
                         <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5" />
                     </button>
