@@ -39,16 +39,23 @@ if [ -z "$USER_LAT" ] || [ -z "$USER_LON" ]; then
     exit 1
 fi
 
-# Bounding box: half-width/half-height in degrees (default ~0.02 => roughly 2km)
-DELTA="${USER_BOX_DELTA:-0.02}"
+# Bounding box derived from the user's coordinates using a search radius of
+# 10 km. One degree of latitude is ~111.32 km anywhere on Earth, and one degree
+# of longitude shrinks toward the poles, so it is scaled by cos(latitude).
+RADIUS_KM=10
 
-south=$(echo "$USER_LAT - $DELTA" | bc -l)
-north=$(echo "$USER_LAT + $DELTA" | bc -l)
-west=$(echo "$USER_LON - $DELTA" | bc -l)
-east=$(echo "$USER_LON + $DELTA" | bc -l)
+dLat=$(echo "scale=8; $RADIUS_KM / 111.32" | bc -l)
+lat_rad=$(echo "scale=10; $USER_LAT * 4 * a(1) / 180" | bc -l)
+dLng=$(echo "scale=8; $RADIUS_KM / (111.32 * c($lat_rad))" | bc -l)
+
+south=$(echo "$USER_LAT - $dLat" | bc -l)
+north=$(echo "$USER_LAT + $dLat" | bc -l)
+west=$(echo "$USER_LON - $dLng" | bc -l)
+east=$(echo "$USER_LON + $dLng" | bc -l)
 
 echo "Populating mosques around lat=$USER_LAT lon=$USER_LON"
 echo "Bounding box: south=$south west=$west north=$north east=$east"
+echo "Using bearer token from $AUTH_STATE_FILE"
 
 add_mosques() {
     local backoff=5
