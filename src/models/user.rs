@@ -148,7 +148,6 @@ pub struct CreateUserIdentifier {
     pub user: RecordId,
     pub identifier_type: String,
     pub identifier_value: String,
-    pub verified: bool,
 }
 
 #[cfg(feature = "ssr")]
@@ -166,7 +165,6 @@ impl CreateUserIdentifier {
             user,
             identifier_type,
             identifier_value,
-            verified: false,
         }
     }
 }
@@ -252,7 +250,6 @@ pub struct UserIdentifier {
     pub user: RecordId,
     pub created_at: Datetime,
     pub updated_at: Datetime,
-    pub verified: Option<bool>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
