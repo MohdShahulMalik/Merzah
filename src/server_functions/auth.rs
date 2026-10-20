@@ -71,6 +71,8 @@ use crate::utils::ssr::ServerResponse;
 #[cfg(feature = "ssr")]
 use crate::utils::ssr::get_authenticated_user_and_context;
 #[cfg(feature = "ssr")]
+use crate::utils::ssr::get_optional_user_and_context;
+#[cfg(feature = "ssr")]
 use crate::utils::ssr::get_server_context;
 #[cfg(feature = "ssr")]
 use actix_web::HttpRequest;
@@ -257,14 +259,19 @@ pub async fn login(form: LoginFormData) -> Result<ApiResponse<String>, ServerFnE
 
 #[server(input = Json, output = Json, prefix = "/auth", endpoint = "me")]
 pub async fn fetch_me() -> Result<ApiResponse<UserOnClient>, ServerFnError> {
+    // Not being logged in is a valid state here: this endpoint is called while
+    // rendering every page, so it must not mark the page as unauthorized.
     let (response_options, _db, user) =
-        match get_authenticated_user_and_context::<UserOnClient>().await {
+        match get_optional_user_and_context::<UserOnClient>().await {
             Ok(ctx) => ctx,
             Err(e) => return Ok(e),
         };
     let responder = ServerResponse::new(response_options);
 
-    Ok(responder.ok(UserOnClient::from(user)))
+    match user {
+        Some(user) => Ok(responder.ok(UserOnClient::from(user))),
+        None => Ok(ApiResponse::error("You are not logged in".to_string())),
+    }
 }
 
 #[server(input=DeleteUrl, output=Json, prefix="/auth", endpoint="logout")]

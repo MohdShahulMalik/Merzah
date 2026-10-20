@@ -38,6 +38,21 @@ pub async fn get_server_context<T>() -> Result<(ResponseOptions, Surreal<Client>
     Ok((response_options, db.get_ref().clone()))
 }
 
+/// Tells whether the current request is a direct call to a server function
+/// (an API request) instead of the server side rendering of a page.
+///
+/// The server functions a page calls are executed inside the request of that
+/// page, so the status they set is applied to the page itself. A page that is
+/// publicly available must therefore not be answered with a `401 Unauthorized`
+/// just because one of its internal calls needed a session, while a direct API
+/// call still has to answer with one.
+#[cfg(feature = "ssr")]
+fn is_direct_api_request(req: &actix_web::HttpRequest) -> bool {
+    let path = req.path();
+    leptos::server_fn::actix::server_fn_paths()
+        .any(|(server_fn_path, _)| server_fn_path == path)
+}
+
 #[cfg(feature = "ssr")]
 pub async fn get_authenticated_user_and_context<T>()
 -> Result<(ResponseOptions, Surreal<Client>, User), ApiResponse<T>> {
@@ -52,6 +67,8 @@ pub async fn get_authenticated_user_and_context<T>()
         }
     };
 
+    let is_api_request = is_direct_api_request(&req);
+
     let session_token = if let Some(cookie) = req.cookie("__Host-session") {
         cookie.value().to_string()
     } else if let Some(auth_header) = req.headers().get("Authorization") {
@@ -59,12 +76,16 @@ pub async fn get_authenticated_user_and_context<T>()
         match extract_bearer_token(auth_str) {
             Some(token) => token,
             None => {
-                response_options.set_status(StatusCode::UNAUTHORIZED);
+                if is_api_request {
+                    response_options.set_status(StatusCode::UNAUTHORIZED);
+                }
                 return Err(ApiResponse::error("You are not logged in".to_string()));
             }
         }
     } else {
-        response_options.set_status(StatusCode::UNAUTHORIZED);
+        if is_api_request {
+            response_options.set_status(StatusCode::UNAUTHORIZED);
+        }
         return Err(ApiResponse::error("You are not logged in".to_string()));
     };
 
@@ -72,8 +93,63 @@ pub async fn get_authenticated_user_and_context<T>()
         Ok(user) => user,
         Err(e) => {
             error!(?e, "Failed to get user by session");
-            response_options.set_status(StatusCode::UNAUTHORIZED);
+            if is_api_request {
+                response_options.set_status(StatusCode::UNAUTHORIZED);
+            }
             return Err(ApiResponse::error("Invalid or expired session".to_string()));
+        }
+    };
+
+    Ok((response_options, db, user))
+}
+
+/// Resolves the signed-in user, if there is one, without failing the request.
+///
+/// Unlike [`get_authenticated_user_and_context`], a missing or invalid session
+/// is not treated as an error: the request still succeeds and only the data is
+/// missing. A direct API call still answers with `401 Unauthorized`, while a
+/// page that is publicly available keeps its own status, because the server
+/// functions a page calls run inside the request of that page.
+#[cfg(feature = "ssr")]
+pub async fn get_optional_user_and_context<T>()
+-> Result<(ResponseOptions, Surreal<Client>, Option<User>), ApiResponse<T>> {
+    let (response_options, db) = get_server_context::<T>().await?;
+
+    let req = match leptos_actix::extract::<actix_web::HttpRequest>().await {
+        Ok(req) => req,
+        Err(e) => {
+            error!(?e, "Failed to extract request");
+            return Err(ApiResponse::error("Internal Server Error".to_string()));
+        }
+    };
+
+    let is_api_request = is_direct_api_request(&req);
+
+    let session_token = if let Some(cookie) = req.cookie("__Host-session") {
+        Some(cookie.value().to_string())
+    } else {
+        req.headers()
+            .get("Authorization")
+            .and_then(|auth_header| auth_header.to_str().ok())
+            .and_then(extract_bearer_token)
+    };
+
+    let user = match session_token {
+        Some(session_token) => match get_user_by_session(&session_token, &db).await {
+            Ok(user) => Some(user),
+            Err(e) => {
+                error!(?e, "Failed to get user by session");
+                if is_api_request {
+                    response_options.set_status(StatusCode::UNAUTHORIZED);
+                }
+                None
+            }
+        },
+        None => {
+            if is_api_request {
+                response_options.set_status(StatusCode::UNAUTHORIZED);
+            }
+            None
         }
     };
 
