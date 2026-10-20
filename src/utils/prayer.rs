@@ -3,6 +3,7 @@ use chrono::TimeDelta;
 
 use crate::models::api_responses::MosqueResponse;
 use crate::models::mosque::PrayerTimes;
+use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
 use crate::models::prayer::NextPrayerCardData;
 use crate::models::prayer::NextPrayerInfo;
 
@@ -78,7 +79,7 @@ pub fn next_prayer_card_data(
     let mosque_name = mosque
         .name
         .clone()
-        .unwrap_or_else(|| "Nearby mosque".to_string());
+        .unwrap_or_else(|| UNNAMED_MOSQUE_NAME.to_string());
     let location = mosque
         .city
         .clone()

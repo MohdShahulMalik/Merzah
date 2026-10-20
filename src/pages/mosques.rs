@@ -7,6 +7,7 @@ use crate::app::AppState;
 use crate::app::AppStateStoreFields;
 use crate::models::api_responses::MixedMosqueResponse;
 use crate::models::api_responses::MosqueResponse;
+use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
 use crate::server_functions::mosque::fetch_mosques_for_location;
 use reactive_stores::OptionStoreExt;
 
@@ -125,7 +126,7 @@ pub fn Mosques() -> impl IntoView {
                                             let name = mosque
                                                 .name
                                                 .clone()
-                                                .unwrap_or_else(|| "Mosque".to_string());
+                                                .unwrap_or_else(|| UNNAMED_MOSQUE_NAME.to_string());
                                             let detail = mosque
                                                 .street
                                                 .clone()

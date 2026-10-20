@@ -9,9 +9,11 @@ use reactive_stores::Store;
 use crate::app::AppState;
 use crate::app::AppStateStoreFields;
 use crate::components::cards::NearbyMosqueCard;
+use crate::components::cards::DEFAULT_MOSQUE_IMAGE;
 use crate::models::api_responses::MixedMosqueResponse;
 use crate::models::location::GeoPosition;
 use crate::models::nearby_mosque::NearbyMosqueCardItem;
+use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
 use crate::server_functions::mosque::fetch_mosques_for_location;
 use crate::server_functions::mosque::get_favorite_mosque;
 use crate::utils::prayer::format_iqamah;
@@ -72,7 +74,7 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
                         let mosque_name = mosque
                             .name
                             .clone()
-                            .unwrap_or_else(|| "Nearby mosque".to_string());
+                            .unwrap_or_else(|| UNNAMED_MOSQUE_NAME.to_string());
 
                         let (iqamah_label, iqamah_time) = mosque
                             .jamat_times
@@ -123,10 +125,7 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
                             image_url=item
                                 .image_url
                                 .clone()
-                                .unwrap_or_else(|| {
-                                    "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=640&h=360&q=80"
-                                        .to_string()
-                                })
+                                .unwrap_or_else(|| DEFAULT_MOSQUE_IMAGE.to_string())
                         />
                     </For>
                 }

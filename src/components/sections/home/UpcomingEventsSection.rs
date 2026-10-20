@@ -8,6 +8,7 @@ use crate::app::AppStateStoreFields;
 use crate::components::cards::MosqueEventCard;
 use crate::models::events::EventCategory;
 use crate::models::events::PersonalEvent;
+use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
 use crate::models::upcoming_event_item::UpcomingEventItem;
 use crate::server_functions::events::fetch_users_favorite_mosques_events;
 
@@ -59,7 +60,7 @@ fn to_item(personal: &PersonalEvent) -> UpcomingEventItem {
         event
             .mosque_name
             .clone()
-            .unwrap_or_else(|| "Nearby mosque".to_string()),
+            .unwrap_or_else(|| UNNAMED_MOSQUE_NAME.to_string()),
         event.date.format("%A").to_string(),
         event.date.format("%-I:%M %p").to_string(),
         short_description(&event.description),

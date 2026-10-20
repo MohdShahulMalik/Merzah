@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-label="Mosque placeholder">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1d2a63" />
+      <stop offset="55%" stop-color="#141a4a" />
+      <stop offset="100%" stop-color="#0b0f31" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="46%" r="58%">
+      <stop offset="0%" stop-color="#d8c07a" stop-opacity="0.32" />
+      <stop offset="60%" stop-color="#7c8cf0" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#0b0f31" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="arabesque" width="80" height="80" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1.5">
+        <path d="M40 4 L76 40 L40 76 L4 40 Z" />
+        <path d="M40 20 L60 40 L40 60 L20 40 Z" />
+        <circle cx="40" cy="40" r="4" />
+      </g>
+    </pattern>
+    <mask id="crescent">
+      <rect width="640" height="360" fill="black" />
+      <circle cx="320" cy="168" r="74" fill="white" />
+      <circle cx="352" cy="150" r="68" fill="black" />
+    </mask>
+    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d8c07a" stop-opacity="0.30" />
+      <stop offset="100%" stop-color="#d8c07a" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#sky)" />
+  <rect width="640" height="360" fill="url(#arabesque)" />
+  <rect width="640" height="360" fill="url(#glow)" />
+
+  <g fill="#f2e6bd" fill-opacity="0.85">
+    <path d="M148 92 l4 12 12 4 -12 4 -4 12 -4 -12 -12 -4 12 -4 Z" />
+    <path d="M486 236 l3.5 10.5 10.5 3.5 -10.5 3.5 -3.5 10.5 -3.5 -10.5 -10.5 -3.5 10.5 -3.5 Z" />
+    <path d="M520 108 l2.5 7.5 7.5 2.5 -7.5 2.5 -2.5 7.5 -2.5 -7.5 -7.5 -2.5 7.5 -2.5 Z" />
+    <path d="M112 262 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 Z" />
+  </g>
+
+  <circle cx="320" cy="168" r="120" fill="url(#moonGlow)" />
+  <rect x="246" y="94" width="148" height="148" fill="#d8c07a" mask="url(#crescent)" />
+
+  <g stroke="#d8c07a" stroke-opacity="0.35" stroke-width="1.5" fill="none">
+    <path d="M40 300 h160" />
+    <path d="M440 300 h160" />
+  </g>
+</svg>

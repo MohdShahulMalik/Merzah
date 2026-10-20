@@ -1,6 +1,12 @@
 use leptos::prelude::*;
 use leptos_router::components::A;
 
+/// Placeholder shown on a mosque card when the mosque has no cover image.
+///
+/// It is a local asset (a crescent over an arabesque pattern) so that no
+/// third party photo ends up on a mosque card.
+pub const DEFAULT_MOSQUE_IMAGE: &str = "/assets/mosque-placeholder.svg";
+
 #[component]
 pub fn PrayerCard(
     prayer_name: String,
@@ -168,9 +174,7 @@ pub fn NearbyMosqueCard(
     is_favorite: bool,
     #[prop(optional)] image_url: Option<String>,
 ) -> impl IntoView {
-    let image_url = image_url.unwrap_or_else(|| {
-        "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=640&h=360&q=80".to_string()
-    });
+    let image_url = image_url.unwrap_or_else(|| DEFAULT_MOSQUE_IMAGE.to_string());
     let image_alt = format!("{} mosque", mosque_name);
 
     view! {

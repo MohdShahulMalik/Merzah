@@ -1,6 +1,9 @@
 use serde::Deserialize;
 use serde::Serialize;
 
+/// Name shown for a mosque that has no name in the data.
+pub const UNNAMED_MOSQUE_NAME: &str = "Unnamed mosque";
+
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct NearbyMosqueCardItem {
     pub id: String,

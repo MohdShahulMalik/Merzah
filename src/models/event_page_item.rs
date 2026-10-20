@@ -1,4 +1,5 @@
 use crate::models::events::PersonalEvent;
+use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct EventPageItem {
@@ -46,7 +47,7 @@ impl EventPageItem {
             event
                 .mosque_name
                 .clone()
-                .unwrap_or_else(|| "Nearby mosque".to_string()),
+                .unwrap_or_else(|| UNNAMED_MOSQUE_NAME.to_string()),
             event.date.format("%A, %b %d · %-I:%M %p").to_string(),
             event.date.format("%a, %b %d · %-I:%M %p").to_string(),
             event.description.clone(),
