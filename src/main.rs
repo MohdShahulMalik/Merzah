@@ -56,6 +56,14 @@ async fn main() -> std::io::Result<()> {
 
                                 // <script src="https://cdn.tailwindcss.com"></script>
 
+                                // The `leaflet` crate (used by leptos-leaflet) binds to the
+                                // global `L` namespace of the Leaflet JS library, so the
+                                // library has to be loaded before the WASM hydrates. Without
+                                // it the map throws `ReferenceError: L is not defined`.
+                                // `defer` keeps the parsing non-blocking, while the script
+                                // still runs before the (deferred) hydration module.
+                                <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
                                 <AutoReload options=leptos_options.clone() />
                                 <HydrationScripts options=leptos_options.clone()/>
                                 <MetaTags/>
