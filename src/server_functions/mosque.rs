@@ -27,7 +27,46 @@ use crate::models::mosque::{
 #[cfg(feature = "ssr")]
 use surrealdb::{RecordId, sql::Geometry};
 #[cfg(feature = "ssr")]
-use tracing::error;
+use tracing::{error, info};
+
+#[cfg(feature = "ssr")]
+fn parse_overpass_mosques(data: OverpassResponse) -> Vec<MosqueFromOverpass> {
+    data.elements
+        .into_iter()
+        .filter_map(|elem| {
+            let (lat, lon) = match elem.element_type.as_str() {
+                "node" => (elem.lat?, elem.lon?),
+                "way" => {
+                    let center = elem.center?;
+                    (center.lat, center.lon)
+                }
+                _ => return None,
+            };
+            let location = Geometry::Point((lon, lat).into());
+            let (name, street, city, wikimedia_commons) = elem
+                .tags
+                .map(|tags| (tags.name, tags.street, tags.city, tags.wikimedia_commons))
+                .unwrap_or((None, None, None, None));
+
+            let cover_img = match wikimedia_commons {
+                Some(ref filename) if !filename.is_empty() => Some(format!(
+                    "https://commons.wikimedia.org/wiki/Special:FilePath/{}",
+                    filename
+                )),
+                _ => None,
+            };
+
+            Some(MosqueFromOverpass {
+                id: RecordId::from(("mosques", elem.id)),
+                name,
+                location,
+                street,
+                city,
+                cover_img,
+            })
+        })
+        .collect()
+}
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(
@@ -60,14 +99,23 @@ pub async fn add_mosques_of_region(
         south, west, north, east, south, west, north, east
     );
 
+    // Only use mirrors that carry worldwide OSM data. Some Overpass instances
+    // (e.g. overpass.osm.ch) only serve data for their own country and answer
+    // with an empty element list for every other region, which used to be
+    // reported as "Added 0 mosques" instead of falling through to the next
+    // mirror.
     let endpoints = [
         "https://overpass-api.de/api/interpreter",
         "https://overpass.kumi.systems/api/interpreter",
-        "https://overpass.osm.ch/api/interpreter",
+        "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+        "https://overpass.nchc.org.tw/api/interpreter",
+        "https://overpass.private.coffee/api/interpreter",
     ];
 
     let client = match reqwest::Client::builder()
         .timeout(std::time::Duration::from_secs(45))
+        // overpass-api.de rejects requests without a user agent with a 406
+        .user_agent(concat!("merzah/", env!("CARGO_PKG_VERSION")))
         .build()
     {
         Ok(client) => client,
@@ -79,8 +127,12 @@ pub async fn add_mosques_of_region(
         }
     };
 
-    let mut response = None;
-    let mut last_error = None;
+    let mut mosques: Vec<MosqueFromOverpass> = Vec::new();
+    let mut last_error: Option<String> = None;
+    // Tracks whether at least one mirror answered with a parsable response. An
+    // empty answer from a working mirror means the region really has no mosques
+    // tagged in OSM, whereas no answer at all means the lookup failed.
+    let mut got_parsable_response = false;
 
     for endpoint in endpoints {
         let mut attempts = 0;
@@ -90,10 +142,7 @@ pub async fn add_mosques_of_region(
             attempts += 1;
             match client.post(endpoint).body(query.clone()).send().await {
                 Ok(res) => {
-                    if res.status().is_success() {
-                        response = Some(res);
-                        break;
-                    } else {
+                    if !res.status().is_success() {
                         let status = res.status();
                         let body = res
                             .text()
@@ -110,6 +159,39 @@ pub async fn add_mosques_of_region(
                         }
                         break; // Try next endpoint
                     }
+
+                    let data: OverpassResponse = match res.json().await {
+                        Ok(data) => data,
+                        Err(e) => {
+                            let err_msg = format!(
+                                "Failed to parse Overpass API response from {}: {}",
+                                endpoint, e
+                            );
+                            error!("{}", err_msg);
+                            last_error = Some(err_msg);
+                            break; // Try next endpoint
+                        }
+                    };
+
+                    got_parsable_response = true;
+                    let parsed = parse_overpass_mosques(data);
+                    if parsed.is_empty() {
+                        let err_msg = format!(
+                            "Endpoint {} returned no mosques for the region, trying next endpoint",
+                            endpoint
+                        );
+                        error!("{}", err_msg);
+                        last_error = Some(err_msg);
+                        break; // Try next endpoint
+                    }
+
+                    info!(
+                        "Fetched {} mosques for the region from {}",
+                        parsed.len(),
+                        endpoint
+                    );
+                    mosques = parsed;
+                    break;
                 }
                 Err(e) => {
                     let err_msg = format!("Endpoint {} failed: {}", endpoint, e);
@@ -125,68 +207,26 @@ pub async fn add_mosques_of_region(
             }
         }
 
-        if response.is_some() {
+        if !mosques.is_empty() {
             break;
         }
     }
 
-    let response = match response {
-        Some(res) => res,
-        None => {
-            return Ok(responder.internal_server_error(format!(
-                "All Overpass API endpoints failed. Last error: {}",
-                last_error.unwrap_or_else(|| "unknown error".to_string())
-            )));
-        }
-    };
-    let data: OverpassResponse = match response.json().await {
-        Ok(data) => data,
-        Err(e) => {
-            error!(?e, "Failed to parse Overpass API response");
-            return Ok(responder.internal_server_error(
-                "Failed to parse mosques data for the region".to_string(),
-            ));
-        }
-    };
-
-    let mosques: Vec<MosqueFromOverpass> = data
-        .elements
-        .into_iter()
-        .filter_map(|elem| {
-            let (lat, lon) = match elem.element_type.as_str() {
-                "node" => (elem.lat?, elem.lon?),
-                "way" => {
-                    let center = elem.center?;
-                    (center.lat, center.lon)
-                }
-                _ => return None,
-            };
-            let location = Geometry::Point((lon, lat).into());
-            let (name, city, street, wikimedia_commons) = elem
-                .tags
-                .map(|tags| (tags.name, tags.street, tags.city, tags.wikimedia_commons))
-                .unwrap_or((None, None, None, None));
-
-            let cover_img = match wikimedia_commons {
-                Some(ref filename) if !filename.is_empty() => Some(format!(
-                    "https://commons.wikimedia.org/wiki/Special:FilePath/{}",
-                    filename
-                )),
-                _ => None,
-            };
-
-            Some(MosqueFromOverpass {
-                id: RecordId::from(("mosques", elem.id)),
-                name,
-                location,
-                street,
-                city,
-                cover_img,
-            })
-        })
-        .collect();
+    if mosques.is_empty() && !got_parsable_response {
+        return Ok(responder.internal_server_error(format!(
+            "All Overpass API endpoints failed. Last error: {}",
+            last_error.unwrap_or_else(|| "unknown error".to_string())
+        )));
+    }
 
     let num_mosques = mosques.len();
+
+    if mosques.is_empty() {
+        return Ok(responder.ok(format!(
+            "Added {} mosques for the region {} {} {} {} successfully",
+            num_mosques, south, west, north, east
+        )));
+    }
 
     let insert_query = "INSERT INTO mosques $mosques";
 
