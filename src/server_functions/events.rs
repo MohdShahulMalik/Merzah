@@ -178,8 +178,8 @@ pub async fn update_event(
 
 #[server(input = Json, output = Json, prefix = "/mosques/events", endpoint = "/fetch-users-favorite-mosques-events")]
 pub async fn fetch_users_favorite_mosques_events(
-    lat: f64,
-    lon: f64,
+    lat: Option<f64>,
+    lon: Option<f64>,
 ) -> Result<ApiResponse<Vec<PersonalEvent>>, ServerFnError> {
     let (response_options, db, user) = match get_authenticated_user_and_context::<Vec<PersonalEvent>>().await {
         Ok(ctx) => ctx,
@@ -187,10 +187,12 @@ pub async fn fetch_users_favorite_mosques_events(
     };
     let responder = ServerResponse::new(response_options);
 
-    let point = Geometry::Point((lon, lat).into());
-    let radius_in_meters = 5000;
+    let has_coords = lat.is_some() && lon.is_some();
+    let point = lat.zip(lon).map(|(lat, lon)| Geometry::Point((lon, lat).into()));
 
-    let events_and_rsvp_query = r#"
+    // Favorite-mosque events (and RSVPs) are always fetched; nearby events are
+    // only fetched when the user's coordinates are available.
+    let events_and_rsvp_query = if has_coords {
         BEGIN TRANSACTION;
         LET $favorite_events = (
             SELECT VALUE {
@@ -237,16 +239,50 @@ pub async fn fetch_users_favorite_mosques_events(
             attending_events: $attending_events,
             nearby_events: $nearby_events
         };
-    "#;
+    "#
+    } else {
+        r#"
+        BEGIN TRANSACTION;
+        LET $favorite_events = (
+            SELECT VALUE {
+                id: type::string(id),
+                title: title,
+                description: description,
+                category: category,
+                date: date,
+                speaker: speaker,
+                mosque_name: mosque.name
+            }
+            FROM $user_id->favorited->mosques->hosts->events
+        );
 
-    let events_and_rsvp_query_result = db
-        .query(events_and_rsvp_query)
-        .bind(("user_id", user.id.clone()))
-        .bind(("point", point))
-        .bind(("radius", radius_in_meters))
-        .await;
+        LET $attending_events = (
+            SELECT VALUE type::string(out)
+            FROM attending
+            WHERE in = $user_id
+        );
 
-    let mut db_response = match events_and_rsvp_query_result {
+        LET $nearby_mosques = [];
+        LET $nearby_events = [];
+        COMMIT TRANSACTION;
+
+        RETURN {
+            favorite_events: $favorite_events,
+            attending_events: $attending_events,
+            nearby_events: $nearby_events
+        };
+    "#
+    };
+
+    let mut events_and_rsvp_query = db.query(events_and_rsvp_query);
+    events_and_rsvp_query = events_and_rsvp_query.bind(("user_id", user.id.clone()));
+
+    if let Some(point) = point {
+        events_and_rsvp_query = events_and_rsvp_query.bind(("point", point));
+    }
+    events_and_rsvp_query = events_and_rsvp_query.bind(("radius", 5000_i64));
+
+    let mut db_response = match events_and_rsvp_query.await {
         Ok(response) => response,
         Err(err) => {
             return Ok(responder.internal_server_error(format!("Some db error occured: {err}")));

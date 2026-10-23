@@ -24,14 +24,16 @@ pub fn Events() -> impl IntoView {
     let events = Resource::new(
         user_pos,
         move |pos: Option<(f64, f64)>| async move {
-            match pos {
-                Some((lat, lon)) => fetch_users_favorite_mosques_events(lat, lon)
-                    .await
-                    .ok()
-                    .and_then(|res| res.data)
-                    .unwrap_or_default(),
-                None => Vec::new(),
-            }
+            let (lat, lon) = match pos {
+                Some((lat, lon)) => (Some(lat), Some(lon)),
+                None => (None, None),
+            };
+
+            fetch_users_favorite_mosques_events(lat, lon)
+                .await
+                .ok()
+                .and_then(|res| res.data)
+                .unwrap_or_default()
         },
     );
 
