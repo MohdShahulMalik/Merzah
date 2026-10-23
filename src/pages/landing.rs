@@ -29,7 +29,7 @@ pub fn Landing() -> impl IntoView {
                     </p>
                     <div class="mt-9 flex w-full flex-col items-stretch justify-center gap-4 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
                         <a
-                            href="#start"
+                            href="/register"
                             class="inline-flex w-full items-center justify-center px-7 py-3.5 rounded-2xl bg-indigo-400 hover:bg-indigo-500 transition-colors duration-300 cursor-pointer text-white text-base font-bold shadow-lg shadow-indigo-500/25 sm:w-auto"
                         >
                             "Get started"
@@ -48,7 +48,7 @@ pub fn Landing() -> impl IntoView {
             <section aria-label="What Merzah brings together" class="relative z-10">
                 <div class="max-w-6xl mx-auto px-5 sm:px-8 -mt-24">
                     <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                        <div class="rounded-2xl bg-surface-700 p-6 ring-1 ring-stroke-muted shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                        <div class="rounded-2xl bg-surface-700 p-6 ring-1 ring-sky-200/70 dark:ring-sky-900/40 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
                             <span class="w-11 h-11 inline-flex items-center justify-center rounded-xl bg-sky-50 dark:bg-sky-400/10 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                                 <svg
                                     class="w-6 h-6 text-sky-700 dark:text-sky-400"
@@ -74,7 +74,7 @@ pub fn Landing() -> impl IntoView {
                                 "Get started " <span class="ml-1" aria-hidden="true">"→"</span>
                             </a>
                         </div>
-                        <div class="rounded-2xl bg-surface-700 p-6 ring-1 ring-stroke-muted shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                        <div class="rounded-2xl bg-surface-700 p-6 ring-1 ring-sky-200/70 dark:ring-sky-900/40 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
                             <span class="w-11 h-11 inline-flex items-center justify-center rounded-xl bg-sky-50 dark:bg-sky-400/10 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                                 <svg
                                     class="w-6 h-6 text-sky-700 dark:text-sky-400"
@@ -209,7 +209,7 @@ pub fn Landing() -> impl IntoView {
                             </li>
                         </ul>
                     </div>
-                    <div class="rounded-2xl bg-surface-700 p-6 sm:p-8 ring-1 ring-stroke-muted shadow-lg">
+                    <div class="rounded-2xl bg-surface-700 p-6 sm:p-8 ring-1 ring-sky-200/70 dark:ring-sky-900/40 shadow-lg">
                         <span class="inline-flex rounded-md bg-sky-50 dark:bg-sky-400/10 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-400 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                             "From the founder"
                         </span>
