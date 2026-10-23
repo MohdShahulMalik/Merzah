@@ -4,11 +4,54 @@ use std::collections::HashSet;
 use surrealdb::RecordId;
 use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client;
+use surrealdb::sql::Geometry;
 
 use crate::models::api_responses::MosqueResponse;
+use crate::models::mosque::MosqueFromOverpass;
 use crate::models::mosque::MosqueSearchResult;
+use crate::models::mosque::OverpassResponse;
 use crate::models::user::UserIdentifier;
 use crate::models::user::UserIdentifierOnClient;
+
+/// Turns the answer of the Overpass API into mosque records that can be
+/// written to the database.
+pub fn parse_overpass_mosques(data: OverpassResponse) -> Vec<MosqueFromOverpass> {
+    data.elements
+        .into_iter()
+        .filter_map(|elem| {
+            let (lat, lon) = match elem.element_type.as_str() {
+                "node" => (elem.lat?, elem.lon?),
+                "way" => {
+                    let center = elem.center?;
+                    (center.lat, center.lon)
+                }
+                _ => return None,
+            };
+            let location = Geometry::Point((lon, lat).into());
+            let (name, street, city, wikimedia_commons) = elem
+                .tags
+                .map(|tags| (tags.name, tags.street, tags.city, tags.wikimedia_commons))
+                .unwrap_or((None, None, None, None));
+
+            let cover_img = match wikimedia_commons {
+                Some(ref filename) if !filename.is_empty() => Some(format!(
+                    "https://commons.wikimedia.org/wiki/Special:FilePath/{}",
+                    filename
+                )),
+                _ => None,
+            };
+
+            Some(MosqueFromOverpass {
+                id: RecordId::from(("mosques", elem.id)),
+                name,
+                location,
+                street,
+                city,
+                cover_img,
+            })
+        })
+        .collect()
+}
 
 pub async fn enrich_mosques_with_contacts(
     mosques: Vec<MosqueSearchResult>,

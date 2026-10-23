@@ -2,7 +2,7 @@
 use crate::{
     errors::user_elevation::UserElevationError,
     utils::{
-        mosque::enrich_mosques_with_contacts,
+        mosque::{enrich_mosques_with_contacts, parse_overpass_mosques},
         parsing::parse_record_id,
         ssr::{ServerResponse, get_authenticated_user_and_context, get_server_context},
         user_elevation::elevate_user,
@@ -28,45 +28,6 @@ use crate::models::mosque::{
 use surrealdb::{RecordId, sql::Geometry};
 #[cfg(feature = "ssr")]
 use tracing::{error, info};
-
-#[cfg(feature = "ssr")]
-fn parse_overpass_mosques(data: OverpassResponse) -> Vec<MosqueFromOverpass> {
-    data.elements
-        .into_iter()
-        .filter_map(|elem| {
-            let (lat, lon) = match elem.element_type.as_str() {
-                "node" => (elem.lat?, elem.lon?),
-                "way" => {
-                    let center = elem.center?;
-                    (center.lat, center.lon)
-                }
-                _ => return None,
-            };
-            let location = Geometry::Point((lon, lat).into());
-            let (name, street, city, wikimedia_commons) = elem
-                .tags
-                .map(|tags| (tags.name, tags.street, tags.city, tags.wikimedia_commons))
-                .unwrap_or((None, None, None, None));
-
-            let cover_img = match wikimedia_commons {
-                Some(ref filename) if !filename.is_empty() => Some(format!(
-                    "https://commons.wikimedia.org/wiki/Special:FilePath/{}",
-                    filename
-                )),
-                _ => None,
-            };
-
-            Some(MosqueFromOverpass {
-                id: RecordId::from(("mosques", elem.id)),
-                name,
-                location,
-                street,
-                city,
-                cover_img,
-            })
-        })
-        .collect()
-}
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(
