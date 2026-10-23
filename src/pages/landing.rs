@@ -100,7 +100,7 @@ pub fn Landing() -> impl IntoView {
                                 "Browse events " <span class="ml-1" aria-hidden="true">"→"</span>
                             </a>
                         </div>
-                        <div class="rounded-2xl bg-surface-700 p-6 ring-1 ring-stroke-muted shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] sm:col-span-2 lg:col-span-1">
+                        <div class="rounded-2xl bg-surface-700 p-6 ring-1 ring-sky-200/70 dark:ring-sky-900/40 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] sm:col-span-2 lg:col-span-1">
                             <span class="w-11 h-11 inline-flex items-center justify-center rounded-xl bg-sky-50 dark:bg-sky-400/10 ring-1 ring-sky-200/70 dark:ring-sky-400/30">
                                 <svg
                                     class="w-6 h-6 text-sky-700 dark:text-sky-400"
