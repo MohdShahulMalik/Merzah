@@ -1,4 +1,5 @@
 use chrono::NaiveTime;
+use garde::Validate;
 use serde::Deserialize;
 use serde::Serialize;
 #[cfg(feature = "ssr")]
@@ -20,6 +21,79 @@ pub struct MosqueFromOverpass {
     pub street: Option<String>,
     pub city: Option<String>,
     pub cover_img: Option<String>,
+}
+
+/// The payload an app admin sends to approve the addition of a new mosque.
+///
+/// It is the input of the `add-mosque` server function, so it has to be
+/// serializable on the client side as well.
+#[derive(Debug, Validate, Deserialize, Serialize, Clone)]
+pub struct NewMosque {
+    #[garde(length(min = 2, max = 100))]
+    pub name: String,
+    #[garde(range(min = -90.0, max = 90.0))]
+    pub lat: f64,
+    #[garde(range(min = -180.0, max = 180.0))]
+    pub lon: f64,
+    #[garde(length(min = 1, max = 200))]
+    pub street: Option<String>,
+    #[garde(length(min = 1, max = 100))]
+    pub city: Option<String>,
+    #[garde(length(min = 1, max = 500))]
+    pub cover_img: Option<String>,
+}
+
+impl NewMosque {
+    pub fn new(
+        name: String,
+        lat: f64,
+        lon: f64,
+        street: Option<String>,
+        city: Option<String>,
+        cover_img: Option<String>,
+    ) -> Self {
+        Self {
+            name,
+            lat,
+            lon,
+            street,
+            city,
+            cover_img,
+        }
+    }
+}
+
+/// The shape of a mosque record that is written to the database.
+#[cfg(feature = "ssr")]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MosqueInsert {
+    pub id: RecordId,
+    pub name: Option<String>,
+    pub location: Geometry,
+    pub street: Option<String>,
+    pub city: Option<String>,
+    pub cover_img: Option<String>,
+}
+
+#[cfg(feature = "ssr")]
+impl MosqueInsert {
+    pub fn new(
+        id: RecordId,
+        name: Option<String>,
+        location: Geometry,
+        street: Option<String>,
+        city: Option<String>,
+        cover_img: Option<String>,
+    ) -> Self {
+        Self {
+            id,
+            name,
+            location,
+            street,
+            city,
+            cover_img,
+        }
+    }
 }
 
 #[cfg(feature = "ssr")]

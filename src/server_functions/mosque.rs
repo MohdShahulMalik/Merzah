@@ -2,7 +2,7 @@
 use crate::{
     errors::user_elevation::UserElevationError,
     utils::{
-        mosque::{enrich_mosques_with_contacts, parse_overpass_mosques},
+        mosque::{enrich_mosques_with_contacts, generate_mosque_record_id},
         parsing::parse_record_id,
         ssr::{ServerResponse, get_authenticated_user_and_context, get_server_context},
         user_elevation::elevate_user,
@@ -17,17 +17,84 @@ use leptos::{
 
 use crate::models::{
     api_responses::{ApiResponse, MixedMosqueResponse, MosqueResponse},
-    mosque::PrayerTimesUpdate,
+    mosque::{NewMosque, PrayerTimesUpdate},
 };
 
 #[cfg(feature = "ssr")]
 use crate::models::mosque::{
-    MosqueFromOverpass, MosqueRecord, MosqueSearchResult, OverpassResponse,
+    MosqueFromOverpass, MosqueInsert, MosqueRecord, MosqueSearchResult, OverpassResponse,
 };
+#[cfg(feature = "ssr")]
+use crate::utils::mosque::parse_overpass_mosques;
+#[cfg(feature = "ssr")]
+use garde::Validate;
 #[cfg(feature = "ssr")]
 use surrealdb::{RecordId, sql::Geometry};
 #[cfg(feature = "ssr")]
 use tracing::{error, info};
+
+#[server(input = Json, output = Json, prefix = "/mosques", endpoint = "add-mosque")]
+pub async fn add_mosque(mosque: NewMosque) -> Result<ApiResponse<String>, ServerFnError> {
+    let (response_options, db, user) = match get_authenticated_user_and_context::<String>().await {
+        Ok(ctx) => ctx,
+        Err(e) => return Ok(e),
+    };
+    let responder = ServerResponse::new(response_options);
+
+    // Only an app admin is allowed to approve the addition of a new mosque.
+    if !user.is_app_admin() {
+        error!(
+            "Unauthorized attempt to add a mosque by the user {}",
+            user.id
+        );
+        return Ok(responder.unauthorized(
+            "Only app admins can approve the addition of a new mosque".to_string(),
+        ));
+    }
+
+    if let Err(err) = mosque.validate() {
+        let errors = err
+            .iter()
+            .map(|(field, msg)| format!("{field}: {msg}"))
+            .collect::<Vec<_>>();
+
+        error!(?errors);
+        return Ok(
+            responder.unprocessable_entity("Error while validating the mosque's data".to_string())
+        );
+    }
+
+    let mosque_id = generate_mosque_record_id();
+    let mosque_record = MosqueInsert::new(
+        mosque_id.clone(),
+        Some(mosque.name),
+        Geometry::Point((mosque.lon, mosque.lat).into()),
+        mosque.street,
+        mosque.city,
+        mosque.cover_img,
+    );
+
+    let insert_query = "INSERT INTO mosques $mosque";
+
+    match db.query(insert_query).bind(("mosque", mosque_record)).await {
+        Ok(result) => {
+            if let Err(e) = result.check() {
+                error!(?e, "Failed to add the mosque to the db");
+                return Ok(responder.internal_server_error(
+                    "Failed to add the mosque due to database error".to_string(),
+                ));
+            }
+        }
+        Err(e) => {
+            error!(?e, "Failed to add the mosque to the db");
+            return Ok(responder.internal_server_error(
+                "Failed to add the mosque due to database error".to_string(),
+            ));
+        }
+    }
+
+    Ok(responder.created(mosque_id.to_string()))
+}
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
 pub async fn add_mosques_of_region(

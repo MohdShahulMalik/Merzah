@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::collections::HashSet;
 
+use rand::Rng;
 use surrealdb::RecordId;
 use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client;
@@ -51,6 +52,17 @@ pub fn parse_overpass_mosques(data: OverpassResponse) -> Vec<MosqueFromOverpass>
             })
         })
         .collect()
+}
+
+/// Builds a random id for a mosque record, so that every mosque that gets
+/// added is a new one.
+pub fn generate_mosque_record_id() -> RecordId {
+    let mut rng = rand::thread_rng();
+    let suffix: String = (0..4)
+        .map(|_| format!("{:016x}", rng.r#gen::<u64>()))
+        .collect();
+
+    RecordId::from(("mosques", suffix))
 }
 
 pub async fn enrich_mosques_with_contacts(

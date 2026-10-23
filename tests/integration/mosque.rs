@@ -5,7 +5,7 @@ use merzah::{
     models::{
         api_responses::{ApiResponse, MosqueResponse},
         auth::{Platform, RegistrationFormData},
-        mosque::{MosqueRecord, MosqueSearchResult, PrayerTimes, PrayerTimesUpdate},
+        mosque::{MosqueRecord, MosqueSearchResult, NewMosque, PrayerTimes, PrayerTimesUpdate},
         user::{Identifier, User},
     },
     spawn_app,
@@ -21,6 +21,11 @@ struct AddMosqueParams {
     west: f64,
     north: f64,
     east: f64,
+}
+
+#[derive(Serialize)]
+struct AddSingleMosqueParams {
+    mosque: NewMosque,
 }
 
 #[derive(Serialize)]
@@ -937,5 +942,108 @@ async fn test_unauthenticated_access_to_protected_mosque_endpoints(
         "Unauthenticated {:?} should return 401, got: {}",
         auth_method,
         response.status()
+    );
+}
+
+#[rstest]
+#[case::app_admin("app_admin", 201)]
+#[case::mosque_supervisor("mosque_supervisor", 401)]
+#[case::regular_user("regular", 401)]
+#[tokio::test]
+async fn test_add_mosque_is_only_allowed_for_app_admins(
+    #[case] role: &str,
+    #[case] expected_status: u16,
+) {
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let client = Client::new();
+
+    let user: User = db
+        .create("users")
+        .content(User {
+            id: RecordId::from(("users", format!("user_{}", uuid::Uuid::new_v4()))),
+            created_at: Datetime::default(),
+            display_name: "Acting User".to_string(),
+            password_hash: "hash".to_string(),
+            role: role.to_string(),
+            updated_at: Datetime::default(),
+        })
+        .await
+        .expect("Failed to create user")
+        .expect("Not returned");
+
+    let session = create_session(user.id.clone(), &db)
+        .await
+        .expect("Failed to create session");
+
+    let url = format!("{}/mosques/add-mosque", addr);
+    let params = AddSingleMosqueParams {
+        mosque: NewMosque::new(
+            "Test Mosque".to_string(),
+            28.6319,
+            76.9675,
+            Some("Test Street".to_string()),
+            Some("Test City".to_string()),
+            None,
+        ),
+    };
+
+    let response = client
+        .post(&url)
+        .json(&params)
+        .header("Authorization", format!("Bearer {}", session))
+        .send()
+        .await
+        .expect("Failed to send request");
+
+    assert_eq!(response.status().as_u16(), expected_status);
+
+    let api_response: ApiResponse<String> = response
+        .json()
+        .await
+        .expect("Failed to deserialize response");
+
+    if expected_status != 201 {
+        assert!(
+            api_response.error.is_some(),
+            "Expected an error for the role {}",
+            role
+        );
+        return;
+    }
+
+    assert!(
+        api_response.error.is_none(),
+        "Expected success but got error: {:?}",
+        api_response.error
+    );
+
+    let mosque_id = api_response.data.expect("No mosque id was returned");
+    assert!(
+        mosque_id.starts_with("mosques:"),
+        "The returned id is not a mosque id: {}",
+        mosque_id
+    );
+
+    let record_id: RecordId = mosque_id.parse().expect("The returned id is not parsable");
+
+    let mosques: Vec<MosqueSearchResult> = db
+        .query("SELECT * FROM mosques WHERE id = $mosque_id")
+        .bind(("mosque_id", record_id))
+        .await
+        .expect("Failed to query the mosque")
+        .take(0)
+        .expect("Take failed");
+
+    assert_eq!(mosques.len(), 1, "The mosque was not created");
+    assert_eq!(
+        mosques[0].name.as_deref(),
+        Some("Test Mosque"),
+        "The mosque was created with another name"
+    );
+    assert_eq!(
+        mosques[0].location,
+        (28.6319, 76.9675),
+        "The mosque was created at another location"
     );
 }
