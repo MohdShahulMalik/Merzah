@@ -16,7 +16,7 @@ pub fn PrayerCard(
 ) -> impl IntoView {
     let border_classes = move || {
         if is_current {
-            "ring-3 ring-green-500"
+            "ring-3 ring-inset ring-green-500"
         } else {
             ""
         }
