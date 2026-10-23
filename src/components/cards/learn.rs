@@ -17,7 +17,7 @@ pub fn ContinueLearningCard(
     });
 
     view! {
-        <article class="min-w-0 rounded-2xl border border-purple-200 bg-linear-to-br from-purple-100 to-indigo-100 p-5 shadow-md sm:p-6 md:px-8 md:py-7">
+        <article class="min-w-0 card bg-linear-to-br from-purple-100 to-indigo-100 p-5 shadow-md sm:p-6 md:px-8 md:py-7">
             <div class="flex min-w-0 flex-col gap-6 lg:flex-row">
                 <div class="w-full overflow-hidden rounded-xl lg:w-64 lg:shrink-0 lg:self-stretch">
                     <img
@@ -118,7 +118,7 @@ pub fn CourseCard(
     });
 
     view! {
-        <article class="group w-full max-w-[19rem] shrink-0 snap-start rounded-2xl border border-stroke-muted bg-surface-700 p-5 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)] sm:w-90 sm:max-w-none sm:p-6">
+        <article class="group w-full max-w-[19rem] shrink-0 snap-start card p-5 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:border-purple-200 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)] sm:w-90 sm:max-w-none sm:p-6">
             <div class="mb-5 overflow-hidden rounded-xl bg-sky-100 dark:bg-sky-400/10">
                 <img
                     src=img_link
@@ -191,7 +191,7 @@ pub fn LearningPathCard(
     cta_label: String,
 ) -> impl IntoView {
     view! {
-        <article class="group relative min-w-0 overflow-hidden rounded-2xl bg-surface-700 bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-5 shadow-lg ring-2 ring-transparent transition-[background-position,background-color,ring-color] duration-700 ease-out hover:bg-[#fbfaff] hover:ring-purple-200 group-hover:[background-position:16px_16px] sm:p-6 md:p-8">
+        <article class="group relative min-w-0 card bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-5 shadow-lg transition-[background-position,background-color,border-color] duration-700 ease-out hover:bg-[#fbfaff] hover:border-purple-200 group-hover:[background-position:16px_16px] sm:p-6 md:p-8">
             <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(168,85,247,0.13),transparent_28%),linear-gradient(135deg,rgba(240,189,37,0.08),transparent_42%)] opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100"></div>
             <div class="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-purple-300/0 to-transparent transition-colors duration-700 ease-out group-hover:via-purple-300/80"></div>
 

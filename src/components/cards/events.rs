@@ -17,7 +17,7 @@ pub fn FeaturedEventCard(
     };
 
     view! {
-        <article class="relative min-w-0 overflow-hidden rounded-xl bg-surface-700 p-5 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-6">
+        <article class="relative min-w-0 card p-5 shadow-lg transition hover:-translate-y-1 hover:border-purple-200 hover:shadow-xl sm:p-6">
             <div class=border_class />
 
             <div class="min-w-0 space-y-4">
@@ -94,7 +94,7 @@ pub fn AllEventCard(
     };
 
     view! {
-        <article class="group relative min-w-0 overflow-hidden rounded-xl bg-surface-700 p-5 shadow-lg transition duration-200 ease-out hover:-translate-y-1 hover:shadow-xl sm:p-6">
+        <article class="group relative min-w-0 card p-5 shadow-lg transition duration-200 ease-out hover:-translate-y-1 hover:border-purple-200 hover:shadow-xl sm:p-6">
             <div class=border_class />
 
             <div class="min-w-0 space-y-5 pl-2">

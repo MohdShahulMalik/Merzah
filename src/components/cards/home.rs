@@ -178,7 +178,7 @@ pub fn NearbyMosqueCard(
     let image_alt = format!("{} mosque", mosque_name);
 
     view! {
-        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-2xl bg-surface-700 ring-1 ring-stroke-muted transition-[background-color,ring-color] duration-500 ease-out hover:bg-[#fbf8ef] hover:ring-[#d8c07a]/70 sm:w-[18rem]">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start card transition-[background-color,border-color] duration-500 ease-out hover:bg-[#fbf8ef] hover:border-[#d8c07a]/70 sm:w-[18rem]">
             <div class="relative h-32 overflow-hidden bg-[#c9cef3]">
                 <img
                     src=image_url
@@ -254,7 +254,7 @@ pub fn MosqueEventCard(
     event_short_description: String,
 ) -> impl IntoView {
     view! {
-        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-700 p-4 ring-1 ring-stroke-muted transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-300/70 sm:w-98 sm:max-w-none">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start card p-4 transition-[background-color,border-color] duration-300 ease-out hover:border-purple-200 sm:w-98 sm:max-w-none">
 
             <div class="relative mb-3 flex items-start justify-between gap-3">
                 <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider transition-[transform,letter-spacing] duration-300 ease-out group-hover:tracking-[0.14em] {}", event_type_class)>
@@ -289,7 +289,7 @@ pub fn EducationalResourceCard(
     let image_alt = format!("{} resource cover", resource_title);
 
     view! {
-        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-700 ring-1 ring-stroke-muted transition-[background-color,ring-color] duration-300 ease-out hover:ring-purple-200 sm:w-82 sm:max-w-none">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start card transition-[background-color,border-color] duration-300 ease-out hover:border-purple-200 sm:w-82 sm:max-w-none">
             <div class="relative h-36 overflow-hidden bg-[#211f55]">
                 <img
                     src=image_url

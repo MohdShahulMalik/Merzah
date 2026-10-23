@@ -66,6 +66,19 @@
   }
 }
 
+/* Standard card treatment shared across pages. A real 1px border is used
+   instead of an outside box-shadow ring so the antialiased edge blends
+   against the card's own background at fractional display scaling
+   (125% / 1.5x), where an outward ring can fade to near invisibility.
+   One radius, one bezel color, one hover accent for every card. */
+@utility card {
+  min-width: 0;
+  overflow: hidden;
+  background-color: var(--color-surface-700);
+  border: 1px solid var(--color-stroke-muted);
+  border-radius: 1rem;
+}
+
 :root, :host {
   background-color: var(--color-surface-900);
 }
