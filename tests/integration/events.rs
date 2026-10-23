@@ -5,8 +5,8 @@ use merzah::{
     models::{
         api_responses::ApiResponse,
         events::{
-            CreateEvent, Event, EventCategory, EventRecord, EventRecurrence, Interval,
-            PersonalEvent, UpdatedEvent,
+            CreateEvent, Event, EventCategory, EventRecord, EventRecurrence, EventSummary,
+            Interval, PersonalEvent, UpdatedEvent,
         },
         mosque::MosqueRecord,
         user::User,
@@ -45,6 +45,11 @@ struct RsvpParams {
 struct FetchUsersFavoriteMosquesEventsParams {
     pub lat: f64,
     pub lon: f64,
+}
+
+#[derive(Serialize)]
+struct FetchMosqueEventsParams {
+    pub mosque_id: String,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -640,6 +645,153 @@ async fn test_fetch_users_favorite_mosques_events_includes_nearby_and_deduplicat
         Some("Nearby Non Favorite Mosque"),
         "Nearby event should carry its mosque name"
     );
+}
+
+#[tokio::test]
+async fn test_fetch_mosque_events_reports_the_rsvp_of_the_user() {
+    let db = get_test_db().await;
+    let addr = spawn_app(db.clone());
+    let client = Client::new();
+
+    let (user, session) = setup_user_and_session(&db).await;
+    let (other_user, other_session) = setup_user_and_session(&db).await;
+
+    let mosque = setup_mosque(&db).await;
+
+    let event_date =
+        Utc::now().with_timezone(&FixedOffset::east_opt(0).unwrap()) + Duration::days(3);
+
+    let create_event = CreateEvent {
+        title: "RSVP Event".to_string(),
+        description: "An event that is used to check the rsvp of the user.".to_string(),
+        category: EventCategory::Community,
+        date: event_date,
+        mosque: mosque.id.to_string(),
+        speaker: None,
+        recurrence_pattern: None,
+        recurrence_duration: None,
+    };
+
+    let response = create_event_via_api(&client, &addr, &session, AuthMethod::Mobile, create_event)
+        .await;
+
+    assert!(
+        response.error.is_none(),
+        "Unexpected error: {:?}",
+        response.error
+    );
+
+    let events: Vec<Event> = db
+        .query("SELECT * FROM events WHERE title = $title")
+        .bind(("title", "RSVP Event"))
+        .await
+        .expect("Failed to query the event")
+        .take(0)
+        .expect("Take failed");
+
+    assert_eq!(events.len(), 1);
+    let event = &events[0];
+
+    db.query("RELATE $user -> attending -> $event")
+        .bind(("user", user.id.clone()))
+        .bind(("event", event.id.clone()))
+        .await
+        .expect("Failed to create the RSVP");
+
+    let url = format!("{}/mosques/events/fetch-mosque-events", addr);
+    let params = FetchMosqueEventsParams {
+        mosque_id: mosque.id.to_string(),
+    };
+
+    // The user that attends the event has the rsvp set
+    let response = client
+        .post(&url)
+        .json(&params)
+        .header("Authorization", format!("Bearer {}", session))
+        .send()
+        .await
+        .expect("Failed to fetch the events of the mosque");
+
+    assert!(
+        response.status().is_success(),
+        "Fetch failed: {:?}",
+        response.text().await
+    );
+
+    let api_response: ApiResponse<Vec<PersonalEvent>> = response
+        .json()
+        .await
+        .expect("Failed to deserialize the events");
+
+    assert!(api_response.error.is_none());
+    let events = api_response.data.expect("Expected the events of the mosque");
+
+    assert_eq!(events.len(), 1);
+    assert!(
+        events[0].rsvp,
+        "The user that attends the event should have the rsvp set"
+    );
+
+    // A user that does not attend the event does not have the rsvp set
+    let response = client
+        .post(&url)
+        .json(&params)
+        .header("Authorization", format!("Bearer {}", other_session))
+        .send()
+        .await
+        .expect("Failed to fetch the events of the mosque");
+
+    assert!(
+        response.status().is_success(),
+        "Fetch failed: {:?}",
+        response.text().await
+    );
+
+    let api_response: ApiResponse<Vec<PersonalEvent>> = response
+        .json()
+        .await
+        .expect("Failed to deserialize the events");
+
+    assert!(api_response.error.is_none());
+    let events = api_response.data.expect("Expected the events of the mosque");
+
+    assert_eq!(events.len(), 1);
+    assert!(
+        !events[0].rsvp,
+        "The user that does not attend the event should not have the rsvp set"
+    );
+
+    // An admin of the mosque gets the summary with the number of the attendees
+    db.query("RELATE $user -> handles -> $mosque SET granted_by = $user")
+        .bind(("user", user.id.clone()))
+        .bind(("mosque", mosque.id.clone()))
+        .await
+        .expect("Failed to make the user an admin of the mosque");
+
+    let response = client
+        .post(&url)
+        .json(&params)
+        .header("Authorization", format!("Bearer {}", session))
+        .send()
+        .await
+        .expect("Failed to fetch the events of the mosque");
+
+    assert!(
+        response.status().is_success(),
+        "Fetch failed: {:?}",
+        response.text().await
+    );
+
+    let api_response: ApiResponse<Vec<EventSummary>> = response
+        .json()
+        .await
+        .expect("Failed to deserialize the events");
+
+    assert!(api_response.error.is_none());
+    let events = api_response.data.expect("Expected the events of the mosque");
+
+    assert_eq!(events.len(), 1);
+    assert_eq!(events[0].rsvp_count, 1, "The event has one attendee");
 }
 
 #[tokio::test]

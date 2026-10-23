@@ -392,7 +392,7 @@ pub async fn fetch_mosque_events(
                     mosque_name: mosque.name
                 } AS event,
 
-                (array::len(<-attending WHERE in = $user_id) == 1)
+                ($user_id IN (<-attending).in)
                 AS rsvp
 
             FROM $mosque_id->hosts->events
