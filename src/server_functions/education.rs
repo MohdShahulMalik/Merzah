@@ -1,5 +1,5 @@
 #[cfg(feature = "ssr")]
-use chrono::{DateTime, FixedOffset, Utc};
+use chrono::Utc;
 #[cfg(feature = "ssr")]
 use garde::Validate;
 use leptos::{
@@ -36,6 +36,8 @@ use crate::services::course_stats::{update_course_enrollment_count, update_cours
 #[cfg(feature = "ssr")]
 use crate::services::streak::bump_streak;
 #[cfg(feature = "ssr")]
+use crate::utils::datetime::datetime_to_fixed;
+#[cfg(feature = "ssr")]
 use crate::utils::education_auth::{is_course_owner, is_educator_or_admin};
 #[cfg(feature = "ssr")]
 use crate::utils::parsing::parse_record_id;
@@ -43,12 +45,6 @@ use crate::utils::parsing::parse_record_id;
 use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context, get_server_context};
 #[cfg(feature = "ssr")]
 use crate::utils::token_generator::generate_token;
-
-#[cfg(feature = "ssr")]
-fn datetime_to_fixed(datetime: Datetime) -> DateTime<FixedOffset> {
-    DateTime::parse_from_rfc3339(&datetime.to_string())
-        .unwrap_or_else(|_| Utc::now().with_timezone(&FixedOffset::east_opt(0).unwrap()))
-}
 
 #[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize)]

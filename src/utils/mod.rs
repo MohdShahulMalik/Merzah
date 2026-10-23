@@ -1,4 +1,6 @@
 #[cfg(feature = "ssr")]
+pub mod datetime;
+#[cfg(feature = "ssr")]
 pub mod education_auth;
 #[cfg(feature = "ssr")]
 pub mod mosque;

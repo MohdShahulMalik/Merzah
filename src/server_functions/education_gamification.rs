@@ -1,5 +1,3 @@
-#[cfg(feature = "ssr")]
-use chrono::{DateTime, FixedOffset, Utc};
 use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
 #[cfg(feature = "ssr")]
 use serde::Deserialize;
@@ -17,13 +15,9 @@ use crate::models::gamification::{
 #[cfg(feature = "ssr")]
 use crate::models::user::User;
 #[cfg(feature = "ssr")]
-use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context};
-
+use crate::utils::datetime::datetime_to_fixed;
 #[cfg(feature = "ssr")]
-fn datetime_to_fixed(datetime: Datetime) -> DateTime<FixedOffset> {
-    DateTime::parse_from_rfc3339(&datetime.to_string())
-        .unwrap_or_else(|_| Utc::now().with_timezone(&FixedOffset::east_opt(0).unwrap()))
-}
+use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context};
 
 #[cfg(feature = "ssr")]
 #[derive(Debug, Deserialize)]
