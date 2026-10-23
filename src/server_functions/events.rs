@@ -193,6 +193,7 @@ pub async fn fetch_users_favorite_mosques_events(
     // Favorite-mosque events (and RSVPs) are always fetched; nearby events are
     // only fetched when the user's coordinates are available.
     let events_and_rsvp_query = if has_coords {
+        r#"
         BEGIN TRANSACTION;
         LET $favorite_events = (
             SELECT VALUE {
