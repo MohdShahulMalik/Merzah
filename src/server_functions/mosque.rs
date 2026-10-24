@@ -22,7 +22,7 @@ use crate::models::{
 
 #[cfg(feature = "ssr")]
 use crate::models::mosque::{
-    MosqueFromOverpass, MosqueInsert, MosqueRecord, MosqueSearchResult, OverpassResponse,
+    MosqueFromOverpass, MosqueInsert, MosqueSearchResult, OverpassResponse,
 };
 #[cfg(feature = "ssr")]
 use crate::utils::mosque::parse_overpass_mosques;
@@ -440,11 +440,20 @@ pub async fn update_adhan_jamat_times(
     }
 
     match db
-        .update::<Option<MosqueRecord>>(mosque_id)
-        .merge(prayer_times)
+        .query("UPDATE $mosque_id SET adhan_times = $adhan, jamat_times = $jamat")
+        .bind(("mosque_id", mosque_id))
+        .bind(("adhan", prayer_times.adhan_times))
+        .bind(("jamat", prayer_times.jamat_times))
         .await
     {
-        Ok(_) => (),
+        Ok(mut response) => {
+            if let Err(e) = response.check() {
+                error!(?e, "Failed to update adhan and jamat times");
+                return Ok(responder.internal_server_error(
+                    "Failed to update adhan and jamat times due to database error".to_string(),
+                ));
+            }
+        }
         Err(e) => {
             error!(?e, "Failed to update adhan and jamat times");
             return Ok(responder.internal_server_error(

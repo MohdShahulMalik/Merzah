@@ -212,6 +212,9 @@ pub struct PrayerTimes {
     pub asr: NaiveTime,
     pub maghrib: NaiveTime,
     pub isha: NaiveTime,
+    /// Serialized as `jummah` to match the database schema
+    /// (`schemas/mosques.surql` spells this field `jummah`).
+    #[serde(rename = "jummah", alias = "jumuah")]
     pub jumuah: NaiveTime,
 }
 
