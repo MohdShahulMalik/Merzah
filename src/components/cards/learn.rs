@@ -17,7 +17,7 @@ pub fn ContinueLearningCard(
     });
 
     view! {
-        <article class="min-w-0 card bg-linear-to-br from-purple-100 to-indigo-100 p-5 shadow-md sm:p-6 md:px-8 md:py-7">
+        <article class="min-w-0 overflow-hidden rounded-2xl bg-linear-to-br from-purple-100 to-indigo-100 p-5 shadow-md sm:p-6 md:px-8 md:py-7">
             <div class="flex min-w-0 flex-col gap-6 lg:flex-row">
                 <div class="w-full overflow-hidden rounded-xl lg:w-64 lg:shrink-0 lg:self-stretch">
                     <img
@@ -68,7 +68,7 @@ pub fn ContinueLearningCard(
                     </div>
 
                     <div class="w-full shrink-0 sm:w-auto">
-                        <button class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-purple-600 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-purple-700 hover:shadow-xl sm:w-auto xl:w-auto">
+                        <button class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-indigo-500 hover:shadow-xl sm:w-auto xl:w-auto">
                             {cta_label}
                         </button>
                     </div>
@@ -118,7 +118,7 @@ pub fn CourseCard(
     });
 
     view! {
-        <article class="group w-full max-w-[19rem] shrink-0 snap-start card p-5 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:border-purple-200 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)] sm:w-90 sm:max-w-none sm:p-6">
+        <article class="group w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-2xl bg-surface-700 p-5 shadow-md transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_25px_-5px_rgba(124,58,237,0.2)] sm:w-90 sm:max-w-none sm:p-6">
             <div class="mb-5 overflow-hidden rounded-xl bg-sky-100 dark:bg-sky-400/10">
                 <img
                     src=img_link
@@ -169,7 +169,7 @@ pub fn CourseCard(
                 </span>
             </div>
 
-            <button class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-purple-600 py-3 font-semibold text-white transition hover:bg-purple-700">
+            <button class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 py-3 font-semibold text-white transition hover:bg-indigo-500">
                 {cta_label}
             </button>
         </article>
@@ -191,10 +191,7 @@ pub fn LearningPathCard(
     cta_label: String,
 ) -> impl IntoView {
     view! {
-        <article class="group relative min-w-0 card bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-5 shadow-lg transition-[background-position,background-color,border-color] duration-700 ease-out hover:bg-[#fbfaff] hover:border-purple-200 group-hover:[background-position:16px_16px] sm:p-6 md:p-8">
-            <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(168,85,247,0.13),transparent_28%),linear-gradient(135deg,rgba(240,189,37,0.08),transparent_42%)] opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100"></div>
-            <div class="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-purple-300/0 to-transparent transition-colors duration-700 ease-out group-hover:via-purple-300/80"></div>
-
+        <article class="group relative min-w-0 overflow-hidden rounded-2xl bg-surface-700 bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-5 shadow-lg transition-[background-color] duration-300 ease-out hover:bg-[#fbfaff] dark:hover:bg-[#272352] sm:p-6 md:p-8">
             <div class="relative mb-4 flex min-w-0 items-start justify-between gap-3">
                 <div class="min-w-0">
                     <h3 class=format!("mb-2 min-w-0 text-xl font-bold sm:text-2xl text-balance break-words transition-colors duration-300 ease-out {}", title_class)>
@@ -206,21 +203,20 @@ pub fn LearningPathCard(
                     </p>
                 </div>
 
-                <div class="relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/70 ring-1 ring-stroke-muted transition-[background-color,ring-color] duration-500 ease-out group-hover:bg-white group-hover:ring-purple-200" aria-hidden="true">
-                    <div class="absolute inset-1 rounded-2xl bg-sky-200/0 blur-md transition-colors duration-500 ease-out group-hover:bg-sky-200/45"></div>
-                    <div class=format!("relative text-4xl transition-[transform,filter] duration-500 ease-out group-hover:-rotate-3 group-hover:scale-105 group-hover:[filter:saturate(1.12)] {}", icon_class)>
+                <div class="relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/70 dark:bg-white/10 ring-1 ring-stroke-muted" aria-hidden="true">
+                    <div class=format!("relative text-4xl {}", icon_class)>
                         {icon}
                     </div>
                 </div>
             </div>
 
             <div class="relative mb-6 flex flex-wrap items-center gap-3 text-foreground-400">
-                <div class="flex items-center gap-2 rounded-full bg-white/50 px-3 py-1.5 text-sm ring-1 ring-stroke-muted/0 transition-[background-color,ring-color,color] duration-300 ease-out group-hover:bg-white/80 group-hover:text-sky-700 dark:hover:text-sky-300 group-hover:ring-stroke-muted">
+                <div class="flex items-center gap-2 rounded-full bg-white/50 dark:bg-white/10 px-3 py-1.5 text-sm">
                     <span aria-hidden="true">"📖"</span>
                     <span>{course_count}</span>
                 </div>
 
-                <div class="flex items-center gap-2 rounded-full bg-white/50 px-3 py-1.5 text-sm ring-1 ring-stroke-muted/0 transition-[background-color,ring-color,color] duration-300 ease-out group-hover:bg-white/80 group-hover:text-sky-700 dark:hover:text-sky-300 group-hover:ring-stroke-muted">
+                <div class="flex items-center gap-2 rounded-full bg-white/50 dark:bg-white/10 px-3 py-1.5 text-sm">
                     <span aria-hidden="true">"⏱️"</span>
                     <span>{duration}</span>
                 </div>
@@ -228,23 +224,21 @@ pub fn LearningPathCard(
 
             <div class="relative mb-4">
                 <div class="mb-2 flex items-center justify-between">
-                    <span class="text-sm text-foreground-600 transition-colors duration-300 ease-out group-hover:text-sky-700">"Path Progress"</span>
-                    <span class="text-sm font-bold text-foreground-600 transition-colors duration-300 ease-out group-hover:text-foreground-900">{progress_label}</span>
+                    <span class="text-sm text-foreground-600">"Path Progress"</span>
+                    <span class="text-sm font-bold text-foreground-600">{progress_label}</span>
                 </div>
 
-                <div class="h-2 w-full overflow-hidden rounded-full bg-purple-900/30 ring-1 ring-purple-900/0 transition-[background-color,ring-color] duration-300 ease-out group-hover:bg-purple-900/20 group-hover:ring-purple-200/70">
+                <div class="h-2 w-full overflow-hidden rounded-full bg-purple-900/30 ring-1 ring-purple-900/0">
                     <div
-                        class="relative h-full overflow-hidden rounded-full bg-purple-500 transition-[width,background-color] duration-500 ease-out group-hover:bg-purple-600"
+                        class="relative h-full overflow-hidden rounded-full bg-purple-500 transition-[width] duration-300 ease-out"
                         style=format!("width: {}%;", progress_percent)
-                    >
-                        <span class="absolute inset-y-0 left-0 w-10 -translate-x-full bg-linear-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[220%]"></span>
-                    </div>
+                    ></div>
                 </div>
             </div>
 
-            <button class="relative flex min-h-[44px] w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-purple-700 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-purple-600">
+            <button class="relative flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-400 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-indigo-500">
                 <span class="relative">{cta_label}</span>
-                <span class="relative transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">"→"</span>
+                <span class="relative" aria-hidden="true">"→"</span>
             </button>
         </article>
     }

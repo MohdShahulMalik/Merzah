@@ -121,7 +121,7 @@ pub fn NextPrayerReminderCard(
                     </div>
 
                     <div class="min-w-0 space-y-3">
-                        <div class="inline-flex max-w-full items-center rounded-full border border-white/12 bg-white/10 px-4 py-2 text-sm font-medium text-sky-50 shadow-[0_0.5rem_1rem_rgba(11,6,27,0.18)]">
+                        <div class="inline-flex max-w-full items-center rounded-xl border border-white/12 bg-white/10 px-4 py-2 text-sm font-medium text-sky-50 shadow-[0_0.5rem_1rem_rgba(11,6,27,0.18)]">
                             <span class="truncate">{mosque_name}</span>
                         </div>
                         <h2 class="text-2xl font-bold tracking-tight text-white sm:text-[1.75rem] md:text-[2.5rem] lg:text-[3rem] [text-shadow:0_0_30px_rgba(200,160,20,0.5),0_0_60px_rgba(200,160,20,0.25)] text-balance break-words">
@@ -181,7 +181,7 @@ pub fn NearbyMosqueCard(
     let image_alt = format!("{} mosque", mosque_name);
 
     view! {
-        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start card transition-[background-color,border-color] duration-500 ease-out hover:bg-[#fbf8ef] hover:border-[#d8c07a]/70 sm:w-[18rem]">
+        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start card transition-[background-color,border-color] duration-500 ease-out hover:bg-[#fbf8ef] dark:hover:bg-[#252152] hover:border-[#d8c07a]/70 sm:w-[18rem]">
             <div class="relative h-32 overflow-hidden bg-[#c9cef3]">
                 <img
                     src=image_url
@@ -225,10 +225,10 @@ pub fn NearbyMosqueCard(
                 <div class="pointer-events-none absolute inset-x-4 top-0 h-px bg-linear-to-r from-transparent via-[#f0bd25]/0 to-transparent transition-colors duration-500 ease-out group-hover:via-[#f0bd25]/70"></div>
 
                 <div>
-                    <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-[#211f55]">
+                    <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047] dark:text-[#cfccfa] transition-colors duration-300 ease-out group-hover:text-[#211f55] dark:group-hover:text-white">
                         {mosque_name}
                     </h3>
-                    <p class="mt-2 flex items-center gap-1.5 text-sm text-[#17135f] transition-colors duration-300 ease-out group-hover:text-[#4a3d86]">
+                    <p class="mt-2 flex items-center gap-1.5 text-sm text-[#17135f] dark:text-[#a7a3e4] transition-colors duration-300 ease-out group-hover:text-[#4a3d86] dark:group-hover:text-[#c6baff]">
                         <svg
                             class="h-3.5 w-3.5 text-[#f0bd25]"
                             viewBox="0 0 24 24"
@@ -246,9 +246,9 @@ pub fn NearbyMosqueCard(
                     </p>
                 </div>
 
-                <div class="relative flex items-center justify-between rounded-lg border border-transparent bg-[#e8edff] px-3 py-2 text-sm text-[#211c74] transition-[background-color,border-color] duration-300 ease-out group-hover:border-[#ead58d] group-hover:bg-white/70">
-                    <span class="text-[0.72rem] font-medium uppercase tracking-[0.08em] text-[#5c5793] transition-colors duration-300 ease-out group-hover:text-[#7c6a2e]">{iqamah_label}</span>
-                    <span class="font-bold text-[#211c74] transition-colors duration-300 ease-out group-hover:text-[#6b4e00]">{iqamah_time}</span>
+                <div class="relative flex items-center justify-between rounded-lg border border-transparent bg-[#e8edff] dark:bg-[#141136] px-3 py-2 text-sm text-[#211c74] transition-[background-color,border-color] duration-300 ease-out group-hover:border-[#ead58d] group-hover:bg-white/70 dark:group-hover:bg-[#141136]">
+                    <span class="text-[0.72rem] font-medium uppercase tracking-[0.08em] text-[#5c5793] dark:text-[#8f8bd6] transition-colors duration-300 ease-out group-hover:text-[#7c6a2e] dark:group-hover:text-[#e7c25f]">{iqamah_label}</span>
+                    <span class="font-bold text-[#211c74] dark:text-[#dedbff] transition-colors duration-300 ease-out group-hover:text-[#6b4e00] dark:group-hover:text-[#ffdd7a]">{iqamah_time}</span>
                 </div>
 
             </div>
@@ -271,10 +271,11 @@ pub fn MosqueEventCard(
     #[prop(optional)] on_open_mosque: Option<Callback<()>>,
 ) -> impl IntoView {
     let root_class = if on_open_mosque.is_some() {
-        "group relative w-full max-w-[19rem] shrink-0 snap-start card p-4 cursor-pointer transition-[background-color,border-color] duration-300 ease-out hover:border-purple-200 sm:w-98 sm:max-w-none"
+        "group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-700 p-4 cursor-pointer transition-[background-color] duration-300 ease-out sm:w-98 sm:max-w-none"
     } else {
-        "group relative w-full max-w-[19rem] shrink-0 snap-start card p-4 transition-[background-color,border-color] duration-300 ease-out hover:border-purple-200 sm:w-98 sm:max-w-none"
+        "group relative w-full max-w-[19rem] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-700 p-4 transition-[background-color] duration-300 ease-out sm:w-98 sm:max-w-none"
     };
+
     view! {
         <article
             class=root_class
@@ -284,18 +285,18 @@ pub fn MosqueEventCard(
         >
 
             <div class="relative mb-3 flex items-start justify-between gap-3">
-                <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider transition-[transform,letter-spacing] duration-300 ease-out group-hover:tracking-[0.14em] {}", event_type_class)>
+                <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider {}", event_type_class)>
                     {event_type}
                 </span>
-                <div class="rounded-lg px-2 py-1 text-right text-[#050047] transition-colors duration-300 ease-out group-hover:bg-sky-50 dark:hover:bg-sky-400/10">
+                <div class="rounded-lg px-2 py-1 text-right text-[#050047] dark:text-[#cfccfa] transition-colors duration-300 ease-out group-hover:bg-sky-50 dark:group-hover:bg-sky-400/10 dark:group-hover:text-sky-300">
                     <p class="text-[0.85rem] font-bold">{event_day}</p>
                     <p class="mt-0.5 text-xs">{event_time}</p>
                 </div>
             </div>
             <div class="relative space-y-1.5">
-                <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-foreground-900">{event_title}</h3>
-                <p class="text-xs text-foreground-600 transition-colors duration-300 ease-out group-hover:text-sky-700">"🕌 "{mosque_name}</p>
-                <p class="text-[0.8rem] leading-relaxed text-[#302977]">{event_short_description}</p>
+                <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047] dark:text-[#e4e2ff] transition-colors duration-300 ease-out group-hover:text-foreground-900">{event_title}</h3>
+                <p class="text-xs text-foreground-600 transition-colors duration-300 ease-out group-hover:text-sky-700 dark:group-hover:text-sky-300">"🕌 "{mosque_name}</p>
+                <p class="text-[0.8rem] leading-relaxed text-[#302977] dark:text-[#b9b6ef]">{event_short_description}</p>
             </div>
         </article>
     }
@@ -343,14 +344,14 @@ pub fn EducationalResourceCard(
                 </div>
 
                 <div>
-                    <h3 class="relative inline-block text-base font-bold leading-tight text-[#050047] transition-colors duration-300 ease-out group-hover:text-foreground-900">
+                    <h3 class="relative inline-block text-base font-bold leading-tight text-foreground-900 transition-colors duration-300 ease-out group-hover:text-foreground-900">
                         <span>{resource_title}</span>
                         <span class="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-sky-300 transition-transform duration-500 ease-out group-hover:scale-x-100"></span>
                     </h3>
-                    <p class="mt-2 text-sm text-[#17135f] transition-colors duration-300 ease-out group-hover:text-sky-700">{resource_by}</p>
+                    <p class="mt-2 text-sm text-foreground-600 transition-colors duration-300 ease-out group-hover:text-sky-700">{resource_by}</p>
                 </div>
 
-                <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-purple-700">
+                <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-400 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-indigo-500">
                     <span>{action_label}</span>
                     <span class="transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">"→"</span>
                 </button>

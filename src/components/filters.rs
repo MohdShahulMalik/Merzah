@@ -65,7 +65,7 @@ pub fn Filters(
                         view! {
                             <div class="flex min-w-0 flex-col gap-3 py-5 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
                                 <p class="min-w-24 shrink-0 text-sm font-bold text-foreground-600">{group.label}</p>
-                                <div class="flex min-w-0 flex-wrap gap-2.5">
+                                <div class="flex min-w-0 flex-nowrap gap-2.5 overflow-x-auto scrollbar-hide">
                                     {group.options
                                         .into_iter()
                                         .map(|option| {
@@ -76,7 +76,7 @@ pub fn Filters(
                                             };
 
                                             view! {
-                                                <button class=format!("inline-flex min-h-[44px] items-center rounded-full border px-5 py-2 text-sm font-medium transition-colors {option_class}")>
+                                                <button class=format!("inline-flex min-h-[44px] shrink-0 items-center rounded-2xl border px-5 py-2 text-sm font-medium transition-colors {option_class}")>
                                                     {option.label}
                                                 </button>
                                             }
