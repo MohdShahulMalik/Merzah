@@ -173,6 +173,9 @@ pub fn NearbyMosqueCard(
     distance: f64,
     is_favorite: bool,
     #[prop(optional)] image_url: Option<String>,
+    /// Opens the mosque info dialog for this card. The button replacing the
+    /// former dead link is only rendered when a callback is given.
+    #[prop(optional)] on_view_mosque: Option<Callback<()>>,
 ) -> impl IntoView {
     let image_url = image_url.unwrap_or_else(|| DEFAULT_MOSQUE_IMAGE.to_string());
     let image_alt = format!("{} mosque", mosque_name);
@@ -203,7 +206,17 @@ pub fn NearbyMosqueCard(
                 <div class="absolute inset-x-0 bottom-0 border-t border-white/15 bg-[#211f55]/88 px-4 py-1 text-white backdrop-blur-md transition-transform duration-500 ease-out translate-y-0 sm:translate-y-full sm:group-hover:translate-y-0">
                     <div class="flex items-center justify-between gap-2">
                         <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-sky-200 hover:text-sky-100">"Directions →"</A>
-                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-sky-200 hover:text-sky-100">"View Mosque →"</A>
+                        <Show when=move || on_view_mosque.is_some()>
+                            <button
+                                type="button"
+                                class="inline-flex min-h-[44px] cursor-pointer items-center text-sm font-bold text-sky-200 hover:text-sky-100"
+                                on:click=move |_| if let Some(callback) = on_view_mosque.clone() {
+                                    callback.run(())
+                                }
+                            >
+                                "View Mosque →"
+                            </button>
+                        </Show>
                     </div>
                 </div>
             </div>
@@ -252,9 +265,23 @@ pub fn MosqueEventCard(
     event_day: String,
     event_time: String,
     event_short_description: String,
+    /// Opens the mosque info dialog for the mosque hosting this event. A
+    /// click anywhere on the card triggers it; the card is only clickable
+    /// when a callback is given.
+    #[prop(optional)] on_open_mosque: Option<Callback<()>>,
 ) -> impl IntoView {
+    let root_class = if on_open_mosque.is_some() {
+        "group relative w-full max-w-[19rem] shrink-0 snap-start card p-4 cursor-pointer transition-[background-color,border-color] duration-300 ease-out hover:border-purple-200 sm:w-98 sm:max-w-none"
+    } else {
+        "group relative w-full max-w-[19rem] shrink-0 snap-start card p-4 transition-[background-color,border-color] duration-300 ease-out hover:border-purple-200 sm:w-98 sm:max-w-none"
+    };
     view! {
-        <article class="group relative w-full max-w-[19rem] shrink-0 snap-start card p-4 transition-[background-color,border-color] duration-300 ease-out hover:border-purple-200 sm:w-98 sm:max-w-none">
+        <article
+            class=root_class
+            on:click=move |_| if let Some(callback) = on_open_mosque.clone() {
+                callback.run(())
+            }
+        >
 
             <div class="relative mb-3 flex items-start justify-between gap-3">
                 <span class=format!("rounded-md px-2 py-0.5 text-[0.75rem] font-bold uppercase tracking-wider transition-[transform,letter-spacing] duration-300 ease-out group-hover:tracking-[0.14em] {}", event_type_class)>

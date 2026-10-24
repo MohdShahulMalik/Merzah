@@ -10,7 +10,9 @@ use crate::app::AppState;
 use crate::app::AppStateStoreFields;
 use crate::components::cards::NearbyMosqueCard;
 use crate::components::cards::DEFAULT_MOSQUE_IMAGE;
+use crate::components::modal::MosqueInfoDialog;
 use crate::models::api_responses::MixedMosqueResponse;
+use crate::models::api_responses::MosqueResponse;
 use crate::models::location::GeoPosition;
 use crate::models::nearby_mosque::NearbyMosqueCardItem;
 use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
@@ -29,6 +31,9 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
             .coords()
             .map(|coords| coords.read().as_lat_lon())
     };
+
+    let dialog_open = RwSignal::new(false);
+    let selected_mosque = RwSignal::new(None::<MosqueResponse>);
 
     let mosques = Resource::new(user_pos, move |pos: Option<(f64, f64)>| async move {
         match pos {
@@ -52,7 +57,7 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
     });
 
     view! {
-        <div class="flex min-w-0 snap-x snap-mandatory gap-4 overflow-x-auto pb-4 sm:gap-5">
+        <div class="flex min-w-0 snap-x snap-mandatory gap-4 overflow-x-auto scrollbar-hide pb-4 sm:gap-5">
             <Suspense fallback=move || view! {
                 <p class="text-sm text-foreground-600">"Finding mosques near you…"</p>
             }>
@@ -63,7 +68,11 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
 
                 let user_pos = app_state.coords().map(|coords| coords.read().clone());
 
-                let items: Vec<NearbyMosqueCardItem> = all
+                // Each card keeps its own mosque alongside the display item so
+                // the "View Mosque" button can hand the full data straight to
+                // the info dialog without a lookup.
+                let items: Vec<(NearbyMosqueCardItem, MosqueResponse)> = all
+                    .clone()
                     .into_iter()
                     .take(if show_all.get() {
                         usize::MAX
@@ -98,23 +107,26 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
                             })
                             .unwrap_or(0.0);
 
-                        NearbyMosqueCardItem::new(
-                            mosque.id.clone(),
-                            mosque_name,
-                            iqamah_label,
-                            iqamah_time,
-                            distance,
-                            false,
-                            mosque.cover_img.clone(),
+                        (
+                            NearbyMosqueCardItem::new(
+                                mosque.id.clone(),
+                                mosque_name,
+                                iqamah_label,
+                                iqamah_time,
+                                distance,
+                                false,
+                                mosque.cover_img.clone(),
+                            ),
+                            mosque,
                         )
                     })
-                    .collect();
+                    .collect::<Vec<(NearbyMosqueCardItem, MosqueResponse)>>();
 
                 view! {
                     <For
                         each=move || items.clone()
-                        key=|item| item.id.clone()
-                        let(item)
+                        key=|(item, _)| item.id.clone()
+                        let((item, mosque))
                     >
                         <NearbyMosqueCard
                             mosque_name=item.mosque_name.clone()
@@ -126,11 +138,20 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
                                 .image_url
                                 .clone()
                                 .unwrap_or_else(|| DEFAULT_MOSQUE_IMAGE.to_string())
+                            on_view_mosque=Callback::new(move |_: ()| {
+                                selected_mosque.set(Some(mosque.clone()));
+                                dialog_open.set(true);
+                            })
                         />
                     </For>
                 }
                 }}
             </Suspense>
+
+            <MosqueInfoDialog
+                open=dialog_open
+                mosque=Signal::derive(move || selected_mosque.get())
+            />
         </div>
     }
 }

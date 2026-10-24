@@ -6,6 +6,7 @@ use reactive_stores::Store;
 use crate::app::AppState;
 use crate::app::AppStateStoreFields;
 use crate::components::cards::MosqueEventCard;
+use crate::components::modal::MosqueInfoDialog;
 use crate::models::events::EventCategory;
 use crate::models::events::PersonalEvent;
 use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
@@ -70,6 +71,8 @@ fn to_item(personal: &PersonalEvent) -> UpcomingEventItem {
 #[component]
 pub fn UpcomingEventsSection(show_all: ReadSignal<bool>) -> impl IntoView {
     let app_state = expect_context::<Store<AppState>>();
+    let dialog_open = RwSignal::new(false);
+    let selected_mosque_name = RwSignal::new(None::<String>);
     let user_pos = move || {
         app_state
             .coords()
@@ -93,7 +96,7 @@ pub fn UpcomingEventsSection(show_all: ReadSignal<bool>) -> impl IntoView {
     );
 
     view! {
-        <div class="flex min-w-0 snap-x snap-mandatory gap-4 overflow-x-auto pb-4 sm:gap-5">
+        <div class="flex min-w-0 snap-x snap-mandatory gap-4 overflow-x-auto scrollbar-hide pb-4 sm:gap-5">
             <Suspense fallback=move || view! {
                 <p class="text-sm text-foreground-600">"Loading events…"</p>
             }>
@@ -126,6 +129,10 @@ pub fn UpcomingEventsSection(show_all: ReadSignal<bool>) -> impl IntoView {
                             event_day=item.event_day.clone()
                             event_time=item.event_time.clone()
                             event_short_description=item.event_short_description.clone()
+                            on_open_mosque=Callback::new(move |_: ()| {
+                                selected_mosque_name.set(Some(item.mosque_name.clone()));
+                                dialog_open.set(true);
+                            })
                         />
                     </For>
                     <Show when=move || empty>
@@ -134,6 +141,12 @@ pub fn UpcomingEventsSection(show_all: ReadSignal<bool>) -> impl IntoView {
                 }
                 }}
             </Suspense>
+
+            <MosqueInfoDialog
+                open=dialog_open
+                mosque=Signal::derive(move || None)
+                mosque_name=Signal::derive(move || selected_mosque_name.get())
+            />
         </div>
     }
 }

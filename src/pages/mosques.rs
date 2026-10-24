@@ -5,6 +5,7 @@ use reactive_stores::Store;
 
 use crate::app::AppState;
 use crate::app::AppStateStoreFields;
+use crate::components::modal::MosqueInfoDialog;
 use crate::models::api_responses::MixedMosqueResponse;
 use crate::models::api_responses::MosqueResponse;
 use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
@@ -44,6 +45,9 @@ pub fn Mosques() -> impl IntoView {
     });
 
     let has_pos = Memo::new(move |_| user_pos().is_some());
+
+    let dialog_open = RwSignal::new(false);
+    let selected_mosque = RwSignal::new(None::<MosqueResponse>);
 
     view! {
         <Stylesheet href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -135,12 +139,23 @@ pub fn Mosques() -> impl IntoView {
                                             let popup_name = name.clone();
                                             let tooltip_name = name.clone();
                                             let popup_detail = detail.clone();
+                                            let open_dialog = move |_| {
+                                                selected_mosque.set(Some(mosque.clone()));
+                                                dialog_open.set(true);
+                                            };
                                             view! {
                                                 <Marker position=position>
                                                     <Popup>
                                                         <strong>{popup_name}</strong>
                                                         <br />
                                                         <span>{popup_detail}</span>
+                                                        <button
+                                                            type="button"
+                                                            class="mt-1 inline-flex min-h-[44px] items-center text-sm font-bold text-sky-700 hover:text-sky-900"
+                                                            on:click=open_dialog
+                                                        >
+                                                            "View mosque →"
+                                                        </button>
                                                     </Popup>
                                                     <Tooltip direction="top">{tooltip_name}</Tooltip>
                                                 </Marker>
@@ -156,6 +171,11 @@ pub fn Mosques() -> impl IntoView {
                     }
                 }}
             </Suspense>
+
+            <MosqueInfoDialog
+                open=dialog_open
+                mosque=Signal::derive(move || selected_mosque.get())
+            />
         </div>
     }
 }
