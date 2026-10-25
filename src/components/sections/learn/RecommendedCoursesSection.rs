@@ -69,6 +69,7 @@ pub fn RecommendedCoursesSection(catalog: Vec<CatalogEntry>) -> impl IntoView {
                     instructor_initials=instructor_initials(&entry.course.educator_name)
                     instructor_name=entry.course.educator_name.clone()
                     cta_label="Start Course".to_string()
+                    cta_href=format!("/learn/courses/{}", entry.course.id)
                     img_link=entry
                         .course
                         .thumbnail_url

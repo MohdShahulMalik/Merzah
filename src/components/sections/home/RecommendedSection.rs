@@ -98,6 +98,7 @@ pub fn RecommendedSection(show_all: ReadSignal<bool>) -> impl IntoView {
                             resource_title=item.resource_title.clone()
                             resource_by=item.resource_by.clone()
                             action_label=item.action_label.clone()
+                            action_href=format!("/learn/courses/{}", item.id)
                             image_url=item
                                 .image_url
                                 .clone()

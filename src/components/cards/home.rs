@@ -309,6 +309,7 @@ pub fn EducationalResourceCard(
     resource_title: String,
     resource_by: String,
     action_label: String,
+    action_href: String,
     #[prop(optional)] image_url: Option<String>,
 ) -> impl IntoView {
     let image_url = image_url.unwrap_or_else(|| {
@@ -351,10 +352,13 @@ pub fn EducationalResourceCard(
                     <p class="mt-2 text-sm text-foreground-600 transition-colors duration-300 ease-out group-hover:text-sky-700">{resource_by}</p>
                 </div>
 
-                <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-400 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-indigo-500">
+                <A
+                    href=action_href
+                    attr:class="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-400 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-indigo-500"
+                >
                     <span>{action_label}</span>
                     <span class="transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">"→"</span>
-                </button>
+                </A>
             </div>
         </article>
     }

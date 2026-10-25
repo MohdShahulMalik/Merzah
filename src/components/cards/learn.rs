@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos_router::components::A;
 
 #[component]
 pub fn ContinueLearningCard(
@@ -9,6 +10,7 @@ pub fn ContinueLearningCard(
     lesson_progress: String,
     progress_percent: u8,
     cta_label: String,
+    cta_href: String,
     #[prop(optional)] img_link: Option<String>,
 ) -> impl IntoView {
     let img_link = img_link.unwrap_or_else(|| {
@@ -68,9 +70,12 @@ pub fn ContinueLearningCard(
                     </div>
 
                     <div class="w-full shrink-0 sm:w-auto">
-                        <button class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-indigo-500 hover:shadow-xl sm:w-auto xl:w-auto">
+                        <A
+                            href=cta_href
+                            attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-indigo-500 hover:shadow-xl sm:w-auto xl:w-auto"
+                        >
                             {cta_label}
-                        </button>
+                        </A>
                     </div>
                 </div>
             </div>
@@ -93,6 +98,7 @@ pub fn CourseCard(
     instructor_initials: String,
     instructor_name: String,
     cta_label: String,
+    cta_href: String,
 ) -> impl IntoView {
     let image_alt = format!("{} course cover", title);
     let img_link = img_link.unwrap_or_else(|| {
@@ -169,9 +175,12 @@ pub fn CourseCard(
                 </span>
             </div>
 
-            <button class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 py-3 font-semibold text-white transition hover:bg-indigo-500">
+            <A
+                href=cta_href
+                attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 py-3 font-semibold text-white transition hover:bg-indigo-500"
+            >
                 {cta_label}
-            </button>
+            </A>
         </article>
     }
 }
@@ -189,6 +198,7 @@ pub fn LearningPathCard(
     progress_label: String,
     progress_percent: u8,
     cta_label: String,
+    cta_href: String,
 ) -> impl IntoView {
     view! {
         <article class="group relative min-w-0 overflow-hidden rounded-2xl bg-surface-700 bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-5 shadow-lg transition-[background-color] duration-300 ease-out hover:bg-[#fbfaff] dark:hover:bg-[#272352] sm:p-6 md:p-8">
@@ -236,10 +246,13 @@ pub fn LearningPathCard(
                 </div>
             </div>
 
-            <button class="relative flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-400 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-indigo-500">
+            <A
+                href=cta_href
+                attr:class="relative flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-400 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-indigo-500"
+            >
                 <span class="relative">{cta_label}</span>
                 <span class="relative" aria-hidden="true">"→"</span>
-            </button>
+            </A>
         </article>
     }
 }

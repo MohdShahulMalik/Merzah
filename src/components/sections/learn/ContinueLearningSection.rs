@@ -84,6 +84,7 @@ pub fn ContinueLearningSection(courses: Vec<EnrollmentProgress>) -> impl IntoVie
                                         .clamp(0.0, 100.0)
                                         .round() as u8
                                     cta_label="Continue Learning".to_string()
+                                    cta_href=format!("/learn/courses/{}", progress.course_id)
                                     img_link=detail
                                         .thumbnail_url
                                         .clone()
