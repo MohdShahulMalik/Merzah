@@ -13,7 +13,7 @@ use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
 use crate::models::upcoming_event_item::UpcomingEventItem;
 use crate::server_functions::events::fetch_users_favorite_mosques_events;
 
-const PREVIEW_SIZE: usize = 3;
+const PREVIEW_SIZE: usize = 5;
 const DESCRIPTION_PREVIEW_CHARS: usize = 120;
 
 fn category_label_and_class(category: &EventCategory) -> (String, &'static str) {
