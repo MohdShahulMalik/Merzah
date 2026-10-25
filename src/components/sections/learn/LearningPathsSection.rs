@@ -1,112 +1,137 @@
-use std::collections::HashSet;
-
-use leptos::IntoView;
 use leptos::prelude::*;
 
 use crate::components::cards::LearningPathCard;
-use crate::models::catalog_entry::CatalogEntry;
 use crate::models::education::EnrollmentProgress;
-use crate::models::education::TrackOnClient;
+use crate::models::roadmap::RoadmapOnClient;
+use crate::server_functions::education_roadmap::fetch_roadmap_detail;
 
-fn style(index: usize) -> (&'static str, &'static str, &'static str) {
-    match index % 4 {
-        0 => ("text-foreground-900", "text-rose-500 dark:text-rose-300", "text-rose-200 dark:text-rose-200"),
-        1 => ("text-foreground-900", "text-cyan-500 dark:text-cyan-300", "text-cyan-200 dark:text-cyan-200"),
-        2 => ("text-teal-900 dark:text-teal-300", "text-teal-500 dark:text-teal-300", "text-teal-200 dark:text-teal-200"),
-        _ => ("text-amber-900 dark:text-amber-300", "text-amber-500 dark:text-amber-300", "text-amber-200 dark:text-amber-200"),
+const ICONS: [&str; 4] = ["🧭", "🗺️", "🚀", "📚"];
+
+const TITLE_CLASSES: [&str; 4] = [
+    "text-purple-900 dark:text-purple-100",
+    "text-indigo-900 dark:text-indigo-100",
+    "text-sky-900 dark:text-sky-100",
+    "text-emerald-900 dark:text-emerald-100",
+];
+
+const DESCRIPTION_CLASSES: [&str; 4] = [
+    "text-purple-700 dark:text-purple-300",
+    "text-indigo-700 dark:text-indigo-300",
+    "text-sky-700 dark:text-sky-300",
+    "text-emerald-700 dark:text-emerald-300",
+];
+
+const ICON_CLASSES: [&str; 4] = [
+    "bg-purple-500/15 text-purple-600 dark:text-purple-300",
+    "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300",
+    "bg-sky-500/15 text-sky-600 dark:text-sky-300",
+    "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300",
+];
+
+fn average_progress(course_ids: &[String], enrolled: &[EnrollmentProgress]) -> Option<f32> {
+    let matched = enrolled
+        .iter()
+        .filter(|row| course_ids.iter().any(|id| id == &row.course_id))
+        .collect::<Vec<_>>();
+
+    if matched.is_empty() {
+        return None;
     }
-}
 
-fn format_duration(minutes: i32) -> String {
-    let minutes = minutes.max(0);
-    let hours = minutes / 60;
-    let rest = minutes % 60;
+    let total = matched
+        .iter()
+        .map(|row| row.progress_percent)
+        .sum::<f32>();
 
-    if minutes == 0 {
-        "--".to_string()
-    } else if hours == 0 {
-        format!("{rest} min")
-    } else if rest == 0 {
-        format!("{hours} hours")
-    } else {
-        format!("{hours}h {rest}m")
-    }
+    Some((total / matched.len() as f32).clamp(0.0, 100.0))
 }
 
 #[component]
 pub fn LearningPathsSection(
-    tracks: Vec<TrackOnClient>,
-    catalog: Vec<CatalogEntry>,
+    roadmaps: Vec<RoadmapOnClient>,
     enrolled: Vec<EnrollmentProgress>,
 ) -> impl IntoView {
-    let empty = tracks.is_empty();
+    let is_empty = roadmaps.is_empty();
+
+    let cards = roadmaps
+        .into_iter()
+        .enumerate()
+        .map(|(index, roadmap)| {
+            let enrolled_rows = enrolled.clone();
+            let resource_id = roadmap.id.clone();
+            let detail = Resource::new(
+                move || resource_id.clone(),
+                |roadmap_id: String| async move {
+                    fetch_roadmap_detail(roadmap_id)
+                        .await
+                        .ok()
+                        .and_then(|res| res.data)
+                },
+            );
+
+            let style_index = index % ICONS.len();
+
+            view! {
+                <Suspense fallback=move || view! {
+                    <p class="text-sm text-foreground-600">"Loading learning paths…"</p>
+                }>
+                    {move || {
+                        let detail = detail.get().flatten();
+                        let course_ids = detail
+                            .as_ref()
+                            .map(|detail| {
+                                detail
+                                    .courses
+                                    .iter()
+                                    .map(|course| course.course_id.clone())
+                                    .collect::<Vec<_>>()
+                            })
+                            .unwrap_or_default();
+                        let course_count = detail
+                            .as_ref()
+                            .map(|detail| detail.courses.len())
+                            .unwrap_or(0);
+                        let progress = average_progress(&course_ids, &enrolled_rows);
+
+                        view! {
+                            <LearningPathCard
+                                title=roadmap.title.clone()
+                                description=roadmap.description.clone()
+                                title_class=TITLE_CLASSES[style_index].to_string()
+                                description_class=DESCRIPTION_CLASSES[style_index].to_string()
+                                icon=ICONS[style_index].to_string()
+                                icon_class=ICON_CLASSES[style_index].to_string()
+                                course_count=format!("{} courses", course_count)
+                                duration=format!("{} weeks", roadmap.estimated_weeks)
+                                progress_label=match progress {
+                                    Some(percent) => format!("{percent:.0}%"),
+                                    None => "Not Started".to_string(),
+                                }
+                                progress_percent=progress
+                                    .unwrap_or(0.0)
+                                    .clamp(0.0, 100.0)
+                                    .round() as u8
+                                cta_label=if progress.is_some() {
+                                    "Continue Path".to_string()
+                                } else {
+                                    "Begin Path".to_string()
+                                }
+                                cta_href=format!("/learn/roadmaps/{}", roadmap.id)
+                            />
+                        }
+                    }}
+                </Suspense>
+            }
+        })
+        .collect_view();
 
     view! {
-        <div class="grid min-w-0 gap-5 sm:gap-6 md:grid-cols-2">
-            <ForEnumerate
-                each=move || tracks.clone()
-                key=|track| track.id.clone()
-                let(idx, track)
-            >
-                {
-                    let (title_class, description_class, icon_class) = style(idx.get());
-                    let progress = {
-                        let course_ids: HashSet<String> = catalog
-                            .iter()
-                            .filter(|entry| entry.track_id == track.id)
-                            .map(|entry| entry.course.id.clone())
-                            .collect();
-                        let total_minutes: i32 = catalog
-                            .iter()
-                            .filter(|entry| entry.track_id == track.id)
-                            .map(|entry| entry.course.duration_minutes)
-                            .sum();
-                        let track_progress: Vec<f32> = enrolled
-                            .iter()
-                            .filter(|progress| course_ids.contains(&progress.course_id))
-                            .map(|progress| progress.progress_percent)
-                            .collect();
-                        let average = if track_progress.is_empty() {
-                            None
-                        } else {
-                            Some(
-                                track_progress.iter().sum::<f32>()
-                                    / track_progress.len() as f32,
-                            )
-                        };
+        <div class="min-w-0 space-y-5">
+            <div class="grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {cards}
+            </div>
 
-                        (total_minutes, average)
-                    };
-                    let (total_minutes, average) = progress;
-
-                    view! {
-                        <LearningPathCard
-                            title=track.name.clone()
-                            description=track.description.clone()
-                            title_class=title_class.to_string()
-                            description_class=description_class.to_string()
-                            icon=track.icon.clone().unwrap_or_else(|| "📚".to_string())
-                            icon_class=icon_class.to_string()
-                            course_count=format!("{} courses", track.course_count)
-                            duration=format_duration(total_minutes)
-                            progress_label=match average {
-                                Some(percent) => format!("{percent:.0}%"),
-                                None => "Not Started".to_string(),
-                            }
-                            progress_percent=match average {
-                                Some(percent) => percent.clamp(0.0, 100.0).round() as u8,
-                                None => 0,
-                            }
-                            cta_label=if average.is_some() {
-                                "Continue Path".to_string()
-                            } else {
-                                "Begin Path".to_string()
-                            }
-                        />
-                    }
-                }
-            </ForEnumerate>
-            <Show when=move || empty>
+            <Show when=move || is_empty>
                 <p class="text-sm text-foreground-600">"No learning paths yet."</p>
             </Show>
         </div>

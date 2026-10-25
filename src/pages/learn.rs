@@ -10,6 +10,7 @@ use crate::models::catalog_entry::CatalogEntry;
 use crate::server_functions::education::fetch_my_courses;
 use crate::server_functions::education::fetch_track_courses;
 use crate::server_functions::education::fetch_tracks;
+use crate::server_functions::education_roadmap::fetch_roadmaps;
 
 #[component]
 pub fn Learn() -> impl IntoView {
@@ -23,6 +24,14 @@ pub fn Learn() -> impl IntoView {
 
     let tracks = Resource::new(|| (), |_| async move {
         fetch_tracks()
+            .await
+            .ok()
+            .and_then(|res| res.data)
+            .unwrap_or_default()
+    });
+
+    let roadmaps = Resource::new(|| (), |_| async move {
+        fetch_roadmaps()
             .await
             .ok()
             .and_then(|res| res.data)
@@ -135,15 +144,10 @@ pub fn Learn() -> impl IntoView {
                     <p class="text-sm text-foreground-600">"Loading learning paths…"</p>
                 }>
                     {move || {
-                        let path_tracks = tracks.get().unwrap_or_default();
-                        let path_catalog = catalog.get().unwrap_or_default();
+                        let path_roadmaps = roadmaps.get().unwrap_or_default();
                         let path_enrolled = enrolled.get().unwrap_or_default();
                         view! {
-                            <LearningPathsSection
-                                tracks=path_tracks
-                                catalog=path_catalog
-                                enrolled=path_enrolled
-                            />
+                            <LearningPathsSection roadmaps=path_roadmaps enrolled=path_enrolled />
                         }
                     }}
                 </Suspense>
