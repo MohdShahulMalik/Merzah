@@ -14,6 +14,7 @@ use crate::{
     pages::{
         add_mosques_of_region::AddMosquesOfRegion,
         auth::{Login, Register},
+        course::CourseDetailPage,
         discord_callback::DiscordCallback,
         events::Events,
         google_callback::GoogleCallback,
@@ -21,6 +22,8 @@ use crate::{
         landing::Landing,
         layout::AppLayout,
         learn::Learn,
+        learning_path::LearningPathDetailPage,
+        lesson::LessonPage,
         microsoft_callback::MicrosoftCallback,
         mosques::Mosques,
     },
@@ -95,6 +98,9 @@ pub fn App() -> impl IntoView {
                         <Route path=path!("mosques") view=Mosques/>
                         <Route path=path!("events") view=Events/>
                         <Route path=path!("learn") view=Learn/>
+                        <Route path=path!("learn/courses/:course_id") view=CourseDetailPage/>
+                        <Route path=path!("learn/lessons/:lesson_id") view=LessonPage/>
+                        <Route path=path!("learn/roadmaps/:roadmap_id") view=LearningPathDetailPage/>
                     </ParentRoute>
 
                     <Route path=path!("/register") view=Register/>

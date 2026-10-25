@@ -1,5 +1,6 @@
 pub mod add_mosques_of_region;
 pub mod auth;
+pub mod course;
 pub mod discord_callback;
 pub mod events;
 pub mod google_callback;
@@ -7,5 +8,7 @@ pub mod home;
 pub mod landing;
 pub mod layout;
 pub mod learn;
+pub mod learning_path;
+pub mod lesson;
 pub mod microsoft_callback;
 pub mod mosques;
