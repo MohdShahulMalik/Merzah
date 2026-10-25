@@ -69,17 +69,19 @@ pub async fn enrich_mosques_with_contacts(
     mosques: Vec<MosqueSearchResult>,
     db: &Surreal<Client>,
 ) -> Result<Vec<MosqueResponse>, surrealdb::Error> {
+    // The ids are kept as `RecordId`s: binding plain strings into a `user IN`
+    // comparison against record ids makes the lookup return nothing.
     let mut user_ids = HashSet::new();
     for mosque in &mosques {
         if let Some(ref imam) = mosque.imam {
-            user_ids.insert(imam.id.to_string());
+            user_ids.insert(imam.id.clone());
         }
         if let Some(ref muazzin) = mosque.muazzin {
-            user_ids.insert(muazzin.id.to_string());
+            user_ids.insert(muazzin.id.clone());
         }
     }
 
-    let user_ids_vec: Vec<String> = user_ids.into_iter().collect();
+    let user_ids_vec: Vec<RecordId> = user_ids.into_iter().collect();
     let mut id_to_contacts: HashMap<RecordId, Vec<UserIdentifierOnClient>> = HashMap::new();
 
     if !user_ids_vec.is_empty() {
