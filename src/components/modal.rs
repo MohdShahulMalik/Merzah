@@ -21,7 +21,6 @@ use crate::models::api_responses::MosqueResponse;
 use crate::models::mosque::PrayerTimes;
 use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
 use crate::models::user::UserIdentifierOnClient;
-use crate::models::user::UserOnClient;
 use crate::server_functions::mosque::fetch_mosques_for_location;
 
 /// A mosque info popup rendered as a native modal `<dialog>`.
@@ -273,6 +272,12 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
         || !imam_contact.is_empty()
         || !muazzin_contact.is_empty();
 
+    // Only the display names are needed here, so the user objects are
+    // dropped right after and the `PersonRow`s fall back to the role label
+    // when a mosque has no imam/muazzin user attached.
+    let imam_name = imam.map(|user| user.display_name);
+    let muazzin_name = muazzin.map(|user| user.display_name);
+
     view! {
         <div class="min-w-0">
             <header class="relative h-44 overflow-hidden bg-[#c9cef3] sm:h-52">
@@ -395,19 +400,23 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
                                     <span class="mt-1 block h-px w-8 bg-[#f0bd25]"></span>
                                 </div>
 
-                                {imam
-                                    .map(|user| {
+                                {(imam_name.is_some() || !imam_contact.is_empty())
+                                    .then(|| {
                                         view! {
-                                            <PersonRow role_label="Imam" user=user contacts=imam_contact />
+                                            <PersonRow
+                                                role_label="Imam"
+                                                name=imam_name
+                                                contacts=imam_contact
+                                            />
                                         }
                                     })}
 
-                                {muazzin
-                                    .map(|user| {
+                                {(muazzin_name.is_some() || !muazzin_contact.is_empty())
+                                    .then(|| {
                                         view! {
                                             <PersonRow
                                                 role_label="Muazzin"
-                                                user=user
+                                                name=muazzin_name
                                                 contacts=muazzin_contact
                                             />
                                         }
@@ -431,14 +440,24 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
     }
 }
 
-/// A single personnel row plus that person's contact pills.
+/// A single personnel row: the person's name (or the role label when the
+/// mosque has no user attached) and their email / mobile contact lines.
 #[component]
 fn PersonRow(
     role_label: &'static str,
-    user: UserOnClient,
+    name: Option<String>,
     contacts: Vec<UserIdentifierOnClient>,
 ) -> impl IntoView {
-    let display_name = user.display_name;
+    let find_contact = |kind: &str| {
+        contacts
+            .iter()
+            .find(|contact| contact.identifier_type.eq_ignore_ascii_case(kind))
+            .map(|contact| contact.identifier_value.clone())
+    };
+
+    let email = find_contact("email");
+    let mobile = find_contact("mobile");
+    let shown_name = name.unwrap_or_else(|| role_label.to_string());
 
     view! {
         <div class="min-w-0 space-y-2">
@@ -459,39 +478,95 @@ fn PersonRow(
                     </svg>
                 </div>
 
-                <p class="min-w-0 flex-1 truncate font-bold text-foreground-900">{display_name}</p>
+                <p class="min-w-0 flex-1 truncate font-bold text-foreground-900">{shown_name}</p>
 
                 <span class="shrink-0 text-[0.6rem] uppercase tracking-[0.16em] text-foreground-600">
                     {role_label}
                 </span>
             </div>
 
-            {(!contacts.is_empty())
+            {(email.is_some() || mobile.is_some())
                 .then(|| {
                     view! {
-                        <div class="flex min-w-0 flex-wrap gap-2">
-                            {contacts
-                                .into_iter()
-                                .map(|contact| {
-                                    let pill = format!(
-                                        "{}: {}",
-                                        contact.identifier_type,
-                                        contact.identifier_value,
-                                    );
+                        <div class="min-w-0 space-y-1.5 pl-12">
+                            {email.map(|value| {
+                                view! {
+                                    <ContactLine label="Email" value=value icon_paths=MAIL_ICON.into() />
+                                }
+                            })}
 
-                                    view! {
-                                        <span class="rounded-full bg-[#e8edff] px-2.5 py-1 text-[0.7rem] font-medium text-[#211c74] dark:bg-sky-400/10 dark:text-sky-200">
-                                            {pill}
-                                        </span>
-                                    }
-                                })
-                                .collect::<Vec<_>>()}
+                            {mobile.map(|value| {
+                                view! {
+                                    <ContactLine
+                                        label="Mobile"
+                                        value=value
+                                        icon_paths=PHONE_ICON.into()
+                                    />
+                                }
+                            })}
                         </div>
                     }
                 })}
         </div>
     }
 }
+
+/// One contact line: a small icon, the label and a `mailto:`/`tel:` link to
+/// the stored value.
+#[component]
+fn ContactLine(
+    label: &'static str,
+    value: String,
+    icon_paths: Vec<&'static str>,
+) -> impl IntoView {
+    let href = if label == "Email" {
+        format!("mailto:{value}")
+    } else {
+        format!("tel:{value}")
+    };
+
+    view! {
+        <div class="flex min-w-0 items-center gap-2">
+            <svg
+                class="h-3.5 w-3.5 shrink-0 text-[#f0bd25]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                {icon_paths
+                    .into_iter()
+                    .map(|path| view! { <path d=path /> })
+                    .collect::<Vec<_>>()}
+            </svg>
+
+            <span class="shrink-0 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-foreground-600">
+                {label}
+            </span>
+
+            <a
+                href=href
+                class="min-w-0 truncate text-[0.75rem] font-medium text-sky-600 transition-colors duration-300 ease-out hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300"
+            >
+                {value}
+            </a>
+        </div>
+    }
+}
+
+/// Envelope icon used by the email [`ContactLine`].
+const MAIL_ICON: [&'static str; 2] = [
+    "M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z",
+    "m22 7-10 6L2 7",
+];
+
+/// Phone handset icon used by the mobile [`ContactLine`].
+const PHONE_ICON: [&'static str; 1] = [
+    "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z",
+];
 
 /// The six prayers rendered by the times grid, each paired with the accessor
 /// that reads it off a [`PrayerTimes`].
