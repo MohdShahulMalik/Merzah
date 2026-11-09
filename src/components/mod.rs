@@ -2,6 +2,7 @@ pub mod cards;
 pub mod filters;
 pub mod form_field;
 pub mod location;
+pub mod mihrab;
 pub mod modal;
 pub mod nav;
 pub mod sections;
