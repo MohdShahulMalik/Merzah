@@ -32,6 +32,23 @@
   --color-warning: oklch(0.5 0.11 100);
   --color-success: oklch(0.5 0.11 160);
   --color-info: oklch(0.5 0.11 260);
+
+  /* Mihrab design tokens (referenced by Tailwind utilities like mih-ink / bg-mih-card) */
+  --color-mih-card: #ffffff;
+  --color-mih-ring: #e8e6f5;
+  --color-mih-ring-soft: #f1effb;
+  --color-mih-ink: #120e38;
+  --color-mih-ink-2: #2b2566;
+  --color-mih-muted: #5d5891;
+  --color-mih-indigo: #4f46e5;
+  --color-mih-indigo-strong: #4338ca;
+  --color-mih-indigo-deep: #3730a3;
+  --color-mih-brass: #b8873b;
+  --color-mih-brass-soft: #f3e7cf;
+  --color-mih-ivory: #fffdf8;
+  --color-mih-crown: #fdf3d4;
+  --color-mih-star: #fde68a;
+  --font-amiri: "Amiri", serif;
 }
 
 @layer theme {
@@ -165,3 +182,4 @@
     animation: none;
   }
 }
+

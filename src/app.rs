@@ -82,6 +82,7 @@ pub fn App() -> impl IntoView {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
         <Stylesheet id="leptos" href="/pkg/merzah.css"/>
+        <Stylesheet id="amiri" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap"/>
 
         // sets the document title
         <Title text="Merzah"/>
