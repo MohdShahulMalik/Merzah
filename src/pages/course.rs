@@ -3,13 +3,15 @@ use leptos::reactive::spawn_local;
 use leptos_router::components::A;
 use leptos_router::hooks::use_params_map;
 
+use crate::components::mihrab::{MihrabDefs, MihrabStar};
 use crate::models::education::LessonContentType;
 use crate::server_functions::education::enroll_course;
 use crate::server_functions::education::fetch_course_details;
 use crate::server_functions::education::fetch_course_progress;
 use crate::server_functions::education::fetch_my_courses;
+use crate::server_functions::education::fetch_track_courses;
+use crate::server_functions::education::fetch_tracks;
 
-const FALLBACK_THUMBNAIL: &str = "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1280&h=560&q=80";
 const NOT_LOGGED_IN: &str = "You are not logged in";
 
 fn format_duration(total_minutes: i32) -> String {
@@ -19,30 +21,21 @@ fn format_duration(total_minutes: i32) -> String {
 
     if hours > 0 {
         format!("{hours}h {remainder}m")
-    } else {
+    } else if remainder > 0 {
         format!("{remainder}m")
+    } else {
+        "—".to_string()
     }
 }
 
-fn content_type_icon(content_type: &LessonContentType) -> &'static str {
+fn content_type_label(content_type: &LessonContentType) -> &'static str {
     match content_type {
-        LessonContentType::Text => "📄",
-        LessonContentType::Video => "🎬",
-        LessonContentType::Audio => "🎧",
-        LessonContentType::Pdf => "📕",
-        LessonContentType::ExternalLink => "🔗",
-        LessonContentType::Mixed => "🧩",
-    }
-}
-
-fn content_type_chip(content_type: &LessonContentType) -> &'static str {
-    match content_type {
-        LessonContentType::Text => "bg-sky-500/10 text-sky-700 dark:text-sky-300",
-        LessonContentType::Video => "bg-purple-500/10 text-purple-700 dark:text-purple-300",
-        LessonContentType::Audio => "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300",
-        LessonContentType::Pdf => "bg-rose-500/10 text-rose-700 dark:text-rose-300",
-        LessonContentType::ExternalLink => "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-        LessonContentType::Mixed => "bg-amber-500/10 text-amber-700 dark:text-amber-300",
+        LessonContentType::Text => "Text",
+        LessonContentType::Video => "Video",
+        LessonContentType::Audio => "Audio",
+        LessonContentType::Pdf => "PDF",
+        LessonContentType::ExternalLink => "External link",
+        LessonContentType::Mixed => "Mixed",
     }
 }
 
@@ -60,6 +53,16 @@ fn initials(name: &str) -> String {
     }
 
     out
+}
+
+fn arabic_numeral(number: usize) -> String {
+    const NUMERALS: [char; 9] = ['١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    if (1..=9).contains(&number) {
+        NUMERALS[number - 1].to_string()
+    } else {
+        number.to_string()
+    }
 }
 
 #[component]
@@ -89,6 +92,39 @@ pub fn CourseDetailPage() -> impl IntoView {
                 .ok()
                 .and_then(|res| res.data)
                 .unwrap_or_default()
+        },
+    );
+
+    let tracks = Resource::new(
+        || (),
+        |_| async move {
+            fetch_tracks()
+                .await
+                .ok()
+                .and_then(|res| res.data)
+                .unwrap_or_default()
+        },
+    );
+
+    let catalog = Resource::new(
+        move || {
+            tracks
+                .get()
+                .unwrap_or_default()
+                .into_iter()
+                .map(|track| track.id.clone())
+                .collect::<Vec<String>>()
+        },
+        |track_ids: Vec<String>| async move {
+            let mut entries = Vec::new();
+
+            for track_id in track_ids {
+                if let Some(courses) = fetch_track_courses(track_id).await.ok().and_then(|res| res.data) {
+                    entries.extend(courses);
+                }
+            }
+
+            entries
         },
     );
 
@@ -139,17 +175,15 @@ pub fn CourseDetailPage() -> impl IntoView {
             let needs_login = message == NOT_LOGGED_IN;
 
             view! {
-                <div class="min-w-0 space-y-2 rounded-xl bg-rose-500/10 p-4 ring-1 ring-rose-500/20">
-                    <p class="min-w-0 break-words text-sm font-medium text-rose-600 dark:text-rose-400">
-                        {message}
-                    </p>
+                <div class="space-y-2 rounded-xl bg-rose-500/10 p-4 ring-1 ring-rose-500/20">
+                    <p class="text-sm font-medium text-rose-700 break-words">{message}</p>
 
                     {needs_login
                         .then(|| {
                             view! {
                                 <A
                                     href="/login"
-                                    attr:class="inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-sky-600 underline-offset-4 transition duration-300 ease-out hover:text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 dark:text-sky-400 dark:hover:text-sky-300"
+                                    attr:class="inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-sky-700 underline-offset-4 hover:underline"
                                 >
                                     "Log in to enroll"
                                     <span aria-hidden="true">"→"</span>
@@ -162,19 +196,22 @@ pub fn CourseDetailPage() -> impl IntoView {
     };
 
     view! {
-        <div class="min-w-0 space-y-8 py-6 sm:space-y-10 sm:py-8">
+        <div class="py-4 sm:py-6">
+            <MihrabDefs />
+
             <Suspense fallback=move || {
                 view! {
-                    <div class="min-w-0 animate-pulse space-y-6">
-                        <div class="h-64 w-full rounded-3xl bg-surface-700 shadow-md sm:h-80"></div>
-                        <div class="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+                    <div class="mx-auto w-full max-w-[68rem] min-w-0 animate-pulse space-y-6">
+                        <div class="h-10 w-56 rounded-xl bg-white"></div>
+                        <div class="h-64 w-full rounded-3xl border border-mih-brass-soft bg-white shadow-sm sm:h-80"></div>
+                        <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
                             <div class="space-y-4">
-                                <div class="h-28 w-full rounded-2xl bg-surface-700"></div>
-                                <div class="h-40 w-full rounded-2xl bg-surface-700"></div>
+                                <div class="h-28 w-full rounded-2xl border border-mih-brass-soft bg-white"></div>
+                                <div class="h-40 w-full rounded-2xl border border-mih-brass-soft bg-white"></div>
                             </div>
-                            <div class="h-56 w-full rounded-2xl bg-surface-700"></div>
+                            <div class="h-56 w-full rounded-2xl border border-mih-brass-soft bg-white"></div>
                         </div>
-                        <p class="text-sm text-foreground-600">"Loading course…"</p>
+                        <p class="text-sm text-mih-muted">"Loading course…"</p>
                     </div>
                 }
             }>
@@ -182,36 +219,81 @@ pub fn CourseDetailPage() -> impl IntoView {
                     match course.get().flatten() {
                         None => {
                             view! {
-                                <div class="min-w-0 space-y-3 rounded-3xl bg-surface-700 p-8 text-center shadow-md">
+                                <div class="mx-auto w-full max-w-[68rem] min-w-0 space-y-3 rounded-3xl border border-mih-brass-soft bg-white p-8 text-center shadow-sm">
                                     <p class="text-4xl" aria-hidden="true">"🧐"</p>
-                                    <h1 class="text-xl font-bold text-foreground-900 sm:text-2xl">
+                                    <h1 class="text-xl font-bold text-mih-ink sm:text-2xl">
                                         "Course not found."
                                     </h1>
-                                    <p class="mx-auto max-w-sm text-sm text-foreground-600">
+                                    <p class="mx-auto max-w-sm text-sm text-mih-muted">
                                         "This course may have been unpublished or the link is out of date."
                                     </p>
                                     <A
                                         href="/learn"
-                                        attr:class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-indigo-400 px-6 font-semibold text-white transition duration-300 ease-out hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
+                                        attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65]"
                                     >
                                         "Browse courses"
                                         <span aria-hidden="true">"→"</span>
                                     </A>
                                 </div>
                             }
-                                .into_any()
+                            .into_any()
                         }
                         Some(detail) => {
-                            let thumbnail = detail
-                                .thumbnail_url
-                                .clone()
-                                .unwrap_or_else(|| FALLBACK_THUMBNAIL.to_string());
+                            let thumbnail = detail.thumbnail_url.clone();
                             let educator_name = detail.educator.display_name.clone();
                             let educator_initials = initials(&educator_name);
                             let modules = detail.modules.clone();
                             let module_count = modules.len();
-                            let has_modules = module_count > 0;
+                            let lesson_total = modules
+                                .iter()
+                                .map(|module| module.lessons.len())
+                                .sum::<usize>();
+                            let completed_lessons = modules
+                                .iter()
+                                .flat_map(|module| module.lessons.iter())
+                                .filter(|lesson| lesson.is_completed)
+                                .count();
+                            let has_preview = modules
+                                .iter()
+                                .flat_map(|module| module.lessons.iter())
+                                .any(|lesson| lesson.is_preview);
+                            let first_incomplete = modules.iter().find_map(|module| {
+                                module
+                                    .lessons
+                                    .iter()
+                                    .find(|lesson| !lesson.is_completed)
+                                    .map(|lesson| (module.title.clone(), lesson.id.clone(), lesson.title.clone()))
+                            });
+                            let first_incomplete_lesson_id = first_incomplete
+                                .as_ref()
+                                .map(|(_, lesson_id, _)| lesson_id.clone());
+                            let next_lesson_title = first_incomplete
+                                .as_ref()
+                                .map(|(module_title, _, lesson_title)| {
+                                    format!("{module_title} · {lesson_title}")
+                                });
+                            let first_incomplete_module_index = modules
+                                .iter()
+                                .position(|module| {
+                                    module.lessons.iter().any(|lesson| !lesson.is_completed)
+                                })
+                                .unwrap_or(0);
+
                             let detail_id = detail.id.clone();
+                            let rec_entries = catalog
+                                .get()
+                                .unwrap_or_default()
+                                .into_iter()
+                                .filter(|course| course.id != detail.id)
+                                .take(3)
+                                .collect::<Vec<_>>();
+                            let course_title = detail.title.clone();
+                            let short_description = detail.short_description.clone();
+                            let duration_label = format_duration(detail.duration_minutes);
+                            let lesson_label = lesson_total.to_string();
+                            let module_label = module_count.to_string();
+                            let enrolled_label = detail.enrollment_count.to_string();
+                            let level_label = format!("{:?}", detail.level);
                             let percent = local_progress
                                 .get()
                                 .or_else(|| {
@@ -223,344 +305,455 @@ pub fn CourseDetailPage() -> impl IntoView {
                                         .map(|row| row.progress_percent)
                                 })
                                 .map(|value| value.clamp(0.0, 100.0));
+                            let enrollment_progress = my_courses
+                                .get()
+                                .unwrap_or_default()
+                                .into_iter()
+                                .find(|row| row.course_id == detail.id.clone());
+                            let (completed_label, total_label) = enrollment_progress
+                                .map(|row| (row.completed_lessons, row.total_lessons as i32))
+                                .unwrap_or((completed_lessons as i32, lesson_total as i32));
 
                             view! {
-                                <article class="min-w-0 space-y-8">
-                                    <section class="relative isolate min-w-0 overflow-hidden rounded-3xl bg-linear-to-br from-purple-600 via-indigo-500 to-sky-500 p-px shadow-[0_24px_60px_-30px_rgba(79,70,229,0.75)]">
-                                        <div class="relative min-w-0 overflow-hidden rounded-3xl bg-surface-700/95 backdrop-blur-sm">
-                                            <div
-                                                class="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-purple-500/25 blur-3xl"
-                                                aria-hidden="true"
-                                            ></div>
-                                            <div
-                                                class="pointer-events-none absolute -bottom-28 -left-20 h-64 w-64 rounded-full bg-sky-400/20 blur-3xl"
-                                                aria-hidden="true"
-                                            ></div>
+                                <article class="mx-auto w-full max-w-[68rem] min-w-0 space-y-6">
+                                    <A
+                                        href="/learn"
+                                        attr:class="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium text-sky-700 hover:text-sky-800 dark:text-sky-300"
+                                    >
+                                        <span aria-hidden="true">"←"</span>
+                                        "Back to Learn"
+                                    </A>
 
-                                            <div class="relative min-w-0 p-5 sm:p-7 lg:p-9">
-                                                <A
-                                                    href="/learn"
-                                                    attr:class="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium text-sky-600 transition duration-300 ease-out hover:-translate-x-0.5 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 dark:text-sky-400 dark:hover:text-sky-300"
-                                                >
-                                                    <span aria-hidden="true">"←"</span>
-                                                    "Back to Learn"
-                                                </A>
-
-                                                <div class="mt-4 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-center">
-                                                    <div class="min-w-0 space-y-4">
-                                                        <span class="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-purple-600 to-indigo-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-sm">
-                                                            <span aria-hidden="true">"✦"</span>
-                                                            {format!("{:?}", detail.level)}
-                                                        </span>
-
-                                                        <h1 class="min-w-0 break-words text-3xl font-bold leading-tight text-foreground-900 text-balance sm:text-4xl">
-                                                            {detail.title.clone()}
-                                                        </h1>
-
-                                                        <p class="min-w-0 max-w-2xl break-words text-base text-foreground-600 sm:text-lg">
-                                                            {detail.short_description.clone()}
-                                                        </p>
-
-                                                        <div class="flex min-w-0 flex-wrap items-center gap-2">
-                                                            <span class="inline-flex items-center gap-2 rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
-                                                                <span aria-hidden="true">"⏱️"</span>
-                                                                {format_duration(detail.duration_minutes)}
-                                                            </span>
-                                                            <span class="inline-flex items-center gap-2 rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
-                                                                <span aria-hidden="true">"📖"</span>
-                                                                {format!("{} lessons", detail.lesson_count)}
-                                                            </span>
-                                                            <span class="inline-flex items-center gap-2 rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
-                                                                <span aria-hidden="true">"🗂️"</span>
-                                                                {format!("{} modules", module_count)}
-                                                            </span>
-                                                            <span class="inline-flex items-center gap-2 rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
-                                                                <span aria-hidden="true">"👥"</span>
-                                                                {format!("{} enrolled", detail.enrollment_count)}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="flex min-w-0 items-center gap-3 pt-1">
-                                                            <span
-                                                                class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-linear-to-br from-purple-500 to-indigo-500 text-sm font-bold text-white shadow-md"
-                                                                aria-hidden="true"
-                                                            >
-                                                                {educator_initials}
-                                                            </span>
-                                                            <span class="min-w-0">
-                                                                <span class="block text-xs uppercase tracking-wide text-foreground-600">
-                                                                    "Educator"
-                                                                </span>
-                                                                <span class="block min-w-0 break-words text-sm font-semibold text-foreground-900">
-                                                                    {educator_name}
-                                                                </span>
-                                                            </span>
-                                                        </div>
+                                    <header class="relative overflow-hidden rounded-[1.5rem] border border-mih-brass-soft bg-mih-card p-6 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                        <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-[0.08] text-[#4c1d95]" aria-hidden="true">
+                                            <rect width="100%" height="100%" fill="url(#mihrab-lattice)" />
+                                        </svg>
+                                        <div class="relative grid items-start gap-6 md:grid-cols-[13rem_minmax(0,1fr)]">
+                                            <div class="w-44 sm:w-48 md:w-full">
+                                                <div class="relative p-[0.35rem] [clip-path:url(#mihrab)] bg-[linear-gradient(170deg,rgba(184,135,59,0.55),rgba(184,135,59,0.12))]">
+                                                    <div class="relative aspect-[3/4] w-full overflow-hidden grid place-items-center [clip-path:url(#mihrab)] bg-[radial-gradient(120%_140%_at_50%_-10%,#4c1d95_0%,#2e1065_45%,#1e1b4b_100%)]">
+                                                        {match thumbnail {
+                                                            Some(src) => view! {
+                                                                <img src=src alt=course_title.clone() class="block h-full w-full object-cover" />
+                                                            }
+                                                                .into_any(),
+                                                            None => view! {
+                                                                <>
+                                                                    <svg class="pointer-events-none absolute inset-0 h-full w-full text-mih-star opacity-20" aria-hidden="true">
+                                                                        <rect width="100%" height="100%" fill="url(#mihrab-lattice)" />
+                                                                    </svg>
+                                                                    <span class="relative px-[0.85rem] text-center font-amiri text-[1.75rem] leading-[1.6] text-mih-crown [direction:rtl] [unicode-bidi:isolate]">
+                                                                        "علم التجويد"
+                                                                    </span>
+                                                                </>
+                                                            }
+                                                                .into_any(),
+                                                        }}
                                                     </div>
+                                                </div>
+                                            </div>
 
-                                                    <div class="relative min-w-0 overflow-hidden rounded-2xl ring-1 ring-black/5 dark:ring-white/10">
-                                                        <img
-                                                            src=thumbnail
-                                                            alt=detail.title.clone()
-                                                            class="h-52 w-full object-cover transition duration-300 ease-out hover:scale-[1.03] sm:h-64 lg:h-56"
-                                                        />
-                                                        <div
-                                                            class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/45 via-transparent to-transparent"
-                                                            aria-hidden="true"
-                                                        ></div>
+                                            <div class="min-w-0">
+                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">"Merzah · Learning"</p>
+                                                <h1 class="mt-1 break-words text-3xl font-bold leading-tight text-mih-ink text-balance sm:text-4xl">
+                                                    {detail.title.clone()}
+                                                </h1>
+                                                <p class="mt-[0.35rem] max-w-2xl break-words text-base leading-[1.55] text-mih-muted sm:text-lg">
+                                                    {short_description}
+                                                </p>
+
+                                                <div class="mt-4 flex min-w-0 flex-wrap gap-2">
+                                                    <span class="inline-flex items-center gap-[0.35rem] rounded-full border border-mih-brass-soft bg-mih-ivory px-3 py-[0.3rem] text-xs font-semibold text-mih-ink-2">{level_label}</span>
+                                                    {has_preview
+                                                        .then(|| {
+                                                            view! { <span class="inline-flex items-center gap-[0.35rem] rounded-full border border-mih-brass-soft bg-mih-ivory px-3 py-[0.3rem] text-xs font-semibold text-mih-ink-2">"Free preview available"</span> }
+                                                        })}
+                                                </div>
+
+                                                <div class="mt-5 grid grid-cols-4 max-sm:grid-cols-2 overflow-hidden rounded-[0.9rem] border border-mih-brass-soft bg-mih-ivory">
+                                                    <div class="min-w-0 px-[0.85rem] py-[0.65rem]">
+                                                        <b class="block text-[1.15rem] leading-[1.2]">{duration_label.clone()}</b>
+                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-mih-brass">"Duration"</span>
+                                                    </div>
+                                                    <div class="min-w-0 border-l border-mih-brass-soft px-[0.85rem] py-[0.65rem]">
+                                                        <b class="block text-[1.15rem] leading-[1.2]">{lesson_label}</b>
+                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-mih-brass">"Lessons"</span>
+                                                    </div>
+                                                    <div class="min-w-0 border-l border-mih-brass-soft max-sm:border-l-0 max-sm:border-t max-sm:border-mih-brass-soft px-[0.85rem] py-[0.65rem]">
+                                                        <b class="block text-[1.15rem] leading-[1.2]">{module_label}</b>
+                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-mih-brass">"Modules"</span>
+                                                    </div>
+                                                    <div class="min-w-0 border-l border-mih-brass-soft max-sm:border-t max-sm:border-mih-brass-soft px-[0.85rem] py-[0.65rem]">
+                                                        <b class="block text-[1.15rem] leading-[1.2]">{enrolled_label}</b>
+                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-mih-brass">"Enrolled"</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </header>
+
+                                    <section class="space-y-2">
+                                        <div class="flex items-center gap-[0.6rem] text-mih-brass">
+                                            <h2 class="text-lg font-bold text-mih-ink">"Enrollment"</h2>
+                                            <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
+                                        </div>
+
+                                        {match percent {
+                                            Some(value) if value >= 100.0 => {
+                                                view! {
+                                                    <div class="relative overflow-hidden rounded-2xl border border-mih-ring bg-mih-card px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] [&::before]:absolute [&::before]:inset-x-0 [&::before]:top-0 [&::before]:h-[3px] [&::before]:bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.6),transparent)] [&::before]:content-['']">
+                                                        <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-[#15803d]">"Completed"</p>
+                                                        <div class="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                                            <div>
+                                                                <h3 class="text-base font-bold text-mih-ink">
+                                                                    "100% — course completed"
+                                                                </h3>
+                                                                <p class="mt-1 text-sm text-mih-muted">
+                                                                    "Every lesson is done. Revisit any module below whenever you want to refresh."
+                                                                </p>
+                                                                <div class="h-[0.4rem] max-w-xs overflow-hidden rounded-full border border-mih-brass-soft bg-[#f1efe6] mt-3">
+                                                                    <i class="block h-full bg-[linear-gradient(90deg,#b8873b,#e0b25f)]" style="width: 100%"></i>
+                                                                </div>
+                                                                <p class="mt-1 text-xs font-medium text-mih-muted">
+                                                                    {format!("{completed_label} of {total_label} lessons done")}
+                                                                </p>
+                                                            </div>
+                                                            <span class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-[rgba(184,135,59,0.5)] bg-mih-ivory text-[#8a6a06] no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 flex-none">
+                                                                <MihrabStar class="w-4 h-4"/>
+                                                                "Badge earned"
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                .into_any()
+                                            }
+                                            Some(value) => {
+                                                view! {
+                                                    <div class="relative overflow-hidden rounded-2xl border border-mih-ring bg-mih-card px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] [&::before]:absolute [&::before]:inset-x-0 [&::before]:top-0 [&::before]:h-[3px] [&::before]:bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.6),transparent)] [&::before]:content-['']">
+                                                        <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-mih-indigo-strong">"Enrolled · in progress"</p>
+                                                        <div class="mt-2 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                                                            <div class="min-w-0">
+                                                                <h3 class="text-base font-bold text-mih-ink">
+                                                                    {format!("{value:.0}% complete")}
+                                                                </h3>
+                                                                {next_lesson_title
+                                                                    .map(|next| {
+                                                                        view! {
+                                                                            <p class="mt-1 break-words text-sm text-mih-muted">
+                                                                                "Next up — " {next}
+                                                                            </p>
+                                                                        }
+                                                                    })}
+                                                                <div class="mt-3 h-[0.4rem] max-w-xs overflow-hidden rounded-full border border-mih-brass-soft bg-[#f1efe6]">
+                                                                    <i class="block h-full bg-[linear-gradient(90deg,#6366f1,#4338ca)]" style=format!("width: {value:.0}%")></i>
+                                                                </div>
+                                                                <p class="mt-1 text-xs font-medium text-mih-muted">
+                                                                    {format!("{completed_label} of {total_label} lessons done")}
+                                                                </p>
+                                                            </div>
+                                                            {first_incomplete_lesson_id
+                                                                .map(|lesson_id| {
+                                                                    let href = format!("/learn/lessons/{lesson_id}");
+
+                                                                    view! {
+                                                                        <A
+                                                                            href=href
+                                                                            attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] flex-none"
+                                                                        >
+                                                                            "Continue"
+                                                                            <span aria-hidden="true">"→"</span>
+                                                                        </A>
+                                                                    }
+                                                                })}
+                                                        </div>
+                                                    </div>
+                                                }
+                                                .into_any()
+                                            }
+                                            None => {
+                                                view! {
+                                                    <div class="relative overflow-hidden rounded-2xl border border-mih-ring bg-mih-card px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] [&::before]:absolute [&::before]:inset-x-0 [&::before]:top-0 [&::before]:h-[3px] [&::before]:bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.6),transparent)] [&::before]:content-['']">
+                                                        <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-mih-brass">"Ready when you are"</p>
+                                                        <div class="mt-2 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                                                            <div class="min-w-0">
+                                                                <h3 class="text-base font-bold text-mih-ink">
+                                                                    "Enroll and begin"
+                                                                </h3>
+                                                                <p class="mt-1 break-words text-sm text-mih-muted">
+                                                                    "Free to join. Progress, streak and badges are saved to your Merzah account."
+                                                                </p>
+                                                                <div class="h-[0.4rem] max-w-xs overflow-hidden rounded-full border border-mih-brass-soft bg-[#f1efe6] mt-3">
+                                                                    <i class="block h-full bg-[linear-gradient(90deg,#b8873b,#e0b25f)]" style="width: 0%"></i>
+                                                                </div>
+                                                                <p class="mt-1 text-xs font-medium text-mih-muted">
+                                                                    {format!("0% · 0 of {lesson_total} lessons")}
+                                                                </p>
+                                                            </div>
+                                                            <button
+                                                                class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] flex-none"
+                                                                disabled=move || enrolling.get()
+                                                                on:click=on_enroll
+                                                            >
+                                                                "Enroll and begin"
+                                                                <span aria-hidden="true">"→"</span>
+                                                            </button>
+                                                        </div>
+                                                        {move || {
+                                                            enrolling
+                                                                .get()
+                                                                .then(|| {
+                                                                    view! {
+                                                                        <p class="mt-3 text-sm font-medium text-mih-muted">"Enrolling…"</p>
+                                                                    }
+                                                                })
+                                                        }}
+                                                        <div class="mt-3">{error_banner}</div>
+                                                    </div>
+                                                }
+                                                .into_any()
+                                            }
+                                        }}
                                     </section>
 
-                                    <div class="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem] lg:items-start">
+                                    <div class="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
                                         <div class="min-w-0 space-y-6">
-                                            <section class="min-w-0 rounded-2xl bg-surface-700 p-5 shadow-md sm:p-6">
-                                                <h2 class="mb-3 text-lg font-bold text-foreground-900 sm:text-xl">
-                                                    "About this course"
-                                                </h2>
-                                                <p class="min-w-0 whitespace-pre-line break-words text-sm leading-relaxed text-foreground-600 sm:text-base">
+                                            <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                <p class="font-amiri text-xl [direction:rtl] text-mih-brass [unicode-bidi:isolate]" >"عن الدورة"</p>
+                                                <h2 class="mt-0.5 text-lg font-bold text-mih-ink">"About this course"</h2>
+                                                <hr class="my-3 h-px border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
+                                                <p class="max-w-[68ch] whitespace-pre-line break-words leading-relaxed text-mih-ink-2">
                                                     {detail.description.clone()}
                                                 </p>
                                             </section>
 
-                                            <section class="min-w-0 space-y-5">
-                                                <div class="flex min-w-0 flex-wrap items-end justify-between gap-2">
-                                                    <h2 class="min-w-0 text-xl font-bold text-foreground-900 sm:text-2xl">
-                                                        "Course Content"
-                                                    </h2>
-                                                    <span class="text-xs font-medium uppercase tracking-wide text-foreground-600">
-                                                        {format!(
-                                                            "{} modules · {} lessons",
-                                                            module_count,
-                                                            detail.lesson_count,
-                                                        )}
+                                            <section class="min-w-0 space-y-4">
+                                                <div class="flex items-center gap-[0.6rem] text-mih-brass">
+                                                    <h2 class="text-lg font-bold text-mih-ink">"Curriculum"</h2>
+                                                    <span class="text-xs font-medium text-mih-muted">
+                                                        {format!("{module_count} modules · {lesson_total} lessons · {duration_label}")}
                                                     </span>
+                                                    <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
                                                 </div>
 
-                                                {(!has_modules)
+                                                {(lesson_total == 0)
                                                     .then(|| {
                                                         view! {
-                                                            <div class="min-w-0 rounded-2xl border border-dashed border-indigo-400/40 bg-surface-700 p-8 text-center shadow-sm">
+                                                            <div class="rounded-2xl border border-dashed border-mih-brass-soft bg-white p-8 text-center">
                                                                 <p class="text-3xl" aria-hidden="true">"🪴"</p>
-                                                                <p class="mt-2 text-sm font-semibold text-foreground-900">
+                                                                <p class="mt-2 text-sm font-semibold text-mih-ink">
                                                                     "No modules published yet."
                                                                 </p>
-                                                                <p class="mt-1 text-sm text-foreground-600">
+                                                                <p class="mt-1 text-sm text-mih-muted">
                                                                     "The educator is still shaping this curriculum — check back soon."
                                                                 </p>
                                                             </div>
                                                         }
                                                     })}
 
-                                                <ol class="min-w-0 space-y-5">
+                                                <div class="min-w-0 space-y-3">
                                                     {modules
                                                         .clone()
                                                         .into_iter()
                                                         .enumerate()
-                                                        .map(|(index, module)| {
-                                                            let is_last = index + 1 == module_count;
-                                                            let lesson_total = module.lessons.len();
+                                                        .map(|(module_index, module)| {
+                                                            let lesson_total_module = module.lessons.len();
+                                                            let module_minutes: i32 = module
+                                                                .lessons
+                                                                .iter()
+                                                                .map(|lesson| lesson.duration_minutes)
+                                                                .sum();
+                                                            let open = module_index <= first_incomplete_module_index;
 
                                                             view! {
-                                                                <li class="relative min-w-0 sm:pl-16">
-                                                                    <span
-                                                                        class="absolute left-0 top-5 hidden h-11 w-11 place-items-center rounded-2xl bg-linear-to-br from-purple-600 to-indigo-500 text-sm font-bold text-white shadow-lg ring-4 ring-surface-700 sm:grid"
-                                                                        aria-hidden="true"
-                                                                    >
-                                                                        {format!("{:02}", index + 1)}
-                                                                    </span>
-
-                                                                    {(!is_last)
-                                                                        .then(|| {
-                                                                            view! {
-                                                                                <span
-                                                                                    class="absolute bottom-[-1.25rem] left-[1.3125rem] top-16 hidden w-px bg-linear-to-b from-indigo-400/70 to-transparent sm:block"
-                                                                                    aria-hidden="true"
-                                                                                ></span>
-                                                                            }
-                                                                        })}
-
-                                                                    <div class="min-w-0 rounded-2xl bg-surface-700 p-5 shadow-md transition duration-300 ease-out hover:shadow-[0_18px_40px_-28px_rgba(99,102,241,0.9)] sm:p-6">
-                                                                        <div class="flex min-w-0 flex-wrap items-center justify-between gap-2">
-                                                                            <h3 class="min-w-0 break-words text-base font-bold text-foreground-900 sm:text-lg">
-                                                                                {module.title.clone()}
-                                                                            </h3>
-                                                                            <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-indigo-400/10 px-3 py-1 text-xs font-semibold text-indigo-700 dark:text-indigo-300">
-                                                                                {format!("{} lessons", lesson_total)}
-                                                                            </span>
-                                                                        </div>
-
+                                                                <details class="overflow-hidden rounded-2xl border border-mih-ring bg-mih-card shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]" open=open>
+                                                                    <summary class="flex cursor-pointer list-none items-center gap-[0.85rem] border-b border-transparent px-[1.1rem] py-[0.85rem] [&::-webkit-details-marker]:hidden [details[open]_&]:border-mih-brass/30">
+                                                                        <span class="grid h-[2.6rem] w-[2.1rem] flex-none place-items-center bg-[linear-gradient(170deg,#4c1d95,#1e1b4b)] font-amiri text-[1rem] font-bold text-[#fde68a] [direction:rtl] [clip-path:url(#mihrab-niche)] [unicode-bidi:isolate]">{arabic_numeral(module_index + 1)}</span>
+                                                                        <span class="min-w-0">
+                                                                            <h4 class="text-base font-bold text-mih-ink">{module.title.clone()}</h4>
+                                                                            <span class="text-xs text-mih-muted">{format!("{lesson_total_module} lessons")}</span>
+                                                                        </span>
+                                                                        <span class="ml-auto whitespace-nowrap text-sm font-medium text-mih-brass">
+                                                                            {format!("{module_minutes} min")}
+                                                                        </span>
+                                                                    </summary>
+                                                                    <div>
                                                                         {module
-                                                                            .description
+                                                                            .lessons
                                                                             .clone()
-                                                                            .map(|description| {
+                                                                            .into_iter()
+                                                                            .map(|lesson| {
+                                                                                let is_preview = lesson.is_preview;
+                                                                                let is_completed = lesson.is_completed;
+                                                                                let is_current = !is_completed
+                                                                                    && Some(&lesson.id) == first_incomplete
+                                                                                        .as_ref()
+                                                                                        .map(|(_, id, _)| id);
+                                                                                let href = format!("/learn/lessons/{}", lesson.id);
+                                                                                let lesson_row_class = if is_current {
+                                                                                    "flex min-h-[3.4rem] items-center gap-[0.8rem] border-t border-mih-ring-soft px-[1.1rem] py-[0.72rem] text-inherit no-underline first:border-t-0 bg-[#fdf6e7] hover:bg-[#fbeed3] focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-mih-indigo transition-colors duration-200"
+                                                                                } else {
+                                                                                    "flex min-h-[3.4rem] items-center gap-[0.8rem] border-t border-mih-ring-soft px-[1.1rem] py-[0.72rem] text-inherit no-underline first:border-t-0 hover:bg-mih-ivory focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-mih-indigo transition-colors duration-200"
+                                                                                };
+
                                                                                 view! {
-                                                                                    <p class="mt-2 min-w-0 break-words text-sm text-foreground-600">
-                                                                                        {description}
-                                                                                    </p>
+                                                                                    <a href=href class=lesson_row_class>
+                                                                                        <span class="grid size-6 flex-none place-items-center">
+                                                                                            {if is_completed {
+                                                                                                view! {
+                                                                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                                                                        <path d="M20 6 9 17l-5-5" />
+                                                                                                    </svg>
+                                                                                                }
+                                                                                                .into_any()
+                                                                                            } else if is_current {
+                                                                                                view! { <MihrabStar class="w-5 h-5 text-mih-brass" /> }
+                                                                                                    .into_any()
+                                                                                            } else {
+                                                                                                view! { <span class="inline-block size-[0.62rem] rounded-full border-2 border-[#ddd3bd]" aria-hidden="true"></span> }
+                                                                                                    .into_any()
+                                                                                            }}
+                                                                                        </span>
+                                                                                        <span class="min-w-0 flex-1">
+                                                                                            <span class="block break-words text-sm font-semibold text-mih-ink">
+                                                                                                {lesson.title.clone()}
+                                                                                            </span>
+                                                                                            <span class="mt-1 flex flex-wrap gap-1.5">
+                                                                                                <span class="inline-flex items-center gap-1 rounded-full border border-mih-brass-soft bg-mih-ivory px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-mih-muted">{content_type_label(&lesson.content_type)}</span>
+                                                                                                {is_preview
+                                                                                                    .then(|| {
+                                                                                                        view! { <span class="inline-flex items-center gap-1 rounded-full border border-[rgba(184,135,59,0.55)] bg-[#fdf6e7] px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-[#8a6a06]">"Free preview"</span> }
+                                                                                                    })}
+                                                                                                {is_completed
+                                                                                                    .then(|| {
+                                                                                                        view! { <span class="inline-flex items-center gap-1 rounded-full border border-[#bbf7d0] bg-[#ecfdf5] px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-[#166534]">"Done"</span> }
+                                                                                                    })}
+                                                                                                {is_current
+                                                                                                    .then(|| {
+                                                                                                        view! { <span class="inline-flex items-center gap-1 rounded-full border border-[#c7d2fe] bg-[#eef2ff] px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-mih-indigo-strong">"Current · playing"</span> }
+                                                                                                    })}
+                                                                                            </span>
+                                                                                        </span>
+                                                                                        <span class="whitespace-nowrap text-xs font-medium text-mih-muted">
+                                                                                            {format!("{} min", lesson.duration_minutes)}
+                                                                                        </span>
+                                                                                    </a>
                                                                                 }
-                                                                            })}
-
-                                                                        <ul class="mt-4 min-w-0 space-y-2">
-                                                                            {module
-                                                                                .lessons
-                                                                                .clone()
-                                                                                .into_iter()
-                                                                                .map(|lesson| {
-                                                                                    let is_preview = lesson.is_preview;
-
-                                                                                    view! {
-                                                                                        <li class="min-w-0">
-                                                                                            <A
-                                                                                                href=format!("/learn/lessons/{}", lesson.id)
-                                                                                                attr:class="group flex min-h-[44px] min-w-0 items-center gap-3 rounded-xl bg-black/5 px-3 py-2.5 transition duration-300 ease-out hover:translate-x-1 hover:bg-indigo-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 dark:bg-white/5 dark:hover:bg-indigo-400/15"
-                                                                                            >
-                                                                                                <span
-                                                                                                    class=format!(
-                                                                                                        "grid h-9 w-9 shrink-0 place-items-center rounded-xl text-base {}",
-                                                                                                        content_type_chip(&lesson.content_type),
-                                                                                                    )
-                                                                                                    aria-hidden="true"
-                                                                                                >
-                                                                                                    {content_type_icon(&lesson.content_type)}
-                                                                                                </span>
-
-                                                                                                <span class="min-w-0 flex-1">
-                                                                                                    <span class="block min-w-0 break-words text-sm font-medium text-foreground-900">
-                                                                                                        {lesson.title.clone()}
-                                                                                                    </span>
-                                                                                                    <span class="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-foreground-600">
-                                                                                                        <span>{format!("{} min", lesson.duration_minutes)}</span>
-                                                                                                        {is_preview
-                                                                                                            .then(|| {
-                                                                                                                view! {
-                                                                                                                    <span class="rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-700 dark:text-emerald-300">
-                                                                                                                        "Free preview"
-                                                                                                                    </span>
-                                                                                                                }
-                                                                                                            })}
-                                                                                                    </span>
-                                                                                                </span>
-
-                                                                                                <span
-                                                                                                    class="shrink-0 text-foreground-600 transition duration-300 ease-out group-hover:translate-x-1 group-hover:text-indigo-500"
-                                                                                                    aria-hidden="true"
-                                                                                                >
-                                                                                                    "→"
-                                                                                                </span>
-                                                                                            </A>
-                                                                                        </li>
-                                                                                    }
-                                                                                })
-                                                                                .collect_view()}
-                                                                        </ul>
+                                                                            })
+                                                                            .collect_view()}
                                                                     </div>
-                                                                </li>
+                                                                </details>
                                                             }
                                                         })
                                                         .collect_view()}
-                                                </ol>
+                                                </div>
                                             </section>
                                         </div>
 
-                                        <aside class="min-w-0 lg:sticky lg:top-6">
-                                            <div class="min-w-0 overflow-hidden rounded-2xl bg-surface-700 p-5 shadow-lg ring-1 ring-black/5 sm:p-6 dark:ring-white/10">
-                                                {match percent {
-                                                    Some(value) if value >= 100.0 => {
-                                                        view! {
-                                                            <div class="min-w-0 space-y-3 text-center">
-                                                                <span
-                                                                    class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-500/10 text-3xl"
-                                                                    aria-hidden="true"
-                                                                >
-                                                                    "🎓"
-                                                                </span>
-                                                                <p class="text-lg font-bold text-emerald-700 dark:text-emerald-300">
-                                                                    "Course completed"
-                                                                </p>
-                                                                <p class="min-w-0 break-words text-sm text-foreground-600">
-                                                                    "Every lesson is done — revisit any module below whenever you want to refresh."
-                                                                </p>
-                                                                <div class="h-2 w-full overflow-hidden rounded-full bg-emerald-500/15">
-                                                                    <div class="h-full w-full rounded-full bg-linear-to-r from-emerald-500 to-emerald-400"></div>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                            .into_any()
-                                                    }
-                                                    Some(value) => {
-                                                        view! {
-                                                            <div class="min-w-0 space-y-4">
-                                                                <div class="flex min-w-0 items-center justify-between gap-2">
-                                                                    <span class="text-xs font-semibold uppercase tracking-wide text-foreground-600">
-                                                                        "Your progress"
-                                                                    </span>
-                                                                    <span class="text-sm font-bold text-foreground-900">
-                                                                        {format!("{value:.0}% complete")}
-                                                                    </span>
-                                                                </div>
+                                        <aside class="min-w-0 space-y-4 lg:sticky lg:top-6">
+                                            <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">"Educator"</p>
+                                                <div class="mt-3 flex items-center gap-3">
+                                                    <span class="grid h-[3.2rem] w-[2.6rem] flex-none place-items-center bg-[linear-gradient(170deg,#4c1d95,#1e1b4b)] font-amiri text-[1.1rem] font-bold text-[#fde68a] [direction:rtl] [clip-path:url(#mihrab)] [unicode-bidi:isolate]">
+                                                        {educator_initials}
+                                                    </span>
+                                                    <div class="min-w-0">
+                                                        <h3 class="break-words font-bold leading-snug text-mih-ink">
+                                                            {educator_name}
+                                                        </h3>
+                                                        <p class="text-xs text-mih-muted">"Curriculum educator"</p>
+                                                    </div>
+                                                </div>
+                                            </section>
 
-                                                                <div class="h-2.5 w-full overflow-hidden rounded-full bg-purple-900/15 ring-1 ring-purple-500/10 dark:bg-white/10">
-                                                                    <div
-                                                                        class="h-full rounded-full bg-linear-to-r from-purple-600 via-indigo-500 to-sky-400 shadow-[0_0_12px_rgba(99,102,241,0.65)] transition-[width] duration-300 ease-out"
-                                                                        style=format!("width: {value:.0}%;")
-                                                                    ></div>
-                                                                </div>
-
-                                                                <p class="min-w-0 break-words text-sm text-foreground-600">
-                                                                    "You're enrolled — continue with the modules below."
-                                                                </p>
-                                                            </div>
-                                                        }
-                                                            .into_any()
-                                                    }
-                                                    None => {
-                                                        view! {
-                                                            <div class="min-w-0 space-y-4">
-                                                                <div class="min-w-0 space-y-1">
-                                                                    <p class="text-xs font-semibold uppercase tracking-wide text-foreground-600">
-                                                                        "Ready when you are"
-                                                                    </p>
-                                                                    <p class="min-w-0 break-words text-sm text-foreground-600">
-                                                                        "Enroll to unlock progress tracking across every module of this course."
-                                                                    </p>
-                                                                </div>
-
-                                                                <button
-                                                                    class="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-400 px-5 font-semibold text-white shadow-lg transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 disabled:translate-y-0 disabled:opacity-60"
-                                                                    disabled=move || enrolling.get()
-                                                                    on:click=on_enroll
-                                                                >
-                                                                    "Start Course"
-                                                                    <span aria-hidden="true">"→"</span>
-                                                                </button>
-
-                                                                {move || {
-                                                                    enrolling
-                                                                        .get()
-                                                                        .then(|| {
-                                                                            view! {
-                                                                                <p class="text-sm font-medium text-foreground-600">
-                                                                                    "Enrolling…"
-                                                                                </p>
-                                                                            }
-                                                                        })
-                                                                }}
-
-                                                                {error_banner}
-                                                            </div>
-                                                        }
-                                                            .into_any()
-                                                    }
-                                                }}
-                                            </div>
+                                            <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">"At a glance"</p>
+                                                <ul class="mt-3 grid gap-2 text-sm">
+                                                    <li class="flex items-baseline justify-between gap-3">
+                                                        <span class="text-mih-muted">"Level"</span>
+                                                        <b class="text-mih-ink-2">{format!("{:?}", detail.level)}</b>
+                                                    </li>
+                                                    <li class="flex items-baseline justify-between gap-3">
+                                                        <span class="text-mih-muted">"Duration"</span>
+                                                        <b class="text-mih-ink-2">{format_duration(detail.duration_minutes)}</b>
+                                                    </li>
+                                                    <li class="flex items-baseline justify-between gap-3">
+                                                        <span class="text-mih-muted">"Lessons"</span>
+                                                        <b class="text-mih-ink-2">{lesson_total}</b>
+                                                    </li>
+                                                    <li class="flex items-baseline justify-between gap-3">
+                                                        <span class="text-mih-muted">"Modules"</span>
+                                                        <b class="text-mih-ink-2">{module_count}</b>
+                                                    </li>
+                                                    <li class="flex items-baseline justify-between gap-3">
+                                                        <span class="text-mih-muted">"Enrolled"</span>
+                                                        <b class="text-mih-ink-2">{detail.enrollment_count}</b>
+                                                    </li>
+                                                </ul>
+                                            </section>
                                         </aside>
                                     </div>
+
+                                    <section class="min-w-0 space-y-4">
+                                        <div class="flex items-center gap-[0.6rem] text-mih-brass">
+                                            <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
+                                            <h2 class="text-lg font-bold text-mih-ink">"Recommended next"</h2>
+                                            <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
+                                        </div>
+                                        {if rec_entries.is_empty() {
+                                            view! {
+                                                <div class="min-w-0 rounded-2xl border border-dashed border-mih-brass-soft bg-white p-6 text-center">
+                                                    <p class="text-sm text-mih-muted">
+                                                        "More courses are being curated — check back soon."
+                                                    </p>
+                                                </div>
+                                            }
+                                            .into_any()
+                                        } else {
+                                            view! {
+                                                <div class="grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                                    {rec_entries
+                                                        .into_iter()
+                                                        .map(|entry| {
+                                                            let href = format!("/learn/courses/{}", entry.id);
+                                                            let level_label = format!("{:?}", entry.level);
+
+                                                            view! {
+                                                                <article class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                                    <div class="relative grid h-28 place-items-center overflow-hidden rounded-xl bg-linear-to-br from-violet-800 to-indigo-950">
+                                                                        <svg class="absolute inset-0 h-full w-full opacity-20" aria-hidden="true">
+                                                                            <rect width="100%" height="100%" fill="url(#mihrab-lattice)" style="color:#fde68a" />
+                                                                        </svg>
+                                                                        <span class="relative text-3xl text-mih-crown">"✦"</span>
+                                                                    </div>
+                                                                    <div class="mt-3 flex flex-wrap gap-1.5">
+                                                                        <span class="inline-flex items-center gap-1 rounded-full border border-mih-brass-soft bg-mih-ivory px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-mih-muted">{level_label}</span>
+                                                                        <span class="inline-flex items-center gap-1 rounded-full border border-mih-brass-soft bg-mih-ivory px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-mih-muted">{format!("{} lessons", entry.lesson_count)}</span>
+                                                                    </div>
+                                                                    <h3 class="mt-2 break-words font-bold leading-snug text-mih-ink">
+                                                                        {entry.title.clone()}
+                                                                    </h3>
+                                                                    <p class="mt-1 break-words text-xs text-mih-muted">
+                                                                        {entry.educator_name.clone()}
+                                                                    </p>
+                                                                    <A
+                                                                        href=href
+                                                                        attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] mt-3 w-full"
+                                                                    >
+                                                                        "View course"
+                                                                        <span aria-hidden="true">"→"</span>
+                                                                    </A>
+                                                                </article>
+                                                            }
+                                                        })
+                                                        .collect_view()}
+                                                </div>
+                                            }
+                                            .into_any()
+                                        }}
+                                    </section>
                                 </article>
                             }
-                                .into_any()
+                            .into_any()
                         }
                     }
                 }}
