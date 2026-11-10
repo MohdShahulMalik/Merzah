@@ -251,7 +251,6 @@ pub fn LearningPathCard(
                 attr:class="relative flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-400 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-indigo-500"
             >
                 <span class="relative">{cta_label}</span>
-                <span class="relative" aria-hidden="true">"→"</span>
             </A>
         </article>
     }

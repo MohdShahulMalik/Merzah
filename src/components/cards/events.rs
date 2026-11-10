@@ -51,7 +51,7 @@ pub fn FeaturedEventCard(
                     href="#"
                     class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-400 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-500"
                 >
-                    {cta_label}" →"
+                    {cta_label}
                 </a>
             </div>
         </article>
@@ -132,7 +132,7 @@ pub fn AllEventCard(
                     href="#"
                     class="inline-flex min-h-[44px] items-center rounded-lg border-2 border-sky-300/80 bg-sky-50 dark:bg-sky-400/10 px-5 py-2.5 text-sm font-bold text-sky-700 dark:text-sky-400 transition hover:bg-sky-100 dark:hover:bg-sky-400/15"
                 >
-                    {cta_label}" →"
+                    {cta_label}
                 </a>
             </div>
         </article>

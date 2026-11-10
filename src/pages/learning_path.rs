@@ -277,7 +277,6 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                                         on:click=on_start
                                                                     >
                                                                         "Begin Path"
-                                                                        <span aria-hidden="true">"→"</span>
                                                                     </button>
 
                                                                     {move || {
@@ -399,7 +398,6 @@ pub fn LearningPathDetailPage() -> impl IntoView {
 
                                                                 <span class="mt-4 inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-sky-600 transition duration-300 ease-out group-hover:gap-3 dark:text-sky-400">
                                                                     "Open course"
-                                                                    <span aria-hidden="true">"→"</span>
                                                                 </span>
                                                             </A>
                                                         </li>

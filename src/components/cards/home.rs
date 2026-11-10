@@ -205,7 +205,7 @@ pub fn NearbyMosqueCard(
 
                 <div class="absolute inset-x-0 bottom-0 border-t border-white/15 bg-[#211f55]/88 px-4 py-1 text-white backdrop-blur-md transition-transform duration-500 ease-out translate-y-0 sm:translate-y-full sm:group-hover:translate-y-0">
                     <div class="flex items-center justify-between gap-2">
-                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-sky-200 hover:text-sky-100">"Directions →"</A>
+                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-sky-200 hover:text-sky-100">"Directions"</A>
                         <Show when=move || on_view_mosque.is_some()>
                             <button
                                 type="button"
@@ -214,7 +214,7 @@ pub fn NearbyMosqueCard(
                                     callback.run(())
                                 }
                             >
-                                "View Mosque →"
+                                "View Mosque"
                             </button>
                         </Show>
                     </div>
@@ -357,7 +357,6 @@ pub fn EducationalResourceCard(
                     attr:class="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-400 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-indigo-500"
                 >
                     <span>{action_label}</span>
-                    <span class="transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">"→"</span>
                 </A>
             </div>
         </article>
