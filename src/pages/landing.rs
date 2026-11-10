@@ -235,7 +235,7 @@ pub fn Landing() -> impl IntoView {
                     </div>
 
                     <div class="relative">
-                        <span class="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-sky-50">
+                        <span class="inline-flex items-center rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-sky-50">
                             "For mosque admins"
                         </span>
                         <h2 class="mt-5 text-3xl sm:text-4xl xl:text-5xl font-bold tracking-tight leading-tight text-white">

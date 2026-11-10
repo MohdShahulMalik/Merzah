@@ -173,7 +173,7 @@ fn MosqueInfoSkeleton() -> impl IntoView {
             <div class="h-44 w-full animate-pulse bg-[#c9cef3] dark:bg-white/5 sm:h-52"></div>
 
             <div class="space-y-4 p-4 sm:p-5">
-                <div class="h-3 w-28 animate-pulse rounded-full bg-[#e8edff] dark:bg-white/5"></div>
+                <div class="h-3 w-28 animate-pulse rounded-md bg-[#e8edff] dark:bg-white/5"></div>
 
                 <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
                     {(0..6)
@@ -325,7 +325,7 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
                             }
                         })}
 
-                    <span class="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-sky-100/85 backdrop-blur">
+                    <span class="inline-flex rounded-lg border border-white/15 bg-white/10 px-3 py-1 text-xs text-sky-100/85 backdrop-blur">
                         {coordinates}
                     </span>
                 </div>
