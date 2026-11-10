@@ -2,7 +2,7 @@ use leptos::{logging, prelude::*};
 use leptos_meta::{Script, Stylesheet, Title, provide_meta_context};
 use leptos_router::{
     WildcardSegment,
-    components::{ParentRoute, Route, Router, Routes},
+    components::{ParentRoute, ProtectedRoute, Route, Router, Routes},
     path,
 };
 use reactive_stores::Store;
@@ -45,6 +45,12 @@ pub fn App() -> impl IntoView {
         coords: None,
     });
     let auth_user = OnceResource::new(async { fetch_me().await });
+    let auth_condition = move || {
+        auth_user.map(|auth_user_response_result| match auth_user_response_result {
+            Ok(auth_user_response) => auth_user_response.data.is_some(),
+            Err(_) => false,
+        })
+    };
 
     provide_context(app_state);
 
@@ -95,9 +101,9 @@ pub fn App() -> impl IntoView {
                     <Route path=path!("/") view=Landing/>
 
                     <ParentRoute path=path!("/") view=AppLayout>
-                        <Route path=path!("home") view=Home/>
+                        <ProtectedRoute path=path!("home") view=Home condition=auth_condition redirect_path=|| "/login"/>
                         <Route path=path!("mosques") view=Mosques/>
-                        <Route path=path!("events") view=Events/>
+                        <ProtectedRoute path=path!("events") view=Events condition=auth_condition redirect_path=|| "/login"/>
                         <Route path=path!("learn") view=Learn/>
                         <Route path=path!("learn/courses/:course_id") view=CourseDetailPage/>
                         <Route path=path!("learn/lessons/:lesson_id") view=LessonPage/>
