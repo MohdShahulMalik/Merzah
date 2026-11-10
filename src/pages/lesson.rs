@@ -3,7 +3,6 @@ use leptos::reactive::spawn_local;
 use leptos_router::components::A;
 use leptos_router::hooks::use_params_map;
 
-use crate::components::mihrab::{MihrabDefs, MihrabStar};
 use crate::models::education::LessonContentType;
 use crate::models::gamification::{AchievementOnClient, UserStreakOnClient};
 use crate::models::quiz::{QuestionType, QuizAnswer, QuizOnClient, QuizSubmission};
@@ -239,15 +238,13 @@ pub fn LessonPage() -> impl IntoView {
 
     view! {
         <div class="py-4 sm:py-6">
-            <MihrabDefs />
-
             <Suspense fallback=move || {
                 view! {
                     <div class="mx-auto w-full max-w-[68rem] min-w-0 animate-pulse space-y-6">
-                        <div class="h-10 w-56 rounded-xl bg-white"></div>
-                        <div class="h-72 w-full rounded-3xl border border-mih-brass-soft bg-white shadow-sm"></div>
-                        <div class="h-40 w-full rounded-2xl border border-mih-brass-soft bg-white"></div>
-                        <p class="text-sm text-mih-muted">"Loading lesson…"</p>
+                        <div class="h-10 w-56 rounded-xl bg-surface-700"></div>
+                        <div class="h-72 w-full rounded-3xl border border-stroke-muted bg-surface-700 shadow-sm"></div>
+                        <div class="h-40 w-full rounded-2xl border border-stroke-muted bg-surface-700"></div>
+                        <p class="text-sm text-foreground-600">"Loading lesson…"</p>
                     </div>
                 }
             }>
@@ -255,17 +252,17 @@ pub fn LessonPage() -> impl IntoView {
                     match lesson.get().flatten() {
                         None => {
                             view! {
-                                <div class="mx-auto w-full max-w-[68rem] min-w-0 space-y-3 rounded-3xl border border-mih-brass-soft bg-white p-8 text-center shadow-sm">
+                                <div class="mx-auto w-full max-w-[68rem] min-w-0 space-y-3 rounded-3xl border border-stroke-muted bg-surface-700 p-8 text-center shadow-sm">
                                     <p class="text-4xl" aria-hidden="true">"📭"</p>
-                                    <h1 class="text-xl font-bold text-mih-ink sm:text-2xl">
+                                    <h1 class="text-xl font-bold text-foreground-900 sm:text-2xl">
                                         "Lesson not found."
                                     </h1>
-                                    <p class="mx-auto max-w-sm text-sm text-mih-muted">
+                                    <p class="mx-auto max-w-sm text-sm text-foreground-600">
                                         "This lesson may have been removed or the link is out of date."
                                     </p>
                                     <A
                                         href="/learn"
-                                        attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65]"
+                                        attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65]"
                                     >
                                         "Back to Learn"
                                         <span aria-hidden="true">"→"</span>
@@ -301,40 +298,37 @@ pub fn LessonPage() -> impl IntoView {
 
                             view! {
                                 <article class="mx-auto w-full max-w-[68rem] min-w-0 space-y-6">
-                                    <nav class="flex flex-wrap items-center gap-2 text-sm text-mih-muted" aria-label="Breadcrumb">
-                                        <A href="/learn" attr:class="hover:text-mih-indigo-strong">"Learning"</A>
-                                        <span class="text-mih-brass">"/"</span>
-                                        <A href=course_href.clone() attr:class="hover:text-mih-indigo-strong">
+                                    <nav class="flex flex-wrap items-center gap-2 text-sm text-foreground-600" aria-label="Breadcrumb">
+                                        <A href="/learn" attr:class="transition duration-300 ease-out hover:text-sky-600 dark:hover:text-sky-400">"Learning"</A>
+                                        <span class="text-foreground-400" aria-hidden="true">"/"</span>
+                                        <A href=course_href.clone() attr:class="transition duration-300 ease-out hover:text-sky-600 dark:hover:text-sky-400">
                                             {course_title.clone()}
                                         </A>
-                                        <span class="text-mih-brass">"/"</span>
+                                        <span class="text-foreground-400" aria-hidden="true">"/"</span>
                                         <span>{module_title.clone()}</span>
                                     </nav>
 
-                                    <header class="relative overflow-hidden rounded-[1.5rem] border border-mih-brass-soft bg-mih-card p-6 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                        <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-[0.08] text-[#4c1d95]" aria-hidden="true">
-                                            <rect width="100%" height="100%" fill="url(#mihrab-lattice)" />
-                                        </svg>
-                                        <div class="relative">
-                                            <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">{module_title.clone()}</p>
-                                            <h1 class="mt-1 break-words text-3xl font-bold leading-tight text-mih-ink text-balance">
+                                    <header class="relative overflow-hidden rounded-2xl border border-stroke-muted bg-surface-700 p-6 shadow-md">
+                                        <div>
+                                            <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-foreground-600">{module_title.clone()}</p>
+                                            <h1 class="mt-1 break-words text-3xl font-bold leading-tight text-foreground-900 text-balance">
                                                 {detail.title.clone()}
                                             </h1>
                                             <div class="mt-4 flex flex-wrap gap-2">
-                                                <span class="inline-flex items-center gap-[0.35rem] rounded-full border border-[#c7d2fe] bg-[#eef2ff] px-3 py-[0.3rem] text-xs font-semibold text-mih-indigo-deep">
+                                                <span class="inline-flex items-center gap-[0.35rem] rounded-lg bg-indigo-100 px-3 py-[0.3rem] text-xs font-semibold text-indigo-700">
                                                     <span aria-hidden="true">{content_type_icon}</span>
                                                     {content_type_label}
                                                 </span>
-                                                <span class="inline-flex items-center gap-[0.35rem] rounded-full border border-mih-brass-soft bg-mih-ivory px-3 py-[0.3rem] text-xs font-semibold text-mih-ink-2">{format!("{} min", detail.duration_minutes)}</span>
+                                                <span class="inline-flex items-center gap-[0.35rem] rounded-lg border border-stroke-muted bg-surface-800 px-3 py-[0.3rem] text-xs font-semibold text-foreground-600">{format!("{} min", detail.duration_minutes)}</span>
                                                 {video_clock
                                                     .map(|clock| {
                                                         view! {
-                                                            <span class="inline-flex items-center gap-[0.35rem] rounded-full border border-mih-brass-soft bg-mih-ivory px-3 py-[0.3rem] text-xs font-semibold text-mih-ink-2">{clock}</span>
+                                                            <span class="inline-flex items-center gap-[0.35rem] rounded-lg border border-stroke-muted bg-surface-800 px-3 py-[0.3rem] text-xs font-semibold text-foreground-600">{clock}</span>
                                                         }
                                                     })}
                                                 {is_complete()
                                                     .then(|| {
-                                                        view! { <span class="inline-flex items-center gap-[0.35rem] rounded-full border border-[#bbf7d0] bg-[#ecfdf5] px-3 py-[0.3rem] text-xs font-semibold text-[#166534]">"Completed"</span> }
+                                                        view! { <span class="inline-flex items-center gap-[0.35rem] rounded-lg bg-emerald-100 px-3 py-[0.3rem] text-xs font-semibold text-emerald-700">"Completed"</span> }
                                                     })}
                                             </div>
                                         </div>
@@ -347,8 +341,7 @@ pub fn LessonPage() -> impl IntoView {
                                                     let poster = thumbnail_url.clone();
 
                                                     view! {
-                                                        <div class="relative p-[0.35rem] [clip-path:url(#mihrab-wide)] bg-[linear-gradient(170deg,rgba(184,135,59,0.55),rgba(184,135,59,0.12))]">
-                                                            <div class="relative aspect-[16/10] w-full overflow-hidden grid place-items-center [clip-path:url(#mihrab-wide)] bg-[linear-gradient(170deg,#4338ca,#2e1065_60%,#1e1b4b)]">
+                                                        <div class="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-stroke-muted bg-indigo-400 shadow-md">
                                                                 <video
                                                                     controls=true
                                                                     src=url
@@ -356,7 +349,6 @@ pub fn LessonPage() -> impl IntoView {
                                                                     class="h-full w-full object-cover"
                                                                 ></video>
                                                             </div>
-                                                        </div>
                                                     }
                                                 })}
 
@@ -364,12 +356,12 @@ pub fn LessonPage() -> impl IntoView {
                                                 .then(|| audio_url.clone().unwrap_or_default())
                                                 .map(|url| {
                                                     view! {
-                                                        <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                                            <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">"Audio lesson"</p>
-                                                            <h3 class="mt-1 text-base font-bold text-mih-ink">"Listen, then recite along"</h3>
+                                                        <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                            <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-foreground-600">"Audio lesson"</p>
+                                                            <h3 class="mt-1 text-base font-bold text-foreground-900">"Listen, then recite along"</h3>
                                                             <div class="mt-3 flex items-center gap-3">
-                                                                <span class="grid h-[2.9rem] w-[2.4rem] flex-none place-items-center bg-[#fdf6e7] [clip-path:url(#mihrab)]" aria-hidden="true">
-                                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#b8873b">
+                                                                <span class="grid size-11 flex-none place-items-center rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-400" aria-hidden="true">
+                                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                                                         <path d="M8 5v14l11-7z" />
                                                                     </svg>
                                                                 </span>
@@ -378,7 +370,7 @@ pub fn LessonPage() -> impl IntoView {
                                                                         .into_iter()
                                                                         .map(|height| {
                                                                             view! {
-                                                                                <i class="min-w-[2px] flex-1 rounded-[2px] bg-[#e2d2b0]" style=format!("height: {height}%")></i>
+                                                                                <i class="min-w-[2px] flex-1 rounded-[2px] bg-indigo-200" style=format!("height: {height}%")></i>
                                                                             }
                                                                         })
                                                                         .collect_view()}
@@ -393,22 +385,19 @@ pub fn LessonPage() -> impl IntoView {
                                                 .then(|| thumbnail_url.clone().unwrap_or_default())
                                                 .map(|url| {
                                                     view! {
-                                                        <div class="relative p-[0.35rem] [clip-path:url(#mihrab-wide)] bg-[linear-gradient(170deg,rgba(184,135,59,0.55),rgba(184,135,59,0.12))]">
-                                                            <div class="relative aspect-[16/10] w-full overflow-hidden grid place-items-center [clip-path:url(#mihrab-wide)] bg-[linear-gradient(170deg,#4338ca,#2e1065_60%,#1e1b4b)]">
+                                                        <div class="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-stroke-muted bg-indigo-400 shadow-md">
                                                                 <img src=url alt=detail.title.clone() class="block h-full w-full object-cover" />
                                                             </div>
-                                                        </div>
                                                     }
                                                 })}
 
                                             {(!detail.content.is_empty())
                                                 .then(|| {
                                                     view! {
-                                                        <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                                            <p class="font-amiri text-lg [direction:rtl] text-mih-brass [unicode-bidi:isolate]" >"ملاحظات الدرس"</p>
-                                                            <h2 class="mt-0.5 text-base font-bold text-mih-ink">"Lesson notes"</h2>
-                                                            <hr class="my-3 h-px border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
-                                                            <p class="max-w-[68ch] whitespace-pre-line break-words text-base leading-relaxed text-mih-ink-2">
+                                                        <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                            <h2 class="text-base font-bold text-foreground-900">"Lesson notes"</h2>
+                                                            <hr class="my-3 border-stroke-muted" />
+                                                            <p class="max-w-[68ch] whitespace-pre-line break-words text-base leading-relaxed text-foreground-600">
                                                                 {detail.content.clone()}
                                                             </p>
                                                         </section>
@@ -425,7 +414,7 @@ pub fn LessonPage() -> impl IntoView {
                                                                 href=url
                                                                 attr:target="_blank"
                                                                 attr:rel="noopener noreferrer"
-                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-mih-brass-soft bg-mih-card text-mih-ink-2 no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-ivory hover:no-underline"
+                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-stroke-muted bg-surface-700 text-foreground-600 no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-surface-800 hover:no-underline"
                                                             >
                                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                                     <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16" />
@@ -444,7 +433,7 @@ pub fn LessonPage() -> impl IntoView {
                                                                 href=url
                                                                 attr:target="_blank"
                                                                 attr:rel="noopener noreferrer"
-                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-mih-brass-soft bg-mih-card text-mih-ink-2 no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-ivory hover:no-underline"
+                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-stroke-muted bg-surface-700 text-foreground-600 no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-surface-800 hover:no-underline"
                                                             >
                                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                                     <path d="M14 4h6v6M20 4 10 14M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" />
@@ -456,19 +445,16 @@ pub fn LessonPage() -> impl IntoView {
                                             </div>
 
                                             <section class="min-w-0 space-y-2">
-                                                <div class="flex items-center gap-[0.6rem] text-mih-brass">
-                                                    <h2 class="text-lg font-bold text-mih-ink">"Completion"</h2>
-                                                    <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
-                                                </div>
+                                                <h2 class="text-lg font-bold text-foreground-900">"Completion"</h2>
 
                                                 {if is_enrolled {
                                                     if is_complete() {
                                                         view! {
-                                                            <div class="relative overflow-hidden rounded-2xl border border-mih-ring bg-mih-card px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] [&::before]:absolute [&::before]:inset-x-0 [&::before]:top-0 [&::before]:h-[3px] [&::before]:bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.6),transparent)] [&::before]:content-['']">
-                                                                <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-[#15803d]">"Completed"</p>
+                                                            <div class="relative overflow-hidden rounded-2xl border border-stroke-muted bg-surface-700 px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                                <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-emerald-700">"Completed"</p>
                                                                 <div class="mt-2 flex items-center gap-3">
                                                                     <span class="grid h-10 w-10 flex-none place-items-center rounded-full bg-emerald-100" aria-hidden="true">
-                                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-emerald-700" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                                                                             <path d="M20 6 9 17l-5-5" />
                                                                         </svg>
                                                                     </span>
@@ -482,10 +468,9 @@ pub fn LessonPage() -> impl IntoView {
                                                                         view! {
                                                                             <A
                                                                                 href=format!("/learn/lessons/{next}")
-                                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] mt-3 inline-flex"
+                                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] mt-3 inline-flex"
                                                                             >
                                                                                 "Next lesson"
-                                                                                <span aria-hidden="true">"→"</span>
                                                                             </A>
                                                                         }
                                                                     })}
@@ -494,13 +479,13 @@ pub fn LessonPage() -> impl IntoView {
                                                         .into_any()
                                                     } else {
                                                         view! {
-                                                            <div class="relative overflow-hidden rounded-2xl border border-mih-ring bg-mih-card px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] [&::before]:absolute [&::before]:inset-x-0 [&::before]:top-0 [&::before]:h-[3px] [&::before]:bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.6),transparent)] [&::before]:content-['']">
-                                                                <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-mih-indigo-strong">"Enrolled · not finished"</p>
-                                                                <p class="mt-1 text-sm text-mih-muted">
+                                                            <div class="relative overflow-hidden rounded-2xl border border-stroke-muted bg-surface-700 px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                                <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-indigo-600">"Enrolled · not finished"</p>
+                                                                <p class="mt-1 text-sm text-foreground-600">
                                                                     "Marking this complete moves your course progress forward."
                                                                 </p>
                                                                 <button
-                                                                    class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] mt-3 w-full sm:w-auto"
+                                                                    class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] mt-3 w-full sm:w-auto"
                                                                     disabled=move || completing.get()
                                                                     on:click=on_complete
                                                                 >
@@ -511,7 +496,7 @@ pub fn LessonPage() -> impl IntoView {
                                                                     completing
                                                                         .get()
                                                                         .then(|| {
-                                                                            view! { <p class="mt-2 text-sm font-medium text-mih-muted">"Saving…"</p> }
+                                                                            view! { <p class="mt-2 text-sm font-medium text-foreground-600">"Saving…"</p> }
                                                                         })
                                                                 }}
                                                                 <div class="mt-3">{error_banner}</div>
@@ -521,17 +506,16 @@ pub fn LessonPage() -> impl IntoView {
                                                     }
                                                 } else {
                                                     view! {
-                                                        <div class="relative overflow-hidden rounded-2xl border border-mih-ring bg-mih-card px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] [&::before]:absolute [&::before]:inset-x-0 [&::before]:top-0 [&::before]:h-[3px] [&::before]:bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.6),transparent)] [&::before]:content-['']">
-                                                            <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-mih-brass">"Not enrolled · preview"</p>
-                                                            <p class="mt-1 text-sm text-mih-muted">
+                                                        <div class="relative overflow-hidden rounded-2xl border border-stroke-muted bg-surface-700 px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                            <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-foreground-600">"Not enrolled · preview"</p>
+                                                            <p class="mt-1 text-sm text-foreground-600">
                                                                 "You're previewing this lesson. Enroll to save progress, keep your streak and earn badges."
                                                             </p>
                                                             <A
                                                                 href=course_href.clone()
-                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] mt-3 w-full sm:w-auto"
+                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] mt-3 w-full sm:w-auto"
                                                             >
                                                                 "Go to course to enroll"
-                                                                <span aria-hidden="true">"→"</span>
                                                             </A>
                                                         </div>
                                                     }
@@ -547,14 +531,14 @@ pub fn LessonPage() -> impl IntoView {
                                                         let question_count = quiz_data.questions.len();
 
                                                         view! {
-                                                            <section class="min-w-0 space-y-4 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                            <section class="min-w-0 space-y-4 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
                                                                 <div class="flex flex-wrap items-baseline gap-3">
-                                                                    <h2 class="text-lg font-bold text-mih-ink">"Check your understanding"</h2>
-                                                                    <span class="text-xs text-mih-muted">
+                                                                    <h2 class="text-lg font-bold text-foreground-900">"Check your understanding"</h2>
+                                                                    <span class="text-xs text-foreground-600">
                                                                         {format!("{question_count} generated questions · pass at {}%", (quiz_data.passing_score * 100.0) as i32)}
                                                                     </span>
                                                                 </div>
-                                                                <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
+                                                                <hr class="border-stroke-muted" />
                                                                 {quiz_data
                                                                     .questions
                                                                     .into_iter()
@@ -573,8 +557,8 @@ pub fn LessonPage() -> impl IntoView {
                                                                         let question_id_for_radio = question_id.clone();
 
                                                                         view! {
-                                                                            <div class="rounded-[0.8rem] border border-mih-ring bg-mih-card p-[0.85rem_0.95rem]">
-                                                                                <p class="font-bold leading-snug text-mih-ink text-sm">
+                                                                            <div class="rounded-xl border border-stroke-muted bg-surface-800 p-[0.85rem_0.95rem]">
+                                                                                <p class="font-bold leading-snug text-foreground-900 text-sm">
                                                                                     {format!("{} · {}", index + 1, question.question_text)}
                                                                                 </p>
                                                                                 <div class="mt-2 grid gap-2">
@@ -586,7 +570,7 @@ pub fn LessonPage() -> impl IntoView {
                                                                                             let name = name.clone();
 
                                                                                             view! {
-                                                                                                <label class="flex cursor-pointer items-center gap-2 rounded-[0.6rem] border border-mih-ring-soft px-[0.65rem] py-[0.5rem] text-[0.88rem] text-mih-ink-2 hover:bg-mih-ivory [&_input]:accent-mih-indigo-strong">
+                                                                                                <label class="flex cursor-pointer items-center gap-2 rounded-[0.6rem] border border-stroke-muted px-[0.65rem] py-[0.5rem] text-[0.88rem] text-foreground-600 hover:bg-surface-800 [&_input]:accent-indigo-500">
                                                                                                     <input
                                                                                                         type="radio"
                                                                                                         name=name
@@ -609,7 +593,7 @@ pub fn LessonPage() -> impl IntoView {
                                                                     })
                                                                     .collect_view()}
                                                                 <button
-                                                                    class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65]"
+                                                                    class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65]"
                                                                     disabled=move || quiz_submitting.get()
                                                                     on:click=on_quiz_submit
                                                                 >
@@ -656,7 +640,7 @@ pub fn LessonPage() -> impl IntoView {
                                                         view! {
                                                             <A
                                                                 href=format!("/learn/lessons/{prev}")
-                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-mih-brass-soft bg-mih-card text-mih-ink-2 no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-ivory hover:no-underline min-h-[3rem]"
+                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-stroke-muted bg-surface-700 text-foreground-600 no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-surface-800 hover:no-underline min-h-[3rem]"
                                                             >
                                                                 "← Previous lesson"
                                                             </A>
@@ -668,7 +652,7 @@ pub fn LessonPage() -> impl IntoView {
                                                         view! {
                                                             <A
                                                                 href=format!("/learn/lessons/{next}")
-                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] min-h-[3rem] sm:col-start-2"
+                                                                attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] min-h-[3rem] sm:col-start-2"
                                                             >
                                                                 "Next lesson"
                                                                 <span aria-hidden="true">"→"</span>
@@ -685,19 +669,19 @@ pub fn LessonPage() -> impl IntoView {
                                                     .flatten()
                                                     .map(|streak_data: UserStreakOnClient| {
                                                         view! {
-                                                            <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">"Your streak"</p>
+                                                            <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-foreground-600">"Your streak"</p>
                                                                 <div class="mt-3 flex items-center gap-3">
-                                                                    <span class="grid h-[2.9rem] w-[2.4rem] flex-none place-items-center bg-[#fdf6e7] [clip-path:url(#mihrab)]" aria-hidden="true">
-                                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#b8873b">
+                                                                    <span class="grid size-11 flex-none place-items-center rounded-xl bg-orange-100 text-orange-800" aria-hidden="true">
+                                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                                                             <path d="M13 2s1 3-2 6-4 4.5-4 7a7 7 0 0 0 14 0c0-3-2-5-3-7-1.5 1.5-2 2-3 2 1-3 0-6-2-8z" />
                                                                         </svg>
                                                                     </span>
                                                                     <div class="min-w-0">
-                                                                        <p class="text-lg font-bold leading-tight text-mih-ink">
+                                                                        <p class="text-lg font-bold leading-tight text-foreground-900">
                                                                             {format!("{}-day streak", streak_data.current_streak)}
                                                                         </p>
-                                                                        <p class="text-xs text-mih-muted">
+                                                                        <p class="text-xs text-foreground-600">
                                                                             {format!("Longest run: {} days", streak_data.longest_streak)}
                                                                         </p>
                                                                     </div>
@@ -711,7 +695,7 @@ pub fn LessonPage() -> impl IntoView {
                                                                     .collect::<Vec<AchievementOnClient>>();
                                                                     if earned.is_empty() {
                                                                         view! {
-                                                                            <p class="mt-3 text-xs text-mih-muted">
+                                                                            <p class="mt-3 text-xs text-foreground-600">
                                                                                 "Earn badges by completing lessons."
                                                                             </p>
                                                                         }
@@ -723,7 +707,7 @@ pub fn LessonPage() -> impl IntoView {
                                                                                     .into_iter()
                                                                                     .map(|achievement| {
                                                                                         view! {
-                                                                                            <span class="min-w-0 flex-1 truncate rounded-[0.75rem] border border-[rgba(184,135,59,0.6)] bg-[#fdf6e7] p-[0.5rem_0.35rem] text-center text-[0.66rem] font-bold text-[#8a6a06]">{achievement.name.clone()}</span>
+                                                                                            <span class="min-w-0 flex-1 truncate rounded-lg bg-indigo-100 dark:bg-white/10 p-[0.5rem_0.35rem] text-center text-[0.66rem] font-bold text-indigo-700">{achievement.name.clone()}</span>
                                                                                         }
                                                                                     })
                                                                                     .collect_view()}
@@ -762,8 +746,8 @@ pub fn LessonPage() -> impl IntoView {
                                                         let module_title = module.title.clone();
 
                                                         view! {
-                                                            <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">
+                                                            <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-foreground-600">
                                                                     {format!("Module · {module_title}")}
                                                                 </p>
                                                                 <ol class="mt-3 grid grid-cols-1 gap-1.5 text-sm">
@@ -782,29 +766,29 @@ pub fn LessonPage() -> impl IntoView {
                                                                                     <A
                                                                                         href=href
                                                                                         attr:class=if lesson_is_current {
-                                                                                            "flex min-w-0 items-center gap-2 rounded-lg bg-[#fdf6e7] px-2 py-1.5 no-underline"
+                                                                                            "flex min-w-0 items-center gap-2 rounded-lg bg-indigo-100 dark:bg-white/10 px-2 py-1.5 no-underline"
                                                                                         } else {
                                                                                             "flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 no-underline"
                                                                                         }
                                                                                     >
                                                                                         {if lesson_is_done {
                                                                                             view! {
-                                                                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-emerald-700" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                                                                     <path d="M20 6 9 17l-5-5" />
                                                                                                 </svg>
                                                                                             }
                                                                                             .into_any()
                                                                                         } else if lesson_is_current {
-                                                                                            view! { <MihrabStar class="w-3.5 h-3.5 flex-none text-mih-brass" /> }
+                                                                                            view! { <span class="inline-block size-2.5 flex-none rounded-full bg-indigo-500" aria-hidden="true"></span> }
                                                                                             .into_any()
                                                                                         } else {
-                                                                                            view! { <span class="inline-block size-[0.62rem] rounded-full border-2 border-[#ddd3bd]" aria-hidden="true"></span> }
+                                                                                            view! { <span class="inline-block size-[0.62rem] rounded-full border-2 border-stroke-muted" aria-hidden="true"></span> }
                                                                                             .into_any()
                                                                                         }}
-                                                                                        <span class="min-w-0 flex-1 truncate text-mih-ink-2">
+                                                                                        <span class="min-w-0 flex-1 truncate text-foreground-600">
                                                                                             {format!("{}. {}", index + 1, lesson.title)}
                                                                                         </span>
-                                                                                        <span class="ml-auto whitespace-nowrap text-xs text-mih-muted">
+                                                                                        <span class="ml-auto whitespace-nowrap text-xs text-foreground-600">
                                                                                             {format!("{} min", lesson.duration_minutes)}
                                                                                         </span>
                                                                                     </A>
@@ -813,15 +797,15 @@ pub fn LessonPage() -> impl IntoView {
                                                                         })
                                                                         .collect_view()}
                                                                 </ol>
-                                                                <div class="h-[0.4rem] overflow-hidden rounded-full border border-mih-brass-soft bg-[#f1efe6] mt-3">
-                                                                    <i class="block h-full bg-[linear-gradient(90deg,#b8873b,#e0b25f)]" style=format!("width: {module_progress}%")></i>
+                                                                <div class="h-[0.4rem] overflow-hidden rounded-md bg-gray-200 mt-3">
+                                                                    <i class="block h-full bg-indigo-400" style=format!("width: {module_progress}%")></i>
                                                                 </div>
-                                                                <p class="mt-1 text-xs text-mih-muted">
+                                                                <p class="mt-1 text-xs text-foreground-600">
                                                                     {format!("Module progress · {module_done} of {module_total} done")}
                                                                 </p>
                                                                 <A
                                                                     href=course_href.clone()
-                                                                    attr:class="mt-2 inline-flex text-xs font-semibold text-sky-700 hover:underline"
+                                                                    attr:class="mt-2 inline-flex text-xs font-semibold text-sky-600 transition duration-300 ease-out hover:text-sky-700 hover:underline dark:text-sky-400 dark:hover:text-sky-300"
                                                                 >
                                                                     "Back to course →"
                                                                 </A>

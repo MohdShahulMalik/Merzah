@@ -3,7 +3,6 @@ use leptos::reactive::spawn_local;
 use leptos_router::components::A;
 use leptos_router::hooks::use_params_map;
 
-use crate::components::mihrab::{MihrabDefs, MihrabStar};
 use crate::models::education::LessonContentType;
 use crate::server_functions::education::enroll_course;
 use crate::server_functions::education::fetch_course_details;
@@ -53,16 +52,6 @@ fn initials(name: &str) -> String {
     }
 
     out
-}
-
-fn arabic_numeral(number: usize) -> String {
-    const NUMERALS: [char; 9] = ['١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-    if (1..=9).contains(&number) {
-        NUMERALS[number - 1].to_string()
-    } else {
-        number.to_string()
-    }
 }
 
 #[component]
@@ -197,21 +186,19 @@ pub fn CourseDetailPage() -> impl IntoView {
 
     view! {
         <div class="py-4 sm:py-6">
-            <MihrabDefs />
-
             <Suspense fallback=move || {
                 view! {
                     <div class="mx-auto w-full max-w-[68rem] min-w-0 animate-pulse space-y-6">
-                        <div class="h-10 w-56 rounded-xl bg-white"></div>
-                        <div class="h-64 w-full rounded-3xl border border-mih-brass-soft bg-white shadow-sm sm:h-80"></div>
+                        <div class="h-10 w-56 rounded-xl bg-surface-700"></div>
+                        <div class="h-64 w-full rounded-3xl border border-stroke-muted bg-surface-700 shadow-sm sm:h-80"></div>
                         <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
                             <div class="space-y-4">
-                                <div class="h-28 w-full rounded-2xl border border-mih-brass-soft bg-white"></div>
-                                <div class="h-40 w-full rounded-2xl border border-mih-brass-soft bg-white"></div>
+                                <div class="h-28 w-full rounded-2xl border border-stroke-muted bg-surface-700"></div>
+                                <div class="h-40 w-full rounded-2xl border border-stroke-muted bg-surface-700"></div>
                             </div>
-                            <div class="h-56 w-full rounded-2xl border border-mih-brass-soft bg-white"></div>
+                            <div class="h-56 w-full rounded-2xl border border-stroke-muted bg-surface-700"></div>
                         </div>
-                        <p class="text-sm text-mih-muted">"Loading course…"</p>
+                        <p class="text-sm text-foreground-600">"Loading course…"</p>
                     </div>
                 }
             }>
@@ -219,17 +206,17 @@ pub fn CourseDetailPage() -> impl IntoView {
                     match course.get().flatten() {
                         None => {
                             view! {
-                                <div class="mx-auto w-full max-w-[68rem] min-w-0 space-y-3 rounded-3xl border border-mih-brass-soft bg-white p-8 text-center shadow-sm">
+                                <div class="mx-auto w-full max-w-[68rem] min-w-0 space-y-3 rounded-3xl border border-stroke-muted bg-surface-700 p-8 text-center shadow-sm">
                                     <p class="text-4xl" aria-hidden="true">"🧐"</p>
-                                    <h1 class="text-xl font-bold text-mih-ink sm:text-2xl">
+                                    <h1 class="text-xl font-bold text-foreground-900 sm:text-2xl">
                                         "Course not found."
                                     </h1>
-                                    <p class="mx-auto max-w-sm text-sm text-mih-muted">
+                                    <p class="mx-auto max-w-sm text-sm text-foreground-600">
                                         "This course may have been unpublished or the link is out of date."
                                     </p>
                                     <A
                                         href="/learn"
-                                        attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65]"
+                                        attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65]"
                                     >
                                         "Browse courses"
                                         <span aria-hidden="true">"→"</span>
@@ -318,74 +305,62 @@ pub fn CourseDetailPage() -> impl IntoView {
                                 <article class="mx-auto w-full max-w-[68rem] min-w-0 space-y-6">
                                     <A
                                         href="/learn"
-                                        attr:class="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium text-sky-700 hover:text-sky-800 dark:text-sky-300"
+                                        attr:class="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium text-sky-600 transition duration-300 ease-out hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
                                     >
                                         <span aria-hidden="true">"←"</span>
                                         "Back to Learn"
                                     </A>
 
-                                    <header class="relative overflow-hidden rounded-[1.5rem] border border-mih-brass-soft bg-mih-card p-6 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                        <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-[0.08] text-[#4c1d95]" aria-hidden="true">
-                                            <rect width="100%" height="100%" fill="url(#mihrab-lattice)" />
-                                        </svg>
+                                    <header class="relative overflow-hidden rounded-2xl border border-stroke-muted bg-surface-700 p-6 shadow-md">
                                         <div class="relative grid items-start gap-6 md:grid-cols-[13rem_minmax(0,1fr)]">
                                             <div class="w-44 sm:w-48 md:w-full">
-                                                <div class="relative p-[0.35rem] [clip-path:url(#mihrab)] bg-[linear-gradient(170deg,rgba(184,135,59,0.55),rgba(184,135,59,0.12))]">
-                                                    <div class="relative aspect-[3/4] w-full overflow-hidden grid place-items-center [clip-path:url(#mihrab)] bg-[radial-gradient(120%_140%_at_50%_-10%,#4c1d95_0%,#2e1065_45%,#1e1b4b_100%)]">
-                                                        {match thumbnail {
-                                                            Some(src) => view! {
-                                                                <img src=src alt=course_title.clone() class="block h-full w-full object-cover" />
-                                                            }
-                                                                .into_any(),
-                                                            None => view! {
-                                                                <>
-                                                                    <svg class="pointer-events-none absolute inset-0 h-full w-full text-mih-star opacity-20" aria-hidden="true">
-                                                                        <rect width="100%" height="100%" fill="url(#mihrab-lattice)" />
-                                                                    </svg>
-                                                                    <span class="relative px-[0.85rem] text-center font-amiri text-[1.75rem] leading-[1.6] text-mih-crown [direction:rtl] [unicode-bidi:isolate]">
-                                                                        "علم التجويد"
-                                                                    </span>
-                                                                </>
-                                                            }
-                                                                .into_any(),
-                                                        }}
-                                                    </div>
+                                                <div class="relative aspect-[3/4] w-full overflow-hidden rounded-xl border border-stroke-muted bg-sky-100 dark:bg-sky-400/10">
+                                                    {match thumbnail {
+                                                        Some(src) => view! {
+                                                            <img src=src alt=course_title.clone() class="block h-full w-full object-cover" />
+                                                        }
+                                                            .into_any(),
+                                                        None => view! {
+                                                            <span class="grid h-full w-full place-items-center text-6xl" aria-hidden="true">"📖"</span>
+                                                        }
+                                                            .into_any(),
+                                                    }}
                                                 </div>
                                             </div>
 
                                             <div class="min-w-0">
-                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">"Merzah · Learning"</p>
-                                                <h1 class="mt-1 break-words text-3xl font-bold leading-tight text-mih-ink text-balance sm:text-4xl">
+                                                <span class="inline-flex items-center gap-2 rounded-lg bg-indigo-400 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-wide text-white shadow-sm">"Merzah · Learning"</span>
+                                                <h1 class="mt-1 break-words text-3xl font-bold leading-tight text-foreground-900 text-balance sm:text-4xl">
                                                     {detail.title.clone()}
                                                 </h1>
-                                                <p class="mt-[0.35rem] max-w-2xl break-words text-base leading-[1.55] text-mih-muted sm:text-lg">
+                                                <p class="mt-[0.35rem] max-w-2xl break-words text-base leading-[1.55] text-foreground-600 sm:text-lg">
                                                     {short_description}
                                                 </p>
 
                                                 <div class="mt-4 flex min-w-0 flex-wrap gap-2">
-                                                    <span class="inline-flex items-center gap-[0.35rem] rounded-full border border-mih-brass-soft bg-mih-ivory px-3 py-[0.3rem] text-xs font-semibold text-mih-ink-2">{level_label}</span>
+                                                    <span class="inline-flex items-center gap-[0.35rem] rounded-lg border border-stroke-muted bg-surface-800 px-3 py-[0.3rem] text-xs font-semibold text-foreground-600">{level_label}</span>
                                                     {has_preview
                                                         .then(|| {
-                                                            view! { <span class="inline-flex items-center gap-[0.35rem] rounded-full border border-mih-brass-soft bg-mih-ivory px-3 py-[0.3rem] text-xs font-semibold text-mih-ink-2">"Free preview available"</span> }
+                                                            view! { <span class="inline-flex items-center gap-[0.35rem] rounded-lg border border-stroke-muted bg-surface-800 px-3 py-[0.3rem] text-xs font-semibold text-foreground-600">"Free preview available"</span> }
                                                         })}
                                                 </div>
 
-                                                <div class="mt-5 grid grid-cols-4 max-sm:grid-cols-2 overflow-hidden rounded-[0.9rem] border border-mih-brass-soft bg-mih-ivory">
+                                                <div class="mt-5 grid grid-cols-4 max-sm:grid-cols-2 overflow-hidden rounded-[0.9rem] border border-stroke-muted bg-surface-800">
                                                     <div class="min-w-0 px-[0.85rem] py-[0.65rem]">
                                                         <b class="block text-[1.15rem] leading-[1.2]">{duration_label.clone()}</b>
-                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-mih-brass">"Duration"</span>
+                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-foreground-600">"Duration"</span>
                                                     </div>
-                                                    <div class="min-w-0 border-l border-mih-brass-soft px-[0.85rem] py-[0.65rem]">
+                                                    <div class="min-w-0 border-l border-stroke-muted px-[0.85rem] py-[0.65rem]">
                                                         <b class="block text-[1.15rem] leading-[1.2]">{lesson_label}</b>
-                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-mih-brass">"Lessons"</span>
+                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-foreground-600">"Lessons"</span>
                                                     </div>
-                                                    <div class="min-w-0 border-l border-mih-brass-soft max-sm:border-l-0 max-sm:border-t max-sm:border-mih-brass-soft px-[0.85rem] py-[0.65rem]">
+                                                    <div class="min-w-0 border-l border-stroke-muted max-sm:border-l-0 max-sm:border-t max-sm:border-stroke-muted px-[0.85rem] py-[0.65rem]">
                                                         <b class="block text-[1.15rem] leading-[1.2]">{module_label}</b>
-                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-mih-brass">"Modules"</span>
+                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-foreground-600">"Modules"</span>
                                                     </div>
-                                                    <div class="min-w-0 border-l border-mih-brass-soft max-sm:border-t max-sm:border-mih-brass-soft px-[0.85rem] py-[0.65rem]">
+                                                    <div class="min-w-0 border-l border-stroke-muted max-sm:border-t max-sm:border-stroke-muted px-[0.85rem] py-[0.65rem]">
                                                         <b class="block text-[1.15rem] leading-[1.2]">{enrolled_label}</b>
-                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-mih-brass">"Enrolled"</span>
+                                                        <span class="mt-[0.15rem] block text-[0.62rem] font-bold uppercase tracking-[0.16em] text-foreground-600">"Enrolled"</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -393,33 +368,32 @@ pub fn CourseDetailPage() -> impl IntoView {
                                     </header>
 
                                     <section class="space-y-2">
-                                        <div class="flex items-center gap-[0.6rem] text-mih-brass">
-                                            <h2 class="text-lg font-bold text-mih-ink">"Enrollment"</h2>
-                                            <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
-                                        </div>
+                                        <h2 class="text-lg font-bold text-foreground-900">"Enrollment"</h2>
 
                                         {match percent {
                                             Some(value) if value >= 100.0 => {
                                                 view! {
-                                                    <div class="relative overflow-hidden rounded-2xl border border-mih-ring bg-mih-card px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] [&::before]:absolute [&::before]:inset-x-0 [&::before]:top-0 [&::before]:h-[3px] [&::before]:bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.6),transparent)] [&::before]:content-['']">
-                                                        <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-[#15803d]">"Completed"</p>
+                                                    <div class="relative overflow-hidden rounded-2xl border border-stroke-muted bg-surface-700 px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                        <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-emerald-700">"Completed"</p>
                                                         <div class="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                                             <div>
-                                                                <h3 class="text-base font-bold text-mih-ink">
+                                                                <h3 class="text-base font-bold text-foreground-900">
                                                                     "100% — course completed"
                                                                 </h3>
-                                                                <p class="mt-1 text-sm text-mih-muted">
+                                                                <p class="mt-1 text-sm text-foreground-600">
                                                                     "Every lesson is done. Revisit any module below whenever you want to refresh."
                                                                 </p>
-                                                                <div class="h-[0.4rem] max-w-xs overflow-hidden rounded-full border border-mih-brass-soft bg-[#f1efe6] mt-3">
-                                                                    <i class="block h-full bg-[linear-gradient(90deg,#b8873b,#e0b25f)]" style="width: 100%"></i>
+                                                                <div class="h-[0.4rem] max-w-xs overflow-hidden rounded-md bg-gray-200 mt-3">
+                                                                    <i class="block h-full bg-indigo-400" style="width: 100%"></i>
                                                                 </div>
-                                                                <p class="mt-1 text-xs font-medium text-mih-muted">
+                                                                <p class="mt-1 text-xs font-medium text-foreground-600">
                                                                     {format!("{completed_label} of {total_label} lessons done")}
                                                                 </p>
                                                             </div>
-                                                            <span class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-[rgba(184,135,59,0.5)] bg-mih-ivory text-[#8a6a06] no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 flex-none">
-                                                                <MihrabStar class="w-4 h-4"/>
+                                                            <span class="inline-flex flex-none items-center justify-center gap-2 rounded-lg bg-indigo-400 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">
+                                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                                    <path d="M20 6 9 17l-5-5" />
+                                                                </svg>
                                                                 "Badge earned"
                                                             </span>
                                                         </div>
@@ -429,25 +403,25 @@ pub fn CourseDetailPage() -> impl IntoView {
                                             }
                                             Some(value) => {
                                                 view! {
-                                                    <div class="relative overflow-hidden rounded-2xl border border-mih-ring bg-mih-card px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] [&::before]:absolute [&::before]:inset-x-0 [&::before]:top-0 [&::before]:h-[3px] [&::before]:bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.6),transparent)] [&::before]:content-['']">
-                                                        <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-mih-indigo-strong">"Enrolled · in progress"</p>
+                                                    <div class="relative overflow-hidden rounded-2xl border border-stroke-muted bg-surface-700 px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                        <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-indigo-600">"Enrolled · in progress"</p>
                                                         <div class="mt-2 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                                                             <div class="min-w-0">
-                                                                <h3 class="text-base font-bold text-mih-ink">
+                                                                <h3 class="text-base font-bold text-foreground-900">
                                                                     {format!("{value:.0}% complete")}
                                                                 </h3>
                                                                 {next_lesson_title
                                                                     .map(|next| {
                                                                         view! {
-                                                                            <p class="mt-1 break-words text-sm text-mih-muted">
+                                                                            <p class="mt-1 break-words text-sm text-foreground-600">
                                                                                 "Next up — " {next}
                                                                             </p>
                                                                         }
                                                                     })}
-                                                                <div class="mt-3 h-[0.4rem] max-w-xs overflow-hidden rounded-full border border-mih-brass-soft bg-[#f1efe6]">
-                                                                    <i class="block h-full bg-[linear-gradient(90deg,#6366f1,#4338ca)]" style=format!("width: {value:.0}%")></i>
+                                                                <div class="mt-3 h-[0.4rem] max-w-xs overflow-hidden rounded-md bg-gray-200">
+                                                                    <i class="block h-full bg-indigo-400" style=format!("width: {value:.0}%")></i>
                                                                 </div>
-                                                                <p class="mt-1 text-xs font-medium text-mih-muted">
+                                                                <p class="mt-1 text-xs font-medium text-foreground-600">
                                                                     {format!("{completed_label} of {total_label} lessons done")}
                                                                 </p>
                                                             </div>
@@ -458,10 +432,9 @@ pub fn CourseDetailPage() -> impl IntoView {
                                                                     view! {
                                                                         <A
                                                                             href=href
-                                                                            attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] flex-none"
+                                                                            attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] flex-none"
                                                                         >
                                                                             "Continue"
-                                                                            <span aria-hidden="true">"→"</span>
                                                                         </A>
                                                                     }
                                                                 })}
@@ -472,30 +445,29 @@ pub fn CourseDetailPage() -> impl IntoView {
                                             }
                                             None => {
                                                 view! {
-                                                    <div class="relative overflow-hidden rounded-2xl border border-mih-ring bg-mih-card px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] [&::before]:absolute [&::before]:inset-x-0 [&::before]:top-0 [&::before]:h-[3px] [&::before]:bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.6),transparent)] [&::before]:content-['']">
-                                                        <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-mih-brass">"Ready when you are"</p>
+                                                    <div class="relative overflow-hidden rounded-2xl border border-stroke-muted bg-surface-700 px-[1.25rem] py-[1.1rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                        <p class="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-foreground-600">"Ready when you are"</p>
                                                         <div class="mt-2 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                                                             <div class="min-w-0">
-                                                                <h3 class="text-base font-bold text-mih-ink">
+                                                                <h3 class="text-base font-bold text-foreground-900">
                                                                     "Enroll and begin"
                                                                 </h3>
-                                                                <p class="mt-1 break-words text-sm text-mih-muted">
+                                                                <p class="mt-1 break-words text-sm text-foreground-600">
                                                                     "Free to join. Progress, streak and badges are saved to your Merzah account."
                                                                 </p>
-                                                                <div class="h-[0.4rem] max-w-xs overflow-hidden rounded-full border border-mih-brass-soft bg-[#f1efe6] mt-3">
-                                                                    <i class="block h-full bg-[linear-gradient(90deg,#b8873b,#e0b25f)]" style="width: 0%"></i>
+                                                                <div class="h-[0.4rem] max-w-xs overflow-hidden rounded-md bg-gray-200 mt-3">
+                                                                    <i class="block h-full bg-indigo-400" style="width: 0%"></i>
                                                                 </div>
-                                                                <p class="mt-1 text-xs font-medium text-mih-muted">
+                                                                <p class="mt-1 text-xs font-medium text-foreground-600">
                                                                     {format!("0% · 0 of {lesson_total} lessons")}
                                                                 </p>
                                                             </div>
                                                             <button
-                                                                class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] flex-none"
+                                                                class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] flex-none"
                                                                 disabled=move || enrolling.get()
                                                                 on:click=on_enroll
                                                             >
                                                                 "Enroll and begin"
-                                                                <span aria-hidden="true">"→"</span>
                                                             </button>
                                                         </div>
                                                         {move || {
@@ -503,7 +475,7 @@ pub fn CourseDetailPage() -> impl IntoView {
                                                                 .get()
                                                                 .then(|| {
                                                                     view! {
-                                                                        <p class="mt-3 text-sm font-medium text-mih-muted">"Enrolling…"</p>
+                                                                        <p class="mt-3 text-sm font-medium text-foreground-600">"Enrolling…"</p>
                                                                     }
                                                                 })
                                                         }}
@@ -517,33 +489,31 @@ pub fn CourseDetailPage() -> impl IntoView {
 
                                     <div class="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
                                         <div class="min-w-0 space-y-6">
-                                            <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                                <p class="font-amiri text-xl [direction:rtl] text-mih-brass [unicode-bidi:isolate]" >"عن الدورة"</p>
-                                                <h2 class="mt-0.5 text-lg font-bold text-mih-ink">"About this course"</h2>
-                                                <hr class="my-3 h-px border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
-                                                <p class="max-w-[68ch] whitespace-pre-line break-words leading-relaxed text-mih-ink-2">
+                                            <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                <h2 class="text-lg font-bold text-foreground-900">"About this course"</h2>
+                                                <hr class="my-3 border-stroke-muted" />
+                                                <p class="max-w-[68ch] whitespace-pre-line break-words leading-relaxed text-foreground-600">
                                                     {detail.description.clone()}
                                                 </p>
                                             </section>
 
                                             <section class="min-w-0 space-y-4">
-                                                <div class="flex items-center gap-[0.6rem] text-mih-brass">
-                                                    <h2 class="text-lg font-bold text-mih-ink">"Curriculum"</h2>
-                                                    <span class="text-xs font-medium text-mih-muted">
+                                                <div class="flex min-w-0 flex-wrap items-end justify-between gap-2">
+                                                    <h2 class="text-lg font-bold text-foreground-900">"Curriculum"</h2>
+                                                    <span class="text-xs font-medium uppercase tracking-wide text-foreground-600">
                                                         {format!("{module_count} modules · {lesson_total} lessons · {duration_label}")}
                                                     </span>
-                                                    <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
                                                 </div>
 
                                                 {(lesson_total == 0)
                                                     .then(|| {
                                                         view! {
-                                                            <div class="rounded-2xl border border-dashed border-mih-brass-soft bg-white p-8 text-center">
+                                                            <div class="rounded-2xl border border-dashed border-stroke-muted bg-surface-700 p-8 text-center">
                                                                 <p class="text-3xl" aria-hidden="true">"🪴"</p>
-                                                                <p class="mt-2 text-sm font-semibold text-mih-ink">
+                                                                <p class="mt-2 text-sm font-semibold text-foreground-900">
                                                                     "No modules published yet."
                                                                 </p>
-                                                                <p class="mt-1 text-sm text-mih-muted">
+                                                                <p class="mt-1 text-sm text-foreground-600">
                                                                     "The educator is still shaping this curriculum — check back soon."
                                                                 </p>
                                                             </div>
@@ -565,14 +535,14 @@ pub fn CourseDetailPage() -> impl IntoView {
                                                             let open = module_index <= first_incomplete_module_index;
 
                                                             view! {
-                                                                <details class="overflow-hidden rounded-2xl border border-mih-ring bg-mih-card shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]" open=open>
-                                                                    <summary class="flex cursor-pointer list-none items-center gap-[0.85rem] border-b border-transparent px-[1.1rem] py-[0.85rem] [&::-webkit-details-marker]:hidden [details[open]_&]:border-mih-brass/30">
-                                                                        <span class="grid h-[2.6rem] w-[2.1rem] flex-none place-items-center bg-[linear-gradient(170deg,#4c1d95,#1e1b4b)] font-amiri text-[1rem] font-bold text-[#fde68a] [direction:rtl] [clip-path:url(#mihrab-niche)] [unicode-bidi:isolate]">{arabic_numeral(module_index + 1)}</span>
+                                                                <details class="overflow-hidden rounded-2xl border border-stroke-muted bg-surface-700 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]" open=open>
+                                                                    <summary class="flex cursor-pointer list-none items-center gap-[0.85rem] border-b border-transparent px-[1.1rem] py-[0.85rem] [&::-webkit-details-marker]:hidden [details[open]_&]:border-stroke-muted">
+                                                                        <span class="grid size-10 flex-none place-items-center rounded-full bg-indigo-400 text-sm font-bold text-white">{module_index + 1}</span>
                                                                         <span class="min-w-0">
-                                                                            <h4 class="text-base font-bold text-mih-ink">{module.title.clone()}</h4>
-                                                                            <span class="text-xs text-mih-muted">{format!("{lesson_total_module} lessons")}</span>
+                                                                            <h4 class="text-base font-bold text-foreground-900">{module.title.clone()}</h4>
+                                                                            <span class="text-xs text-foreground-600">{format!("{lesson_total_module} lessons")}</span>
                                                                         </span>
-                                                                        <span class="ml-auto whitespace-nowrap text-sm font-medium text-mih-brass">
+                                                                        <span class="ml-auto whitespace-nowrap text-sm font-medium text-foreground-600">
                                                                             {format!("{module_minutes} min")}
                                                                         </span>
                                                                     </summary>
@@ -590,9 +560,9 @@ pub fn CourseDetailPage() -> impl IntoView {
                                                                                         .map(|(_, id, _)| id);
                                                                                 let href = format!("/learn/lessons/{}", lesson.id);
                                                                                 let lesson_row_class = if is_current {
-                                                                                    "flex min-h-[3.4rem] items-center gap-[0.8rem] border-t border-mih-ring-soft px-[1.1rem] py-[0.72rem] text-inherit no-underline first:border-t-0 bg-[#fdf6e7] hover:bg-[#fbeed3] focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-mih-indigo transition-colors duration-200"
+                                                                                    "flex min-h-[3.4rem] items-center gap-[0.8rem] border-t border-stroke-muted px-[1.1rem] py-[0.72rem] text-inherit no-underline first:border-t-0 bg-indigo-100 dark:bg-white/5 hover:bg-indigo-200 dark:hover:bg-white/10 focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-indigo-500 transition-colors duration-200"
                                                                                 } else {
-                                                                                    "flex min-h-[3.4rem] items-center gap-[0.8rem] border-t border-mih-ring-soft px-[1.1rem] py-[0.72rem] text-inherit no-underline first:border-t-0 hover:bg-mih-ivory focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-mih-indigo transition-colors duration-200"
+                                                                                    "flex min-h-[3.4rem] items-center gap-[0.8rem] border-t border-stroke-muted px-[1.1rem] py-[0.72rem] text-inherit no-underline first:border-t-0 hover:bg-surface-800 focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-indigo-500 transition-colors duration-200"
                                                                                 };
 
                                                                                 view! {
@@ -600,40 +570,40 @@ pub fn CourseDetailPage() -> impl IntoView {
                                                                                         <span class="grid size-6 flex-none place-items-center">
                                                                                             {if is_completed {
                                                                                                 view! {
-                                                                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-emerald-700" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                                                                         <path d="M20 6 9 17l-5-5" />
                                                                                                     </svg>
                                                                                                 }
                                                                                                 .into_any()
                                                                                             } else if is_current {
-                                                                                                view! { <MihrabStar class="w-5 h-5 text-mih-brass" /> }
+                                                                                                view! { <span class="inline-block size-3 rounded-full bg-indigo-500" aria-hidden="true"></span> }
                                                                                                     .into_any()
                                                                                             } else {
-                                                                                                view! { <span class="inline-block size-[0.62rem] rounded-full border-2 border-[#ddd3bd]" aria-hidden="true"></span> }
+                                                                                                view! { <span class="inline-block size-[0.62rem] rounded-full border-2 border-stroke-muted" aria-hidden="true"></span> }
                                                                                                     .into_any()
                                                                                             }}
                                                                                         </span>
                                                                                         <span class="min-w-0 flex-1">
-                                                                                            <span class="block break-words text-sm font-semibold text-mih-ink">
+                                                                                            <span class="block break-words text-sm font-semibold text-foreground-900">
                                                                                                 {lesson.title.clone()}
                                                                                             </span>
                                                                                             <span class="mt-1 flex flex-wrap gap-1.5">
-                                                                                                <span class="inline-flex items-center gap-1 rounded-full border border-mih-brass-soft bg-mih-ivory px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-mih-muted">{content_type_label(&lesson.content_type)}</span>
+                                                                                                <span class="inline-flex items-center gap-1 rounded-lg border border-stroke-muted bg-surface-800 px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-foreground-600">{content_type_label(&lesson.content_type)}</span>
                                                                                                 {is_preview
                                                                                                     .then(|| {
-                                                                                                        view! { <span class="inline-flex items-center gap-1 rounded-full border border-[rgba(184,135,59,0.55)] bg-[#fdf6e7] px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-[#8a6a06]">"Free preview"</span> }
+                                                                                                        view! { <span class="inline-flex items-center gap-1 rounded-lg bg-indigo-100 px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-indigo-700">"Free preview"</span> }
                                                                                                     })}
                                                                                                 {is_completed
                                                                                                     .then(|| {
-                                                                                                        view! { <span class="inline-flex items-center gap-1 rounded-full border border-[#bbf7d0] bg-[#ecfdf5] px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-[#166534]">"Done"</span> }
+                                                                                                        view! { <span class="inline-flex items-center gap-1 rounded-lg bg-emerald-100 px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-emerald-700">"Done"</span> }
                                                                                                     })}
                                                                                                 {is_current
                                                                                                     .then(|| {
-                                                                                                        view! { <span class="inline-flex items-center gap-1 rounded-full border border-[#c7d2fe] bg-[#eef2ff] px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-mih-indigo-strong">"Current · playing"</span> }
+                                                                                                        view! { <span class="inline-flex items-center gap-1 rounded-lg bg-indigo-100 px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-indigo-700">"Current · playing"</span> }
                                                                                                     })}
                                                                                             </span>
                                                                                         </span>
-                                                                                        <span class="whitespace-nowrap text-xs font-medium text-mih-muted">
+                                                                                        <span class="whitespace-nowrap text-xs font-medium text-foreground-600">
                                                                                             {format!("{} min", lesson.duration_minutes)}
                                                                                         </span>
                                                                                     </a>
@@ -650,43 +620,43 @@ pub fn CourseDetailPage() -> impl IntoView {
                                         </div>
 
                                         <aside class="min-w-0 space-y-4 lg:sticky lg:top-6">
-                                            <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">"Educator"</p>
+                                            <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-foreground-600">"Educator"</p>
                                                 <div class="mt-3 flex items-center gap-3">
-                                                    <span class="grid h-[3.2rem] w-[2.6rem] flex-none place-items-center bg-[linear-gradient(170deg,#4c1d95,#1e1b4b)] font-amiri text-[1.1rem] font-bold text-[#fde68a] [direction:rtl] [clip-path:url(#mihrab)] [unicode-bidi:isolate]">
+                                                    <span class="grid size-12 flex-none place-items-center rounded-full bg-sky-200 text-sm font-semibold text-sky-700 dark:bg-sky-400/20 dark:text-sky-400">
                                                         {educator_initials}
                                                     </span>
                                                     <div class="min-w-0">
-                                                        <h3 class="break-words font-bold leading-snug text-mih-ink">
+                                                        <h3 class="break-words font-bold leading-snug text-foreground-900">
                                                             {educator_name}
                                                         </h3>
-                                                        <p class="text-xs text-mih-muted">"Curriculum educator"</p>
+                                                        <p class="text-xs text-foreground-600">"Curriculum educator"</p>
                                                     </div>
                                                 </div>
                                             </section>
 
-                                            <section class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-mih-brass">"At a glance"</p>
+                                            <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                <p class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-foreground-600">"At a glance"</p>
                                                 <ul class="mt-3 grid gap-2 text-sm">
                                                     <li class="flex items-baseline justify-between gap-3">
-                                                        <span class="text-mih-muted">"Level"</span>
-                                                        <b class="text-mih-ink-2">{format!("{:?}", detail.level)}</b>
+                                                        <span class="text-foreground-600">"Level"</span>
+                                                        <b class="text-foreground-900">{format!("{:?}", detail.level)}</b>
                                                     </li>
                                                     <li class="flex items-baseline justify-between gap-3">
-                                                        <span class="text-mih-muted">"Duration"</span>
-                                                        <b class="text-mih-ink-2">{format_duration(detail.duration_minutes)}</b>
+                                                        <span class="text-foreground-600">"Duration"</span>
+                                                        <b class="text-foreground-900">{format_duration(detail.duration_minutes)}</b>
                                                     </li>
                                                     <li class="flex items-baseline justify-between gap-3">
-                                                        <span class="text-mih-muted">"Lessons"</span>
-                                                        <b class="text-mih-ink-2">{lesson_total}</b>
+                                                        <span class="text-foreground-600">"Lessons"</span>
+                                                        <b class="text-foreground-900">{lesson_total}</b>
                                                     </li>
                                                     <li class="flex items-baseline justify-between gap-3">
-                                                        <span class="text-mih-muted">"Modules"</span>
-                                                        <b class="text-mih-ink-2">{module_count}</b>
+                                                        <span class="text-foreground-600">"Modules"</span>
+                                                        <b class="text-foreground-900">{module_count}</b>
                                                     </li>
                                                     <li class="flex items-baseline justify-between gap-3">
-                                                        <span class="text-mih-muted">"Enrolled"</span>
-                                                        <b class="text-mih-ink-2">{detail.enrollment_count}</b>
+                                                        <span class="text-foreground-600">"Enrolled"</span>
+                                                        <b class="text-foreground-900">{detail.enrollment_count}</b>
                                                     </li>
                                                 </ul>
                                             </section>
@@ -694,15 +664,11 @@ pub fn CourseDetailPage() -> impl IntoView {
                                     </div>
 
                                     <section class="min-w-0 space-y-4">
-                                        <div class="flex items-center gap-[0.6rem] text-mih-brass">
-                                            <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
-                                            <h2 class="text-lg font-bold text-mih-ink">"Recommended next"</h2>
-                                            <hr class="h-px flex-1 border-0 bg-[linear-gradient(90deg,transparent,rgba(184,135,59,0.55),transparent)]" />
-                                        </div>
+                                        <h2 class="text-lg font-bold text-foreground-900">"Recommended next"</h2>
                                         {if rec_entries.is_empty() {
                                             view! {
-                                                <div class="min-w-0 rounded-2xl border border-dashed border-mih-brass-soft bg-white p-6 text-center">
-                                                    <p class="text-sm text-mih-muted">
+                                                <div class="min-w-0 rounded-2xl border border-dashed border-stroke-muted bg-surface-700 p-6 text-center">
+                                                    <p class="text-sm text-foreground-600">
                                                         "More courses are being curated — check back soon."
                                                     </p>
                                                 </div>
@@ -718,29 +684,25 @@ pub fn CourseDetailPage() -> impl IntoView {
                                                             let level_label = format!("{:?}", entry.level);
 
                                                             view! {
-                                                                <article class="min-w-0 rounded-2xl border border-mih-brass-soft bg-mih-card p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                                                    <div class="relative grid h-28 place-items-center overflow-hidden rounded-xl bg-linear-to-br from-violet-800 to-indigo-950">
-                                                                        <svg class="absolute inset-0 h-full w-full opacity-20" aria-hidden="true">
-                                                                            <rect width="100%" height="100%" fill="url(#mihrab-lattice)" style="color:#fde68a" />
-                                                                        </svg>
-                                                                        <span class="relative text-3xl text-mih-crown">"✦"</span>
+                                                                <article class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
+                                                                    <div class="grid h-28 place-items-center overflow-hidden rounded-xl bg-sky-100 text-4xl dark:bg-sky-400/10" aria-hidden="true">
+                                                                        "📖"
                                                                     </div>
                                                                     <div class="mt-3 flex flex-wrap gap-1.5">
-                                                                        <span class="inline-flex items-center gap-1 rounded-full border border-mih-brass-soft bg-mih-ivory px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-mih-muted">{level_label}</span>
-                                                                        <span class="inline-flex items-center gap-1 rounded-full border border-mih-brass-soft bg-mih-ivory px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-mih-muted">{format!("{} lessons", entry.lesson_count)}</span>
+                                                                        <span class="inline-flex items-center gap-1 rounded-lg border border-stroke-muted bg-surface-800 px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-foreground-600">{level_label}</span>
+                                                                        <span class="inline-flex items-center gap-1 rounded-lg border border-stroke-muted bg-surface-800 px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-foreground-600">{format!("{} lessons", entry.lesson_count)}</span>
                                                                     </div>
-                                                                    <h3 class="mt-2 break-words font-bold leading-snug text-mih-ink">
+                                                                    <h3 class="mt-2 break-words font-bold leading-snug text-foreground-900">
                                                                         {entry.title.clone()}
                                                                     </h3>
-                                                                    <p class="mt-1 break-words text-xs text-mih-muted">
+                                                                    <p class="mt-1 break-words text-xs text-foreground-600">
                                                                         {entry.educator_name.clone()}
                                                                     </p>
                                                                     <A
                                                                         href=href
-                                                                        attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-[0.8rem] font-bold text-[0.9rem] border border-transparent bg-mih-indigo-strong text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-mih-indigo-deep hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] mt-3 w-full"
+                                                                        attr:class="inline-flex items-center justify-center gap-2 min-h-11 px-[1.15rem] rounded-xl font-bold text-[0.9rem] border border-transparent bg-indigo-400 text-white no-underline transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-indigo-500 hover:no-underline disabled:cursor-not-allowed disabled:opacity-[0.65] mt-3 w-full"
                                                                     >
                                                                         "View course"
-                                                                        <span aria-hidden="true">"→"</span>
                                                                     </A>
                                                                 </article>
                                                             }
