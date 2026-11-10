@@ -36,22 +36,6 @@ pub fn PrayerCard(
             <div class = "grid grid-cols-[1fr_auto_1fr] items-center gap-1 sm:gap-2">
                 <div class = "min-w-0 text-center">
                     <span class = "block whitespace-nowrap text-lg sm:text-[1.35rem] font-semibold leading-none text-foreground-900">
-                        {jamat_main}
-                    </span>
-                    <Show when=move || jamat_has_meridiem>
-                        <span class = "mt-1 block text-[0.7rem] font-bold uppercase leading-none tracking-[0.22em] text-foreground-600">
-                            {jamat_meridiem_text.clone()}
-                        </span>
-                    </Show>
-                    <span class = "mt-1.5 block text-[0.65rem] font-medium uppercase leading-none tracking-[0.16em] text-foreground-600">
-                        "Iqamah"
-                    </span>
-                </div>
-
-                <div class = "h-14 w-px rounded-full bg-gradient-to-b from-transparent via-stroke-muted to-transparent"></div>
-
-                <div class = "min-w-0 text-center">
-                    <span class = "block whitespace-nowrap text-lg sm:text-[1.35rem] font-semibold leading-none text-foreground-900">
                         {adhan_main}
                     </span>
                     <Show when=move || adhan_has_meridiem>
@@ -61,6 +45,22 @@ pub fn PrayerCard(
                     </Show>
                     <span class = "mt-1.5 block text-[0.65rem] font-medium uppercase leading-none tracking-[0.16em] text-foreground-600">
                         "Adhan"
+                    </span>
+                </div>
+
+                <div class = "h-14 w-px rounded-full bg-gradient-to-b from-transparent via-stroke-muted to-transparent"></div>
+
+                <div class = "min-w-0 text-center">
+                    <span class = "block whitespace-nowrap text-lg sm:text-[1.35rem] font-semibold leading-none text-foreground-900">
+                        {jamat_main}
+                    </span>
+                    <Show when=move || jamat_has_meridiem>
+                        <span class = "mt-1 block text-[0.7rem] font-bold uppercase leading-none tracking-[0.22em] text-foreground-600">
+                            {jamat_meridiem_text.clone()}
+                        </span>
+                    </Show>
+                    <span class = "mt-1.5 block text-[0.65rem] font-medium uppercase leading-none tracking-[0.16em] text-foreground-600">
+                        "Iqamah"
                     </span>
                 </div>
 
