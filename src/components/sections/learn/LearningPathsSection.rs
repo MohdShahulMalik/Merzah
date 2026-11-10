@@ -8,21 +8,21 @@ use crate::server_functions::education_roadmap::fetch_roadmap_detail;
 const ICONS: [&str; 4] = ["🧭", "🗺️", "🚀", "📚"];
 
 const TITLE_CLASSES: [&str; 4] = [
-    "text-purple-900 dark:text-purple-100",
+    "text-indigo-900 dark:text-indigo-100",
     "text-indigo-900 dark:text-indigo-100",
     "text-sky-900 dark:text-sky-100",
     "text-emerald-900 dark:text-emerald-100",
 ];
 
 const DESCRIPTION_CLASSES: [&str; 4] = [
-    "text-purple-700 dark:text-purple-300",
+    "text-indigo-700 dark:text-indigo-300",
     "text-indigo-700 dark:text-indigo-300",
     "text-sky-700 dark:text-sky-300",
     "text-emerald-700 dark:text-emerald-300",
 ];
 
 const ICON_CLASSES: [&str; 4] = [
-    "bg-purple-500/15 text-purple-600 dark:text-purple-300",
+    "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300",
     "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300",
     "bg-sky-500/15 text-sky-600 dark:text-sky-300",
     "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300",

@@ -336,10 +336,10 @@ pub fn EducationalResourceCard(
                 <div class="pointer-events-none absolute inset-y-4 left-0 w-px bg-linear-to-b from-transparent via-sky-300 to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"></div>
 
                 <div class="flex flex-wrap gap-2">
-                    <span class="rounded-full bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74] transition-colors duration-300 ease-out group-hover:text-[#4c1d95]">
+                    <span class="rounded-lg bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74] transition-colors duration-300 ease-out group-hover:text-[#4c1d95]">
                         {lesson_count}
                     </span>
-                    <span class="rounded-full bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74] transition-colors duration-300 ease-out group-hover:text-[#4c1d95]">
+                    <span class="rounded-lg bg-[#e8edff] px-2 py-1 text-[0.7rem] font-medium text-[#211c74] transition-colors duration-300 ease-out group-hover:text-[#4c1d95]">
                         {level}
                     </span>
                 </div>

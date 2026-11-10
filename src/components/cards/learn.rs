@@ -30,7 +30,7 @@ pub fn ContinueLearningCard(
                 </div>
                 <div class = "min-w-0 items-center justify-center gap-6 w-full flex flex-col sm:flex-row">
                     <div class="min-w-0 w-full flex-1">
-                        <span class="mb-3 inline-flex rounded-full bg-purple-600 px-3 py-1 text-xs font-semibold uppercase text-white">
+                        <span class="mb-3 inline-flex rounded-lg bg-indigo-400 px-3 py-1 text-xs font-semibold uppercase text-white">
                             {status}
                         </span>
 
@@ -60,9 +60,9 @@ pub fn ContinueLearningCard(
                                 <span class="text-sm font-bold text-foreground-900">{progress_percent}"%"</span>
                             </div>
 
-                            <div class="h-2.5 w-full overflow-hidden rounded-full bg-purple-200">
+                            <div class="h-2.5 w-full overflow-hidden rounded-md bg-gray-300">
                                 <div
-                                    class="h-full rounded-full bg-linear-to-r from-purple-600 to-purple-500 transition-[width] duration-300 ease-out"
+                                    class="h-full rounded-md bg-indigo-400 transition-[width] duration-300 ease-out"
                                     style=format!("width: {}%;", progress_percent)
                                 />
                             </div>
@@ -113,9 +113,9 @@ pub fn CourseCard(
                     <span class="text-xs font-semibold text-sky-700 dark:text-sky-400">{progress_percent}"%"</span>
                 </div>
 
-                <div class="h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
+                <div class="h-1.5 w-full overflow-hidden rounded-md bg-gray-200">
                     <div
-                        class="h-full rounded-full bg-purple-600 transition-[width] duration-300 ease-out"
+                        class="h-full rounded-md bg-indigo-400 transition-[width] duration-300 ease-out"
                         style=format!("width: {}%;", progress_percent)
                     />
                 </div>
@@ -134,11 +134,11 @@ pub fn CourseCard(
             </div>
 
             <div class="mb-2 flex min-w-0 flex-wrap items-start justify-between gap-2 md:mb-4">
-                <span class=format!("rounded-full px-3 py-1 text-xs font-semibold {}", category_class)>
+                <span class=format!("rounded-lg px-3 py-1 text-xs font-semibold {}", category_class)>
                     {category}
                 </span>
 
-                <span class=format!("rounded-full px-3 py-1 text-xs font-semibold {}", badge_class)>
+                <span class=format!("rounded-lg px-3 py-1 text-xs font-semibold {}", badge_class)>
                     {badge}
                 </span>
             </div>
@@ -201,7 +201,7 @@ pub fn LearningPathCard(
     cta_href: String,
 ) -> impl IntoView {
     view! {
-        <article class="group relative min-w-0 overflow-hidden rounded-2xl bg-surface-700 bg-[radial-gradient(circle_at_2px_2px,rgba(139,92,246,0.15)_1px,transparent_0)] bg-size-[32px_32px] bg-position-[0_0] p-5 shadow-lg transition-[background-color] duration-300 ease-out hover:bg-[#fbfaff] dark:hover:bg-[#272352] sm:p-6 md:p-8">
+        <article class="group relative min-w-0 overflow-hidden rounded-2xl bg-surface-700 p-5 shadow-lg transition-[background-color] duration-300 ease-out hover:bg-surface-800 dark:hover:bg-surface-750 sm:p-6 md:p-8">
             <div class="relative mb-4 flex min-w-0 items-start justify-between gap-3">
                 <div class="min-w-0">
                     <h3 class=format!("mb-2 min-w-0 text-xl font-bold sm:text-2xl text-balance break-words transition-colors duration-300 ease-out {}", title_class)>
@@ -221,12 +221,12 @@ pub fn LearningPathCard(
             </div>
 
             <div class="relative mb-6 flex flex-wrap items-center gap-3 text-foreground-400">
-                <div class="flex items-center gap-2 rounded-full bg-white/50 dark:bg-white/10 px-3 py-1.5 text-sm">
+                <div class="flex items-center gap-2 rounded-lg bg-white/50 dark:bg-white/10 px-3 py-1.5 text-sm">
                     <span aria-hidden="true">"📖"</span>
                     <span>{course_count}</span>
                 </div>
 
-                <div class="flex items-center gap-2 rounded-full bg-white/50 dark:bg-white/10 px-3 py-1.5 text-sm">
+                <div class="flex items-center gap-2 rounded-lg bg-white/50 dark:bg-white/10 px-3 py-1.5 text-sm">
                     <span aria-hidden="true">"⏱️"</span>
                     <span>{duration}</span>
                 </div>
@@ -238,9 +238,9 @@ pub fn LearningPathCard(
                     <span class="text-sm font-bold text-foreground-600">{progress_label}</span>
                 </div>
 
-                <div class="h-2 w-full overflow-hidden rounded-full bg-purple-900/30 ring-1 ring-purple-900/0">
+                <div class="h-2 w-full overflow-hidden rounded-md bg-gray-200">
                     <div
-                        class="relative h-full overflow-hidden rounded-full bg-purple-500 transition-[width] duration-300 ease-out"
+                        class="relative h-full overflow-hidden rounded-md bg-indigo-400 transition-[width] duration-300 ease-out"
                         style=format!("width: {}%;", progress_percent)
                     ></div>
                 </div>

@@ -49,7 +49,7 @@ pub fn FeaturedEventCard(
 
                 <a
                     href="#"
-                    class="inline-flex min-h-[44px] items-center rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-violet-700"
+                    class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-400 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-500"
                 >
                     {cta_label}" →"
                 </a>
