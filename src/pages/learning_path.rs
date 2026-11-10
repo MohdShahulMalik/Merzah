@@ -179,17 +179,8 @@ pub fn LearningPathDetailPage() -> impl IntoView {
 
                             view! {
                                 <article class="min-w-0 space-y-8">
-                                    <section class="relative isolate min-w-0 overflow-hidden rounded-3xl bg-linear-to-br from-purple-600 via-indigo-500 to-sky-500 p-px shadow-[0_24px_60px_-30px_rgba(79,70,229,0.75)]">
-                                        <div class="relative min-w-0 overflow-hidden rounded-3xl bg-surface-700/95 backdrop-blur-sm">
-                                            <div
-                                                class="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-indigo-500/25 blur-3xl"
-                                                aria-hidden="true"
-                                            ></div>
-                                            <div
-                                                class="pointer-events-none absolute -bottom-24 -right-16 h-56 w-56 rounded-full bg-purple-500/25 blur-3xl"
-                                                aria-hidden="true"
-                                            ></div>
-
+                                    <section class="relative min-w-0 overflow-hidden rounded-3xl border border-indigo-400 bg-surface-700 shadow-md">
+                                        <div class="relative min-w-0 overflow-hidden rounded-3xl bg-surface-700">
                                             {hero_image
                                                 .map(|image_url| {
                                                     view! {
@@ -199,10 +190,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                                 alt=detail.title.clone()
                                                                 class="h-44 w-full object-cover sm:h-56 lg:h-64"
                                                             />
-                                                            <div
-                                                                class="pointer-events-none absolute inset-0 bg-linear-to-t from-surface-700 via-surface-700/40 to-transparent"
-                                                                aria-hidden="true"
-                                                            ></div>
+
                                                         </div>
                                                     }
                                                 })}
@@ -216,7 +204,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                     "Back to Learn"
                                                 </A>
 
-                                                <span class="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-purple-600 to-indigo-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-sm">
+                                                <span class="inline-flex items-center gap-2 rounded-lg bg-indigo-400 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-sm">
                                                     <span aria-hidden="true">"🧭"</span>
                                                     "Guided path"
                                                 </span>
@@ -230,19 +218,19 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                 </p>
 
                                                 <div class="flex min-w-0 flex-wrap items-center gap-2">
-                                                    <span class="inline-flex items-center gap-2 rounded-full bg-purple-500/10 px-3 py-1.5 text-xs font-semibold text-purple-700 ring-1 ring-purple-500/20 dark:text-purple-300">
+                                                    <span class="inline-flex items-center gap-2 rounded-lg bg-indigo-400/15 px-3 py-1.5 text-xs font-semibold text-indigo-700 ring-1 ring-indigo-400/30 dark:text-indigo-300">
                                                         <span aria-hidden="true">"✦"</span>
                                                         {format!("{:?}", detail.difficulty)}
                                                     </span>
-                                                    <span class="inline-flex items-center gap-2 rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
+                                                    <span class="inline-flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
                                                         <span aria-hidden="true">"🗓️"</span>
                                                         {format!("{} weeks", detail.estimated_weeks)}
                                                     </span>
-                                                    <span class="inline-flex items-center gap-2 rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
+                                                    <span class="inline-flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
                                                         <span aria-hidden="true">"📚"</span>
                                                         {format!("{} courses", course_total)}
                                                     </span>
-                                                    <span class="inline-flex items-center gap-2 rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
+                                                    <span class="inline-flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
                                                         <span aria-hidden="true">"🎯"</span>
                                                         {format!("{} required", required_total)}
                                                     </span>
@@ -262,9 +250,9 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                                         </span>
                                                                     </div>
 
-                                                                    <div class="h-2.5 w-full overflow-hidden rounded-full bg-purple-900/15 ring-1 ring-purple-500/10 dark:bg-white/10">
+                                                                    <div class="h-2.5 w-full overflow-hidden rounded-md bg-gray-200 ring-1  dark:bg-white/10">
                                                                         <div
-                                                                            class="h-full rounded-full bg-linear-to-r from-purple-600 via-indigo-500 to-sky-400 shadow-[0_0_12px_rgba(99,102,241,0.65)] transition-[width] duration-300 ease-out"
+                                                                            class="h-full rounded-md bg-indigo-400 transition-[width] duration-300 ease-out"
                                                                             style=format!("width: {value:.0}%;")
                                                                         ></div>
                                                                     </div>
@@ -349,7 +337,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                     let is_last = index + 1 == course_total;
                                                     let is_required = course.is_required;
                                                     let node_class = if is_required {
-                                                        "absolute left-0 top-6 hidden h-11 w-11 place-items-center rounded-full bg-linear-to-br from-purple-600 to-indigo-500 text-sm font-bold text-white shadow-lg ring-4 ring-surface-700 sm:grid"
+                                                        "absolute left-0 top-6 hidden h-11 w-11 place-items-center rounded-full bg-indigo-400 text-sm font-bold text-white shadow-lg ring-4 ring-surface-700 sm:grid"
                                                     } else {
                                                         "absolute left-0 top-6 hidden h-11 w-11 place-items-center rounded-full border-2 border-dashed border-indigo-400/60 bg-surface-700 text-sm font-bold text-foreground-600 ring-4 ring-surface-700 sm:grid"
                                                     };
@@ -359,9 +347,9 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                         "group block min-w-0 rounded-2xl border border-dashed border-stroke-muted bg-surface-700/80 p-5 shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:border-indigo-400/50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 sm:p-6"
                                                     };
                                                     let pill_class = if is_required {
-                                                        "inline-flex shrink-0 items-center gap-1 rounded-full bg-indigo-400/15 px-3 py-1 text-xs font-semibold text-indigo-700 dark:text-indigo-300"
+                                                        "inline-flex shrink-0 items-center gap-1 rounded-lg bg-indigo-400/15 px-3 py-1 text-xs font-semibold text-indigo-700 dark:text-indigo-300"
                                                     } else {
-                                                        "inline-flex shrink-0 items-center gap-1 rounded-full border border-stroke-muted px-3 py-1 text-xs font-semibold text-foreground-600"
+                                                        "inline-flex shrink-0 items-center gap-1 rounded-lg border border-stroke-muted px-3 py-1 text-xs font-semibold text-foreground-600"
                                                     };
 
                                                     view! {
@@ -374,7 +362,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                                 .then(|| {
                                                                     view! {
                                                                         <span
-                                                                            class="absolute bottom-[-1.25rem] left-[1.3125rem] top-[4.25rem] hidden w-px bg-linear-to-b from-indigo-400/70 to-transparent sm:block"
+                                                                            class="absolute bottom-[-1.25rem] left-[1.3125rem] top-[4.25rem] hidden w-px bg-stroke-muted sm:block"
                                                                             aria-hidden="true"
                                                                         ></span>
                                                                     }
@@ -402,7 +390,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                                     .clone()
                                                                     .map(|note| {
                                                                         view! {
-                                                                            <p class="mt-3 flex min-w-0 items-start gap-2 rounded-xl bg-purple-500/10 px-3 py-2 text-xs font-medium text-purple-700 dark:text-purple-300">
+                                                                            <p class="mt-3 flex min-w-0 items-start gap-2 rounded-xl bg-indigo-400/15 px-3 py-2 text-xs font-medium text-indigo-700 dark:text-indigo-300">
                                                                                 <span class="shrink-0" aria-hidden="true">"💡"</span>
                                                                                 <span class="min-w-0 break-words">{note}</span>
                                                                             </p>
