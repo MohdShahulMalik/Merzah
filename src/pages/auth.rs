@@ -14,7 +14,6 @@ use crate::server_functions::auth::{
 #[component]
 pub fn Register() -> impl IntoView {
     let (error, set_error) = signal("".to_string());
-    let (success, set_success) = signal("".to_string());
     let (name_error, set_name_error) = signal(String::new());
     let (password_error, set_password_error) = signal(String::new());
     let (identifier_error, set_identifier_error) = signal(String::new());
@@ -117,7 +116,11 @@ pub fn Register() -> impl IntoView {
 
         spawn_local(async move {
             match register(registration_form).await {
-                Ok(_) => set_success.set("Successful".to_string()),
+                // Do a full page load so the session cookie is sent and the app
+                // re-fetches the authenticated user on the home page.
+                Ok(_) => {
+                    let _ = window().location().set_href("/home");
+                }
 
                 Err(e) => {
                     set_error.set(format!("Registration Error: {}", e));
@@ -248,13 +251,6 @@ pub fn Register() -> impl IntoView {
                     <p>{error.get()}</p>
                 </Show>
 
-                <Show
-                    when = move || !success.get().is_empty()
-                    fallback = view! {<p></p>}
-                >
-                    <p>{success.get()}</p>
-                </Show>
-
                 <p class = "text-[0.90rem] text-foreground-600 text-center mb-2">"Already have an account?"</p>
                 <A href = "/login" attr:class="block w-full min-w-0">
                     <button
@@ -272,7 +268,6 @@ pub fn Register() -> impl IntoView {
 #[component]
 pub fn Login() -> impl IntoView {
     let (error, set_error) = signal("".to_string());
-    let (success, set_success) = signal("".to_string());
     let (identifier_error, set_identifier_error) = signal(String::new());
     let (password_error, set_password_error) = signal(String::new());
 
@@ -380,7 +375,11 @@ pub fn Login() -> impl IntoView {
 
         spawn_local(async move {
             match login(login_form).await {
-                Ok(_) => set_success.set("Successful".to_string()),
+                // Do a full page load so the session cookie is sent and the app
+                // re-fetches the authenticated user on the home page.
+                Ok(_) => {
+                    let _ = window().location().set_href("/home");
+                }
 
                 Err(e) => set_error.set(format!("Error: {}", e)),
             }
@@ -504,13 +503,6 @@ pub fn Login() -> impl IntoView {
                     fallback = view! {<p></p>}
                 >
                     <p>{error.get()}</p>
-                </Show>
-
-                <Show
-                    when = move || !success.get().is_empty()
-                    fallback = view! {<p></p>}
-                >
-                    <p>{success.get()}</p>
                 </Show>
 
                 <div class = "w-full min-w-0">
