@@ -171,11 +171,15 @@ pub fn NearbyMosqueCard(
     iqamah_label: String,
     iqamah_time: String,
     distance: f64,
-    is_favorite: bool,
+    is_favorite: Signal<bool>,
     #[prop(optional)] image_url: Option<String>,
     /// Opens the mosque info dialog for this card. The button replacing the
     /// former dead link is only rendered when a callback is given.
     #[prop(optional)] on_view_mosque: Option<Callback<()>>,
+    /// Toggles the favorite state of this mosque.
+    on_toggle_favorite: Callback<()>,
+    /// External Google Maps directions URL for this mosque.
+    directions_url: String,
 ) -> impl IntoView {
     let image_url = image_url.unwrap_or_else(|| DEFAULT_MOSQUE_IMAGE.to_string());
     let image_alt = format!("{} mosque", mosque_name);
@@ -190,9 +194,18 @@ pub fn NearbyMosqueCard(
                 />
                 <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-[#050047]/60 via-[#050047]/12 to-white/0"></div>
 
-                <div class="absolute right-3 top-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/25 bg-white/18 text-white backdrop-blur-md transition-[background-color,border-color,color] duration-300 ease-out group-hover:border-white/55 group-hover:bg-white group-hover:text-pink-600">
+                <button
+                    type="button"
+                    class="absolute right-3 top-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/25 bg-white/18 text-white backdrop-blur-md transition-[background-color,border-color,color] duration-300 ease-out group-hover:border-white/55 group-hover:bg-white group-hover:text-pink-600 hover:border-white/55 hover:bg-white hover:text-pink-600"
+                    aria-pressed=move || is_favorite.get().to_string()
+                    aria-label=move || if is_favorite.get() { "Remove from favorites" } else { "Add to favorites" }
+                    on:click=move |ev| {
+                        ev.stop_propagation();
+                        on_toggle_favorite.run(());
+                    }
+                >
                     <svg
-                        class=if is_favorite { "h-4 w-4 fill-pink-500 stroke-pink-500" } else { "h-4 w-4 fill-none stroke-current" }
+                        class=move || if is_favorite.get() { "h-4 w-4 fill-pink-500 stroke-pink-500" } else { "h-4 w-4 fill-none stroke-current" }
                         viewBox="0 0 24 24"
                         stroke-width="1.8"
                         stroke-linecap="round"
@@ -201,11 +214,11 @@ pub fn NearbyMosqueCard(
                     >
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
                     </svg>
-                </div>
+                </button>
 
                 <div class="absolute inset-x-0 bottom-0 border-t border-white/15 bg-[#211f55]/88 px-4 py-1 text-white backdrop-blur-md transition-transform duration-500 ease-out translate-y-0 sm:translate-y-full sm:group-hover:translate-y-0">
                     <div class="flex items-center justify-between gap-2">
-                        <A href="#" attr:class="inline-flex min-h-[44px] items-center text-sm font-bold text-sky-200 hover:text-sky-100">"Directions"</A>
+                        <a href=directions_url target="_blank" rel="noopener noreferrer" class="inline-flex min-h-[44px] items-center text-sm font-bold text-sky-200 hover:text-sky-100">"Directions"</a>
                         <Show when=move || on_view_mosque.is_some()>
                             <button
                                 type="button"

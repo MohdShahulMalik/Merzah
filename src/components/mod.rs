@@ -1,4 +1,5 @@
 pub mod cards;
+pub mod favorites;
 pub mod filters;
 pub mod form_field;
 pub mod location;

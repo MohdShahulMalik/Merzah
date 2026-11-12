@@ -8,7 +8,7 @@ use leptos_router::{
 use reactive_stores::Store;
 
 use crate::{
-    components::location::LocationProvider,
+    components::{favorites::FavoritesErrorToast, favorites::provide_favorites, location::LocationProvider},
     models::location::GeoPosition,
     models::user::UserOnClient,
     pages::{
@@ -53,6 +53,7 @@ pub fn App() -> impl IntoView {
     };
 
     provide_context(app_state);
+    provide_favorites();
 
     Effect::new(move |_| {
         auth_user.map(
@@ -118,6 +119,7 @@ pub fn App() -> impl IntoView {
                     <Route path=path!("/auth/callback/microsoft") view=MicrosoftCallback/>
                     <Route path=WildcardSegment("any") view=NotFound/>
                 </Routes>
+                <FavoritesErrorToast />
             </main>
         </Router>
     }

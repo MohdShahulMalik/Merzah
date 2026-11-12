@@ -16,6 +16,7 @@ use wasm_bindgen::JsCast;
 use crate::app::AppState;
 use crate::app::AppStateStoreFields;
 use crate::components::cards::DEFAULT_MOSQUE_IMAGE;
+use crate::components::favorites::use_favorites;
 use crate::models::api_responses::MixedMosqueResponse;
 use crate::models::api_responses::MosqueResponse;
 use crate::models::mosque::PrayerTimes;
@@ -224,7 +225,9 @@ fn MosqueInfoEmptyState() -> impl IntoView {
 /// The mosque card itself: hero, prayer times, personnel and the action row.
 #[component]
 fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
+    let favorites = use_favorites();
     let MosqueResponse {
+        id: mosque_id,
         location,
         name,
         street,
@@ -266,6 +269,12 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
             (label, jamat_main, jamat_meridiem, adhan_line)
         })
         .collect::<Vec<_>>();
+
+    let toggle_id = mosque_id.clone();
+    let is_favorite = Signal::derive({
+        let mosque_id = mosque_id.clone();
+        move || favorites.is_favorite(&mosque_id)
+    });
 
     let has_personnel = imam.is_some()
         || muazzin.is_some()
@@ -434,6 +443,33 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
                     >
                         "Directions →"
                     </a>
+                    <button
+                        type="button"
+                        class=move || {
+                            if is_favorite.get() {
+                                "inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 bg-red-500 hover:bg-red-600 active:bg-red-700 transition-colors duration-300 font-bold text-white py-2 px-6 rounded-lg border-2 border-red-500"
+                            } else {
+                                "inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 bg-transparent border-red-400 border-2 hover:bg-red-300/30 active:bg-red-400/40 transition-colors duration-300 font-bold text-red-400 dark:text-red-300 py-2 px-6 rounded-lg"
+                            }
+                        }
+                        aria-pressed=move || is_favorite.get().to_string()
+                        aria-label=move || if is_favorite.get() { "Remove from favorites" } else { "Add to favorites" }
+                        on:click=move |_| favorites.toggle_favorite(toggle_id.clone())
+                    >
+                        <svg
+                            class=move || if is_favorite.get() { "h-4 w-4 fill-white stroke-white" } else { "h-4 w-4 fill-none stroke-current" }
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
+                        </svg>
+                        <span>{move || if is_favorite.get() { "Favorited" } else { "Favorite" }}</span>
+                    </button>
                 </div>
             </div>
         </div>

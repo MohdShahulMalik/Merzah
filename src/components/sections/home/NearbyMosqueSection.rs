@@ -8,6 +8,7 @@ use reactive_stores::Store;
 
 use crate::app::AppState;
 use crate::app::AppStateStoreFields;
+use crate::components::favorites::use_favorites;
 use crate::components::cards::NearbyMosqueCard;
 use crate::components::cards::DEFAULT_MOSQUE_IMAGE;
 use crate::components::modal::MosqueInfoDialog;
@@ -26,6 +27,7 @@ const PREVIEW_SIZE: usize = 5;
 #[component]
 pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
     let app_state = expect_context::<Store<AppState>>();
+    let favorites = use_favorites();
     let user_pos = move || {
         app_state
             .coords()
@@ -114,7 +116,6 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
                                 iqamah_label,
                                 iqamah_time,
                                 distance,
-                                false,
                                 mosque.cover_img.clone(),
                             ),
                             mosque,
@@ -128,12 +129,22 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
                         key=|(item, _)| item.id.clone()
                         let((item, mosque))
                     >
+                        {
+                            let directions_url = format!(
+                                "https://www.google.com/maps/search/?api=1&query={},{}",
+                                mosque.location.0,
+                                mosque.location.1,
+                            );
+                            view! {
                         <NearbyMosqueCard
                             mosque_name=item.mosque_name.clone()
                             iqamah_label=item.iqamah_label.clone()
                             iqamah_time=item.iqamah_time.clone()
                             distance=item.distance
-                            is_favorite=item.is_favorite
+                            is_favorite={
+                                let favorite_id = item.id.clone();
+                                Signal::derive(move || favorites.is_favorite(&favorite_id))
+                            }
                             image_url=item
                                 .image_url
                                 .clone()
@@ -142,7 +153,16 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
                                 selected_mosque.set(Some(mosque.clone()));
                                 dialog_open.set(true);
                             })
+                            on_toggle_favorite={
+                                let toggle_id = item.id.clone();
+                                Callback::new(move |_: ()| {
+                                    favorites.toggle_favorite(toggle_id.clone());
+                                })
+                            }
+                            directions_url=directions_url
                         />
+                            }
+                        }
                     </For>
                 }
                 }}

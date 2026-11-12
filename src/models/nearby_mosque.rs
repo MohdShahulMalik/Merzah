@@ -11,7 +11,6 @@ pub struct NearbyMosqueCardItem {
     pub iqamah_label: String,
     pub iqamah_time: String,
     pub distance: f64,
-    pub is_favorite: bool,
     pub image_url: Option<String>,
 }
 
@@ -22,7 +21,6 @@ impl NearbyMosqueCardItem {
         iqamah_label: String,
         iqamah_time: String,
         distance: f64,
-        is_favorite: bool,
         image_url: Option<String>,
     ) -> Self {
         Self {
@@ -31,7 +29,6 @@ impl NearbyMosqueCardItem {
             iqamah_label,
             iqamah_time,
             distance,
-            is_favorite,
             image_url,
         }
     }
