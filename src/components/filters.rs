@@ -39,7 +39,7 @@ pub fn Filters(
     view! {
         <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-4 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] sm:p-5 md:p-7">
             <div class="flex min-w-0 flex-col gap-3 md:flex-row">
-                <label class="flex min-h-[44px] min-w-0 flex-1 items-center gap-3 rounded-xl border border-stroke-muted bg-surface-700 px-4 text-foreground-600 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
+                <label class="flex min-h-[44px] min-w-0 flex-1 items-center gap-3 rounded-xl border border-stroke-muted bg-surface-750 px-4 text-foreground-600 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
                     <span class="text-lg" aria-hidden="true">"🔍"</span>
                     <input
                         type="search"
@@ -58,7 +58,7 @@ pub fn Filters(
                 })}
             </div>
 
-            <div class="mt-5 min-w-0 divide-y divide-violet-950/10">
+            <div class="mt-5 min-w-0 divide-y divide-violet-950/10 dark:divide-white/10">
                 {filter_groups
                     .into_iter()
                     .map(|group| {
@@ -70,7 +70,7 @@ pub fn Filters(
                                         .into_iter()
                                         .map(|option| {
                                             let option_class = if option.is_active {
-                                                "bg-primary text-white border-primary shadow-sm"
+                                                "bg-primary text-white dark:text-surface-900 border-primary shadow-sm"
                                             } else {
                                                 "bg-surface-750 text-foreground-900 border-stroke-muted hover:border-primary/35 hover:bg-surface-900"
                                             };

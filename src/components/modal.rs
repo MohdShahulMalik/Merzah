@@ -355,9 +355,9 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
                             .map(|(label, jamat_main, jamat_meridiem, adhan_line)| {
                                 let is_jumuah = label == "Jumuah";
                                 let cell_class = if is_jumuah {
-                                    "rounded-lg border border-[#f0bd25]/50 bg-[#e8edff]/70 px-3 py-2.5 text-center dark:bg-white/5"
+                                    "rounded-lg border border-[#f0bd25]/50 bg-[#e8edff]/70 px-3 py-2.5 text-center dark:bg-white/10"
                                 } else {
-                                    "rounded-lg border border-stroke-muted bg-[#e8edff]/70 px-3 py-2.5 text-center dark:bg-white/5"
+                                    "rounded-lg border border-stroke-muted bg-[#e8edff]/70 px-3 py-2.5 text-center dark:bg-white/10"
                                 };
 
                                 view! {
@@ -439,9 +439,9 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
                         href=directions_url
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-400 px-4 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-indigo-500"
+                        class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-500 px-4 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-indigo-600"
                     >
-                        "Directions →"
+                        "Directions"
                     </a>
                     <button
                         type="button"

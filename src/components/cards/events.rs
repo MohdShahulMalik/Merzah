@@ -51,7 +51,7 @@ pub fn FeaturedEventCard(
 
                 <A
                     href=format!("/events/{id}")
-                    attr:class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-400 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-500"
+                    attr:class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-600"
                 >
                     {cta_label}
                 </A>
@@ -89,10 +89,10 @@ pub fn AllEventCard(
             "inline-flex rounded-md bg-sky-50 dark:bg-sky-400/10 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-400 ring-1 ring-sky-200/70 dark:ring-sky-400/30"
         }
         1 => {
-            "inline-flex rounded-md bg-fuchsia-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-fuchsia-700 ring-1 ring-fuchsia-200/70"
+            "inline-flex rounded-md bg-fuchsia-50 dark:bg-fuchsia-400/10 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-fuchsia-700 dark:text-fuchsia-400 ring-1 ring-fuchsia-200/70 dark:ring-fuchsia-400/30"
         }
         _ => {
-            "inline-flex rounded-md bg-sky-50 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-sky-700 ring-1 ring-sky-200/70"
+            "inline-flex rounded-md bg-sky-50 dark:bg-sky-400/10 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-400 ring-1 ring-sky-200/70 dark:ring-sky-400/30"
         }
     };
 

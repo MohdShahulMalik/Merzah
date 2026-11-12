@@ -19,7 +19,7 @@ pub fn ContinueLearningCard(
     });
 
     view! {
-        <article class="min-w-0 overflow-hidden rounded-2xl bg-linear-to-br from-purple-100 to-indigo-100 p-5 shadow-md sm:p-6 md:px-8 md:py-7">
+        <article class="min-w-0 overflow-hidden rounded-2xl bg-linear-to-br from-purple-100 to-indigo-100 p-5 shadow-md sm:p-6 md:px-8 md:py-7 dark:from-indigo-900/60 dark:to-purple-900/60">
             <div class="flex min-w-0 flex-col gap-6 lg:flex-row">
                 <div class="w-full overflow-hidden rounded-xl lg:w-64 lg:shrink-0 lg:self-stretch">
                     <img
@@ -30,7 +30,7 @@ pub fn ContinueLearningCard(
                 </div>
                 <div class = "min-w-0 items-center justify-center gap-6 w-full flex flex-col sm:flex-row">
                     <div class="min-w-0 w-full flex-1">
-                        <span class="mb-3 inline-flex rounded-lg bg-indigo-400 px-3 py-1 text-xs font-semibold uppercase text-white">
+                        <span class="mb-3 inline-flex rounded-lg bg-indigo-500 px-3 py-1 text-xs font-semibold uppercase text-white">
                             {status}
                         </span>
 
@@ -60,7 +60,7 @@ pub fn ContinueLearningCard(
                                 <span class="text-sm font-bold text-foreground-900">{progress_percent}"%"</span>
                             </div>
 
-                            <div class="h-2.5 w-full overflow-hidden rounded-md bg-gray-300">
+                            <div class="h-2.5 w-full overflow-hidden rounded-md bg-gray-300 dark:bg-white/10">
                                 <div
                                     class="h-full rounded-md bg-indigo-400 transition-[width] duration-300 ease-out"
                                     style=format!("width: {}%;", progress_percent)
@@ -72,7 +72,7 @@ pub fn ContinueLearningCard(
                     <div class="w-full shrink-0 sm:w-auto">
                         <A
                             href=cta_href
-                            attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-indigo-500 hover:shadow-xl sm:w-auto xl:w-auto"
+                            attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-500 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-indigo-600 hover:shadow-xl sm:w-auto xl:w-auto"
                         >
                             {cta_label}
                         </A>
@@ -113,7 +113,7 @@ pub fn CourseCard(
                     <span class="text-xs font-semibold text-sky-700 dark:text-sky-400">{progress_percent}"%"</span>
                 </div>
 
-                <div class="h-1.5 w-full overflow-hidden rounded-md bg-gray-200">
+                <div class="h-1.5 w-full overflow-hidden rounded-md bg-gray-200 dark:bg-white/10">
                     <div
                         class="h-full rounded-md bg-indigo-400 transition-[width] duration-300 ease-out"
                         style=format!("width: {}%;", progress_percent)
@@ -177,7 +177,7 @@ pub fn CourseCard(
 
             <A
                 href=cta_href
-                attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 py-3 font-semibold text-white transition hover:bg-indigo-500"
+                attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-500 py-3 font-semibold text-white transition hover:bg-indigo-600"
             >
                 {cta_label}
             </A>
@@ -238,7 +238,7 @@ pub fn LearningPathCard(
                     <span class="text-sm font-bold text-foreground-600">{progress_label}</span>
                 </div>
 
-                <div class="h-2 w-full overflow-hidden rounded-md bg-gray-200">
+                <div class="h-2 w-full overflow-hidden rounded-md bg-gray-200 dark:bg-white/10">
                     <div
                         class="relative h-full overflow-hidden rounded-md bg-indigo-400 transition-[width] duration-300 ease-out"
                         style=format!("width: {}%;", progress_percent)
@@ -248,7 +248,7 @@ pub fn LearningPathCard(
 
             <A
                 href=cta_href
-                attr:class="relative flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-400 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-indigo-500"
+                attr:class="relative flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-indigo-600"
             >
                 <span class="relative">{cta_label}</span>
             </A>
