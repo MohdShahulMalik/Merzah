@@ -129,19 +129,6 @@ pub fn App() -> impl IntoView {
     }
 }
 
-/// Renders the home page of your application.
-#[component]
-fn HomePage() -> impl IntoView {
-    // Creates a reactive value to update the button
-    let count = RwSignal::new(0);
-    let on_click = move |_| *count.write() += 1;
-
-    view! {
-        <h1>"Welcome to Leptos!"</h1>
-        <button class = "text-white bg-blue-400" on:click=on_click>"Click Me: " {count}</button>
-    }
-}
-
 /// 404 - Not Found
 #[component]
 fn NotFound() -> impl IntoView {
@@ -160,6 +147,18 @@ fn NotFound() -> impl IntoView {
     }
 
     view! {
-        <h1>"Not Found"</h1>
+        <div class="flex min-w-0 flex-col items-center justify-center gap-4 py-16 text-center sm:py-24">
+            <p class="font-serif text-6xl font-bold text-foreground-900">"404"</p>
+            <h1 class="font-serif text-2xl font-bold text-foreground-900 text-balance">"Page not found"</h1>
+            <p class="max-w-md text-base leading-7 text-foreground-700">
+                "The page you are looking for does not exist or may have been moved."
+            </p>
+            <a
+                href="/home"
+                class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-600"
+            >
+                "Back to Home"
+            </a>
+        </div>
     }
 }
