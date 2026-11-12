@@ -402,7 +402,7 @@ pub fn Login() -> impl IntoView {
 
                 <div class = "grid w-full max-w-xl gap-8 xl:gap-16">
                     <p class = "min-w-0 text-3xl font-bold text-foreground-900 text-balance break-words xl:text-4xl">
-                        "Welcome back to connect with your mosque, stay informed on events, and grow in deen and dunya"
+                        "Welcome back to your mosques, stay informed on events, and grow in deen and dunya"
                     </p>
 
                     <p class = "text-foreground-600">

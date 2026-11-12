@@ -7,7 +7,7 @@ pub fn Landing() -> impl IntoView {
             // ============================ HERO ============================
             <header class="relative flex flex-col text-center">
                 <div class="relative z-0 mx-auto flex w-full max-w-3xl flex-col items-center px-6 pt-14 pb-36 md:pt-20">
-                    <a href="#" class="inline-flex flex-col items-center select-none" aria-label="Merzah home">
+                    <a href="/" class="inline-flex flex-col items-center select-none" aria-label="Merzah home">
                         <img
                             src="/assets/logo.png"
                             alt="Merzah emblem"

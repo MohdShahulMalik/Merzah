@@ -27,7 +27,9 @@ pub fn GoogleCallback() -> impl IntoView {
                         set_error.set(err_msg);
                     } else {
                         set_success.set(true);
-                        // TODO: Use better approach to redirect after successful authentication if possible.
+                        // Full-page navigation (rather than client-side routing) matches the
+                        // other auth callbacks and re-runs SSR so the session cookie is picked
+                        // up on the next request.
                         let _ = window().location().set_href("/home");
                     }
                 }

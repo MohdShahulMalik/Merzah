@@ -54,8 +54,6 @@ async fn main() -> std::io::Result<()> {
                                 <meta charset="utf-8"/>
                                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-                                // <script src="https://cdn.tailwindcss.com"></script>
-
                                 // The `leaflet` crate (used by leptos-leaflet) binds to the
                                 // global `L` namespace of the Leaflet JS library, so the
                                 // library has to be loaded before the WASM hydrates. Without
