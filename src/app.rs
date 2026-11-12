@@ -14,6 +14,7 @@ use crate::{
     pages::{
         add_mosques_of_region::AddMosquesOfRegion,
         auth::{Login, Register},
+        coming_soon::{AllCourses, AllLearningPaths, EventDetails},
         course::CourseDetailPage,
         discord_callback::DiscordCallback,
         events::Events,
@@ -106,6 +107,9 @@ pub fn App() -> impl IntoView {
                         <Route path=path!("mosques") view=Mosques/>
                         <ProtectedRoute path=path!("events") view=Events condition=auth_condition redirect_path=|| "/login"/>
                         <Route path=path!("learn") view=Learn/>
+                        <Route path=path!("learn/courses") view=AllCourses/>
+                        <Route path=path!("learn/paths") view=AllLearningPaths/>
+                        <ProtectedRoute path=path!("events/:event_id") view=EventDetails condition=auth_condition redirect_path=|| "/login"/>
                         <Route path=path!("learn/courses/:course_id") view=CourseDetailPage/>
                         <Route path=path!("learn/lessons/:lesson_id") view=LessonPage/>
                         <Route path=path!("learn/roadmaps/:roadmap_id") view=LearningPathDetailPage/>

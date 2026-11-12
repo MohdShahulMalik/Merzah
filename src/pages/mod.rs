@@ -1,5 +1,6 @@
 pub mod add_mosques_of_region;
 pub mod auth;
+pub mod coming_soon;
 pub mod course;
 pub mod discord_callback;
 pub mod events;

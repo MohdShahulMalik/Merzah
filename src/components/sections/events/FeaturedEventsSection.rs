@@ -20,6 +20,7 @@ pub fn FeaturedEventsSection(events: Vec<EventPageItem>) -> impl IntoView {
             >
                 <FeaturedEventCard
                     index=idx.get()
+                    id=item.id.clone()
                     badge=item.category.clone()
                     title=item.title.clone()
                     date=item.date_featured.clone()

@@ -15,6 +15,7 @@
 
   /* Foreground colors (text) */
   --color-foreground-900: oklch(0.15 0.11 279); /* primary text */
+  --color-foreground-700: oklch(0.28 0.11 279); /* body text */
   --color-foreground-600: oklch(0.4 0.11 279); /* muted text */
   --color-foreground-400: oklch(0.5 0.11 279);
 
@@ -62,6 +63,7 @@
 
       /* Foreground colors (text) */
       --color-foreground-900: oklch(0.96 0.1 279);
+      --color-foreground-700: oklch(0.86 0.1 279);
       --color-foreground-600: oklch(0.76 0.1 279);
       --color-foreground-400: oklch(0.66 0.1 279);
 

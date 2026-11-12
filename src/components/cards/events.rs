@@ -1,9 +1,11 @@
 use leptos::IntoView;
 use leptos::prelude::*;
+use leptos_router::components::A;
 
 #[component]
 pub fn FeaturedEventCard(
     index: usize,
+    id: String,
     badge: String,
     title: String,
     date: String,
@@ -47,12 +49,12 @@ pub fn FeaturedEventCard(
                     {description}
                 </p>
 
-                <a
-                    href="#"
-                    class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-400 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-500"
+                <A
+                    href=format!("/events/{id}")
+                    attr:class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-400 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-500"
                 >
                     {cta_label}
-                </a>
+                </A>
             </div>
         </article>
     }
@@ -61,6 +63,7 @@ pub fn FeaturedEventCard(
 #[component]
 pub fn AllEventCard(
     index: usize,
+    id: String,
     category: String,
     distance: String,
     title: String,
@@ -128,12 +131,12 @@ pub fn AllEventCard(
                     {description}
                 </p>
 
-                <a
-                    href="#"
-                    class="inline-flex min-h-[44px] items-center rounded-lg border-2 border-sky-300/80 bg-sky-50 dark:bg-sky-400/10 px-5 py-2.5 text-sm font-bold text-sky-700 dark:text-sky-400 transition hover:bg-sky-100 dark:hover:bg-sky-400/15"
+                <A
+                    href=format!("/events/{id}")
+                    attr:class="inline-flex min-h-[44px] items-center rounded-lg border-2 border-sky-300/80 bg-sky-50 dark:bg-sky-400/10 px-5 py-2.5 text-sm font-bold text-sky-700 dark:text-sky-400 transition hover:bg-sky-100 dark:hover:bg-sky-400/15"
                 >
                     {cta_label}
-                </a>
+                </A>
             </div>
         </article>
     }

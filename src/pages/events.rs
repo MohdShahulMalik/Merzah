@@ -1,6 +1,5 @@
 use leptos::IntoView;
 use leptos::prelude::*;
-use leptos_router::components::A;
 use reactive_stores::OptionStoreExt;
 use reactive_stores::Store;
 
@@ -74,7 +73,6 @@ pub fn Events() -> impl IntoView {
             <section class="min-w-0 space-y-6">
                 <div class="flex min-w-0 flex-wrap items-center justify-between gap-2">
                     <h1 class="min-w-0 text-2xl font-bold text-foreground-900 sm:text-3xl text-balance">"Featured Events"</h1>
-                    <A href="#" attr:class="inline-flex min-h-[44px] shrink-0 items-center whitespace-nowrap font-medium text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300">"View All →"</A>
                 </div>
 
                 <Suspense fallback=move || view! {
