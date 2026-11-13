@@ -4,7 +4,7 @@
   "description": "Continuation of the Bayna Yadayk series for intermediate Arabic learners, building upon the foundations learned in Book 1. This course covers intermediate Arabic grammar, vocabulary, and conversation skills with Ustadh Abdul Karim from Green Lane Masjid, UK.",
   "short_description": "Intermediate Arabic course building on Book 1 foundations",
   "track_slug": "study-skills",
-  "educator_id": "users:x978x0s78tk1z5nyqe5p",
+  "educator_id": "users:green_lane_masjid",
   "level": "intermediate",
   "language": "en",
   "thumbnail_url": "https://i.ytimg.com/vi/qukXx6l58ao/hqdefault.jpg",
@@ -67,7 +67,7 @@
         {
           "title": "Lesson 4 - Verb Forms",
           "content_type": "video",
-          "content": "Introduction to Arabic verb forms (\u0623\u0648\u0632\u0627\u0646 \u0627\u0644\u0641\u0639\u0644) and conjugation patterns",
+          "content": "Introduction to Arabic verb forms (أوزان الفعل) and conjugation patterns",
           "video_url": "https://www.youtube.com/watch?v=E1ZmuxJIgkg",
           "video_duration_seconds": null,
           "audio_url": null,
@@ -81,7 +81,7 @@
         {
           "title": "Lesson 5 - Verb Conjugation",
           "content_type": "video",
-          "content": "Advanced verb conjugation (\u062a\u0635\u0631\u064a\u0641 \u0627\u0644\u0641\u0639\u0644) in different tenses",
+          "content": "Advanced verb conjugation (تصريف الفعل) in different tenses",
           "video_url": "https://www.youtube.com/watch?v=45ZbDgACTwE",
           "video_duration_seconds": null,
           "audio_url": null,

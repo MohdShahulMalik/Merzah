@@ -1,10 +1,10 @@
 {
   "title": "Al-Arabiyyah Bayna Yadayk (Book 1)",
   "slug": "arabic-bayna-yadayk-book1",
-  "description": "Complete video lectures for the beginner Arabic textbook used at Islamic University of Madinah, teaching Arabic as a second language. This course covers the foundational lessons of Al-Arabiyyah Bayna Yadayk (\u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0628\u064a\u0646 \u064a\u062f\u064a\u0643) with Ustadh Abdul Karim from Green Lane Masjid, UK.",
+  "description": "Complete video lectures for the beginner Arabic textbook used at Islamic University of Madinah, teaching Arabic as a second language. This course covers the foundational lessons of Al-Arabiyyah Bayna Yadayk (العربية بين يديك) with Ustadh Abdul Karim from Green Lane Masjid, UK.",
   "short_description": "Beginner Arabic course using the Islamic University of Madinah textbook",
   "track_slug": "study-skills",
-  "educator_id": "users:x978x0s78tk1z5nyqe5p",
+  "educator_id": "users:green_lane_masjid",
   "level": "beginner",
   "language": "en",
   "thumbnail_url": "https://i.ytimg.com/vi/RTKlv_fUGvg/hqdefault.jpg",
@@ -12,7 +12,7 @@
   "modules": [
     {
       "title": "Introduction & Arabic Alphabet",
-      "description": "Introduction to the Bayna Yadayk method and learning the Arabic alphabet (\u062d\u0631\u0648\u0641 \u0627\u0644\u0647\u062c\u0627\u0621)",
+      "description": "Introduction to the Bayna Yadayk method and learning the Arabic alphabet (حروف الهجاء)",
       "sort_order": 1,
       "lessons": [
         {
@@ -30,15 +30,15 @@
           "is_preview": true
         },
         {
-          "title": "Lesson 1a - Arabic Alphabet",
+          "title": "Lesson 1a - Arabic Alphabet (GLM Bayna Yadayk Book 1, Dars 92)",
           "content_type": "video",
-          "content": "Introduction to Arabic letters (\u0627\u0644\u062d\u0631\u0648\u0641 \u0627\u0644\u0639\u0631\u0628\u064a\u0629) and their pronunciation",
-          "video_url": "https://www.youtube.com/watch?v=_btQFskJVSQ",
+          "content": "Arabic alphabet - the letters and their sounds, from Green Lane Masjid's Al-Arabiyyah Bayna Yadayk Book 1 series (Ustadh Abdul Karim).",
+          "video_url": "https://www.youtube.com/watch?v=EiiEl3-Zv_s",
           "video_duration_seconds": null,
           "audio_url": null,
           "pdf_url": null,
           "external_url": null,
-          "thumbnail_url": "https://i.ytimg.com/vi/_btQFskJVSQ/hqdefault.jpg",
+          "thumbnail_url": "https://i.ytimg.com/vi/EiiEl3-Zv_s/hqdefault.jpg",
           "duration_minutes": 60,
           "sort_order": 2,
           "is_preview": false
@@ -67,7 +67,7 @@
         {
           "title": "Lesson 2a - Basic Vocabulary",
           "content_type": "video",
-          "content": "Introduction to basic Arabic vocabulary and common words (\u0627\u0644\u0645\u0641\u0631\u062f\u0627\u062a \u0627\u0644\u0623\u0633\u0627\u0633\u064a\u0629)",
+          "content": "Introduction to basic Arabic vocabulary and common words (المفردات الأساسية)",
           "video_url": "https://www.youtube.com/watch?v=VtOvbNyfxgY",
           "video_duration_seconds": null,
           "audio_url": null,
@@ -93,15 +93,15 @@
           "is_preview": false
         },
         {
-          "title": "Lesson 3a - Greetings & Introductions",
+          "title": "Lesson 3a - Greetings & Introductions (GLM Bayna Yadayk Book 1, Dars 182)",
           "content_type": "video",
-          "content": "Learning Arabic greetings (\u0627\u0644\u062a\u062d\u064a\u0627\u062a) and how to introduce yourself",
-          "video_url": "https://www.youtube.com/watch?v=4OTfb4TD4mg",
+          "content": "Greetings and introductions in Arabic from Green Lane Masjid's Al-Arabiyyah Bayna Yadayk Book 1 series (Ustadh Abdul Karim).",
+          "video_url": "https://www.youtube.com/watch?v=-ie0P0xY3c4",
           "video_duration_seconds": null,
           "audio_url": null,
           "pdf_url": null,
           "external_url": null,
-          "thumbnail_url": "https://i.ytimg.com/vi/4OTfb4TD4mg/hqdefault.jpg",
+          "thumbnail_url": "https://i.ytimg.com/vi/-ie0P0xY3c4/hqdefault.jpg",
           "duration_minutes": 60,
           "sort_order": 3,
           "is_preview": false
@@ -130,7 +130,7 @@
         {
           "title": "Lesson 4a - Basic Grammar",
           "content_type": "video",
-          "content": "Introduction to Arabic grammar (\u0627\u0644\u0646\u062d\u0648 \u0627\u0644\u0639\u0631\u0628\u064a) including nouns and verbs",
+          "content": "Introduction to Arabic grammar (النحو العربي) including nouns and verbs",
           "video_url": "https://www.youtube.com/watch?v=hEwehv0RNuQ",
           "video_duration_seconds": null,
           "audio_url": null,
@@ -144,7 +144,7 @@
         {
           "title": "Lesson 4b - Sentence Structure",
           "content_type": "video",
-          "content": "Basic Arabic sentence structure (\u062a\u0631\u0643\u064a\u0628 \u0627\u0644\u062c\u0645\u0644\u0629) and word order",
+          "content": "Basic Arabic sentence structure (تركيب الجملة) and word order",
           "video_url": "https://www.youtube.com/watch?v=D9grBMj4UMY",
           "video_duration_seconds": null,
           "audio_url": null,

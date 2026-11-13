@@ -1,0 +1,140 @@
+{
+  "title": "Riba & Interest: The Complete Islamic Guide",
+  "slug": "riba-and-interest-islam",
+  "description": "Riba (usury) explained in depth from the Qur'an and Sunnah, by Salafi scholars: what riba is (it is more than 'interest'), how it applies in modern banking, mortgages in non-Muslim lands, working for riba-based institutions, and the Islamic alternatives. Ustadh Muhammad Tim Humble, Sheikh Assim Al Hakeem, Ustadh AbdulRahman Hassan (AMAR) and Islamic Finance Guru.",
+  "short_description": "Riba explained: the complete Islamic ruling on usury",
+  "track_slug": "finance",
+  "educator_id": "users:assim_al_hakeem",
+  "level": "beginner",
+  "language": "en",
+  "thumbnail_url": "https://i.ytimg.com/vi/3PRIVXcFiXs/hqdefault.jpg",
+  "video_url": null,
+  "modules": [
+    {
+      "title": "What Is Riba?",
+      "description": "The definition of riba, why it is forbidden, and what counts as riba today.",
+      "sort_order": 1,
+      "lessons": [
+        {
+          "title": "What Is Riba — Is It the Same as Interest?",
+          "content_type": "video",
+          "content": "The linguistic and legal definition of riba: when extra payment for time is forbidden and when it is not. source: Sheikh Assim Al Hakeem (assimalhakeem, https://www.youtube.com/@assimalhakeem) — Salafi scholar, English-language fatwa Q&A from Jeddah, Saudi Arabia",
+          "video_url": "https://www.youtube.com/watch?v=3PRIVXcFiXs",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/3PRIVXcFiXs/hqdefault.jpg",
+          "duration_minutes": 2,
+          "sort_order": 1,
+          "is_preview": true
+        },
+        {
+          "title": "Riba Is Not Just Interest — An Important Reminder",
+          "content_type": "video",
+          "content": "Why riba is broader than bank interest and applies in every exchange of the six categories (gold, silver, wheat, barley, dates, salt). Ustadh Muhammad Tim Humble.",
+          "video_url": "https://www.youtube.com/watch?v=5k-3TQAQg2g",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/5k-3TQAQg2g/hqdefault.jpg",
+          "duration_minutes": 5,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Islamic Finance: Murābaḥah, Installments & Ribā Clarified",
+          "content_type": "video",
+          "content": "Murābaḥah financing and installment sales explained: the boundary between halal profit and riba. source: AMAR — AMAU's Arabic-language broadcasts (https://www.youtube.com/@AMARofficial); Ustadh AbdulRahman Hassan, translated in English",
+          "video_url": "https://www.youtube.com/watch?v=LJWq2GSVg7E",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/LJWq2GSVg7E/hqdefault.jpg",
+          "duration_minutes": 52,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "10 Times Interest Is Not Halal: IFG Clarifies",
+          "content_type": "video",
+          "content": "Ten misconceptions about when interest might be allowed - IFG dissects each one. Islamic Finance Guru.",
+          "video_url": "https://www.youtube.com/watch?v=_JaNFKOiXkQ",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/_JaNFKOiXkQ/hqdefault.jpg",
+          "duration_minutes": 13,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    },
+    {
+      "title": "Riba in Modern Life",
+      "description": "Jobs, banks, mortgages and alternatives, with scholarly rulings.",
+      "sort_order": 2,
+      "lessons": [
+        {
+          "title": "Working for a Company That Deals with Riba — Permissible or Not?",
+          "content_type": "video",
+          "content": "Is it allowed to work for a company that takes riba-based loans? The ruling in detail. source: Sheikh Assim Al Hakeem (assimalhakeem, https://www.youtube.com/@assimalhakeem) — Salafi scholar, English-language fatwa Q&A from Jeddah, Saudi Arabia",
+          "video_url": "https://www.youtube.com/watch?v=pVg3wuhEypI",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/pVg3wuhEypI/hqdefault.jpg",
+          "duration_minutes": 4,
+          "sort_order": 1,
+          "is_preview": false
+        },
+        {
+          "title": "Is It Okay to Work at a Riba-Based Bank If Not Directly Dealing with Riba?",
+          "content_type": "video",
+          "content": "Even 'back office' and support roles at riba-based institutions: the ruling. source: Sheikh Assim Al Hakeem (assimalhakeem, https://www.youtube.com/@assimalhakeem) — Salafi scholar, English-language fatwa Q&A from Jeddah, Saudi Arabia",
+          "video_url": "https://www.youtube.com/watch?v=EQhvXo35HAE",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/EQhvXo35HAE/hqdefault.jpg",
+          "duration_minutes": 4,
+          "sort_order": 2,
+          "is_preview": false
+        },
+        {
+          "title": "Scholars Who Say Mortgage Loans Are Permissible in the Land of Disbelievers",
+          "content_type": "video",
+          "content": "The fatwa of some scholars regarding mortgages in dar al-kufr (countries of disbelief): the debate with evidence. source: Sheikh Assim Al Hakeem (assimalhakeem, https://www.youtube.com/@assimalhakeem) — Salafi scholar, English-language fatwa Q&A from Jeddah, Saudi Arabia",
+          "video_url": "https://www.youtube.com/watch?v=GsTB3JkiWXw",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/GsTB3JkiWXw/hqdefault.jpg",
+          "duration_minutes": 3,
+          "sort_order": 3,
+          "is_preview": false
+        },
+        {
+          "title": "There Are No Islamic / Interest-Free Banks in Our Place — Where Should We Put Our Money?",
+          "content_type": "video",
+          "content": "Living without access to Islamic banking: practical guidance. source: Sheikh Assim Al Hakeem (assimalhakeem, https://www.youtube.com/@assimalhakeem) — Salafi scholar, English-language fatwa Q&A from Jeddah, Saudi Arabia",
+          "video_url": "https://www.youtube.com/watch?v=q14hJjL_6sU",
+          "video_duration_seconds": null,
+          "audio_url": null,
+          "pdf_url": null,
+          "external_url": null,
+          "thumbnail_url": "https://i.ytimg.com/vi/q14hJjL_6sU/hqdefault.jpg",
+          "duration_minutes": 1,
+          "sort_order": 4,
+          "is_preview": false
+        }
+      ]
+    }
+  ]
+}

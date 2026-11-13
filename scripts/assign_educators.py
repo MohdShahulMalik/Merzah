@@ -29,31 +29,66 @@ edu_map = {e["name"]: e["id"] for e in educators}
 id_to_name = {e["id"]: e["name"] for e in educators}
 
 ASSIGNMENTS = {
+    # Salafi/Athari sources verified against the seed files' actual video
+    # authors (see scripts/data/educator_ids.json). Multi-word keys win over
+    # shorter overlapping keys because Python dicts keep insertion order.
+    "aqeedah-series": "Newcastle Central Mosque",
+    "thalathat": "AMAU Academy",
+    "qawaid": "AMAU Academy",
+    "nawaid": "AMAU Academy",
+    "forty-hadith": "Madeenah Academy",
+    "hajj-in-perspective": "Garden of Ilm",
+    "hajj-and-umrah": "Garden of Ilm",
+    "hajj": "Garden of Ilm",
+    "tafsir": "Garden of Ilm",
+    "rightly-guided": "The Patient One",
+    "caliph": "The Patient One",
+    "seerah-in-years": "Muwahhideen Publications",
+    "lessons-from-seerah": "Salafi Matloob",
+    "life-of-prophet": "Forgotten Light",
+    "seerah": "Muwahhideen Publications",
+    "prophet-muhammad": "Forgotten Light",
+    "the-salafi-woman": "AMAU Academy",
+    "married-ever-after": "AMAU Academy",
+    "secrets-to-successful-marriage": "AMAU Academy",
+    "salafi-dawah": "Salafi Publications",
+    "dawah": "Salafi Publications",
+    "adab-doing-things": "Salafi Publications",
+    "al-adab-al-mufrad": "Salafi Publications",
+    "islamic-manners": "Salafi Publications",
+    "manners": "Salafi Publications",
+    "adab": "Salafi Publications",
+    "patience": "Forgotten Light",
+    "time-management": "AMAU Academy",
+    "arabic": "Green Lane Masjid",
+    "salah": "Newcastle Central Mosque",
+    "fiqh": "Newcastle Central Mosque",
+    "muslim-business-leadership": "Newcastle Central Mosque",
+    "leadership-islamic-values": "Miftaah Institute",
+    "starting-halal": "Assim Al-Hakeem",
+    "halal-entrepreneurship": "Assim Al-Hakeem",
+    "islamic-business-ethics": "Assim Al-Hakeem",
+    "ethical-business-practices": "Assim Al-Hakeem",
+    "riba": "Assim Al-Hakeem",
+    "islamic-apps-tools": "Quran.com",
+    "quran-recitation-basics": "E-Tilawah Academy",
+    "learn-reading-quran": "Islamic Home Schooling Academy - New Zealand",
+    "tajweed": "TROID",
+    "recitation": "E-Tilawah Academy",
+    "reading-quran": "Islamic Home Schooling Academy - New Zealand",
+    "aqeedah": "Garden of Ilm",
+    "tawheed": "Garden of Ilm",
     "quran": "Quran.com",
-    "tajweed": "Quran.com",
-    "recitation": "Quran.com",
-    "reading-quran": "Quran.com",
-    "tafsir": "Imam al-Bukhari",
     "bukhari": "Imam al-Bukhari",
     "muslim": "Imam Muslim",
     "nawawi": "Imam an-Nawawi",
     "hadith": "Imam al-Bukhari",
-    "salah": "Imam Malik",
-    "fiqh": "Imam Malik",
-    "hajj": "Imam Malik",
     "zakat": "Imam Malik",
-    "aqeedah": "SeekersGuidance",
-    "tawheed": "SeekersGuidance",
-    "seerah": "Shaykh Faraz Rabbani",
-    "prophet": "Shaykh Faraz Rabbani",
-    "caliph": "Shaykh Faraz Rabbani",
-    "patience": "Shaykh Abdul-Rahim Reasat",
-    "adab": "Shaykh Abdul-Rahim Reasat",
-    "manners": "Shaykh Abdul-Rahim Reasat",
-    "character": "Shaykh Abdul-Rahim Reasat",
-    "married": "Ustadha Shireen Ahmed",
-    "marriage": "Ustadha Shireen Ahmed",
-    "family": "Ustadha Shireen Ahmed",
+    "prophet": "Muwahhideen Publications",
+    "character": "Salafi Publications",
+    "married": "AMAU Academy",
+    "marriage": "AMAU Academy",
+    "family": "AMAU Academy",
     "finance": "SeekersGuidance",
     "investing": "SeekersGuidance",
     "inheritance": "SeekersGuidance",
@@ -61,27 +96,21 @@ ASSIGNMENTS = {
     "entrepreneurship": "SeekersGuidance",
     "leadership": "SeekersGuidance",
     "communication": "SeekersGuidance",
-    "time-management": "SeekersGuidance",
     "workplace": "SeekersGuidance",
     "ethics": "Shaykh Abdul-Rahim Reasat",
-    "dawah": "Shaykh Yahya Rhodus",
-    "community": "Shaykh Yahya Rhodus",
+    "community": "Salafi Publications",
     "digital": "SeekersGuidance",
     "online-safety": "SeekersGuidance",
     "islamic-apps": "SeekersGuidance",
-    "arabic": "Ustadh Abdullah Misra",
 }
 
 DEFAULT_EDUCATOR = educators[0]["name"]
 
-# Slugs managed explicitly below (NEW_EDUCATORS); the pattern pass must not
-# touch them, otherwise a re-run would revert their dedicated educators.
-MANAGED_SLUGS = {
-    "nawaid-ul-islam",
-    "qawaid-al-arba",
-    "thalathat-ul-usul",
-    "the-salafi-woman",
-}
+# Slugs managed explicitly below (none - Salafi courses are attributed via
+# ASSIGNMENTS to deterministic-id accounts seeded by
+# populate_salafi_educators.sh, e.g. users:amau_academy, and are also
+# re-synced to the DB here on every run).
+MANAGED_SLUGS = set()
 
 changed = []
 for fname in sorted(os.listdir(COURSES_DIR)):
@@ -138,18 +167,12 @@ for slug, _old_id, new_id in changed:
 
 print("db records updated: %d" % db_updated)
 
-# --- Dedicated educators for courses no keyword matches --------------------
-# slug -> display_name of the (possibly newly created) educator user.
-NEW_EDUCATORS = {
-    "Imam Muhammad ibn Abd al-Wahhab": [
-        "nawaid-ul-islam",
-        "qawaid-al-arba",
-        "thalathat-ul-usul",
-    ],
-    "The Salafi Woman": [
-        "the-salafi-woman",
-    ],
-}
+# --- Dedicated educators (retired) ----------------------------------------
+# Previously created random-id users for mutoon courses. Those courses now
+# point at deterministic-id Salafi accounts (users:amau_academy etc.) and are
+# routed via ASSIGNMENTS above; keep the dict empty rather than delete the
+# mechanism, in case a future dedicated account is needed.
+NEW_EDUCATORS = {}
 
 UNUSABLE_PASSWORD_HASH = "UNUSABLE_SEED_ACCOUNT"
 

@@ -16,20 +16,26 @@
       "note": "Foundation course on principles of Islamic finance"
     },
     {
-      "course_slug": "halal-investing-guide",
+      "course_slug": "riba-and-interest-islam",
       "sort_order": 2,
+      "is_required": true,
+      "note": "Understand riba (usury) and its modern forms before touching any financial product"
+    },
+    {
+      "course_slug": "halal-investing-guide",
+      "sort_order": 3,
       "is_required": true,
       "note": "Learn how to invest in accordance with Islamic law"
     },
     {
       "course_slug": "zakat-business-wealth",
-      "sort_order": 3,
+      "sort_order": 4,
       "is_required": true,
       "note": "Understand Zakat obligations on business and wealth"
     },
     {
       "course_slug": "islamic-inheritance-planning",
-      "sort_order": 4,
+      "sort_order": 5,
       "is_required": false,
       "note": "Optional: Plan your estate according to Islamic inheritance rules"
     }

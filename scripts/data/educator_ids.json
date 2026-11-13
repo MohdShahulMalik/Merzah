@@ -1,17 +1,134 @@
 [
-  {"name": "SeekersGuidance", "id": "users:uwijb5tl9kyyh2y5cuon"},
-  {"name": "Shaykh Faraz Rabbani", "id": "users:3kibcfggsg0av8c487sz"},
-  {"name": "Ustadh Abdullah Misra", "id": "users:x978x0s78tk1z5nyqe5p"},
-  {"name": "Shaykh Yahya Rhodus", "id": "users:eerq0i131ozz79hs6mzv"},
-  {"name": "Shaykh Abdul-Rahim Reasat", "id": "users:cpeg48iroddgeglcoqpo"},
-  {"name": "Ustadha Shireen Ahmed", "id": "users:qvybx6jc0uoj7tuwjhae"},
-  {"name": "Quran.com", "id": "users:fvjwwab4tzab5xr2sdkc"},
-  {"name": "Sunnah.com", "id": "users:vgyuyy48vxi7tpilc2be"},
-  {"name": "Imam al-Bukhari", "id": "users:ymt8tgorjr7teuymh3y1"},
-  {"name": "Imam Muslim", "id": "users:rbqpt62ga2wiqh6tm7mk"},
-  {"name": "Imam an-Nawawi", "id": "users:sumlm1la971nwuakc2it"},
-  {"name": "Imam Malik", "id": "users:ge7pdilrod94stv3ne37"},
-  {"name": "Imam at-Tirmidhi", "id": "users:zt7i3zcga1lxx5abr6jw"},
-  {"name": "Imam Ibn Majah", "id": "users:zb0aa6hvwk064iz58c1t"},
-  {"name": "Imam Ahmad", "id": "users:kafeuppk2osj9h0veff0"}
+  {
+    "name": "SeekersGuidance",
+    "id": "users:uwijb5tl9kyyh2y5cuon"
+  },
+  {
+    "name": "Shaykh Faraz Rabbani",
+    "id": "users:3kibcfggsg0av8c487sz"
+  },
+  {
+    "name": "Ustadh Abdullah Misra",
+    "id": "users:x978x0s78tk1z5nyqe5p"
+  },
+  {
+    "name": "Shaykh Yahya Rhodus",
+    "id": "users:eerq0i131ozz79hs6mzv"
+  },
+  {
+    "name": "Shaykh Abdul-Rahim Reasat",
+    "id": "users:cpeg48iroddgeglcoqpo"
+  },
+  {
+    "name": "Ustadha Shireen Ahmed",
+    "id": "users:qvybx6jc0uoj7tuwjhae"
+  },
+  {
+    "name": "Quran.com",
+    "id": "users:fvjwwab4tzab5xr2sdkc"
+  },
+  {
+    "name": "Sunnah.com",
+    "id": "users:vgyuyy48vxi7tpilc2be"
+  },
+  {
+    "name": "Imam al-Bukhari",
+    "id": "users:ymt8tgorjr7teuymh3y1"
+  },
+  {
+    "name": "Imam Muslim",
+    "id": "users:rbqpt62ga2wiqh6tm7mk"
+  },
+  {
+    "name": "Imam an-Nawawi",
+    "id": "users:sumlm1la971nwuakc2it"
+  },
+  {
+    "name": "Imam Malik",
+    "id": "users:ge7pdilrod94stv3ne37"
+  },
+  {
+    "name": "Imam at-Tirmidhi",
+    "id": "users:zt7i3zcga1lxx5abr6jw"
+  },
+  {
+    "name": "Imam Ibn Majah",
+    "id": "users:zb0aa6hvwk064iz58c1t"
+  },
+  {
+    "name": "Imam Ahmad",
+    "id": "users:kafeuppk2osj9h0veff0"
+  },
+  {
+    "name": "Garden of Ilm",
+    "id": "users:garden_of_ilm"
+  },
+  {
+    "name": "Newcastle Central Mosque",
+    "id": "users:newcastle_central_mosque"
+  },
+  {
+    "name": "AMAU Academy",
+    "id": "users:amau_academy"
+  },
+  {
+    "name": "Ulul Absaar Project",
+    "id": "users:ulul_absaar_project"
+  },
+  {
+    "name": "Muwahhideen Publications",
+    "id": "users:muwahhideen_publications"
+  },
+  {
+    "name": "Salafi Matloob",
+    "id": "users:salafi_matloob"
+  },
+  {
+    "name": "Green Lane Masjid",
+    "id": "users:green_lane_masjid"
+  },
+  {
+    "name": "Forgotten Light",
+    "id": "users:forgotten_light"
+  },
+  {
+    "name": "Salafi Publications",
+    "id": "users:salafi_publications"
+  },
+  {
+    "name": "The Patient One",
+    "id": "users:the_patient_one"
+  },
+  {
+    "name": "Umm Uthmaan al-Majariyyah",
+    "id": "users:umm_uthmaan_al_majariyyah"
+  },
+  {
+    "name": "Assim Al-Hakeem",
+    "id": "users:assim_al_hakeem"
+  },
+  {
+    "name": "TROID",
+    "id": "users:troid"
+  },
+  {
+    "name": "E-Tilawah Academy",
+    "id": "users:etilawah_academy"
+  },
+  {
+    "name": "Islamic Home Schooling Academy - New Zealand",
+    "id": "users:ihsan_academy"
+  },
+  {
+    "name": "Madeenah Academy",
+    "id": "users:madeenah_academy"
+  },
+  {
+    "name": "Islamic Finance Guru",
+    "id": "users:ifg"
+  },
+  {
+    "name": "Miftaah Institute",
+    "id": "users:miftaah_institute"
+  }
 ]
