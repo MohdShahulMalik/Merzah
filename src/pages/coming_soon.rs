@@ -48,6 +48,17 @@ pub fn AllLearningPaths() -> impl IntoView {
     }
 }
 
+/// Destination for the "Forgot password?" link on the login page.
+#[component]
+pub fn ForgotPassword() -> impl IntoView {
+    view! {
+        <ComingSoon
+            title="Forgot Password"
+            description="Password reset is not ready yet. We are putting the finishing touches on it."
+        />
+    }
+}
+
 /// Destination for the event card call-to-action buttons.
 #[component]
 pub fn EventDetails() -> impl IntoView {
