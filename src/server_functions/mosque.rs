@@ -65,6 +65,42 @@ pub async fn add_mosque(mosque: NewMosque) -> Result<ApiResponse<String>, Server
     }
 
     let mosque_id = generate_mosque_record_id();
+
+    // Do not create a second record for a mosque that is already stored:
+    // seeding scripts are re-runnable and must not pile up duplicates.
+    let existing_query = "SELECT VALUE id FROM mosques WHERE name = $name LIMIT 1";
+    let existing_result = db
+        .query(existing_query)
+        .bind(("name", mosque.name.clone()))
+        .await;
+    match existing_result {
+        Ok(mut res) => match res.take::<Option<RecordId>>(0) {
+            Ok(Some(existing_id)) => {
+                info!(
+                    "Mosque '{}' already exists as {}, nothing to create",
+                    mosque.name, existing_id
+                );
+                return Ok(responder.ok(format!(
+                    "Mosque '{}' already exists ({}), no duplicate created",
+                    mosque.name, existing_id
+                )));
+            }
+            Ok(None) => {}
+            Err(e) => {
+                error!(?e, "Failed to check whether the mosque already exists");
+                return Ok(responder.internal_server_error(
+                    "Failed to check the mosque list due to database error".to_string(),
+                ));
+            }
+        },
+        Err(e) => {
+            error!(?e, "Failed to check whether the mosque already exists");
+            return Ok(responder.internal_server_error(
+                "Failed to check the mosque list due to database error".to_string(),
+            ));
+        }
+    }
+
     let mosque_record = MosqueInsert::new(
         mosque_id.clone(),
         Some(mosque.name),
@@ -256,6 +292,58 @@ pub async fn add_mosques_of_region(
         )));
     }
 
+    // Skip mosques that are already stored so re-running the seeding script
+    // does not create duplicates.
+    let existing_names_query = "SELECT VALUE name FROM mosques WHERE name != NONE";
+    let existing_names: std::collections::HashSet<String> = match db
+        .query(existing_names_query)
+        .await
+    {
+        Ok(mut res) => match res.take::<Vec<Option<String>>>(0) {
+            Ok(rows) => rows
+                .into_iter()
+                .flatten()
+                .map(|name| name.trim().to_lowercase())
+                .collect(),
+            Err(e) => {
+                error!(?e, "Failed to read the existing mosque names");
+                return Ok(responder.internal_server_error(
+                    "Failed to read the mosque list due to database error".to_string(),
+                ));
+            }
+        },
+        Err(e) => {
+            error!(?e, "Failed to read the existing mosque names");
+            return Ok(responder.internal_server_error(
+                "Failed to read the mosque list due to database error".to_string(),
+            ));
+        }
+    };
+
+    let total_fetched = mosques.len();
+    let mut skipped = 0usize;
+    mosques.retain(|mosque| match mosque.name.as_ref() {
+        Some(name) => {
+            let key = name.trim().to_lowercase();
+            if existing_names.contains(&key) {
+                skipped += 1;
+                false
+            } else {
+                true
+            }
+        }
+        None => true,
+    });
+
+    let num_mosques = mosques.len();
+
+    if mosques.is_empty() {
+        return Ok(responder.ok(format!(
+            "No new mosques for the region {} {} {} {}: {} already existed",
+            south, west, north, east, skipped
+        )));
+    }
+
     let insert_query = "INSERT INTO mosques $mosques";
 
     match db.query(insert_query).bind(("mosques", mosques)).await {
@@ -269,8 +357,8 @@ pub async fn add_mosques_of_region(
     }
 
     Ok(responder.ok(format!(
-        "Added {} mosques for the region {} {} {} {} successfully",
-        num_mosques, south, west, north, east
+        "Added {} mosques for the region {} {} {} {} successfully ({} already existed, {} fetched)",
+        num_mosques, south, west, north, east, skipped, total_fetched
     )))
 }
 
@@ -730,6 +818,37 @@ pub async fn add_favorite(mosque_id: String) -> Result<ApiResponse<String>, Serv
         Ok(id) => id,
         Err(e) => return Ok(e),
     };
+
+    // Favouriting twice must not create a second edge.
+    let existing_favorite_query =
+        "SELECT VALUE id FROM favorited WHERE in = $user_id AND out = $mosque_id LIMIT 1";
+    let existing_favorite_result = db
+        .query(existing_favorite_query)
+        .bind(("user_id", user.id.clone()))
+        .bind(("mosque_id", mosque_id.clone()))
+        .await;
+    match existing_favorite_result {
+        Ok(mut res) => match res.take::<Option<RecordId>>(0) {
+            Ok(Some(_)) => {
+                return Ok(responder.ok(
+                    "The mosque is already in the user's favorite list".to_string(),
+                ));
+            }
+            Ok(None) => {}
+            Err(e) => {
+                error!(?e, "Failed to check the favorite list");
+                return Ok(responder.internal_server_error(
+                    "Failed to favorite a mosque".to_string(),
+                ));
+            }
+        },
+        Err(e) => {
+            error!(?e, "Failed to check the favorite list");
+            return Ok(responder.internal_server_error(
+                "Failed to favorite a mosque".to_string(),
+            ));
+        }
+    }
 
     let favorite_query = r#"
         RELATE $user_id -> favorited -> $mosque_id;

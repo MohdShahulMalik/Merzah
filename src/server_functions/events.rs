@@ -11,7 +11,7 @@ use leptos::{
 #[cfg(feature = "ssr")]
 use surrealdb::{RecordId, sql::Geometry};
 #[cfg(feature = "ssr")]
-use tracing::error;
+use tracing::{error, info};
 
 #[cfg(feature = "ssr")]
 use crate::models::events::EventSummary;
@@ -56,6 +56,43 @@ pub async fn add_event(create_event: CreateEvent) -> Result<ApiResponse<String>,
         Ok(record) => record,
         Err(e) => return Ok(e),
     };
+
+    // Do not create the same event twice: seeding scripts are re-runnable and
+    // must not pile up duplicate events (the hosts relation is unique too).
+    let existing_event_query =
+        "SELECT VALUE id FROM events WHERE mosque = $mosque AND title = $title LIMIT 1";
+    let existing_event_result = db
+        .query(existing_event_query)
+        .bind(("mosque", event_record.mosque.clone()))
+        .bind(("title", event_record.title.clone()))
+        .await;
+    match existing_event_result {
+        Ok(mut res) => match res.take::<Option<RecordId>>(0) {
+            Ok(Some(existing_id)) => {
+                info!(
+                    "Event '{}' already exists as {}, nothing to create",
+                    event_record.title, existing_id
+                );
+                return Ok(responder.ok(format!(
+                    "Event '{}' already exists ({}), no duplicate created",
+                    event_record.title, existing_id
+                )));
+            }
+            Ok(None) => {}
+            Err(e) => {
+                error!(?e, "Failed to check whether the event already exists");
+                return Ok(responder.internal_server_error(
+                    "Failed to check the event list due to database error".to_string(),
+                ));
+            }
+        },
+        Err(e) => {
+            error!(?e, "Failed to check whether the event already exists");
+            return Ok(responder.internal_server_error(
+                "Failed to check the event list due to database error".to_string(),
+            ));
+        }
+    }
 
     let create_event_transaction = r#"
         BEGIN TRANSACTION;
