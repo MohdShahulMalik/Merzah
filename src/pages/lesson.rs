@@ -39,6 +39,58 @@ fn content_type_label(content_type: &LessonContentType) -> &'static str {
     }
 }
 
+// If `url` points at a YouTube video or playlist (watch?v= / playlist?list= /
+// youtu.be/, or an already-embedded URL), return the matching youtube.com embed
+// URL so the lesson can play without leaving the page. Direct media files return
+// None and fall back to the <video> tag.
+fn youtube_embed_url(url: &str) -> Option<String> {
+    let trimmed = url.trim();
+    if !(trimmed.contains("youtube.com") || trimmed.contains("youtu.be")) {
+        return None;
+    }
+
+    let query = trimmed.split_once('?').map(|(_, q)| q).unwrap_or("");
+    let mut v_param: Option<&str> = None;
+    let mut list_param: Option<&str> = None;
+    for pair in query.split('&') {
+        let Some((key, value)) = pair.split_once('=') else {
+            continue;
+        };
+        match key {
+            "v" if v_param.is_none() => v_param = Some(value),
+            "list" if list_param.is_none() => list_param = Some(value),
+            _ => {}
+        }
+    }
+
+    if let Some(id) = v_param {
+        return Some(format!("https://www.youtube.com/embed/{}", id));
+    }
+    if let Some(list) = list_param {
+        if trimmed.contains("/embed/videoseries") {
+            return Some(trimmed.to_string());
+        }
+        return Some(format!(
+            "https://www.youtube.com/embed/videoseries?list={}",
+            list
+        ));
+    }
+    // youtu.be/<id> or youtube.com/embed/<id> style links
+    for segment in trimmed.split(['/', '?']) {
+        if segment.len() == 11
+            && segment
+                .chars()
+                .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
+        {
+            if trimmed.contains("/embed/") {
+                return Some(trimmed.to_string());
+            }
+            return Some(format!("https://www.youtube.com/embed/{}", segment));
+        }
+    }
+    None
+}
+
 fn format_clock(total_seconds: i32) -> String {
     let seconds = total_seconds.max(0);
 
@@ -340,8 +392,24 @@ pub fn LessonPage() -> impl IntoView {
                                                 .map(|url| {
                                                     let poster = thumbnail_url.clone();
 
-                                                    view! {
-                                                        <div class="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-stroke-muted bg-indigo-400 shadow-md">
+                                                    if let Some(embed_url) = youtube_embed_url(&url) {
+                                                        let title = detail.title.clone();
+
+                                                        view! {
+                                                            <div class="relative aspect-video w-full overflow-hidden rounded-2xl border border-stroke-muted bg-black shadow-md">
+                                                                <iframe
+                                                                    src=embed_url
+                                                                    title=title
+                                                                    class="h-full w-full border-0"
+                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                                    referrerpolicy="strict-origin-when-cross-origin"
+                                                                ></iframe>
+                                                            </div>
+                                                        }
+                                                        .into_any()
+                                                    } else {
+                                                        view! {
+                                                            <div class="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-stroke-muted bg-indigo-400 shadow-md">
                                                                 <video
                                                                     controls=true
                                                                     src=url
@@ -349,6 +417,8 @@ pub fn LessonPage() -> impl IntoView {
                                                                     class="h-full w-full object-cover"
                                                                 ></video>
                                                             </div>
+                                                        }
+                                                        .into_any()
                                                     }
                                                 })}
 
