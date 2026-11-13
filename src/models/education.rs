@@ -31,6 +31,47 @@ pub struct Track {
     pub deleted: bool,
 }
 
+#[cfg(feature = "ssr")]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TrackRecord {
+    pub name: String,
+    pub slug: String,
+    pub description: String,
+    pub icon: Option<String>,
+    pub image_url: Option<String>,
+    pub sort_order: i32,
+    pub created_at: Datetime,
+    pub updated_at: Datetime,
+    pub deleted: bool,
+}
+
+#[cfg(feature = "ssr")]
+impl TrackRecord {
+    pub fn new(
+        name: String,
+        slug: String,
+        description: String,
+        icon: Option<String>,
+        image_url: Option<String>,
+        sort_order: i32,
+        created_at: Datetime,
+        updated_at: Datetime,
+        deleted: bool,
+    ) -> Self {
+        Self {
+            name,
+            slug,
+            description,
+            icon,
+            image_url,
+            sort_order,
+            created_at,
+            updated_at,
+            deleted,
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct TrackOnClient {
     pub id: String,
@@ -104,6 +145,49 @@ pub struct CourseRecord {
     pub created_at: Datetime,
     pub updated_at: Datetime,
     pub deleted: bool,
+}
+
+#[cfg(feature = "ssr")]
+impl CourseRecord {
+    pub fn new(
+        title: String,
+        slug: String,
+        description: String,
+        short_description: String,
+        track: RecordId,
+        educator: RecordId,
+        level: CourseLevel,
+        status: CourseStatus,
+        language: String,
+        thumbnail_url: Option<String>,
+        video_url: Option<String>,
+        duration_minutes: i32,
+        lesson_count: i32,
+        enrollment_count: i32,
+        created_at: Datetime,
+        updated_at: Datetime,
+        deleted: bool,
+    ) -> Self {
+        Self {
+            title,
+            slug,
+            description,
+            short_description,
+            track,
+            educator,
+            level,
+            status,
+            language,
+            thumbnail_url,
+            video_url,
+            duration_minutes,
+            lesson_count,
+            enrollment_count,
+            created_at,
+            updated_at,
+            deleted,
+        }
+    }
 }
 
 #[cfg(feature = "ssr")]
@@ -202,6 +286,29 @@ pub struct ModuleRecord {
 }
 
 #[cfg(feature = "ssr")]
+impl ModuleRecord {
+    pub fn new(
+        title: String,
+        course: RecordId,
+        description: Option<String>,
+        sort_order: i32,
+        created_at: Datetime,
+        updated_at: Datetime,
+        deleted: bool,
+    ) -> Self {
+        Self {
+            title,
+            course,
+            description,
+            sort_order,
+            created_at,
+            updated_at,
+            deleted,
+        }
+    }
+}
+
+#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UpdatedModuleRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -240,6 +347,9 @@ pub enum LessonContentType {
     Video,
     Audio,
     Pdf,
+    // Stored as "external_link" to match the lessons.content_type assertion in
+    // the database schema.
+    #[serde(rename = "external_link")]
     ExternalLink,
     Mixed,
 }
@@ -285,6 +395,48 @@ pub struct LessonRecord {
     pub created_at: Datetime,
     pub updated_at: Datetime,
     pub deleted: bool,
+}
+
+#[cfg(feature = "ssr")]
+impl LessonRecord {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        title: String,
+        module: RecordId,
+        content_type: LessonContentType,
+        content: String,
+        video_url: Option<String>,
+        video_duration_seconds: Option<i32>,
+        audio_url: Option<String>,
+        pdf_url: Option<String>,
+        external_url: Option<String>,
+        thumbnail_url: Option<String>,
+        duration_minutes: i32,
+        sort_order: i32,
+        is_preview: bool,
+        created_at: Datetime,
+        updated_at: Datetime,
+        deleted: bool,
+    ) -> Self {
+        Self {
+            title,
+            module,
+            content_type,
+            content,
+            video_url,
+            video_duration_seconds,
+            audio_url,
+            pdf_url,
+            external_url,
+            thumbnail_url,
+            duration_minutes,
+            sort_order,
+            is_preview,
+            created_at,
+            updated_at,
+            deleted,
+        }
+    }
 }
 
 #[cfg(feature = "ssr")]
