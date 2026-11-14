@@ -36,10 +36,15 @@ import json
 import os
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 
 REPO_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = os.path.join(REPO_DIR, "scripts", "data")
+# The seed files are read relative to the working directory, exactly like the
+# Rust importer does, so both importers work on the same data set.
+DATA_DIR = os.path.join(os.getcwd(), "scripts", "data")
+if not os.path.isdir(DATA_DIR):
+    DATA_DIR = os.path.join(REPO_DIR, "scripts", "data")
 ENV_FILE = os.path.join(REPO_DIR, ".env")
 
 
@@ -91,13 +96,21 @@ def resolve_created_by(value, what):
     return CREATED_BY_FALLBACK
 
 
-def sql(query):
-    """Run one SQL statement, return its result payload (raise on error)."""
+def sql(query, params=None):
+    """Run one SQL statement, return its result payload (raise on error).
+
+    `params` are sent as SurrealQL variables ($name), which is how record ids
+    have to be passed: a record id in a string literal is not the same thing
+    as a record id.
+    """
     creds = base64.b64encode(
         ("%s:%s" % (SURREAL_USER, SURREAL_PASS)).encode("utf-8")
     ).decode("ascii")
+    url = SURREAL_URL + "/sql"
+    if params:
+        url += "?" + urllib.parse.urlencode(params)
     req = urllib.request.Request(
-        SURREAL_URL + "/sql",
+        url,
         data=query.encode("utf-8"),
         method="POST",
         headers={
@@ -174,6 +187,17 @@ def record_id(raw):
     raise TypeError("cannot use as record id: %r" % (raw,))
 
 
+def rid_expr(rid):
+    """SurrealQL expression that evaluates to the record id `rid`.
+
+    Comparing a record id with a plain string ("courses:abc") never matches in
+    SurrealDB, so every id in a WHERE/UPDATE/DELETE has to be turned into a
+    real record id first.
+    """
+    table, _, ident = rid.partition(":")
+    return "type::thing(%s, %s)" % (esc(table), esc(ident))
+
+
 def first_id(rows):
     if not rows:
         return None
@@ -201,14 +225,14 @@ def ensure_educator(rid, display_name=None):
 
     Returns True when a new account was created.
     """
-    rows = sql("SELECT VALUE id FROM users WHERE id = %s LIMIT 1" % esc(rid))
+    rows = sql("SELECT VALUE id FROM users WHERE id = %s LIMIT 1" % rid_expr(rid))
     if rows:
         return False
     name = display_name or ("Educator %s" % rid)
     sql(
         "UPSERT %s CONTENT { display_name: %s, password_hash: %s, role: 'educator',"
         " created_at: time::now(), updated_at: time::now() }"
-        % (rid, esc(name), esc(UNUSABLE_PASSWORD_HASH))
+        % (rid_expr(rid), esc(name), esc(UNUSABLE_PASSWORD_HASH))
     )
     print("  + educator account %s created (%s)" % (rid, name), flush=True)
     return True
@@ -238,16 +262,16 @@ def import_tracks(data_dir):
         if rows:
             track_id = record_id(rows[0])
             sql(
-                "UPDATE %s SET name = %s, description = %s, icon = %s, image_url = %s,"
+                "UPDATE $id SET name = %s, description = %s, icon = %s, image_url = %s,"
                 " sort_order = %d, deleted = false, updated_at = time::now()"
                 % (
-                    esc(track_id),
                     esc(track["name"]),
                     esc(track["description"]),
                     val(track.get("icon")),
                     val(track.get("image_url")),
                     int(track.get("sort_order", 0)),
-                )
+                ),
+                {"id": track_id},
             )
             updated += 1
             print("  = track %s updated" % track["slug"], flush=True)
@@ -312,22 +336,22 @@ def import_courses(data_dir):
         if course_rows:
             course_id = record_id(course_rows[0])
             sql(
-                "UPDATE %s SET title = %s, description = %s, short_description = %s,"
+                "UPDATE $id SET title = %s, description = %s, short_description = %s,"
                 " track = %s, educator = %s, level = %s, status = %s, language = %s,"
                 " thumbnail_url = %s, video_url = %s, deleted = false, updated_at = time::now()"
                 % (
-                    esc(course_id),
                     esc(course["title"]),
                     esc(course["description"]),
                     esc(course["short_description"]),
-                    esc(track_id),
-                    esc(educator_id),
+                    rid_expr(track_id),
+                    rid_expr(educator_id),
                     esc(course["level"]),
                     esc("published"),
                     esc(course.get("language") or "en"),
                     val(course.get("thumbnail_url")),
                     val(course.get("video_url")),
-                )
+                ),
+                {"id": course_id},
             )
             updated += 1
             print("  = course %s updated" % course["slug"], flush=True)
@@ -343,8 +367,8 @@ def import_courses(data_dir):
                     esc(course["slug"]),
                     esc(course["description"]),
                     esc(course["short_description"]),
-                    esc(track_id),
-                    esc(educator_id),
+                    rid_expr(track_id),
+                    rid_expr(educator_id),
                     esc(course["level"]),
                     esc("published"),
                     esc(course.get("language") or "en"),
@@ -362,18 +386,18 @@ def import_courses(data_dir):
         for module in course.get("modules", []):
             module_rows = sql(
                 "SELECT VALUE id FROM modules WHERE course = %s AND title = %s LIMIT 1"
-                % (esc(course_id), esc(module["title"]))
+                % (rid_expr(course_id), esc(module["title"]))
             )
             if module_rows:
                 module_id = record_id(module_rows[0])
                 sql(
-                    "UPDATE %s SET description = %s, sort_order = %s, deleted = false,"
+                    "UPDATE $id SET description = %s, sort_order = %s, deleted = false,"
                     " updated_at = time::now()"
                     % (
-                        esc(module_id),
                         val(module.get("description")),
                         val(module.get("sort_order", 0)),
-                    )
+                    ),
+                    {"id": module_id},
                 )
             else:
                 module_rows = sql(
@@ -383,7 +407,7 @@ def import_courses(data_dir):
                     " deleted: false }"
                     % (
                         esc(module["title"]),
-                        esc(course_id),
+                        rid_expr(course_id),
                         val(module.get("description")),
                         val(module.get("sort_order", 0)),
                     )
@@ -397,18 +421,17 @@ def import_courses(data_dir):
             for lesson in module.get("lessons", []):
                 lesson_rows = sql(
                     "SELECT VALUE id FROM lessons WHERE module = %s AND title = %s LIMIT 1"
-                    % (esc(module_id), esc(lesson["title"]))
+                    % (rid_expr(module_id), esc(lesson["title"]))
                 )
                 if lesson_rows:
                     lesson_id = record_id(lesson_rows[0])
                     sql(
-                        "UPDATE %s SET content_type = %s, content = %s, video_url = %s,"
+                        "UPDATE $id SET content_type = %s, content = %s, video_url = %s,"
                         " video_duration_seconds = %s, audio_url = %s, pdf_url = %s,"
                         " external_url = %s, thumbnail_url = %s, duration_minutes = %s,"
                         " sort_order = %s, is_preview = %s, deleted = false,"
                         " updated_at = time::now()"
                         % (
-                            esc(lesson_id),
                             esc(lesson["content_type"]),
                             esc(lesson["content"]),
                             val(lesson.get("video_url")),
@@ -420,7 +443,8 @@ def import_courses(data_dir):
                             val(lesson.get("duration_minutes", 5)),
                             val(lesson.get("sort_order", 0)),
                             val(lesson.get("is_preview", False)),
-                        )
+                        ),
+                        {"id": lesson_id},
                     )
                 else:
                     sql(
@@ -433,7 +457,7 @@ def import_courses(data_dir):
                         " deleted: false }"
                         % (
                             esc(lesson["title"]),
-                            esc(module_id),
+                            rid_expr(module_id),
                             esc(lesson["content_type"]),
                             esc(lesson["content"]),
                             val(lesson.get("video_url")),
@@ -449,7 +473,7 @@ def import_courses(data_dir):
                     )
                     lesson_rows = sql(
                         "SELECT VALUE id FROM lessons WHERE module = %s AND title = %s LIMIT 1"
-                        % (esc(module_id), esc(lesson["title"]))
+                        % (rid_expr(module_id), esc(lesson["title"]))
                     )
                     if not lesson_rows:
                         sys.exit("error: Failed to create lesson in %s" % course["slug"])
@@ -459,35 +483,38 @@ def import_courses(data_dir):
             # Soft-delete lessons that are no longer part of the seed.
             stale = sql(
                 "SELECT VALUE id FROM lessons WHERE module = %s AND deleted = false"
-                % esc(module_id)
+                % rid_expr(module_id)
             )
             for stale_id in record_ids_of(stale):
                 if stale_id not in kept_lesson_ids:
                     sql(
-                        "UPDATE %s SET deleted = true, updated_at = time::now()"
-                        % esc(stale_id)
+                        "UPDATE $id SET deleted = true, updated_at = time::now()",
+                        {"id": stale_id},
                     )
 
         # Soft-delete modules that are no longer part of the seed.
         stale = sql(
-            "SELECT VALUE id FROM modules WHERE course = %s AND deleted = false" % esc(course_id)
+            "SELECT VALUE id FROM modules WHERE course = %s AND deleted = false"
+            % rid_expr(course_id)
         )
         for stale_id in record_ids_of(stale):
             if stale_id not in kept_module_ids:
                 sql(
-                    "UPDATE %s SET deleted = true, updated_at = time::now()" % esc(stale_id)
+                    "UPDATE $id SET deleted = true, updated_at = time::now()",
+                    {"id": stale_id},
                 )
 
         lesson_total = len(
             sql(
                 "SELECT VALUE id FROM lessons WHERE module IN"
                 " (SELECT VALUE id FROM modules WHERE course = %s AND deleted = false)"
-                " AND deleted = false" % esc(course_id)
+                " AND deleted = false" % rid_expr(course_id)
             )
         )
         sql(
-            "UPDATE %s SET lesson_count = %d, updated_at = time::now()"
-            % (esc(course_id), lesson_total)
+            "UPDATE $id SET lesson_count = %d, updated_at = time::now()"
+            % (lesson_total,),
+            {"id": course_id},
         )
     print("courses: %d created, %d updated" % (created, updated))
 
@@ -496,23 +523,21 @@ def sync_relation(table, parent_id, child_id, assignments):
     """Create or update one relation edge, keyed by its (in, out) pair."""
     rows = sql(
         "SELECT VALUE id FROM %s WHERE in = %s AND out = %s LIMIT 1"
-        % (table, esc(parent_id), esc(child_id))
+        % (table, rid_expr(parent_id), rid_expr(child_id))
     )
     if rows:
         edge_id = record_id(rows[0])
         if assignments:
             sql(
-                "UPDATE %s SET %s"
-                % (
-                    esc(edge_id),
-                    ", ".join("%s = %s" % (k, v) for k, v in assignments),
-                )
+                "UPDATE $id SET %s"
+                % (", ".join("%s = %s" % (k, v) for k, v in assignments),),
+                {"id": edge_id},
             )
         return
-    statement = "RELATE %s -> %s -> %s" % (esc(parent_id), table, esc(child_id))
+    statement = "RELATE $parent -> %s -> $child" % table
     if assignments:
         statement += " SET %s" % ", ".join("%s = %s" % (k, v) for k, v in assignments)
-    sql(statement)
+    sql(statement, {"parent": parent_id, "child": child_id})
 
 
 def import_roadmaps(data_dir):
@@ -549,20 +574,20 @@ def import_roadmaps(data_dir):
         if roadmap_rows:
             roadmap_id = record_id(roadmap_rows[0])
             sql(
-                "UPDATE %s SET title = %s, description = %s, image_url = %s, track = %s,"
+                "UPDATE $id SET title = %s, description = %s, image_url = %s, track = %s,"
                 " difficulty = %s, estimated_weeks = %d, status = %s, created_by = %s,"
                 " deleted = false, updated_at = time::now()"
                 % (
-                    esc(roadmap_id),
                     esc(roadmap["title"]),
                     esc(roadmap["description"]),
                     val(roadmap.get("image_url")),
-                    esc(track_id) if track_id else "NONE",
+                    rid_expr(track_id) if track_id else "NONE",
                     esc(roadmap["difficulty"]),
                     int(roadmap["estimated_weeks"]),
                     esc(status),
-                    esc(created_by),
-                )
+                    rid_expr(created_by),
+                ),
+                {"id": roadmap_id},
             )
             updated += 1
             print("  = roadmap %s updated" % roadmap["slug"], flush=True)
@@ -577,11 +602,11 @@ def import_roadmaps(data_dir):
                     esc(roadmap["slug"]),
                     esc(roadmap["description"]),
                     val(roadmap.get("image_url")),
-                    esc(track_id) if track_id else "NONE",
+                    rid_expr(track_id) if track_id else "NONE",
                     esc(roadmap["difficulty"]),
                     int(roadmap["estimated_weeks"]),
                     esc(status),
-                    esc(created_by),
+                    rid_expr(created_by),
                 )
             )
             roadmap_id = first_id(roadmap_rows)
@@ -597,9 +622,12 @@ def import_roadmaps(data_dir):
                 % esc(course["course_slug"])
             )
             if not course_rows:
-                sys.exit(
-                    "error: Course not found for roadmap: %s" % course["course_slug"]
+                print(
+                    "  ! course %s not found, skipping the roadmap link"
+                    % course["course_slug"],
+                    flush=True,
                 )
+                continue
             course_id = record_id(course_rows[0])
             sync_relation(
                 "roadmap_courses",
@@ -614,16 +642,19 @@ def import_roadmaps(data_dir):
             kept_course_ids.append(course_id)
 
         # Remove links for courses that dropped out of the roadmap.
-        edges = sql("SELECT VALUE id FROM roadmap_courses WHERE in = %s" % esc(roadmap_id))
+        edges = sql(
+            "SELECT VALUE id FROM roadmap_courses WHERE in = %s" % rid_expr(roadmap_id)
+        )
         for edge_id in record_ids_of(edges):
             out_rows = sql(
-                "SELECT VALUE out FROM roadmap_courses WHERE id = %s LIMIT 1" % esc(edge_id)
+                "SELECT VALUE out FROM roadmap_courses WHERE id = %s LIMIT 1"
+                % rid_expr(edge_id)
             )
             if not out_rows:
                 continue
             out_id = record_id(out_rows[0])
             if out_id not in kept_course_ids:
-                sql("DELETE %s" % esc(edge_id))
+                sql("DELETE $id", {"id": edge_id})
     print("roadmaps: %d created, %d updated" % (created, updated))
 
 
@@ -662,17 +693,17 @@ def import_frameworks(data_dir):
         if framework_rows:
             framework_id = record_id(framework_rows[0])
             sql(
-                "UPDATE %s SET title = %s, description = %s, image_url = %s, track = %s,"
+                "UPDATE $id SET title = %s, description = %s, image_url = %s, track = %s,"
                 " status = %s, created_by = %s, deleted = false, updated_at = time::now()"
                 % (
-                    esc(framework_id),
                     esc(framework["title"]),
                     esc(framework["description"]),
                     val(framework.get("image_url")),
-                    esc(track_id) if track_id else "NONE",
+                    rid_expr(track_id) if track_id else "NONE",
                     esc(status),
-                    esc(created_by),
-                )
+                    rid_expr(created_by),
+                ),
+                {"id": framework_id},
             )
             updated += 1
             print("  = framework %s updated" % framework["slug"], flush=True)
@@ -686,9 +717,9 @@ def import_frameworks(data_dir):
                     esc(framework["slug"]),
                     esc(framework["description"]),
                     val(framework.get("image_url")),
-                    esc(track_id) if track_id else "NONE",
+                    rid_expr(track_id) if track_id else "NONE",
                     esc(status),
-                    esc(created_by),
+                    rid_expr(created_by),
                 )
             )
             framework_id = first_id(framework_rows)
@@ -700,24 +731,24 @@ def import_frameworks(data_dir):
         for milestone in framework.get("milestones", []):
             milestone_rows = sql(
                 "SELECT VALUE id FROM milestones WHERE framework = %s AND title = %s LIMIT 1"
-                % (esc(framework_id), esc(milestone["title"]))
+                % (rid_expr(framework_id), esc(milestone["title"]))
             )
             if milestone_rows:
                 milestone_id = record_id(milestone_rows[0])
                 sql(
-                    "UPDATE %s SET description = %s, sort_order = %s"
+                    "UPDATE $id SET description = %s, sort_order = %s"
                     % (
-                        esc(milestone_id),
                         val(milestone.get("description")),
                         val(milestone["sort_order"]),
-                    )
+                    ),
+                    {"id": milestone_id},
                 )
             else:
                 milestone_rows = sql(
                     "CREATE milestones CONTENT { framework: %s, title: %s,"
                     " description: %s, sort_order: %s }"
                     % (
-                        esc(framework_id),
+                        rid_expr(framework_id),
                         esc(milestone["title"]),
                         val(milestone.get("description")),
                         val(milestone["sort_order"]),
@@ -736,10 +767,12 @@ def import_frameworks(data_dir):
                     % esc(course["course_slug"])
                 )
                 if not course_rows:
-                    sys.exit(
-                        "error: Course not found for milestone: %s"
-                        % course["course_slug"]
+                    print(
+                        "  ! course %s not found, skipping the milestone link"
+                        % course["course_slug"],
+                        flush=True,
                     )
+                    continue
                 course_id = record_id(course_rows[0])
                 sync_relation(
                     "milestone_courses",
@@ -750,18 +783,19 @@ def import_frameworks(data_dir):
                 kept_course_ids.append(course_id)
 
             edges = sql(
-                "SELECT VALUE id FROM milestone_courses WHERE in = %s" % esc(milestone_id)
+                "SELECT VALUE id FROM milestone_courses WHERE in = %s"
+                % rid_expr(milestone_id)
             )
             for edge_id in record_ids_of(edges):
                 out_rows = sql(
                     "SELECT VALUE out FROM milestone_courses WHERE id = %s LIMIT 1"
-                    % esc(edge_id)
+                    % rid_expr(edge_id)
                 )
                 if not out_rows:
                     continue
                 out_id = record_id(out_rows[0])
                 if out_id not in kept_course_ids:
-                    sql("DELETE %s" % esc(edge_id))
+                    sql("DELETE $id", {"id": edge_id})
     print("frameworks: %d created, %d updated" % (created, updated))
 
 

@@ -72,6 +72,15 @@ struct EdgeRow {
     pub id: RecordId,
 }
 
+/// A relation edge with both ends, used to drop links that are no longer
+/// part of the seed data.
+#[cfg(feature = "ssr")]
+#[derive(Debug, Deserialize)]
+struct EdgeRef {
+    pub id: RecordId,
+    pub out: RecordId,
+}
+
 /// name -> id pairs for the educator accounts used by the seed files.
 #[cfg(feature = "ssr")]
 fn educator_names(base: &Path) -> HashMap<String, String> {
@@ -249,8 +258,8 @@ async fn import_courses(base: &Path) -> anyhow::Result<()> {
                 .bind(("short_description", course.short_description.clone()))
                 .bind(("track", track_id.clone()))
                 .bind(("educator", educator_id.clone()))
-                .bind(("level", course.level.clone()))
-                .bind(("status", CourseStatus::Published))
+                .bind(("level", course.level.as_str()))
+                .bind(("status", CourseStatus::Published.as_str()))
                 .bind(("language", course.language.clone().unwrap_or_else(|| "en".to_string())))
                 .bind(("thumbnail_url", course.thumbnail_url.clone()))
                 .bind(("video_url", course.video_url.clone()))
@@ -456,27 +465,6 @@ fn resolve_created_by(raw: &str) -> RecordId {
 }
 
 
-/// Renders a record id coming back from the database as a comparable string.
-/// SurrealDB returns record ids either as "table:id" or as
-/// { "tb": "table", "id": "id" } / { "tb": "table", "id": { "String": "id" } }.
-#[cfg(feature = "ssr")]
-fn record_id_string(value: &serde_json::Value) -> Option<String> {
-    match value {
-        serde_json::Value::String(raw) => Some(raw.clone()),
-        serde_json::Value::Object(map) => {
-            let table = map.get("tb")?.as_str()?;
-            let id = map.get("id")?;
-            let id = match id {
-                serde_json::Value::String(raw) => raw.clone(),
-                serde_json::Value::Object(inner) => inner.get("String")?.as_str()?.to_string(),
-                _ => return None,
-            };
-            Some(format!("{}:{}", table, id))
-        }
-        _ => None,
-    }
-}
-
 /// Syncs one relation edge: updates it when it already exists, creates it
 /// otherwise, and removes edges that are no longer part of the seed.
 #[cfg(feature = "ssr")]
@@ -505,10 +493,7 @@ async fn sync_relation(
             .iter()
             .map(|(key, value)| format!("{} = {}", key, value))
             .collect();
-        db.query(&format!(
-            "UPDATE $id SET {} , updated_at = time::now()",
-            assignments.join(", ")
-        ))
+        db.query(&format!("UPDATE $id SET {}", assignments.join(", ")))
         .bind(("id", row.id))
         .await
         .expect("failed to update relation");
@@ -579,7 +564,7 @@ async fn import_roadmaps(base: &Path) -> anyhow::Result<()> {
                 .bind(("description", roadmap.description.clone()))
                 .bind(("image_url", roadmap.image_url.clone()))
                 .bind(("track", track_id.clone()))
-                .bind(("difficulty", roadmap.difficulty.clone()))
+                .bind(("difficulty", roadmap.difficulty.as_str()))
                 .bind(("estimated_weeks", roadmap.estimated_weeks))
                 .bind(("status", status.clone()))
                 .bind(("created_by", created_by.clone()))
@@ -618,9 +603,16 @@ async fn import_roadmaps(base: &Path) -> anyhow::Result<()> {
                 .bind(("slug", course.course_slug.clone()))
                 .await?.check()?;
             let course_row: Option<IdRow> = course_response.take(0)?;
-            let course_id = course_row
-                .map(|row| row.id)
-                .ok_or_else(|| anyhow::anyhow!("Course not found for roadmap"))?;
+            let course_id = match course_row {
+                Some(row) => row.id,
+                None => {
+                    println!(
+                        "  ! course {} not found, skipping the roadmap link",
+                        course.course_slug
+                    );
+                    continue;
+                }
+            };
 
             sync_relation(
                 &db,
@@ -642,19 +634,14 @@ async fn import_roadmaps(base: &Path) -> anyhow::Result<()> {
             .query("SELECT id, out FROM roadmap_courses WHERE in = $roadmap")
             .bind(("roadmap", roadmap_id.clone()))
             .await?.check()?;
-        let edges: Vec<HashMap<String, serde_json::Value>> = edge_response.take(0)?;
+        let edges: Vec<EdgeRef> = edge_response.take(0)?;
         for edge in edges {
-            let out = edge.get("out").and_then(record_id_string);
-            let keep = match out {
-                Some(out) => kept_course_ids
-                    .iter()
-                    .any(|id| id.to_string() == out),
-                None => true,
-            };
+            let out = edge.out.to_string();
+            let keep = kept_course_ids.iter().any(|id| id.to_string() == out);
             if !keep {
-                if let Some(edge_id) = edge.get("id").and_then(record_id_string) {
-                    db.query("DELETE $id").bind(("id", edge_id)).await?.check()?;
-                }
+                db.query("DELETE $id")
+                    .bind(("id", edge.id))
+                    .await?.check()?;
             }
         }
     }
@@ -781,9 +768,16 @@ async fn import_frameworks(base: &Path) -> anyhow::Result<()> {
                     .bind(("slug", course.course_slug.clone()))
                     .await?.check()?;
                 let course_row: Option<IdRow> = course_response.take(0)?;
-                let course_id = course_row
-                    .map(|row| row.id)
-                    .ok_or_else(|| anyhow::anyhow!("Course not found for milestone"))?;
+                let course_id = match course_row {
+                    Some(row) => row.id,
+                    None => {
+                        println!(
+                            "  ! course {} not found, skipping the milestone link",
+                            course.course_slug
+                        );
+                        continue;
+                    }
+                };
 
                 sync_relation(
                     &db,
@@ -803,17 +797,14 @@ async fn import_frameworks(base: &Path) -> anyhow::Result<()> {
                 .query("SELECT id, out FROM milestone_courses WHERE in = $milestone")
                 .bind(("milestone", milestone_id.clone()))
                 .await?.check()?;
-            let edges: Vec<HashMap<String, serde_json::Value>> = edge_response.take(0)?;
+            let edges: Vec<EdgeRef> = edge_response.take(0)?;
             for edge in edges {
-                let out = edge.get("out").and_then(record_id_string);
-                let keep = match out {
-                    Some(out) => kept_course_ids.iter().any(|id| id.to_string() == out),
-                    None => true,
-                };
+                let out = edge.out.to_string();
+                let keep = kept_course_ids.iter().any(|id| id.to_string() == out);
                 if !keep {
-                    if let Some(edge_id) = edge.get("id").and_then(record_id_string) {
-                        db.query("DELETE $id").bind(("id", edge_id)).await?.check()?;
-                    }
+                    db.query("DELETE $id")
+                        .bind(("id", edge.id))
+                        .await?.check()?;
                 }
             }
         }

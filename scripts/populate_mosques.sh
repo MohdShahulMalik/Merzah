@@ -14,6 +14,9 @@ set -euo pipefail
 # The add-mosque-of-region endpoint queries the Overpass API for
 # places_of_worship with religion=muslim in the given bounding box.
 #
+# Re-runs are safe: mosques that are already stored (matched on their name)
+# are skipped, so running this script again does not create duplicates.
+#
 # Environment variables:
 #   MERZAH_BASE_URL  - Base URL of the server (default: http://127.0.0.1:3000)
 #   MERZAH_TOKEN     - Session token (or loaded from .auth_state)

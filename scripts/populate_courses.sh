@@ -10,6 +10,10 @@ set -euo pipefail
 # Imports all course JSON files from scripts/data/courses/
 # into the database using the import binary.
 #
+# Re-runs are safe: every course, module and lesson is matched by its
+# natural key and updated in place, so running this script again never
+# creates duplicates.
+#
 # Requires:
 #   - SurrealDB running (docker-compose up -d)
 #   - Features: --features ssr

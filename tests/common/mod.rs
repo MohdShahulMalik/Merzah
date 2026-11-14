@@ -17,6 +17,14 @@ use uuid::Uuid;
 static DB_CONTAINER: OnceCell<testcontainers::ContainerAsync<SurrealDb>> = OnceCell::const_new();
 
 pub async fn get_test_db() -> Surreal<Client> {
+    get_test_db_with_ns().await.0
+}
+
+/// Returns the database handle together with the isolated namespace, the
+/// database name and the mapped container port. Callers that need to reach the
+/// same database from another process (for example the `import` binary) need
+/// those values to point that process at the very same namespace.
+pub async fn get_test_db_with_ns() -> (Surreal<Client>, String, String, u16) {
     let container = DB_CONTAINER
         .get_or_init(|| async {
             SurrealDb::default()
@@ -95,5 +103,5 @@ pub async fn get_test_db() -> Surreal<Client> {
     //     }
     // }
 
-    db
+    (db, unique_ns, "test_db".to_string(), port)
 }

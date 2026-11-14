@@ -13,6 +13,7 @@ DEFINE FIELD IF NOT EXISTS status ON courses TYPE string
     DEFAULT "draft";
 DEFINE FIELD IF NOT EXISTS language ON courses TYPE string DEFAULT "en";
 DEFINE FIELD IF NOT EXISTS thumbnail_url ON courses TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS video_url ON courses TYPE option<string>;
 DEFINE FIELD IF NOT EXISTS duration_minutes ON courses TYPE int DEFAULT 0;
 DEFINE FIELD IF NOT EXISTS lesson_count ON courses TYPE int DEFAULT 0;
 DEFINE FIELD IF NOT EXISTS enrollment_count ON courses TYPE int DEFAULT 0;

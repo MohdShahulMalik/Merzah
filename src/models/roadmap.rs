@@ -21,6 +21,19 @@ pub enum RoadmapStatus {
 }
 
 #[cfg(feature = "ssr")]
+impl RoadmapDifficulty {
+    /// The value stored in the database (the schema stores a plain string).
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            RoadmapDifficulty::Beginner => "beginner",
+            RoadmapDifficulty::Intermediate => "intermediate",
+            RoadmapDifficulty::Advanced => "advanced",
+            RoadmapDifficulty::All => "all",
+        }
+    }
+}
+
+#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Roadmap {
     pub id: RecordId,

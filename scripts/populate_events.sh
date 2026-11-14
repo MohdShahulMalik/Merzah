@@ -14,6 +14,9 @@ set -euo pipefail
 # Events are created for "test mosques" that should already exist
 # in the database (from populate_mosques.sh or other means).
 #
+# Re-runs are safe: the add-event endpoint skips events that already exist
+# for the same mosque and title, so no duplicates are created.
+#
 # Environment variables:
 #   MERZAH_BASE_URL  - Base URL of the server (default: http://127.0.0.1:3000)
 #   MERZAH_TOKEN     - Session token (or loaded from .auth_state)

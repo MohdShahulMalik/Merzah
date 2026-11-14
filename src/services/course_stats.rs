@@ -16,7 +16,7 @@ pub async fn update_course_lesson_count(
         .query(
             "SELECT count() AS count FROM lessons
             WHERE module IN (SELECT VALUE id FROM modules WHERE course = $course_id AND deleted = false)
-            AND deleted = false",
+            AND deleted = false GROUP ALL",
         )
         .bind(("course_id", course_id.clone()))
         .await?;
@@ -36,7 +36,7 @@ pub async fn update_course_enrollment_count(
     db: &Surreal<Client>,
 ) -> Result<(), EducationError> {
     let mut response = db
-        .query("SELECT count() AS count FROM enrolled WHERE out = $course_id")
+        .query("SELECT count() AS count FROM enrolled WHERE out = $course_id GROUP ALL")
         .bind(("course_id", course_id.clone()))
         .await?;
     let rows: Vec<CountResult> = response.take(0)?;

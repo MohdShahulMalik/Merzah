@@ -13,3 +13,5 @@ mod favorite_mosque;
 mod mosque;
 #[path = "integration/mosque_admin.rs"]
 mod mosque_admin;
+#[path = "integration/seed_idempotency.rs"]
+mod seed_idempotency;

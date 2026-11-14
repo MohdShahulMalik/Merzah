@@ -126,6 +126,18 @@ pub struct Course {
 }
 
 #[cfg(feature = "ssr")]
+impl CourseLevel {
+    /// The value stored in the database (the schema stores a plain string).
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            CourseLevel::Beginner => "beginner",
+            CourseLevel::Intermediate => "intermediate",
+            CourseLevel::Advanced => "advanced",
+        }
+    }
+}
+
+#[cfg(feature = "ssr")]
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CourseRecord {
     pub title: String,
@@ -186,6 +198,19 @@ impl CourseRecord {
             created_at,
             updated_at,
             deleted,
+        }
+    }
+}
+
+#[cfg(feature = "ssr")]
+impl CourseStatus {
+    /// The value stored in the database (the schema stores a plain string).
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            CourseStatus::Draft => "draft",
+            CourseStatus::Review => "review",
+            CourseStatus::Published => "published",
+            CourseStatus::Archived => "archived",
         }
     }
 }

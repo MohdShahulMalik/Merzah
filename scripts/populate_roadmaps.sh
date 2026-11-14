@@ -11,6 +11,10 @@ set -euo pipefail
 # and framework JSON files from scripts/data/frameworks/
 # into the database using the import binary.
 #
+# Re-runs are safe: roadmaps, frameworks, milestones and their course links
+# are matched by their natural key and updated in place, so running this
+# script again never creates duplicates.
+#
 # Requires:
 #   - SurrealDB running (docker-compose up -d)
 #   - Courses already imported (run populate_courses.sh first)
