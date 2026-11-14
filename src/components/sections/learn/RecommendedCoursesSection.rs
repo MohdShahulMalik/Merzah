@@ -6,7 +6,7 @@ use crate::models::catalog_entry::CatalogEntry;
 
 const FEATURED_COUNT: usize = 4;
 
-fn category_class(index: usize) -> &'static str {
+pub(crate) fn category_class(index: usize) -> &'static str {
     match index % 6 {
         0 => "bg-green-100 text-green-700",
         1 => "bg-blue-100 text-blue-700",
@@ -17,7 +17,7 @@ fn category_class(index: usize) -> &'static str {
     }
 }
 
-fn format_duration(minutes: i32) -> String {
+pub(crate) fn format_duration(minutes: i32) -> String {
     let minutes = minutes.max(0);
     let hours = minutes / 60;
     let rest = minutes % 60;
@@ -31,7 +31,7 @@ fn format_duration(minutes: i32) -> String {
     }
 }
 
-fn instructor_initials(name: &str) -> String {
+pub(crate) fn instructor_initials(name: &str) -> String {
     let mut parts = name.split_whitespace();
     let first = parts.next().and_then(|word| word.chars().next());
     let second = parts.next().and_then(|word| word.chars().next());

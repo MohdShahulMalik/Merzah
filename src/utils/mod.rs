@@ -2,6 +2,7 @@
 pub mod datetime;
 #[cfg(feature = "ssr")]
 pub mod education_auth;
+pub mod geocode;
 #[cfg(feature = "ssr")]
 pub mod mosque;
 pub mod parsing;

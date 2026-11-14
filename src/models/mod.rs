@@ -6,6 +6,7 @@ pub mod form;
 pub mod gamification;
 pub mod import;
 pub mod location;
+pub mod nominatim;
 pub mod mosque;
 pub mod prayer;
 #[cfg(feature = "ssr")]
