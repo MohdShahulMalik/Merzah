@@ -14,8 +14,8 @@ pub fn FeaturedEventCard(
     cta_label: String,
 ) -> impl IntoView {
     let border_class = match index % 2 {
-        0 => "absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-indigo-500 to-sky-500",
-        _ => "absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-purple-500 to-indigo-500",
+        0 => "absolute left-0 top-0 h-1 w-full bg-sky-500",
+        _ => "absolute left-0 top-0 h-1 w-full bg-purple-500",
     };
 
     view! {
@@ -51,7 +51,7 @@ pub fn FeaturedEventCard(
 
                 <A
                     href=format!("/events/{id}")
-                    attr:class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-600"
+                    attr:class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-400 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-500"
                 >
                     {cta_label}
                 </A>

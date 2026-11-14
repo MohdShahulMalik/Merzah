@@ -69,7 +69,7 @@ fn to_item(personal: &PersonalEvent) -> UpcomingEventItem {
 }
 
 #[component]
-pub fn UpcomingEventsSection(show_all: ReadSignal<bool>) -> impl IntoView {
+pub fn UpcomingEventsSection() -> impl IntoView {
     let app_state = expect_context::<Store<AppState>>();
     let dialog_open = RwSignal::new(false);
     let selected_mosque_name = RwSignal::new(None::<String>);
@@ -108,11 +108,7 @@ pub fn UpcomingEventsSection(show_all: ReadSignal<bool>) -> impl IntoView {
                     .map(to_item)
                     .collect();
 
-                let items = if show_all.get() {
-                    all
-                } else {
-                    all.into_iter().take(PREVIEW_SIZE).collect()
-                };
+                let items = all.into_iter().take(PREVIEW_SIZE).collect::<Vec<_>>();
                 let empty = items.is_empty();
 
                 view! {

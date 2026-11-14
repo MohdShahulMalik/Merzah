@@ -72,7 +72,7 @@ pub fn ContinueLearningCard(
                     <div class="w-full shrink-0 sm:w-auto">
                         <A
                             href=cta_href
-                            attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-500 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-indigo-600 hover:shadow-xl sm:w-auto xl:w-auto"
+                            attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-indigo-500 hover:shadow-xl sm:w-auto xl:w-auto"
                         >
                             {cta_label}
                         </A>
@@ -177,7 +177,7 @@ pub fn CourseCard(
 
             <A
                 href=cta_href
-                attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-500 py-3 font-semibold text-white transition hover:bg-indigo-600"
+                attr:class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-indigo-400 py-3 font-semibold text-white transition hover:bg-indigo-500"
             >
                 {cta_label}
             </A>
@@ -248,7 +248,7 @@ pub fn LearningPathCard(
 
             <A
                 href=cta_href
-                attr:class="relative flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-indigo-600"
+                attr:class="relative flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-400 py-3 font-semibold text-white transition-colors duration-300 ease-out hover:bg-indigo-500"
             >
                 <span class="relative">{cta_label}</span>
             </A>

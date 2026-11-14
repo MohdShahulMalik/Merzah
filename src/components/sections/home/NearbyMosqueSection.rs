@@ -25,7 +25,7 @@ use crate::utils::prayer::next_jamat;
 const PREVIEW_SIZE: usize = 5;
 
 #[component]
-pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
+pub fn NearbyMosquesSection() -> impl IntoView {
     let app_state = expect_context::<Store<AppState>>();
     let favorites = use_favorites();
     let user_pos = move || {
@@ -76,11 +76,7 @@ pub fn NearbyMosquesSection(show_all: ReadSignal<bool>) -> impl IntoView {
                 let items: Vec<(NearbyMosqueCardItem, MosqueResponse)> = all
                     .clone()
                     .into_iter()
-                    .take(if show_all.get() {
-                        usize::MAX
-                    } else {
-                        PREVIEW_SIZE
-                    })
+                    .take(PREVIEW_SIZE)
                     .map(|mosque| {
                         let mosque_name = mosque
                             .name

@@ -179,6 +179,14 @@ pub fn LearningPathDetailPage() -> impl IntoView {
 
                             view! {
                                 <article class="min-w-0 space-y-8">
+                                    <A
+                                        href="/learn"
+                                        attr:class="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium text-sky-600 transition duration-300 ease-out hover:-translate-x-0.5 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 dark:text-sky-400 dark:hover:text-sky-300"
+                                    >
+                                        <span aria-hidden="true">"←"</span>
+                                        "Back to Learn"
+                                    </A>
+
                                     <section class="relative min-w-0 overflow-hidden rounded-3xl border border-indigo-400 bg-surface-700 shadow-md">
                                         <div class="relative min-w-0 overflow-hidden rounded-3xl bg-surface-700">
                                             {hero_image
@@ -196,14 +204,6 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                 })}
 
                                             <div class="relative min-w-0 space-y-4 p-5 sm:p-7 lg:p-9">
-                                                <A
-                                                    href="/learn"
-                                                    attr:class="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium text-sky-600 transition duration-300 ease-out hover:-translate-x-0.5 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 dark:text-sky-400 dark:hover:text-sky-300"
-                                                >
-                                                    <span aria-hidden="true">"←"</span>
-                                                    "Back to Learn"
-                                                </A>
-
                                                 <span class="inline-flex items-center gap-2 rounded-lg bg-indigo-400 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-sm">
                                                     <span aria-hidden="true">"🧭"</span>
                                                     "Guided path"
@@ -250,7 +250,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                                         </span>
                                                                     </div>
 
-                                                                    <div class="h-2.5 w-full overflow-hidden rounded-md bg-gray-200 ring-1  dark:bg-white/10">
+                                                                    <div class="h-2.5 w-full overflow-hidden rounded-md bg-gray-200 dark:bg-white/10">
                                                                         <div
                                                                             class="h-full rounded-md bg-indigo-400 transition-[width] duration-300 ease-out"
                                                                             style=format!("width: {value:.0}%;")

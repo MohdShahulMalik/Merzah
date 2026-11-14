@@ -435,14 +435,6 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
                     })}
 
                 <div class="flex min-w-0 flex-wrap items-center gap-3">
-                    <a
-                        href=directions_url
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-500 px-4 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-indigo-600"
-                    >
-                        "Directions"
-                    </a>
                     <button
                         type="button"
                         class=move || {
@@ -461,7 +453,7 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
-                            stroke-width="1.8"
+                            stroke-width="2.2"
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             aria-hidden="true"
@@ -470,6 +462,14 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
                         </svg>
                         <span>{move || if is_favorite.get() { "Favorited" } else { "Favorite" }}</span>
                     </button>
+                    <a
+                        href=directions_url
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex min-h-[44px] items-center rounded-lg bg-indigo-400 px-4 py-2.5 text-sm font-medium text-white transition-colors duration-300 ease-out hover:bg-indigo-500"
+                    >
+                        "Directions"
+                    </a>
                 </div>
             </div>
         </div>

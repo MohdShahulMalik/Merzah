@@ -68,7 +68,7 @@ async fn load_recommended() -> Vec<RecommendedCourseItem> {
 }
 
 #[component]
-pub fn RecommendedSection(show_all: ReadSignal<bool>) -> impl IntoView {
+pub fn RecommendedSection() -> impl IntoView {
     let courses = Resource::new(|| (), |_| async move { load_recommended().await });
 
     view! {
@@ -79,11 +79,7 @@ pub fn RecommendedSection(show_all: ReadSignal<bool>) -> impl IntoView {
                 {move || {
                 let all = courses.get().unwrap_or_default();
 
-                let items = if show_all.get() {
-                    all
-                } else {
-                    all.into_iter().take(PREVIEW_SIZE).collect()
-                };
+                let items: Vec<RecommendedCourseItem> = all.into_iter().take(PREVIEW_SIZE).collect();
                 let empty = items.is_empty();
 
                 view! {

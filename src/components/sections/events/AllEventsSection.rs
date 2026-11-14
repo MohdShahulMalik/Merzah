@@ -53,7 +53,7 @@ pub fn AllEventsSection(events: Vec<EventPageItem>) -> impl IntoView {
                 {move || if show_all.get() {
                     "Show Less".to_string()
                 } else {
-                    format!("View All ({hidden_count} more) →")
+                    format!("View All ({hidden_count} more)")
                 }}
             </button>
         </Show>
