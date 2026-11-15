@@ -1,0 +1,24 @@
+# Build context for the Dockerfile. Keep this lean: the build stage
+# recompiles Rust and the CSS, so local artifacts and dotfiles are useless weight.
+
+# Local build artifacts (target/ alone is 24G on this machine)
+target/
+node_modules/
+style/output/
+
+# Everything dotfile-ish: secrets, editor state, local tooling, local DBs.
+# NOTE: this excludes .env, .cargo/, .aye/, .helix/, .surrealdb/, .git/ etc.
+# Deployment env vars are set in the Hostless dashboard, never baked in.
+.*
+
+# Large non-runtime extras
+design/
+docs/
+fixes/
+events/
+schemas/
+scripts/
+tests/
+migrations/
+*.pptx
+opus45.html
