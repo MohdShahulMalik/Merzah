@@ -4,9 +4,8 @@ use merzah::auth::session::create_session;
 use merzah::{
     models::{
         api_responses::{ApiResponse, MosqueResponse},
-        auth::{Platform, RegistrationFormData},
         mosque::{MosqueRecord, MosqueSearchResult, NewMosque, PrayerTimes, PrayerTimesUpdate},
-        user::{Identifier, User},
+        user::User,
     },
     spawn_app,
 };
@@ -757,22 +756,6 @@ fn build_auth_headers(
             .header("Cookie", format!("__Host-session={}", session)),
         AuthMethod::Mobile => client
             .post(url)
-            .header("Authorization", format!("Bearer {}", session)),
-    }
-}
-
-fn build_auth_delete(
-    client: Client,
-    session: &str,
-    auth_method: AuthMethod,
-    url: &str,
-) -> reqwest::RequestBuilder {
-    match auth_method {
-        AuthMethod::Web => client
-            .delete(url)
-            .header("Cookie", format!("__Host-session={}", session)),
-        AuthMethod::Mobile => client
-            .delete(url)
             .header("Authorization", format!("Bearer {}", session)),
     }
 }

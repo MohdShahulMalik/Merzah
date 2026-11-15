@@ -37,11 +37,6 @@ struct UpdateEventParams {
 }
 
 #[derive(Serialize)]
-struct RsvpParams {
-    pub event_id: String,
-}
-
-#[derive(Serialize)]
 struct FetchUsersFavoriteMosquesEventsParams {
     pub lat: f64,
     pub lon: f64,
@@ -654,7 +649,7 @@ async fn test_fetch_mosque_events_reports_the_rsvp_of_the_user() {
     let client = Client::new();
 
     let (user, session) = setup_user_and_session(&db).await;
-    let (other_user, other_session) = setup_user_and_session(&db).await;
+    let (_other_user, other_session) = setup_user_and_session(&db).await;
 
     let mosque = setup_mosque(&db).await;
 

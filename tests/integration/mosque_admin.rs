@@ -12,7 +12,7 @@ use merzah::{
 };
 use reqwest::Client;
 use rstest::rstest;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use surrealdb::{RecordId, Surreal, engine::remote::ws::Client as SurrealClient, sql::Geometry};
 
 #[derive(Serialize)]
