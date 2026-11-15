@@ -21,12 +21,13 @@ use crate::models::education::{
     UpdatedLessonRecord, UpdatedModuleRecord,
 };
 use crate::models::education::{
-    CourseDetail, CourseLevel, CourseOnClient, CourseStatus, CreateCourse as CreateCourseInput,
-    CreateLesson as CreateLessonInput, CreateModule as CreateModuleInput, EducatorInfo,
-    EnrollmentProgress, LessonDetail, LessonOnClient, ModuleWithLessons, TrackOnClient,
-    UpdateCourse as UpdateCourseInput, UpdateLesson as UpdateLessonInput,
+    CourseDetail, CourseLevel, CourseOnClient, CreateCourse as CreateCourseInput,
+    CreateLesson as CreateLessonInput, CreateModule as CreateModuleInput, EnrollmentProgress,
+    LessonDetail, TrackOnClient, UpdateCourse as UpdateCourseInput, UpdateLesson as UpdateLessonInput,
     UpdateModule as UpdateModuleInput,
 };
+#[cfg(feature = "ssr")]
+use crate::models::education::{CourseStatus, EducatorInfo, LessonOnClient, ModuleWithLessons};
 #[cfg(feature = "ssr")]
 use crate::models::user::User;
 #[cfg(feature = "ssr")]

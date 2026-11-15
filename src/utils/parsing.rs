@@ -1,3 +1,4 @@
+#[cfg(feature = "ssr")]
 use crate::models::api_responses::ApiResponse;
 
 #[cfg(feature = "ssr")]

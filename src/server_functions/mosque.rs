@@ -16,9 +16,11 @@ use leptos::{
 };
 
 use crate::models::{
-    api_responses::{ApiResponse, MixedMosqueResponse, MosqueResponse},
+    api_responses::{ApiResponse, MixedMosqueResponse},
     mosque::{NewMosque, PrayerTimesUpdate},
 };
+#[cfg(feature = "ssr")]
+use crate::models::api_responses::MosqueResponse;
 
 #[cfg(feature = "ssr")]
 use crate::models::mosque::{
@@ -534,7 +536,7 @@ pub async fn update_adhan_jamat_times(
         .bind(("jamat", prayer_times.jamat_times))
         .await
     {
-        Ok(mut response) => {
+        Ok(response) => {
             if let Err(e) = response.check() {
                 error!(?e, "Failed to update adhan and jamat times");
                 return Ok(responder.internal_server_error(

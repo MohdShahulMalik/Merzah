@@ -10,8 +10,10 @@ use crate::models::api_responses::ApiResponse;
 #[cfg(feature = "ssr")]
 use crate::models::quiz::{Quiz, QuizQuestion};
 use crate::models::quiz::{
-    QuizAnswer, QuizOnClient, QuizQuestionOnClient, QuizSubmission, QuizSubmissionResult,
+    QuizOnClient, QuizSubmission, QuizSubmissionResult,
 };
+#[cfg(feature = "ssr")]
+use crate::models::quiz::{QuizAnswer, QuizQuestionOnClient};
 #[cfg(feature = "ssr")]
 use crate::utils::parsing::parse_record_id;
 #[cfg(feature = "ssr")]

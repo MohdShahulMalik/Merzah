@@ -2,9 +2,11 @@ use crate::models::auth::LoginFormData;
 use crate::models::password_reset::PasswordChangeRequest;
 use crate::models::password_reset::PasswordResetConfirm;
 use crate::models::password_reset::PasswordResetRequest;
+#[cfg(feature = "ssr")]
 use crate::models::user::Identifier;
 use crate::models::user::UserOnClient;
 use crate::models::api_responses::ApiResponse;
+#[cfg(feature = "ssr")]
 use crate::models::auth::Platform;
 use crate::models::auth::RegistrationFormData;
 use leptos::prelude::ServerFnError;

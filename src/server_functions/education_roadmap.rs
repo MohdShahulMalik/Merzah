@@ -14,9 +14,10 @@ use crate::models::roadmap::RoadmapStatus;
 #[cfg(feature = "ssr")]
 use crate::models::roadmap::{Framework, Milestone, Roadmap};
 use crate::models::roadmap::{
-    FrameworkDetail, FrameworkOnClient, MilestoneOnClient, RoadmapCourseOnClient, RoadmapDetail,
-    RoadmapOnClient,
+    FrameworkDetail, FrameworkOnClient, RoadmapDetail, RoadmapOnClient,
 };
+#[cfg(feature = "ssr")]
+use crate::models::roadmap::{MilestoneOnClient, RoadmapCourseOnClient};
 #[cfg(feature = "ssr")]
 use crate::services::course_stats::update_course_enrollment_count;
 #[cfg(feature = "ssr")]
