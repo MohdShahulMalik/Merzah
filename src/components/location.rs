@@ -18,6 +18,10 @@ pub fn LocationProvider() -> impl IntoView {
     let UseGeolocationReturn { coords, .. } = use_geolocation();
 
     Effect::new(move |_| {
+        if app_state.user().get().is_none() {
+            return;
+        }
+
         let position = coords
             .get()
             .map(|coords| GeoPosition::new(coords.latitude(), coords.longitude()));
