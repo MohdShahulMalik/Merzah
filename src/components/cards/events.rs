@@ -2,6 +2,8 @@ use leptos::IntoView;
 use leptos::prelude::*;
 use leptos_router::components::A;
 
+use crate::components::icons::{CalendarIcon, ClockIcon, MapPinIcon};
+
 #[component]
 pub fn FeaturedEventCard(
     index: usize,
@@ -34,12 +36,12 @@ pub fn FeaturedEventCard(
 
                     <div class="flex min-w-0 flex-wrap items-center gap-x-6 gap-y-2 text-sm text-foreground-700">
                         <div class="flex items-center gap-2">
-                            <span aria-hidden="true">"🗓️"</span>
+                            <CalendarIcon class="h-4 w-4" />
                             <span>{date}</span>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <span aria-hidden="true">"📍"</span>
+                            <MapPinIcon class="h-4 w-4" />
                             <span>{location}</span>
                         </div>
                     </div>
@@ -107,7 +109,7 @@ pub fn AllEventCard(
                     </span>
 
                     <div class="flex shrink-0 items-center gap-2 text-sm text-foreground-600">
-                        <span aria-hidden="true">"📍"</span>
+                        <MapPinIcon class="h-4 w-4" />
                         <span>{distance}</span>
                     </div>
                 </div>
@@ -122,7 +124,7 @@ pub fn AllEventCard(
                     </p>
 
                     <div class="flex items-center gap-2 text-sm font-bold text-foreground-900">
-                        <span aria-hidden="true">"⏱️"</span>
+                        <ClockIcon class="h-4 w-4" />
                         <span>{date}</span>
                     </div>
                 </div>

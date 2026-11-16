@@ -1,6 +1,8 @@
 use leptos::prelude::*;
 use leptos_router::components::A;
 
+use crate::components::icons::{CircleCheckIcon, ClockIcon, BookOpenIcon};
+
 #[component]
 pub fn ContinueLearningCard(
     status: String,
@@ -44,12 +46,12 @@ pub fn ContinueLearningCard(
 
                         <div class="mb-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-foreground-600">
                             <div class="flex items-center gap-2">
-                                <span aria-hidden="true">"⏱️"</span>
+                                <ClockIcon class="h-4 w-4" />
                                 <span>{time_remaining}</span>
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <span aria-hidden="true">"✅"</span>
+                                <CircleCheckIcon class="h-4 w-4" />
                                 <span>{lesson_progress}</span>
                             </div>
                         </div>
@@ -153,12 +155,12 @@ pub fn CourseCard(
 
             <div class="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-foreground-400">
                 <div class="flex items-center gap-1">
-                    <span aria-hidden="true">"⏱️"</span>
+                    <ClockIcon class="h-4 w-4" />
                     <span>{duration}</span>
                 </div>
 
                 <div class="flex items-center gap-1">
-                    <span aria-hidden="true">"📖"</span>
+                    <BookOpenIcon class="h-4 w-4" />
                     <span>{lesson_count}</span>
                 </div>
             </div>
@@ -191,7 +193,7 @@ pub fn LearningPathCard(
     description: String,
     title_class: String,
     description_class: String,
-    icon: String,
+    icon: AnyView,
     icon_class: String,
     course_count: String,
     duration: String,
@@ -213,21 +215,19 @@ pub fn LearningPathCard(
                     </p>
                 </div>
 
-                <div class="relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/70 dark:bg-white/10 ring-1 ring-stroke-muted" aria-hidden="true">
-                    <div class=format!("relative text-4xl {}", icon_class)>
-                        {icon}
-                    </div>
+                <div class=format!("relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl ring-1 ring-stroke-muted {}", icon_class) aria-hidden="true">
+                    {icon}
                 </div>
             </div>
 
             <div class="relative mb-6 flex flex-wrap items-center gap-3 text-foreground-400">
                 <div class="flex items-center gap-2 rounded-lg bg-white/50 dark:bg-white/10 px-3 py-1.5 text-sm">
-                    <span aria-hidden="true">"📖"</span>
+                    <BookOpenIcon class="h-4 w-4" />
                     <span>{course_count}</span>
                 </div>
 
                 <div class="flex items-center gap-2 rounded-lg bg-white/50 dark:bg-white/10 px-3 py-1.5 text-sm">
-                    <span aria-hidden="true">"⏱️"</span>
+                    <ClockIcon class="h-4 w-4" />
                     <span>{duration}</span>
                 </div>
             </div>

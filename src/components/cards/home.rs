@@ -1,6 +1,8 @@
 use leptos::prelude::*;
 use leptos_router::components::A;
 
+use crate::components::icons::{MapPinIcon, MosqueIcon};
+
 /// Placeholder shown on a mosque card when the mosque has no cover image.
 ///
 /// It is a local asset (a crescent over an arabesque pattern) so that no
@@ -135,7 +137,7 @@ pub fn NextPrayerReminderCard(
                 </div>
 
                 <div class="flex items-center gap-1.5 pb-1 text-[0.68rem] text-sky-100/60 md:absolute md:bottom-4 md:left-1/2 md:-translate-x-1/2 md:pb-0">
-                    <span>"📍"</span>
+                    <MapPinIcon class="h-3.5 w-3.5" />
                     <span class="truncate">{location}</span>
                 </div>
 
@@ -308,7 +310,10 @@ pub fn MosqueEventCard(
             </div>
             <div class="relative space-y-1.5">
                 <h3 class="text-[0.9rem] font-bold leading-tight text-[#050047] dark:text-[#e4e2ff] transition-colors duration-300 ease-out group-hover:text-foreground-900">{event_title}</h3>
-                <p class="text-xs text-foreground-600 transition-colors duration-300 ease-out group-hover:text-sky-700 dark:group-hover:text-sky-300">"🕌 "{mosque_name}</p>
+                <p class="text-xs text-foreground-600 transition-colors duration-300 ease-out group-hover:text-sky-700 dark:group-hover:text-sky-300 inline-flex items-center gap-1.5">
+                    <MosqueIcon class="h-3.5 w-3.5 shrink-0" />
+                    <span>{mosque_name}</span>
+                </p>
                 <p class="text-[0.8rem] leading-relaxed text-[#302977] dark:text-[#b9b6ef]">{event_short_description}</p>
             </div>
         </article>

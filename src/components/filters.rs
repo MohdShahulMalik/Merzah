@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use crate::components::icons::{MapPinIcon, SearchIcon};
+
 #[derive(Clone, Debug)]
 pub struct FilterOption {
     pub label: String,
@@ -67,7 +69,7 @@ pub fn Filters(
         <section class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-4 shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)] sm:p-5 md:p-7">
             <div class="flex min-w-0 flex-col gap-3 md:flex-row">
                 <label class="flex min-h-[44px] min-w-0 flex-1 items-center gap-3 rounded-xl border border-stroke-muted bg-surface-750 px-4 text-foreground-600 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
-                    <span class="text-lg" aria-hidden="true">"🔍"</span>
+                    <SearchIcon class="h-5 w-5" />
                     <input
                         type="search"
                         placeholder=search_placeholder
@@ -80,7 +82,7 @@ pub fn Filters(
                 {location_label.map(|location_label| {
                     view! {
                         <div class="inline-flex min-h-[44px] min-w-0 items-center justify-center gap-3 rounded-xl border border-stroke-muted bg-surface-750 px-5 text-base font-medium text-foreground-900 select-none md:min-w-44">
-                            <span aria-hidden="true">"📍"</span>
+                            <MapPinIcon class="h-5 w-5 shrink-0" />
                             <span class="truncate">{move || location_label.get()}</span>
                         </div>
                     }
