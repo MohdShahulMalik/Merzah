@@ -3,6 +3,7 @@ use leptos::reactive::spawn_local;
 use leptos_router::components::A;
 use leptos_router::hooks::use_params_map;
 
+use crate::components::icons::{ClapperboardIcon, ExternalLinkIcon, FileTextIcon, HeadphonesIcon, InboxIcon, BookIcon, PuzzleIcon};
 use crate::models::education::LessonContentType;
 use crate::models::gamification::{AchievementOnClient, UserStreakOnClient};
 use crate::models::quiz::{QuestionType, QuizAnswer, QuizOnClient, QuizSubmission};
@@ -17,14 +18,14 @@ use crate::server_functions::education_quiz::submit_quiz;
 
 const NOT_LOGGED_IN: &str = "You are not logged in";
 
-fn content_type_icon(content_type: &LessonContentType) -> &'static str {
+fn content_type_icon(content_type: &LessonContentType) -> AnyView {
     match content_type {
-        LessonContentType::Text => "📄",
-        LessonContentType::Video => "🎬",
-        LessonContentType::Audio => "🎧",
-        LessonContentType::Pdf => "📕",
-        LessonContentType::ExternalLink => "🔗",
-        LessonContentType::Mixed => "🧩",
+        LessonContentType::Text => view! { <FileTextIcon class="h-4 w-4" /> }.into_any(),
+        LessonContentType::Video => view! { <ClapperboardIcon class="h-4 w-4" /> }.into_any(),
+        LessonContentType::Audio => view! { <HeadphonesIcon class="h-4 w-4" /> }.into_any(),
+        LessonContentType::Pdf => view! { <BookIcon class="h-4 w-4" /> }.into_any(),
+        LessonContentType::ExternalLink => view! { <ExternalLinkIcon class="h-4 w-4" /> }.into_any(),
+        LessonContentType::Mixed => view! { <PuzzleIcon class="h-4 w-4" /> }.into_any(),
     }
 }
 
@@ -305,7 +306,7 @@ pub fn LessonPage() -> impl IntoView {
                         None => {
                             view! {
                                 <div class="mx-auto w-full max-w-[68rem] min-w-0 space-y-3 rounded-3xl border border-stroke-muted bg-surface-700 p-8 text-center shadow-sm">
-                                    <p class="text-4xl" aria-hidden="true">"📭"</p>
+                                    <InboxIcon class="mx-auto h-12 w-12 text-foreground-400" />
                                     <h1 class="text-xl font-bold text-foreground-900 sm:text-2xl">
                                         "Lesson not found."
                                     </h1>

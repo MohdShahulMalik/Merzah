@@ -1,32 +1,40 @@
 use leptos::prelude::*;
 
 use crate::components::cards::LearningPathCard;
+use crate::components::icons::{CompassIcon, LibraryIcon, MapIcon, RocketIcon};
 use crate::models::education::EnrollmentProgress;
 use crate::models::roadmap::RoadmapOnClient;
 use crate::server_functions::education_roadmap::fetch_roadmap_detail;
 
-const ICONS: [&str; 4] = ["🧭", "🗺️", "🚀", "📚"];
-
 const TITLE_CLASSES: [&str; 4] = [
     "text-indigo-900 dark:text-indigo-100",
-    "text-indigo-900 dark:text-indigo-100",
+    "text-amber-900 dark:text-amber-100",
     "text-sky-900 dark:text-sky-100",
     "text-emerald-900 dark:text-emerald-100",
 ];
 
 const DESCRIPTION_CLASSES: [&str; 4] = [
     "text-indigo-700 dark:text-indigo-300",
-    "text-indigo-700 dark:text-indigo-300",
+    "text-amber-800 dark:text-amber-300",
     "text-sky-700 dark:text-sky-300",
     "text-emerald-700 dark:text-emerald-300",
 ];
 
 const ICON_CLASSES: [&str; 4] = [
     "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300",
-    "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300",
+    "bg-amber-500/20 text-amber-700 dark:text-amber-300",
     "bg-sky-500/15 text-sky-600 dark:text-sky-300",
     "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300",
 ];
+
+fn path_icon(style_index: usize) -> AnyView {
+    match style_index {
+        0 => view! { <CompassIcon class="h-7 w-7" /> }.into_any(),
+        1 => view! { <MapIcon class="h-7 w-7" /> }.into_any(),
+        2 => view! { <RocketIcon class="h-7 w-7" /> }.into_any(),
+        _ => view! { <LibraryIcon class="h-7 w-7" /> }.into_any(),
+    }
+}
 
 fn average_progress(course_ids: &[String], enrolled: &[EnrollmentProgress]) -> Option<f32> {
     let matched = enrolled
@@ -69,7 +77,7 @@ pub fn LearningPathsSection(
                 },
             );
 
-            let style_index = index % ICONS.len();
+            let style_index = index % 4;
 
             view! {
                 <Suspense fallback=move || view! {
@@ -99,7 +107,7 @@ pub fn LearningPathsSection(
                                 description=roadmap.description.clone()
                                 title_class=TITLE_CLASSES[style_index].to_string()
                                 description_class=DESCRIPTION_CLASSES[style_index].to_string()
-                                icon=ICONS[style_index].to_string()
+                                icon=path_icon(style_index)
                                 icon_class=ICON_CLASSES[style_index].to_string()
                                 course_count=format!("{} courses", course_count)
                                 duration=format!("{} weeks", roadmap.estimated_weeks)

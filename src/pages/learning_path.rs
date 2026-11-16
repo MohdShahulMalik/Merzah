@@ -3,6 +3,7 @@ use leptos::reactive::spawn_local;
 use leptos_router::components::A;
 use leptos_router::hooks::use_params_map;
 
+use crate::components::icons::{CalendarIcon, CompassIcon, LibraryIcon, LightbulbIcon, MapIcon, SparklesIcon, TargetIcon};
 use crate::models::education::EnrollmentProgress;
 use crate::server_functions::education::fetch_my_courses;
 use crate::server_functions::education_roadmap::fetch_roadmap_detail;
@@ -140,7 +141,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                         None => {
                             view! {
                                 <div class="min-w-0 space-y-3 rounded-3xl bg-surface-700 p-8 text-center shadow-md">
-                                    <p class="text-4xl" aria-hidden="true">"🧭"</p>
+                                    <CompassIcon class="mx-auto h-12 w-12 text-foreground-400" />
                                     <h1 class="text-xl font-bold text-foreground-900 sm:text-2xl">
                                         "Learning path not found."
                                     </h1>
@@ -205,7 +206,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
 
                                             <div class="relative min-w-0 space-y-4 p-5 sm:p-7 lg:p-9">
                                                 <span class="inline-flex items-center gap-2 rounded-lg bg-indigo-400 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-sm">
-                                                    <span aria-hidden="true">"🧭"</span>
+                                                    <CompassIcon class="h-4 w-4" />
                                                     "Guided path"
                                                 </span>
 
@@ -219,19 +220,19 @@ pub fn LearningPathDetailPage() -> impl IntoView {
 
                                                 <div class="flex min-w-0 flex-wrap items-center gap-2">
                                                     <span class="inline-flex items-center gap-2 rounded-lg bg-indigo-400/15 px-3 py-1.5 text-xs font-semibold text-indigo-700 ring-1 ring-indigo-400/30 dark:text-indigo-300">
-                                                        <span aria-hidden="true">"✦"</span>
+                                                        <SparklesIcon class="h-4 w-4" />
                                                         {format!("{:?}", detail.difficulty)}
                                                     </span>
                                                     <span class="inline-flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
-                                                        <span aria-hidden="true">"🗓️"</span>
+                                                        <CalendarIcon class="h-4 w-4" />
                                                         {format!("{} weeks", detail.estimated_weeks)}
                                                     </span>
                                                     <span class="inline-flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
-                                                        <span aria-hidden="true">"📚"</span>
+                                                        <LibraryIcon class="h-4 w-4" />
                                                         {format!("{} courses", course_total)}
                                                     </span>
                                                     <span class="inline-flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-xs font-medium text-foreground-600 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
-                                                        <span aria-hidden="true">"🎯"</span>
+                                                        <TargetIcon class="h-4 w-4" />
                                                         {format!("{} required", required_total)}
                                                     </span>
                                                 </div>
@@ -316,7 +317,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                             .then(|| {
                                                 view! {
                                                     <div class="min-w-0 rounded-2xl border border-dashed border-indigo-400/40 bg-surface-700 p-8 text-center shadow-sm">
-                                                        <p class="text-3xl" aria-hidden="true">"🗺️"</p>
+                                                        <MapIcon class="mx-auto h-9 w-9 text-foreground-400" />
                                                         <p class="mt-2 text-sm font-semibold text-foreground-900">
                                                             "No courses in this path yet."
                                                         </p>
@@ -390,7 +391,7 @@ pub fn LearningPathDetailPage() -> impl IntoView {
                                                                     .map(|note| {
                                                                         view! {
                                                                             <p class="mt-3 flex min-w-0 items-start gap-2 rounded-xl bg-indigo-400/15 px-3 py-2 text-xs font-medium text-indigo-700 dark:text-indigo-300">
-                                                                                <span class="shrink-0" aria-hidden="true">"💡"</span>
+                                                                                <LightbulbIcon class="h-4 w-4 shrink-0" />
                                                                                 <span class="min-w-0 break-words">{note}</span>
                                                                             </p>
                                                                         }

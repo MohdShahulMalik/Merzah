@@ -9,6 +9,7 @@ use crate::app::AppState;
 use crate::app::AppStateStoreFields;
 use crate::components::cards::AllEventCard;
 use crate::components::filters::{FilterGroup, FilterOption, Filters, default_selection};
+use crate::components::icons::SearchXIcon;
 use crate::components::sections::AllEventsSection;
 use crate::components::sections::FeaturedEventsSection;
 use crate::models::event_page_item::EventPageItem;
@@ -183,7 +184,7 @@ pub fn Events() -> impl IntoView {
                             {if matches.is_empty() {
                                 view! {
                                     <div class="min-w-0 rounded-2xl border border-dashed border-stroke-muted bg-surface-700 p-8 text-center shadow-sm">
-                                        <p class="text-3xl" aria-hidden="true">"🔍"</p>
+                                        <SearchXIcon class="mx-auto h-9 w-9 text-foreground-400" />
                                         <p class="mt-2 text-sm font-semibold text-foreground-900">
                                             "No events match your search."
                                         </p>

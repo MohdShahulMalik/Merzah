@@ -3,6 +3,7 @@ use leptos::reactive::spawn_local;
 use leptos_router::components::A;
 use leptos_router::hooks::use_params_map;
 
+use crate::components::icons::{BookOpenIcon, SearchXIcon, SproutIcon};
 use crate::models::education::LessonContentType;
 use crate::server_functions::education::enroll_course;
 use crate::server_functions::education::fetch_course_details;
@@ -207,7 +208,7 @@ pub fn CourseDetailPage() -> impl IntoView {
                         None => {
                             view! {
                                 <div class="mx-auto w-full max-w-[68rem] min-w-0 space-y-3 rounded-3xl border border-stroke-muted bg-surface-700 p-8 text-center shadow-sm">
-                                    <p class="text-4xl" aria-hidden="true">"🧐"</p>
+                                    <SearchXIcon class="mx-auto h-12 w-12 text-foreground-400" />
                                     <h1 class="text-xl font-bold text-foreground-900 sm:text-2xl">
                                         "Course not found."
                                     </h1>
@@ -321,7 +322,9 @@ pub fn CourseDetailPage() -> impl IntoView {
                                                         }
                                                             .into_any(),
                                                         None => view! {
-                                                            <span class="grid h-full w-full place-items-center text-6xl" aria-hidden="true">"📖"</span>
+                                                            <span class="grid h-full w-full place-items-center" aria-hidden="true">
+                                                                <BookOpenIcon class="h-16 w-16 text-sky-400/70 dark:text-sky-300/50" />
+                                                            </span>
                                                         }
                                                             .into_any(),
                                                     }}
@@ -509,7 +512,7 @@ pub fn CourseDetailPage() -> impl IntoView {
                                                     .then(|| {
                                                         view! {
                                                             <div class="rounded-2xl border border-dashed border-stroke-muted bg-surface-700 p-8 text-center">
-                                                                <p class="text-3xl" aria-hidden="true">"🪴"</p>
+                                                                <SproutIcon class="mx-auto h-9 w-9 text-foreground-400" />
                                                                 <p class="mt-2 text-sm font-semibold text-foreground-900">
                                                                     "No modules published yet."
                                                                 </p>
@@ -685,8 +688,8 @@ pub fn CourseDetailPage() -> impl IntoView {
 
                                                             view! {
                                                                 <article class="min-w-0 rounded-2xl border border-stroke-muted bg-surface-700 p-[1.1rem_1.15rem] shadow-[0_0.75rem_2rem_rgba(31,20,58,0.08)]">
-                                                                    <div class="grid h-28 place-items-center overflow-hidden rounded-xl bg-sky-100 text-4xl dark:bg-sky-400/10" aria-hidden="true">
-                                                                        "📖"
+                                                                    <div class="grid h-28 place-items-center overflow-hidden rounded-xl bg-sky-100 dark:bg-sky-400/10" aria-hidden="true">
+                                                                        <BookOpenIcon class="h-10 w-10 text-sky-400/70 dark:text-sky-300/50" />
                                                                     </div>
                                                                     <div class="mt-3 flex flex-wrap gap-1.5">
                                                                         <span class="inline-flex items-center gap-1 rounded-lg border border-stroke-muted bg-surface-800 px-[0.55rem] py-[0.1rem] text-[0.68rem] font-bold text-foreground-600">{level_label}</span>

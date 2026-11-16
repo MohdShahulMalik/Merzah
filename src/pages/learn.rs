@@ -3,6 +3,7 @@ use leptos_router::components::A;
 
 use crate::components::cards::CourseCard;
 use crate::components::filters::{FilterGroup, FilterOption, Filters, default_selection};
+use crate::components::icons::SearchXIcon;
 use crate::components::sections::ContinueLearningSection;
 use crate::components::sections::FeaturedCoursesSection;
 use crate::components::sections::LearningPathsSection;
@@ -178,7 +179,7 @@ pub fn Learn() -> impl IntoView {
                             {if matches.is_empty() {
                                 view! {
                                     <div class="min-w-0 rounded-2xl border border-dashed border-stroke-muted bg-surface-700 p-8 text-center shadow-sm">
-                                        <p class="text-3xl" aria-hidden="true">"🔍"</p>
+                                        <SearchXIcon class="mx-auto h-9 w-9 text-foreground-400" />
                                         <p class="mt-2 text-sm font-semibold text-foreground-900">
                                             "No courses match your search."
                                         </p>
