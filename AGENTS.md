@@ -27,3 +27,4 @@
 ## THINGS TO NEVER DO
 
 - NEVER EVER TRY TO ACCESS THE .env, .surrealdb, OR /scripts/.auth_state FILES AT ALL!! not through the read tool or by bash like using cat command or by any other means.
+- NEVER GIVE ME VERBOSE RESPONSE AND USE `unslop` SKILL BEFORE GIVING ME ANY RESPONSE TO MAKE YOUR RESPONSES
