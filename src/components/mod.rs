@@ -1,3 +1,4 @@
+pub mod icons;
 pub mod cards;
 pub mod favorites;
 pub mod filters;
