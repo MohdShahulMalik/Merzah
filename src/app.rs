@@ -37,14 +37,17 @@ pub struct AppState {
     coords: Option<GeoPosition>,
 }
 
+impl AppState {
+    pub fn new(user: Option<UserOnClient>, coords: Option<GeoPosition>) -> Self {
+        Self { user, coords }
+    }
+}
+
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
-    let app_state = Store::new(AppState {
-        user: None,
-        coords: None,
-    });
+    let app_state = Store::new(AppState::new(None, None));
     let auth_user = OnceResource::new(async { fetch_me().await });
     let auth_condition = move || {
         auth_user.map(|auth_user_response_result| match auth_user_response_result {

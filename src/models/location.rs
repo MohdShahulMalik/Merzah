@@ -1,4 +1,7 @@
-#[derive(Debug, Clone, Copy, PartialEq)]
+use serde::Deserialize;
+use serde::Serialize;
+
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, Default)]
 pub struct GeoPosition {
     pub latitude: f64,
     pub longitude: f64,
