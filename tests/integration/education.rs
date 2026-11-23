@@ -15,7 +15,7 @@ use merzah::{
 };
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use surrealdb::{Datetime, RecordId};
+use surrealdb::types::{Datetime, RecordId};
 
 #[derive(Serialize)]
 struct EmptyBody {}
@@ -194,7 +194,7 @@ async fn create_user_with_role(
     display_name: &str,
     role: &str,
 ) -> (User, String) {
-    let user_id = RecordId::from(("users", format!("user_{}", uuid::Uuid::new_v4())));
+    let user_id = RecordId::new("users", format!("user_{}", uuid::Uuid::new_v4()));
     let user: User = db
         .create(user_id.clone())
         .content(User {

@@ -12,7 +12,7 @@ use merzah::{
 use reqwest::Client;
 use rstest::rstest;
 use serde::Serialize;
-use surrealdb::{Datetime, RecordId, sql::Geometry};
+use surrealdb::types::{Datetime, RecordId, Geometry};
 
 #[derive(Serialize)]
 struct AddMosqueParams {
@@ -102,7 +102,7 @@ async fn test_update_mosque_personnel(
         .expect("Not returned");
 
     // 2. Create the acting user
-    let user_id = RecordId::from(("users", format!("user_{}", uuid::Uuid::new_v4())));
+    let user_id = RecordId::new("users", format!("user_{}", uuid::Uuid::new_v4()));
     let user: User = db
         .create(user_id.clone())
         .content(User {
@@ -156,7 +156,7 @@ async fn test_update_mosque_personnel(
         .expect("Failed to create session");
 
     // 4. Create a personnel user to assign
-    let imam_id = RecordId::from(("users", "imam_user"));
+    let imam_id = RecordId::new("users", "imam_user");
     let _: User = db
         .create(imam_id.clone())
         .content(User {
@@ -215,7 +215,7 @@ async fn update_mosque_personnel_invalid_type() {
     let app_admin: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", "app_admin")),
+            id: RecordId::new("users", "app_admin"),
             created_at: Datetime::default(),
             display_name: "App Admin".to_string(),
             password_hash: "hash".to_string(),
@@ -259,7 +259,7 @@ async fn add_and_fetch_mosques() {
     let app_admin: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", "test_admin")),
+            id: RecordId::new("users", "test_admin"),
             created_at: Datetime::default(),
             display_name: "Test Admin".to_string(),
             password_hash: "somehash".to_string(),
@@ -359,7 +359,7 @@ async fn update_mosque_prayer_times() {
     let app_admin: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", "admin")),
+            id: RecordId::new("users", "admin"),
             created_at: Datetime::default(),
             display_name: "Admin".to_string(),
             password_hash: "somehash".to_string(),
@@ -424,7 +424,7 @@ async fn update_mosque_prayer_times() {
     let supervisor_user: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", format!("supervisor_{}", uuid::Uuid::new_v4()))),
+            id: RecordId::new("users", format!("supervisor_{}", uuid::Uuid::new_v4())),
             created_at: Datetime::default(),
             display_name: "Supervisor".to_string(),
             password_hash: "somehash".to_string(),
@@ -439,7 +439,7 @@ async fn update_mosque_prayer_times() {
     let mosque_admin_user: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", format!("mosque_admin_{}", uuid::Uuid::new_v4()))),
+            id: RecordId::new("users", format!("mosque_admin_{}", uuid::Uuid::new_v4())),
             created_at: Datetime::default(),
             display_name: "Mosque Admin".to_string(),
             password_hash: "somehash".to_string(),
@@ -587,7 +587,7 @@ async fn favorite_and_unfavorite_mosques() {
     let app_admin: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", "test_admin")),
+            id: RecordId::new("users", "test_admin"),
             created_at: Datetime::default(),
             display_name: "Test Admin".to_string(),
             password_hash: "somehash".to_string(),
@@ -622,7 +622,7 @@ async fn favorite_and_unfavorite_mosques() {
     let user: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", "fan_user")),
+            id: RecordId::new("users", "fan_user"),
             created_at: Datetime::default(),
             display_name: "Fan User".to_string(),
             password_hash: "hash".to_string(),
@@ -776,7 +776,7 @@ async fn test_favorite_mosque_with_both_auth_methods(
     let app_admin: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", format!("admin_{}", uuid::Uuid::new_v4()))),
+            id: RecordId::new("users", format!("admin_{}", uuid::Uuid::new_v4())),
             created_at: Datetime::default(),
             display_name: "Test Admin".to_string(),
             password_hash: "hash".to_string(),
@@ -819,7 +819,7 @@ async fn test_favorite_mosque_with_both_auth_methods(
     let user: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", format!("user_{}", uuid::Uuid::new_v4()))),
+            id: RecordId::new("users", format!("user_{}", uuid::Uuid::new_v4())),
             created_at: Datetime::default(),
             display_name: "Test User".to_string(),
             password_hash: "hash".to_string(),
@@ -944,7 +944,7 @@ async fn test_add_mosque_is_only_allowed_for_app_admins(
     let user: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", format!("user_{}", uuid::Uuid::new_v4()))),
+            id: RecordId::new("users", format!("user_{}", uuid::Uuid::new_v4())),
             created_at: Datetime::default(),
             display_name: "Acting User".to_string(),
             password_hash: "hash".to_string(),

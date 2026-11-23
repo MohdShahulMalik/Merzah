@@ -13,7 +13,8 @@ use merzah::{
 use reqwest::Client;
 use rstest::rstest;
 use serde::Serialize;
-use surrealdb::{RecordId, Surreal, engine::remote::ws::Client as SurrealClient, sql::Geometry};
+use surrealdb::types::{RecordId, Geometry};
+use surrealdb::{Surreal, engine::remote::ws::Client as SurrealClient};
 
 #[derive(Serialize)]
 struct AddAdminPayload {
@@ -80,7 +81,7 @@ async fn test_add_admin_endpoint(
     #[case] should_succeed: bool,
     #[case] expected_error_part: Option<&str>,
 ) {
-    use surrealdb::RecordId;
+    use surrealdb::types::RecordId;
 
     let db = get_test_db().await;
     let addr = spawn_app(db.clone());
@@ -96,7 +97,7 @@ async fn test_add_admin_endpoint(
     let _: Option<MosqueSearchResult> = db
         .create("mosques")
         .content(MosqueFromOverpass {
-            id: RecordId::from(("mosque", "test_mosque_1")),
+            id: RecordId::new("mosque", "test_mosque_1"),
             name: Some("test_mosque_1".to_string()),
             location: Geometry::Point((9.00, 8.00).into()),
             city: None,
@@ -145,7 +146,7 @@ async fn test_add_admin_endpoint(
             .bind(("user", new_admin.id.clone()))
             .bind((
                 "mosque",
-                surrealdb::RecordId::from(("mosques", "test_mosque_1")),
+                surrealdb::types::RecordId::new("mosques", "test_mosque_1"),
             ))
             .await
             .expect("Query failed");

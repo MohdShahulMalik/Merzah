@@ -2,7 +2,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use crate::common::get_test_db_with_ns;
-use surrealdb::RecordId;
+use surrealdb::types::RecordId;
 use surrealdb::engine::remote::ws::Client;
 use surrealdb::Surreal;
 

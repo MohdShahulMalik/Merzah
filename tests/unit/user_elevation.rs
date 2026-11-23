@@ -118,7 +118,7 @@ async fn test_elevate_user(
 async fn test_elevate_user_target_not_found() {
     let db = get_test_db().await;
     let admin = create_user(&db, "Admin", "admin@test.com", Some("app_admin")).await;
-    let fake_user_id = surrealdb::RecordId::from(("users", "nonexistent"));
+    let fake_user_id = surrealdb::types::RecordId::new("users", "nonexistent");
 
     let result = elevate_user(
         admin.id.clone(),
@@ -140,7 +140,7 @@ async fn test_elevate_user_target_not_found() {
 #[tokio::test]
 async fn test_elevate_user_admin_not_found() {
     let db = get_test_db().await;
-    let fake_admin_id = surrealdb::RecordId::from(("users", "nonexistent_admin"));
+    let fake_admin_id = surrealdb::types::RecordId::new("users", "nonexistent_admin");
     let target_user = create_user(&db, "Target", "target@test.com", Some("regular")).await;
 
     let result = elevate_user(

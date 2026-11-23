@@ -45,8 +45,8 @@ pub async fn get_test_db_with_ns() -> (Surreal<Client>, String, String, u16) {
         .expect("Failed to connect to test database");
 
     db.signin(Root {
-        username: "root",
-        password: "root",
+        username: "root".to_string(),
+        password: "root".to_string(),
     })
     .await
     .expect("Failed to sign in as root");

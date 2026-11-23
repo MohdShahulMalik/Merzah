@@ -8,11 +8,11 @@ use merzah::spawn_app;
 use reqwest::Client;
 use rstest::rstest;
 use serde::Serialize;
-use surrealdb::Datetime;
-use surrealdb::RecordId;
+use surrealdb::types::Datetime;
+use surrealdb::types::RecordId;
 use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client as WsClient;
-use surrealdb::sql::Geometry;
+use surrealdb::types::Geometry;
 
 #[derive(Serialize)]
 struct CreateMosque {
@@ -32,7 +32,7 @@ async fn setup_user(db: &Surreal<WsClient>) -> (User, String) {
     let user: User = db
         .create("users")
         .content(User {
-            id: RecordId::from(("users", format!("fav_user_{}", uuid::Uuid::new_v4()))),
+            id: RecordId::new("users", format!("fav_user_{}", uuid::Uuid::new_v4())),
             created_at: Datetime::default(),
             display_name: "Favorite User".to_string(),
             password_hash: "hash".to_string(),

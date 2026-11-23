@@ -17,7 +17,7 @@ use merzah::{
 use reqwest::Client;
 use rstest::rstest;
 use serde::Serialize;
-use surrealdb::{Datetime, RecordId, sql::Geometry};
+use surrealdb::types::{Datetime, RecordId, Geometry};
 
 #[derive(Serialize)]
 struct CreateMosque {
@@ -104,7 +104,7 @@ fn build_auth_delete(
 async fn setup_user_and_session(
     db: &surrealdb::Surreal<surrealdb::engine::remote::ws::Client>,
 ) -> (User, String) {
-    let user_id = RecordId::from(("users", format!("user_{}", uuid::Uuid::new_v4())));
+    let user_id = RecordId::new("users", format!("user_{}", uuid::Uuid::new_v4()));
     let user: User = db
         .create(user_id.clone())
         .content(User {
@@ -848,7 +848,7 @@ async fn test_manual_rotation_trigger() {
 async fn test_rsvp_persistence_across_rotation() {
     let db = get_test_db().await;
 
-    let user_id = RecordId::from(("users", "rsvp_user"));
+    let user_id = RecordId::new("users", "rsvp_user");
     let user: User = db
         .create(user_id.clone())
         .content(User {
