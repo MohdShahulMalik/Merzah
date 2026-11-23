@@ -5,7 +5,7 @@ use thiserror::Error;
 #[derive(Debug, Error)]
 pub enum UserElevationError {
     #[error("Database operation failed")]
-    DatabaseError(#[from] surrealdb::Error),
+    DatabaseError(#[from] surrealdb::types::Error),
 
     #[error("The user attempting the elevation is not authorized to elevate")]
     Unauthorized,

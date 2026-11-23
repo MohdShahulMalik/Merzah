@@ -6,10 +6,10 @@ use chrono::Duration;
 use chrono::Utc;
 use leptos::prelude::expect_context;
 use leptos_actix::ResponseOptions;
-use surrealdb::RecordId;
+use surrealdb::types::RecordId;
 use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client;
-use surrealdb::sql::Datetime;
+use surrealdb::types::Datetime;
 
 use crate::errors::session::SessionError;
 use crate::models::session::CreateSession;

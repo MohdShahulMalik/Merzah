@@ -8,11 +8,11 @@ use leptos::prelude::expect_context;
 #[cfg(feature = "ssr")]
 use leptos_actix::ResponseOptions;
 #[cfg(feature = "ssr")]
-use surrealdb::RecordId;
+use surrealdb::types::RecordId;
 
 #[cfg(feature = "ssr")]
 pub fn parse_record_id<T>(id: &str, field_name: &str) -> Result<RecordId, ApiResponse<T>> {
-    id.parse().map_err(|e| {
+    RecordId::parse_simple(id).map_err(|e| {
         tracing::error!(?e, "Failed to parse {}", field_name);
 
         let response_options = expect_context::<ResponseOptions>();

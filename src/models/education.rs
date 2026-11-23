@@ -3,7 +3,7 @@ use garde::Validate;
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "ssr")]
-use surrealdb::{Datetime, RecordId};
+use surrealdb::types::{Datetime, RecordId, SurrealValue};
 
 // ===== TRACKS =====
 
@@ -17,7 +17,7 @@ pub enum TrackSlug {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Track {
     pub id: RecordId,
     pub name: String,
@@ -85,7 +85,7 @@ pub struct TrackOnClient {
 
 // ===== COURSES =====
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 #[serde(rename_all = "lowercase")]
 pub enum CourseLevel {
     Beginner,
@@ -93,7 +93,7 @@ pub enum CourseLevel {
     Advanced,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 #[serde(rename_all = "lowercase")]
 pub enum CourseStatus {
     Draft,
@@ -103,7 +103,7 @@ pub enum CourseStatus {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Course {
     pub id: RecordId,
     pub title: String,
@@ -138,7 +138,7 @@ impl CourseLevel {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
 pub struct CourseRecord {
     pub title: String,
     pub slug: String,
@@ -216,7 +216,7 @@ impl CourseStatus {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
 pub struct UpdatedCourseRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
@@ -286,7 +286,7 @@ pub struct EducatorInfo {
 // ===== MODULES =====
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Module {
     pub id: RecordId,
     pub title: String,
@@ -299,7 +299,7 @@ pub struct Module {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
 pub struct ModuleRecord {
     pub title: String,
     pub course: RecordId,
@@ -334,7 +334,7 @@ impl ModuleRecord {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
 pub struct UpdatedModuleRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
@@ -365,7 +365,7 @@ pub struct ModuleWithLessons {
 
 // ===== LESSONS =====
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 #[serde(rename_all = "lowercase")]
 pub enum LessonContentType {
     Text,
@@ -380,7 +380,7 @@ pub enum LessonContentType {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Lesson {
     pub id: RecordId,
     pub title: String,
@@ -402,7 +402,7 @@ pub struct Lesson {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
 pub struct LessonRecord {
     pub title: String,
     pub module: RecordId,
@@ -465,7 +465,7 @@ impl LessonRecord {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
 pub struct UpdatedLessonRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,

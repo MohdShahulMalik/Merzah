@@ -12,9 +12,9 @@ use serde::Deserialize;
 #[cfg(feature = "ssr")]
 use serde::de::DeserializeOwned;
 #[cfg(feature = "ssr")]
-use surrealdb::Datetime;
+use surrealdb::types::Datetime;
 #[cfg(feature = "ssr")]
-use surrealdb::RecordId;
+use surrealdb::types::RecordId;
 
 #[cfg(feature = "ssr")]
 use merzah::database::connection::init_db;

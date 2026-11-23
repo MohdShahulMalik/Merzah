@@ -4,12 +4,12 @@ use chrono::{DateTime, FixedOffset};
 use garde::Validate;
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "ssr")]
-use surrealdb::RecordId;
+use surrealdb::types::{RecordId, SurrealValue};
 
 #[cfg(feature = "ssr")]
 use crate::utils::parsing::parse_record_id;
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 #[serde(rename_all = "lowercase")]
 pub enum EventCategory {
     Halaqah,
@@ -29,7 +29,7 @@ pub enum EventCategory {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, SurrealValue)]
 pub struct Event {
     pub id: RecordId,
     pub title: String,
@@ -43,7 +43,7 @@ pub struct Event {
 }
 
 // To be used on client side, where we don't have access to RecordId
-#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq, SurrealValue)]
 pub struct EventDetails {
     pub id: String,
     pub title: String,
@@ -55,7 +55,7 @@ pub struct EventDetails {
     pub mosque_name: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 #[serde(rename_all = "lowercase")]
 pub enum EventRecurrence {
     Daily,
@@ -129,7 +129,7 @@ impl TryFrom<CreateEvent> for EventRecord {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone, SurrealValue)]
 pub struct EventRecord {
     pub title: String,
     pub description: String,
@@ -170,7 +170,7 @@ pub struct UpdatedEvent {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
 pub struct UpdatedEventRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
@@ -213,7 +213,7 @@ impl TryFrom<UpdatedEvent> for UpdatedEventRecord {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq, SurrealValue)]
 pub struct PersonalEvent {
     pub event: EventDetails,
     pub rsvp: bool,
@@ -226,14 +226,14 @@ impl PersonalEvent {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, SurrealValue)]
 pub struct FavoriteAndNearbyEventsQueryResult {
     pub favorite_events: Vec<EventDetails>,
     pub attending_events: Vec<String>,
     pub nearby_events: Vec<EventDetails>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, SurrealValue)]
 pub struct EventSummary {
     pub event: EventDetails,
     pub rsvp_count: usize,

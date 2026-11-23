@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "ssr")]
-use surrealdb::{Datetime, RecordId};
+use surrealdb::types::{Datetime, RecordId, SurrealValue};
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 #[serde(rename_all = "lowercase")]
 pub enum RoadmapDifficulty {
     Beginner,
@@ -12,7 +12,7 @@ pub enum RoadmapDifficulty {
     All,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 #[serde(rename_all = "lowercase")]
 pub enum RoadmapStatus {
     Draft,
@@ -34,7 +34,7 @@ impl RoadmapDifficulty {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Roadmap {
     pub id: RecordId,
     pub title: String,
@@ -97,7 +97,7 @@ pub struct RoadmapDetail {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Framework {
     pub id: RecordId,
     pub title: String,
@@ -113,7 +113,7 @@ pub struct Framework {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Milestone {
     pub id: RecordId,
     pub framework: RecordId,

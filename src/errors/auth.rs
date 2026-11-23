@@ -8,7 +8,7 @@ pub enum AuthError {
     InvalidData(#[from] garde::Report),
 
     #[error("Database operation failed")]
-    DatabaseError(#[from] Box<surrealdb::Error>),
+    DatabaseError(#[from] Box<surrealdb::types::Error>),
 
     #[error("{0} already registered")]
     NotUniqueError(String),

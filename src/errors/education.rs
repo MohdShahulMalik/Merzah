@@ -11,5 +11,5 @@ pub enum EducationError {
     #[error("Invalid input: {0}")]
     InvalidInput(String),
     #[error("Database operation failed")]
-    DatabaseError(#[from] surrealdb::Error),
+    DatabaseError(#[from] surrealdb::types::Error),
 }

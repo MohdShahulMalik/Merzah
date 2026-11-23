@@ -1,22 +1,23 @@
 use std::collections::HashSet;
 
 use serde::Deserialize;
-use surrealdb::{RecordId, Surreal, engine::remote::ws::Client};
+use surrealdb::types::{RecordId, SurrealValue};
+use surrealdb::{Surreal, engine::remote::ws::Client};
 
 use crate::errors::education::EducationError;
 use crate::models::gamification::Achievement;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct CountResult {
     pub count: i64,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct EarnedRow {
     pub out: RecordId,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct StreakRow {
     pub current_streak: i32,
 }

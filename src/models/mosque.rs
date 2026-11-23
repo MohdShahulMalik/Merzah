@@ -3,9 +3,9 @@ use garde::Validate;
 use serde::Deserialize;
 use serde::Serialize;
 #[cfg(feature = "ssr")]
-use surrealdb::RecordId;
+use surrealdb::types::{RecordId, ToSql};
 #[cfg(feature = "ssr")]
-use surrealdb::sql::Geometry;
+use surrealdb::types::{Geometry, SurrealValue};
 
 #[cfg(feature = "ssr")]
 use crate::models::api_responses::MosqueResponse;
@@ -13,7 +13,7 @@ use crate::models::api_responses::MosqueResponse;
 use crate::models::user::User;
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct MosqueFromOverpass {
     pub id: RecordId,
     pub name: Option<String>,
@@ -65,7 +65,7 @@ impl NewMosque {
 
 /// The shape of a mosque record that is written to the database.
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct MosqueInsert {
     pub id: RecordId,
     pub name: Option<String>,
@@ -97,7 +97,7 @@ impl MosqueInsert {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, SurrealValue)]
 pub struct MosqueSearchResult {
     pub id: RecordId,
     #[cfg_attr(feature = "ssr", serde(deserialize_with = "deserialize_surreal_point"))]
@@ -113,7 +113,7 @@ pub struct MosqueSearchResult {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 pub struct MosqueRecord {
     pub id: RecordId,
     #[cfg_attr(feature = "ssr", serde(deserialize_with = "deserialize_surreal_point"))]
@@ -155,7 +155,7 @@ impl MosqueSearchResult {
         let muazzin = self.muazzin.map(|muazzin| muazzin.into());
 
         MosqueResponse {
-            id: self.id.to_string(),
+            id: self.id.to_sql(),
             location: self.location,
             name: self.name,
             street: self.street,
@@ -205,7 +205,7 @@ pub struct Tags {
 
 /// Prayer times stored in the database as strings ("HH:MM:SS" format)
 /// Use this for creating/updating prayer_times records
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 pub struct PrayerTimes {
     pub fajr: NaiveTime,
     pub dhuhr: NaiveTime,

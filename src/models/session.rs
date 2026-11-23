@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "ssr")]
-use surrealdb::RecordId;
+use surrealdb::types::RecordId;
 #[cfg(feature = "ssr")]
-use surrealdb::sql::Datetime;
+use surrealdb::types::{Datetime, SurrealValue};
 
 #[cfg(feature = "ssr")]
 pub const SESSION_DURATION_HOURS: i64 = 1;
@@ -11,7 +11,7 @@ pub const SESSION_DURATION_HOURS: i64 = 1;
 pub const MAX_SESSIONS_PER_USER: usize = 10;
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct CreateSession {
     pub user: RecordId,
     pub session_token: String,
@@ -30,7 +30,7 @@ impl CreateSession {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Session {
     pub id: RecordId,
     pub user: RecordId,
@@ -40,7 +40,7 @@ pub struct Session {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct SessionWithUser {
     pub id: RecordId,
     pub user: crate::models::user::User,
@@ -50,7 +50,7 @@ pub struct SessionWithUser {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct UpdateSession {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_token: Option<String>,

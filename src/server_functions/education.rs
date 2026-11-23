@@ -10,7 +10,7 @@ use leptos::{
 #[cfg(feature = "ssr")]
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "ssr")]
-use surrealdb::{Datetime, RecordId};
+use surrealdb::types::{Datetime, RecordId, ToSql, SurrealValue};
 #[cfg(feature = "ssr")]
 use tracing::error;
 
@@ -48,13 +48,13 @@ use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context, get_
 use crate::utils::token_generator::generate_token;
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct CountResult {
     pub count: i64,
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct CourseWithEducator {
     pub id: RecordId,
     pub title: String,
@@ -71,7 +71,7 @@ struct CourseWithEducator {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct EnrolledWithCourse {
     pub out: Course,
     pub enrolled_at: Datetime,
@@ -80,19 +80,19 @@ struct EnrolledWithCourse {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct RelationId {
     pub id: RecordId,
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct EnrolledWithLessonId {
     pub out: RecordId,
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, SurrealValue)]
 struct EnrollmentUpdate {
     pub progress_percent: f32,
     pub last_accessed_at: Datetime,
@@ -160,7 +160,7 @@ pub async fn fetch_tracks() -> Result<ApiResponse<Vec<TrackOnClient>>, ServerFnE
         let count = counts.first().map(|c| c.count).unwrap_or(0) as usize;
 
         payload.push(TrackOnClient {
-            id: track.id.to_string(),
+            id: track.id.to_sql(),
             name: track.name,
             slug: track.slug,
             description: track.description,
@@ -217,7 +217,7 @@ pub async fn fetch_track_courses(
     let payload = courses
         .into_iter()
         .map(|course| CourseOnClient {
-            id: course.id.to_string(),
+            id: course.id.to_sql(),
             title: course.title,
             slug: course.slug,
             short_description: course.short_description,
@@ -335,7 +335,7 @@ pub async fn fetch_course_details(
         let lessons_payload = lessons
             .into_iter()
             .map(|lesson| LessonOnClient {
-                id: lesson.id.to_string(),
+                id: lesson.id.to_sql(),
                 title: lesson.title,
                 content_type: lesson.content_type,
                 thumbnail_url: lesson.thumbnail_url,
@@ -347,7 +347,7 @@ pub async fn fetch_course_details(
             .collect::<Vec<_>>();
 
         module_payload.push(ModuleWithLessons {
-            id: module.id.to_string(),
+            id: module.id.to_sql(),
             title: module.title,
             description: module.description,
             sort_order: module.sort_order,
@@ -356,7 +356,7 @@ pub async fn fetch_course_details(
     }
 
     let payload = CourseDetail {
-        id: course.id.to_string(),
+        id: course.id.to_sql(),
         title: course.title,
         slug: course.slug,
         description: course.description,
@@ -368,7 +368,7 @@ pub async fn fetch_course_details(
         lesson_count: course.lesson_count,
         enrollment_count: course.enrollment_count,
         educator: EducatorInfo {
-            id: course.educator.id.to_string(),
+            id: course.educator.id.to_sql(),
             display_name: course.educator.display_name,
         },
         modules: module_payload,
@@ -463,17 +463,17 @@ pub async fn fetch_lesson_details(
     for (idx, item) in module_lessons.iter().enumerate() {
         if item.id == lesson.id {
             if idx > 0 {
-                prev_lesson_id = Some(module_lessons[idx - 1].id.to_string());
+                prev_lesson_id = Some(module_lessons[idx - 1].id.to_sql());
             }
             if idx + 1 < module_lessons.len() {
-                next_lesson_id = Some(module_lessons[idx + 1].id.to_string());
+                next_lesson_id = Some(module_lessons[idx + 1].id.to_sql());
             }
             break;
         }
     }
 
     let payload = LessonDetail {
-        id: lesson.id.to_string(),
+        id: lesson.id.to_sql(),
         title: lesson.title,
         content_type: lesson.content_type,
         content: lesson.content,
@@ -484,9 +484,9 @@ pub async fn fetch_lesson_details(
         external_url: lesson.external_url,
         thumbnail_url: lesson.thumbnail_url,
         duration_minutes: lesson.duration_minutes,
-        module_id: module.id.to_string(),
+        module_id: module.id.to_sql(),
         module_title: module.title,
-        course_id: course.id.to_string(),
+        course_id: course.id.to_sql(),
         course_title: course.title,
         is_completed: false,
         next_lesson_id,
@@ -550,7 +550,7 @@ pub async fn search_courses(
             haystack.contains(&keyword) && level.as_ref().map_or(true, |lvl| lvl == &course.level)
         })
         .map(|course| CourseOnClient {
-            id: course.id.to_string(),
+            id: course.id.to_sql(),
             title: course.title,
             slug: course.slug,
             short_description: course.short_description,
@@ -712,7 +712,7 @@ pub async fn fetch_my_courses() -> Result<ApiResponse<Vec<EnrollmentProgress>>, 
             let completed =
                 ((row.progress_percent / 100.0) * row.out.lesson_count as f32).round() as i32;
             EnrollmentProgress {
-                course_id: row.out.id.to_string(),
+                course_id: row.out.id.to_sql(),
                 course_title: row.out.title,
                 thumbnail_url: row.out.thumbnail_url,
                 enrolled_at: datetime_to_fixed(row.enrolled_at),
@@ -868,7 +868,7 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
 
     let lesson_ids = course_lessons
         .iter()
-        .map(|lesson| lesson.id.to_string())
+        .map(|lesson| lesson.id.to_sql())
         .collect::<std::collections::HashSet<_>>();
 
     let mut completed_rows_response = match db
@@ -895,7 +895,7 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
     };
     let completed_lessons = completed_rows
         .into_iter()
-        .filter(|row| lesson_ids.contains(&row.out.to_string()))
+        .filter(|row| lesson_ids.contains(&row.out.to_sql()))
         .count() as f32;
 
     let progress_percent = if total_lessons > 0.0 {
@@ -1031,7 +1031,7 @@ pub async fn fetch_course_progress(
 
     let completed = ((row.progress_percent / 100.0) * row.out.lesson_count as f32).round() as i32;
     let payload = EnrollmentProgress {
-        course_id: row.out.id.to_string(),
+        course_id: row.out.id.to_sql(),
         course_title: row.out.title,
         thumbnail_url: row.out.thumbnail_url,
         enrolled_at: datetime_to_fixed(row.enrolled_at),
@@ -1083,7 +1083,7 @@ pub async fn fetch_educator_courses() -> Result<ApiResponse<Vec<CourseOnClient>>
     let payload = courses
         .into_iter()
         .map(|course| CourseOnClient {
-            id: course.id.to_string(),
+            id: course.id.to_sql(),
             title: course.title,
             slug: course.slug,
             short_description: course.short_description,

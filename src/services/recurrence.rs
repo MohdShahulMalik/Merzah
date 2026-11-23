@@ -7,6 +7,7 @@ use std::cmp::min;
 use crate::models::events::Event;
 use crate::models::events::EventRecurrence;
 #[cfg(feature = "ssr")]
+use surrealdb::types::ToSql;
 use surrealdb::{Surreal, engine::remote::ws::Client};
 
 pub fn calculate_next_date(
@@ -119,7 +120,7 @@ fn days_in_month(year: i32, month: u32) -> u32 {
 }
 
 #[cfg(feature = "ssr")]
-pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, surrealdb::Error> {
+pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, surrealdb::types::Error> {
     use tracing::{error, info};
 
     let Some(pattern) = event.recurrence_pattern.clone() else {
@@ -127,7 +128,7 @@ pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, su
     };
 
     let Some(next_date) = calculate_next_date(event.date, pattern) else {
-        error!("Failed to calculate next date for event {}", event.id);
+        error!("Failed to calculate next date for event {}", event.id.to_sql());
         return Ok(false);
     };
 
@@ -136,7 +137,7 @@ pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, su
             db.query("DELETE $event")
                 .bind(("event", event.id.clone()))
                 .await?;
-            info!("Deleted event {} - recurrence series ended", event.id);
+            info!("Deleted event {} - recurrence series ended", event.id.to_sql());
             return Ok(false);
         }
     }
@@ -146,12 +147,12 @@ pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, su
         .bind(("next_date", next_date.to_rfc3339()))
         .await?;
 
-    info!("Rotated event {} to {}", event.id, next_date);
+    info!("Rotated event {} to {}", event.id.to_sql(), next_date);
     Ok(true)
 }
 
 #[cfg(feature = "ssr")]
-pub async fn check_and_rotate_events(db: &Surreal<Client>) -> Result<usize, surrealdb::Error> {
+pub async fn check_and_rotate_events(db: &Surreal<Client>) -> Result<usize, surrealdb::types::Error> {
     use tracing::{error, info};
 
     let search_query = r#"

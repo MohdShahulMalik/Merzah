@@ -2,10 +2,10 @@ use garde::Validate;
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "ssr")]
-use surrealdb::{Datetime, RecordId};
+use surrealdb::types::{Datetime, RecordId, ToSql, SurrealValue};
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct CreateUser {
     pub display_name: String,
     pub password_hash: String,
@@ -22,7 +22,7 @@ impl CreateUser {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct User {
     pub id: RecordId,
     pub created_at: Datetime,
@@ -86,7 +86,7 @@ impl From<User> for UpdateUser {
 impl From<User> for UserOnClient {
     fn from(user: User) -> Self {
         UserOnClient::new(
-            user.id.to_string(),
+            user.id.to_sql(),
             user.display_name,
             user.role,
         )
@@ -105,7 +105,7 @@ impl From<&User> for UpdateUser {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct UpdateUser {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
@@ -130,7 +130,7 @@ impl UpdateUser {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct UpdateUserPassword {
     pub password_hash: String,
 }
@@ -143,7 +143,7 @@ impl UpdateUserPassword {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct CreateUserIdentifier {
     pub user: RecordId,
     pub identifier_type: String,
@@ -243,7 +243,7 @@ pub fn normalize_mobile(raw: &str) -> String {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 pub struct UserIdentifier {
     pub identifier_type: String,
     pub identifier_value: String,
@@ -268,7 +268,7 @@ impl UserIdentifierOnClient {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 pub struct UserIdentifierWithUser {
     pub identifier_type: String,
     pub identifier_value: String,

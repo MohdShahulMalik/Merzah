@@ -20,8 +20,8 @@ pub async fn init_db() -> Surreal<Client> {
         .expect("Failed to connect to database");
 
     db.signin(Root {
-        username: &db_user,
-        password: &db_pass,
+        username: db_user,
+        password: db_pass,
     })
     .await
     .expect("Failed to sign in to database");

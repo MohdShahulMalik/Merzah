@@ -1,7 +1,7 @@
 #[cfg(feature = "ssr")]
 use chrono::{DateTime, FixedOffset, Utc};
 #[cfg(feature = "ssr")]
-use surrealdb::Datetime;
+use surrealdb::types::Datetime;
 
 /// Converts a datetime coming from the database into a fixed offset datetime,
 /// falling back to the current time when the stored value is not parsable.

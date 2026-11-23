@@ -1,5 +1,6 @@
 use chrono::{Datelike, NaiveDate, Utc};
-use surrealdb::{RecordId, Surreal, engine::remote::ws::Client};
+use surrealdb::types::RecordId;
+use surrealdb::{Surreal, engine::remote::ws::Client};
 
 use crate::errors::education::EducationError;
 use crate::models::gamification::UserStreak;

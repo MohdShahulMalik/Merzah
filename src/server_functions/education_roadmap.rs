@@ -2,7 +2,7 @@ use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
 #[cfg(feature = "ssr")]
 use serde::Deserialize;
 #[cfg(feature = "ssr")]
-use surrealdb::RecordId;
+use surrealdb::types::{RecordId, ToSql, SurrealValue};
 #[cfg(feature = "ssr")]
 use tracing::error;
 
@@ -26,7 +26,7 @@ use crate::utils::parsing::parse_record_id;
 use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context, get_server_context};
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct RoadmapCourseWithCourse {
     pub out: Course,
     pub sort_order: i32,
@@ -35,7 +35,7 @@ struct RoadmapCourseWithCourse {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct MilestoneCourseWithCourse {
     pub out: Course,
     pub is_required: bool,
@@ -79,7 +79,7 @@ pub async fn fetch_roadmaps() -> Result<ApiResponse<Vec<RoadmapOnClient>>, Serve
     let payload = roadmaps
         .into_iter()
         .map(|roadmap| RoadmapOnClient {
-            id: roadmap.id.to_string(),
+            id: roadmap.id.to_sql(),
             title: roadmap.title,
             slug: roadmap.slug,
             description: roadmap.description,
@@ -155,7 +155,7 @@ pub async fn fetch_roadmap_detail(
     let courses_payload = courses
         .into_iter()
         .map(|edge| RoadmapCourseOnClient {
-            course_id: edge.out.id.to_string(),
+            course_id: edge.out.id.to_sql(),
             title: edge.out.title,
             short_description: edge.out.short_description,
             thumbnail_url: edge.out.thumbnail_url,
@@ -166,7 +166,7 @@ pub async fn fetch_roadmap_detail(
         .collect::<Vec<_>>();
 
     let payload = RoadmapDetail {
-        id: roadmap.id.to_string(),
+        id: roadmap.id.to_sql(),
         title: roadmap.title,
         slug: roadmap.slug,
         description: roadmap.description,
@@ -288,7 +288,7 @@ pub async fn fetch_frameworks() -> Result<ApiResponse<Vec<FrameworkOnClient>>, S
     let payload = frameworks
         .into_iter()
         .map(|framework| FrameworkOnClient {
-            id: framework.id.to_string(),
+            id: framework.id.to_sql(),
             title: framework.title,
             slug: framework.slug,
             description: framework.description,
@@ -389,7 +389,7 @@ pub async fn fetch_framework_detail(
         let courses_payload = courses
             .into_iter()
             .map(|edge| RoadmapCourseOnClient {
-                course_id: edge.out.id.to_string(),
+                course_id: edge.out.id.to_sql(),
                 title: edge.out.title,
                 short_description: edge.out.short_description,
                 thumbnail_url: edge.out.thumbnail_url,
@@ -400,7 +400,7 @@ pub async fn fetch_framework_detail(
             .collect::<Vec<_>>();
 
         milestone_payload.push(MilestoneOnClient {
-            id: milestone.id.to_string(),
+            id: milestone.id.to_sql(),
             title: milestone.title,
             description: milestone.description,
             sort_order: milestone.sort_order,
@@ -409,7 +409,7 @@ pub async fn fetch_framework_detail(
     }
 
     let payload = FrameworkDetail {
-        id: framework.id.to_string(),
+        id: framework.id.to_sql(),
         title: framework.title,
         slug: framework.slug,
         description: framework.description,

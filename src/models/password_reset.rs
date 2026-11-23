@@ -46,19 +46,21 @@ impl PasswordResetConfirm {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+use surrealdb::types::SurrealValue;
+#[cfg(feature = "ssr")]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct CreatePasswordResetToken {
-    pub user: surrealdb::RecordId,
+    pub user: surrealdb::types::RecordId,
     pub token_hash: String,
-    pub expires_at: surrealdb::sql::Datetime,
+    pub expires_at: surrealdb::types::Datetime,
 }
 
 #[cfg(feature = "ssr")]
 impl CreatePasswordResetToken {
     pub fn new(
-        user: surrealdb::RecordId,
+        user: surrealdb::types::RecordId,
         token_hash: String,
-        expires_at: surrealdb::sql::Datetime,
+        expires_at: surrealdb::types::Datetime,
     ) -> Self {
         Self {
             user,

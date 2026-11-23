@@ -1,4 +1,4 @@
-use surrealdb::RecordId;
+use surrealdb::types::RecordId;
 use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client;
 

@@ -18,14 +18,14 @@ pub enum OAuthError {
     UserNotFound,
 
     #[error("Database error: {0}")]
-    DatabaseError(#[from] Box<surrealdb::Error>),
+    DatabaseError(#[from] Box<surrealdb::types::Error>),
 
     #[error("Invalid response from OAuth provider")]
     InvalidResponse,
 }
 
-impl From<surrealdb::Error> for OAuthError {
-    fn from(err: surrealdb::Error) -> Self {
+impl From<surrealdb::types::Error> for OAuthError {
+    fn from(err: surrealdb::types::Error) -> Self {
         OAuthError::DatabaseError(Box::new(err))
     }
 }

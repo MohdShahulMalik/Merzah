@@ -2,7 +2,7 @@ use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
 #[cfg(feature = "ssr")]
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "ssr")]
-use surrealdb::RecordId;
+use surrealdb::types::{RecordId, ToSql, SurrealValue};
 #[cfg(feature = "ssr")]
 use tracing::error;
 
@@ -20,13 +20,13 @@ use crate::utils::parsing::parse_record_id;
 use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context, get_server_context};
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct CountResult {
     pub count: i64,
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, SurrealValue)]
 struct QuizAttemptRecord {
     pub user: RecordId,
     pub quiz: RecordId,
@@ -102,15 +102,15 @@ pub async fn fetch_quiz_for_lesson(
     };
 
     let payload = QuizOnClient {
-        id: quiz.id.to_string(),
-        lesson_id: quiz.lesson.to_string(),
+        id: quiz.id.to_sql(),
+        lesson_id: quiz.lesson.to_sql(),
         title: quiz.title,
         passing_score: quiz.passing_score,
         max_attempts: quiz.max_attempts,
         questions: questions
             .into_iter()
             .map(|question| QuizQuestionOnClient {
-                id: question.id.to_string(),
+                id: question.id.to_sql(),
                 question_text: question.question_text,
                 question_type: question.question_type,
                 options: question.options,
@@ -219,7 +219,7 @@ pub async fn submit_quiz(
         if let Some(answer) = submission
             .answers
             .iter()
-            .find(|a| a.question_id == question.id.to_string())
+            .find(|a| a.question_id == question.id.to_sql())
         {
             let expected = question.correct_answer.trim().to_lowercase();
             let actual = answer.answer.trim().to_lowercase();

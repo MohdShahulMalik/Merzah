@@ -9,7 +9,7 @@ use leptos::{
     *,
 };
 #[cfg(feature = "ssr")]
-use surrealdb::{RecordId, sql::Geometry};
+use surrealdb::types::{Geometry, RecordId, ToSql};
 #[cfg(feature = "ssr")]
 use tracing::{error, info};
 
@@ -71,11 +71,13 @@ pub async fn add_event(create_event: CreateEvent) -> Result<ApiResponse<String>,
             Ok(Some(existing_id)) => {
                 info!(
                     "Event '{}' already exists as {}, nothing to create",
-                    event_record.title, existing_id
+                    event_record.title,
+                    existing_id.to_sql()
                 );
                 return Ok(responder.ok(format!(
                     "Event '{}' already exists ({}), no duplicate created",
-                    event_record.title, existing_id
+                    event_record.title,
+                    existing_id.to_sql()
                 )));
             }
             Ok(None) => {}

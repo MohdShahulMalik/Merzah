@@ -2,10 +2,10 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 
 use rand::Rng;
-use surrealdb::RecordId;
+use surrealdb::types::RecordId;
 use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client;
-use surrealdb::sql::Geometry;
+use surrealdb::types::Geometry;
 
 use crate::models::api_responses::MosqueResponse;
 use crate::models::mosque::MosqueFromOverpass;
@@ -43,7 +43,7 @@ pub fn parse_overpass_mosques(data: OverpassResponse) -> Vec<MosqueFromOverpass>
             };
 
             Some(MosqueFromOverpass {
-                id: RecordId::from(("mosques", elem.id)),
+                id: RecordId::new("mosques", elem.id),
                 name,
                 location,
                 street,
@@ -62,13 +62,13 @@ pub fn generate_mosque_record_id() -> RecordId {
         .map(|_| format!("{:016x}", rng.r#gen::<u64>()))
         .collect();
 
-    RecordId::from(("mosques", suffix))
+    RecordId::new("mosques", suffix)
 }
 
 pub async fn enrich_mosques_with_contacts(
     mosques: Vec<MosqueSearchResult>,
     db: &Surreal<Client>,
-) -> Result<Vec<MosqueResponse>, surrealdb::Error> {
+) -> Result<Vec<MosqueResponse>, surrealdb::types::Error> {
     // The ids are kept as `RecordId`s: binding plain strings into a `user IN`
     // comparison against record ids makes the lookup return nothing.
     let mut user_ids = HashSet::new();

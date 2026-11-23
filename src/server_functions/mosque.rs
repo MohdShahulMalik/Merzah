@@ -31,7 +31,7 @@ use crate::utils::mosque::parse_overpass_mosques;
 #[cfg(feature = "ssr")]
 use garde::Validate;
 #[cfg(feature = "ssr")]
-use surrealdb::{RecordId, sql::Geometry};
+use surrealdb::types::{Geometry, RecordId, ToSql};
 #[cfg(feature = "ssr")]
 use tracing::{error, info};
 
@@ -47,7 +47,7 @@ pub async fn add_mosque(mosque: NewMosque) -> Result<ApiResponse<String>, Server
     if !user.is_app_admin() {
         error!(
             "Unauthorized attempt to add a mosque by the user {}",
-            user.id
+            user.id.to_sql()
         );
         return Ok(responder.unauthorized(
             "Only app admins can approve the addition of a new mosque".to_string(),
@@ -80,11 +80,13 @@ pub async fn add_mosque(mosque: NewMosque) -> Result<ApiResponse<String>, Server
             Ok(Some(existing_id)) => {
                 info!(
                     "Mosque '{}' already exists as {}, nothing to create",
-                    mosque.name, existing_id
+                    mosque.name,
+                    existing_id.to_sql()
                 );
                 return Ok(responder.ok(format!(
                     "Mosque '{}' already exists ({}), no duplicate created",
-                    mosque.name, existing_id
+                    mosque.name,
+                    existing_id.to_sql()
                 )));
             }
             Ok(None) => {}
@@ -131,7 +133,7 @@ pub async fn add_mosque(mosque: NewMosque) -> Result<ApiResponse<String>, Server
         }
     }
 
-    Ok(responder.created(mosque_id.to_string()))
+    Ok(responder.created(mosque_id.to_sql()))
 }
 
 #[server(input=Json, output=Json, prefix = "/mosques", endpoint = "add-mosque-of-region")]
@@ -150,7 +152,7 @@ pub async fn add_mosques_of_region(
     if !user.is_app_admin() && !user.is_mosque_supervisor() {
         error!(
             "Unauthorized attempt to add mosques of region by user {}",
-            user.id
+            user.id.to_sql()
         );
         return Ok(responder.unauthorized("Only app admins can add mosques of region".to_string()));
     }
@@ -580,7 +582,7 @@ pub async fn add_admin(
     if !mosque_supervisor.is_mosque_supervisor() && !mosque_supervisor.is_app_admin() {
         error!(
             "The user {} trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin",
-            mosque_supervisor.id
+            mosque_supervisor.id.to_sql()
         );
         return Ok(responder.unauthorized("The user trying to elevate other user's permission to mosque_admin is not a mosque_supervisor or app_admin".to_string()));
     }

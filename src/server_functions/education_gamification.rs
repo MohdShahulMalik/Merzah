@@ -2,7 +2,7 @@ use leptos::{prelude::ServerFnError, server_fn::codec::Json, *};
 #[cfg(feature = "ssr")]
 use serde::Deserialize;
 #[cfg(feature = "ssr")]
-use surrealdb::Datetime;
+use surrealdb::types::{Datetime, ToSql, SurrealValue};
 #[cfg(feature = "ssr")]
 use tracing::error;
 
@@ -20,14 +20,14 @@ use crate::utils::datetime::datetime_to_fixed;
 use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context};
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct EarnedWithAchievement {
     pub out: Achievement,
     pub earned_at: Datetime,
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct UserStreakWithUser {
     pub user: User,
     pub current_streak: i32,
@@ -102,7 +102,7 @@ pub async fn fetch_achievements() -> Result<ApiResponse<Vec<AchievementOnClient>
     let payload = rows
         .into_iter()
         .map(|row| AchievementOnClient {
-            id: row.out.id.to_string(),
+            id: row.out.id.to_sql(),
             name: row.out.name,
             slug: row.out.slug,
             description: row.out.description,
@@ -147,8 +147,8 @@ pub async fn fetch_certificates() -> Result<ApiResponse<Vec<CertificateOnClient>
     let payload = certificates
         .into_iter()
         .map(|cert| CertificateOnClient {
-            id: cert.id.to_string(),
-            course_id: cert.course.to_string(),
+            id: cert.id.to_sql(),
+            course_id: cert.course.to_sql(),
             certificate_number: cert.certificate_number,
             issued_at: datetime_to_fixed(cert.issued_at),
             pdf_url: cert.pdf_url,
@@ -188,7 +188,7 @@ pub async fn fetch_leaderboard() -> Result<ApiResponse<Vec<LeaderboardEntry>>, S
     let payload = rows
         .into_iter()
         .map(|row| LeaderboardEntry {
-            user_id: row.user.id.to_string(),
+            user_id: row.user.id.to_sql(),
             display_name: row.user.display_name,
             current_streak: row.current_streak,
             longest_streak: row.longest_streak,

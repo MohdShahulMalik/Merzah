@@ -1,5 +1,5 @@
 #[cfg(feature = "ssr")]
-use surrealdb::sql::Datetime;
+use surrealdb::types::Datetime;
 #[cfg(feature = "ssr")]
 use thiserror::Error;
 
@@ -16,7 +16,7 @@ pub enum SessionError {
     InvalidToken,
 
     #[error("Database error: {0}")]
-    DatabaseError(#[from] Box<surrealdb::Error>),
+    DatabaseError(#[from] Box<surrealdb::types::Error>),
 
     #[error("User not found for the session")]
     UserNotFound,

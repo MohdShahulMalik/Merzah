@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "ssr")]
-use surrealdb::{Datetime, RecordId};
+use surrealdb::types::{Datetime, RecordId, SurrealValue};
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 #[serde(rename_all = "lowercase")]
 pub enum QuestionType {
     MultipleChoice,
@@ -11,7 +11,7 @@ pub enum QuestionType {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Quiz {
     pub id: RecordId,
     pub lesson: RecordId,
@@ -22,7 +22,7 @@ pub struct Quiz {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct QuizQuestion {
     pub id: RecordId,
     pub quiz: RecordId,
@@ -65,7 +65,7 @@ pub struct QuizAttempt {
     pub attempted_at: Datetime,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
 pub struct QuizAnswer {
     pub question_id: String,
     pub answer: String,

@@ -2,9 +2,9 @@ use chrono::{DateTime, FixedOffset};
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "ssr")]
-use surrealdb::{Datetime, RecordId};
+use surrealdb::types::{Datetime, RecordId, SurrealValue};
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
 #[serde(rename_all = "lowercase")]
 pub enum AchievementCategory {
     Learning,
@@ -14,7 +14,7 @@ pub enum AchievementCategory {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct UserStreak {
     pub id: RecordId,
     pub user: RecordId,
@@ -24,7 +24,7 @@ pub struct UserStreak {
     pub updated_at: Datetime,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
 pub struct UserStreakOnClient {
     pub current_streak: i32,
     pub longest_streak: i32,
@@ -32,7 +32,7 @@ pub struct UserStreakOnClient {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Achievement {
     pub id: RecordId,
     pub name: String,
@@ -59,7 +59,7 @@ pub struct AchievementOnClient {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, SurrealValue)]
 pub struct Certificate {
     pub id: RecordId,
     pub user: RecordId,

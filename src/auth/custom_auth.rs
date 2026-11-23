@@ -5,7 +5,7 @@ use argon2::password_hash::PasswordVerifier;
 use argon2::password_hash::SaltString;
 use garde::Validate;
 use rand::rngs::OsRng;
-use surrealdb::RecordId;
+use surrealdb::types::{RecordId, SurrealValue};
 use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client;
 
@@ -205,7 +205,7 @@ pub async fn request_password_reset(
 
     let raw_token = generate_token();
     let token_hash = hash_reset_token(&raw_token);
-    let expires_at = surrealdb::sql::Datetime::from(chrono::Utc::now() + chrono::Duration::hours(1));
+    let expires_at = surrealdb::types::Datetime::from(chrono::Utc::now() + chrono::Duration::hours(1));
     let row = CreatePasswordResetToken::new(found.user, token_hash, expires_at);
     let _: Option<CreatePasswordResetToken> = db
         .create("password_reset_tokens")
@@ -227,17 +227,17 @@ pub async fn confirm_password_reset(
         .bind(("h", token_hash.clone()))
         .await
         .map_err(|e| AuthError::DatabaseError(Box::new(e)))?;
-    #[derive(Debug, serde::Deserialize)]
+    #[derive(Debug, serde::Deserialize, SurrealValue)]
     struct ResetRow {
         id: RecordId,
         user: User,
-        expires_at: surrealdb::sql::Datetime,
+        expires_at: surrealdb::types::Datetime,
     }
     let row: Option<ResetRow> = result
         .take(0)
         .map_err(|e| AuthError::DatabaseError(Box::new(e)))?;
     let row = row.ok_or(AuthError::InvalidResetToken)?;
-    let now = surrealdb::sql::Datetime::from(chrono::Utc::now());
+    let now = surrealdb::types::Datetime::from(chrono::Utc::now());
     if row.expires_at <= now {
         let _ = db
             .query("DELETE ONLY $id")

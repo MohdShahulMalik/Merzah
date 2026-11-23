@@ -1,4 +1,5 @@
-use surrealdb::{RecordId, Surreal, engine::remote::ws::Client};
+use surrealdb::types::RecordId;
+use surrealdb::{Surreal, engine::remote::ws::Client};
 
 use crate::{
     errors::user_elevation::UserElevationError,
