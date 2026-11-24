@@ -8,13 +8,11 @@ use merzah::spawn_app;
 use reqwest::Client;
 use rstest::rstest;
 use serde::Serialize;
-use surrealdb::types::Datetime;
-use surrealdb::types::RecordId;
+use surrealdb::types::{Datetime, Geometry, RecordId, SurrealValue, ToSql};
 use surrealdb::Surreal;
 use surrealdb::engine::remote::ws::Client as WsClient;
-use surrealdb::types::Geometry;
 
-#[derive(Serialize)]
+#[derive(Serialize, SurrealValue)]
 struct CreateMosque {
     location: Geometry,
     name: String,
@@ -108,11 +106,11 @@ async fn fetch_all_favorite_mosques() {
             assert_eq!(mosques.len(), 2, "Should return both favorites");
             let ids: Vec<String> = mosques.iter().map(|m| m.id.clone()).collect();
             assert!(
-                ids.contains(&near_id.to_string()),
+                ids.contains(&near_id.to_sql()),
                 "Should contain the near mosque"
             );
             assert!(
-                ids.contains(&far_id.to_string()),
+                ids.contains(&far_id.to_sql()),
                 "Should contain the far mosque"
             );
         }
@@ -195,7 +193,7 @@ async fn fetch_closest_favorite_mosque(
             let expected_id = if expect_near { near_id } else { far_id };
             assert_eq!(
                 mosque.id,
-                expected_id.to_string(),
+                expected_id.to_sql(),
                 "Should return the closest favorited mosque"
             );
         }

@@ -2,7 +2,8 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use crate::common::get_test_db_with_ns;
-use surrealdb::types::RecordId;
+use surrealdb::types::{RecordId, ToSql};
+use surrealdb::types::SurrealValue;
 use surrealdb::engine::remote::ws::Client;
 use surrealdb::Surreal;
 
@@ -86,7 +87,7 @@ async fn count(db: &Surreal<Client>, table: &str) -> i64 {
     rows.first().map(|row| row.count).unwrap_or(0)
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, SurrealValue)]
 struct CountRow {
     count: i64,
 }
@@ -183,7 +184,7 @@ async fn seeding_twice_updates_records_instead_of_duplicating_them() {
     std::fs::remove_dir_all(&seed).ok();
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, SurrealValue)]
 struct TitleRow {
     title: String,
 }
@@ -203,7 +204,7 @@ async fn seeding_creates_the_educator_account_the_courses_point_at() {
     let educators: Vec<RecordId> = response.take(0).expect("failed to read the educator link");
     let educator = educators
         .first()
-        .map(|id| id.to_string())
+        .map(|id| id.to_sql())
         .expect("the course should link to an educator");
 
     let mut user_response = db
@@ -310,7 +311,7 @@ async fn seeding_adds_new_lessons_and_soft_deletes_removed_ones() {
     std::fs::remove_dir_all(&seed).ok();
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, SurrealValue)]
 struct LessonCountRow {
     lesson_count: i64,
 }

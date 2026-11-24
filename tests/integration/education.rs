@@ -15,7 +15,7 @@ use merzah::{
 };
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use surrealdb::types::{Datetime, RecordId};
+use surrealdb::types::{Datetime, RecordId, SurrealValue, ToSql};
 
 #[derive(Serialize)]
 struct EmptyBody {}
@@ -74,7 +74,7 @@ struct UpdateLessonParams {
     update: UpdateLesson,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, SurrealValue)]
 struct TrackSeed {
     name: String,
     slug: String,
@@ -87,7 +87,7 @@ struct TrackSeed {
     deleted: bool,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, SurrealValue)]
 struct AchievementSeed {
     name: String,
     slug: String,
@@ -100,24 +100,24 @@ struct AchievementSeed {
     created_at: Datetime,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, SurrealValue)]
 struct CourseLessonCountUpdate {
     lesson_count: i32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct CertificateRow {
     #[allow(dead_code)]
     id: RecordId,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct CompletedRow {
     #[allow(dead_code)]
     id: RecordId,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct StreakRow {
     current_streak: i32,
     longest_streak: i32,
@@ -447,7 +447,7 @@ async fn education_public_endpoints_return_expected_data() {
     let track_courses_response = client
         .post(&track_courses_url)
         .json(&TrackIdParam {
-            track_id: track.id.to_string(),
+            track_id: track.id.to_sql(),
         })
         .send()
         .await
@@ -469,7 +469,7 @@ async fn education_public_endpoints_return_expected_data() {
     let course_response = client
         .post(&course_url)
         .json(&CourseIdParam {
-            course_id: published_course.id.to_string(),
+            course_id: published_course.id.to_sql(),
         })
         .send()
         .await
@@ -494,7 +494,7 @@ async fn education_public_endpoints_return_expected_data() {
     let lesson_response = client
         .post(&lesson_url)
         .json(&LessonIdParam {
-            lesson_id: lesson_two.id.to_string(),
+            lesson_id: lesson_two.id.to_sql(),
         })
         .send()
         .await
@@ -511,7 +511,7 @@ async fn education_public_endpoints_return_expected_data() {
     assert_eq!(lesson_detail.title, "Pillars of Salah");
     assert_eq!(
         lesson_detail.prev_lesson_id,
-        Some(lesson_one.id.to_string())
+        Some(lesson_one.id.to_sql())
     );
     assert_eq!(lesson_detail.next_lesson_id, None);
     assert_eq!(lesson_detail.course_title, "Fiqh of Prayer");
@@ -598,7 +598,7 @@ async fn education_enrollment_flow_updates_progress_and_certificate() {
     let complete_url = format!("{}/education/complete-lesson", addr);
     let forbidden_response = auth_post(&client, &student_session, &complete_url)
         .json(&LessonIdParam {
-            lesson_id: lesson_one.id.to_string(),
+            lesson_id: lesson_one.id.to_sql(),
         })
         .send()
         .await
@@ -609,7 +609,7 @@ async fn education_enrollment_flow_updates_progress_and_certificate() {
     let enroll_url = format!("{}/education/enroll", addr);
     let enroll_response = auth_post(&client, &student_session, &enroll_url)
         .json(&CourseIdParam {
-            course_id: course.id.to_string(),
+            course_id: course.id.to_sql(),
         })
         .send()
         .await
@@ -626,7 +626,7 @@ async fn education_enrollment_flow_updates_progress_and_certificate() {
 
     let duplicate_response = auth_post(&client, &student_session, &enroll_url)
         .json(&CourseIdParam {
-            course_id: course.id.to_string(),
+            course_id: course.id.to_sql(),
         })
         .send()
         .await
@@ -664,7 +664,7 @@ async fn education_enrollment_flow_updates_progress_and_certificate() {
 
     let first_complete_response = auth_post(&client, &student_session, &complete_url)
         .json(&LessonIdParam {
-            lesson_id: lesson_one.id.to_string(),
+            lesson_id: lesson_one.id.to_sql(),
         })
         .send()
         .await
@@ -675,7 +675,7 @@ async fn education_enrollment_flow_updates_progress_and_certificate() {
     let progress_url = format!("{}/education/progress", addr);
     let first_progress_response = auth_post(&client, &student_session, &progress_url)
         .json(&CourseIdParam {
-            course_id: course.id.to_string(),
+            course_id: course.id.to_sql(),
         })
         .send()
         .await
@@ -697,7 +697,7 @@ async fn education_enrollment_flow_updates_progress_and_certificate() {
 
     let second_complete_response = auth_post(&client, &student_session, &complete_url)
         .json(&LessonIdParam {
-            lesson_id: lesson_two.id.to_string(),
+            lesson_id: lesson_two.id.to_sql(),
         })
         .send()
         .await
@@ -707,7 +707,7 @@ async fn education_enrollment_flow_updates_progress_and_certificate() {
 
     let final_progress_response = auth_post(&client, &student_session, &progress_url)
         .json(&CourseIdParam {
-            course_id: course.id.to_string(),
+            course_id: course.id.to_sql(),
         })
         .send()
         .await
@@ -772,7 +772,7 @@ async fn education_enrollment_flow_updates_progress_and_certificate() {
     let unenroll_url = format!("{}/education/unenroll", addr);
     let unenroll_response = auth_post(&client, &student_session, &unenroll_url)
         .json(&CourseIdParam {
-            course_id: course.id.to_string(),
+            course_id: course.id.to_sql(),
         })
         .send()
         .await
@@ -838,7 +838,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
                 slug: "career-planning".to_string(),
                 description: "A practical guide to ethical career planning.".to_string(),
                 short_description: "Build a career plan with ihsan.".to_string(),
-                track: track.id.to_string(),
+                track: track.id.to_sql(),
                 level: CourseLevel::Intermediate,
                 language: "en".to_string(),
                 thumbnail_url: Some("https://example.com/career.png".to_string()),
@@ -881,7 +881,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
     let publish_course_url = format!("{}/education/educator/courses-publish", addr);
     let publish_without_content_response = auth_post(&client, &session, &publish_course_url)
         .json(&CourseIdParam {
-            course_id: created_course.id.to_string(),
+            course_id: created_course.id.to_sql(),
         })
         .send()
         .await
@@ -892,7 +892,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
     let update_course_url = format!("{}/education/educator/courses-update", addr);
     let update_course_response = auth_patch(&client, &session, &update_course_url)
         .json(&UpdateCourseParams {
-            course_id: created_course.id.to_string(),
+            course_id: created_course.id.to_sql(),
             update: UpdateCourse {
                 title: Some("Career Planning Essentials".to_string()),
                 slug: None,
@@ -927,7 +927,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
         .json(&CreateModuleParams {
             create_module: CreateModule {
                 title: "Career Foundations".to_string(),
-                course: created_course.id.to_string(),
+                course: created_course.id.to_sql(),
                 description: Some("Foundational concepts".to_string()),
                 sort_order: Some(3),
             },
@@ -952,7 +952,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
     let update_module_url = format!("{}/education/educator/modules-update", addr);
     let update_module_response = auth_patch(&client, &session, &update_module_url)
         .json(&UpdateModuleParams {
-            module_id: module.id.to_string(),
+            module_id: module.id.to_sql(),
             update: UpdateModule {
                 title: Some("Career Foundations Updated".to_string()),
                 description: Some("Updated module description".to_string()),
@@ -978,7 +978,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
         .json(&CreateLessonParams {
             create_lesson: CreateLesson {
                 title: "Set Intentional Goals".to_string(),
-                module: module.id.to_string(),
+                module: module.id.to_sql(),
                 content_type: LessonContentType::Text,
                 content: "Goal-setting content".to_string(),
                 video_url: None,
@@ -1024,7 +1024,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
     let update_lesson_url = format!("{}/education/educator/lessons-update", addr);
     let update_lesson_response = auth_patch(&client, &session, &update_lesson_url)
         .json(&UpdateLessonParams {
-            lesson_id: lesson.id.to_string(),
+            lesson_id: lesson.id.to_sql(),
             update: UpdateLesson {
                 title: Some("Set Clear Goals".to_string()),
                 content_type: Some(LessonContentType::Video),
@@ -1058,7 +1058,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
 
     let publish_course_response = auth_post(&client, &session, &publish_course_url)
         .json(&CourseIdParam {
-            course_id: created_course.id.to_string(),
+            course_id: created_course.id.to_sql(),
         })
         .send()
         .await
@@ -1077,7 +1077,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
 
     let delete_lesson_url = format!("{}/education/educator/lessons-delete", addr);
     let delete_lesson_response = auth_delete(&client, &session, &delete_lesson_url)
-        .query(&[("lesson_id", lesson.id.to_string())])
+        .query(&[("lesson_id", lesson.id.to_sql())])
         .send()
         .await
         .expect("failed to delete lesson");
@@ -1092,7 +1092,7 @@ async fn education_educator_endpoints_manage_course_module_and_lesson() {
 
     let delete_module_url = format!("{}/education/educator/modules-delete", addr);
     let delete_module_response = auth_delete(&client, &session, &delete_module_url)
-        .query(&[("module_id", module.id.to_string())])
+        .query(&[("module_id", module.id.to_sql())])
         .send()
         .await
         .expect("failed to delete module");

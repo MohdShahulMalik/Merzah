@@ -9,9 +9,11 @@ use merzah::{
 };
 use rstest::rstest;
 use serde::Serialize;
-use surrealdb::{Surreal, engine::remote::ws::Client};
+use surrealdb::Surreal;
+use surrealdb::engine::remote::ws::Client;
+use surrealdb::types::SurrealValue;
 
-#[derive(Serialize)]
+#[derive(Serialize, SurrealValue)]
 struct Role {
     role: String,
 }

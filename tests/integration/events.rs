@@ -1,5 +1,5 @@
 use crate::common::get_test_db;
-use chrono::{Duration, FixedOffset, Utc};
+use chrono::{DateTime, Duration, FixedOffset, Utc};
 use merzah::{
     auth::session::create_session,
     models::{
@@ -17,12 +17,16 @@ use merzah::{
 use reqwest::Client;
 use rstest::rstest;
 use serde::Serialize;
-use surrealdb::types::{Datetime, RecordId, Geometry};
+use surrealdb::types::{Datetime, Geometry, RecordId, SurrealValue, ToSql};
 
-#[derive(Serialize)]
+#[derive(Serialize, SurrealValue)]
 struct CreateMosque {
     pub location: Geometry,
     pub name: String,
+}
+
+fn surreal_date(date: DateTime<FixedOffset>) -> Datetime {
+    Datetime::from(date.with_timezone(&Utc))
 }
 
 #[derive(Serialize)]
@@ -168,7 +172,7 @@ async fn create_hosted_event(
             title: title.to_string(),
             description: format!("Description for {title}"),
             category: EventCategory::Community,
-            date: event_date,
+            date: surreal_date(event_date),
             mosque: mosque_id.clone(),
             speaker: None,
             recurrence_pattern: None,
@@ -237,7 +241,7 @@ async fn test_create_recurring_event_via_api(#[case] auth_method: AuthMethod) {
         description: "A weekly gathering for Quran study and discussion.".to_string(),
         category: EventCategory::Halaqah,
         date: event_date,
-        mosque: mosque.id.to_string(),
+        mosque: mosque.id.to_sql(),
         speaker: Some("Imam Ahmed".to_string()),
         recurrence_pattern: Some(EventRecurrence::Weekly),
         recurrence_duration: Some(Interval::ThreeMonths),
@@ -266,9 +270,13 @@ async fn test_create_recurring_event_via_api(#[case] auth_method: AuthMethod) {
     assert!(event.recurrence_end_date.is_some());
 
     let expected_end_date = event_date + Duration::days(90);
-    let end_date_diff = (event.recurrence_end_date.unwrap() - expected_end_date)
-        .num_hours()
-        .abs();
+    let end_date_diff = (event
+        .recurrence_end_date
+        .expect("recurrence end date")
+        .into_inner()
+         - expected_end_date.with_timezone(&Utc))
+    .num_hours()
+    .abs();
     assert!(
         end_date_diff < 24,
         "End date should be approximately 90 days from start"
@@ -292,7 +300,7 @@ async fn test_create_one_time_event_via_api() {
         description: "A special lecture on Islamic history.".to_string(),
         category: EventCategory::Lecture,
         date: event_date,
-        mosque: mosque.id.to_string(),
+        mosque: mosque.id.to_sql(),
         speaker: Some("Scholar Yusuf".to_string()),
         recurrence_pattern: None,
         recurrence_duration: None,
@@ -348,7 +356,7 @@ async fn test_create_event_with_different_recurrence_patterns(
         description: "Test event".to_string(),
         category: EventCategory::Community,
         date: event_date,
-        mosque: mosque.id.to_string(),
+        mosque: mosque.id.to_sql(),
         speaker: None,
         recurrence_pattern: Some(pattern.clone()),
         recurrence_duration: duration,
@@ -392,7 +400,7 @@ async fn test_update_event_title() {
         description: "Original description".to_string(),
         category: EventCategory::Lecture,
         date: event_date,
-        mosque: mosque.id.to_string(),
+        mosque: mosque.id.to_sql(),
         speaker: None,
         recurrence_pattern: None,
         recurrence_duration: None,
@@ -412,7 +420,7 @@ async fn test_update_event_title() {
 
     let update_url = format!("{}/mosques/events/update-event", addr);
     let update_params = UpdateEventParams {
-        event_id: event_id.to_string(),
+        event_id: event_id.to_sql(),
         updated_event: UpdatedEvent {
             title: Some("Updated Title".to_string()),
             description: None,
@@ -466,7 +474,7 @@ async fn test_delete_event() {
         description: "This event will be deleted".to_string(),
         category: EventCategory::Community,
         date: event_date,
-        mosque: mosque.id.to_string(),
+        mosque: mosque.id.to_sql(),
         speaker: None,
         recurrence_pattern: None,
         recurrence_duration: None,
@@ -488,7 +496,7 @@ async fn test_delete_event() {
     );
 
     let event_id = events[0].id.clone();
-    let event_id_str = event_id.to_string();
+    let event_id_str = event_id.to_sql();
     eprintln!("Event ID: {}", event_id_str);
 
     let encoded_event_id = urlencoding::encode(&event_id_str);
@@ -591,9 +599,9 @@ async fn test_fetch_users_favorite_mosques_events_includes_nearby_and_deduplicat
         "Expected deduplicated nearby + favorite events"
     );
 
-    let favorite_event_id = favorite_event.id.to_string();
-    let nearby_event_id = nearby_event.id.to_string();
-    let far_event_id = far_event.id.to_string();
+    let favorite_event_id = favorite_event.id.to_sql();
+    let nearby_event_id = nearby_event.id.to_sql();
+    let far_event_id = far_event.id.to_sql();
 
     assert_eq!(
         events
@@ -661,7 +669,7 @@ async fn test_fetch_mosque_events_reports_the_rsvp_of_the_user() {
         description: "An event that is used to check the rsvp of the user.".to_string(),
         category: EventCategory::Community,
         date: event_date,
-        mosque: mosque.id.to_string(),
+        mosque: mosque.id.to_sql(),
         speaker: None,
         recurrence_pattern: None,
         recurrence_duration: None,
@@ -695,7 +703,7 @@ async fn test_fetch_mosque_events_reports_the_rsvp_of_the_user() {
 
     let url = format!("{}/mosques/events/fetch-mosque-events", addr);
     let params = FetchMosqueEventsParams {
-        mosque_id: mosque.id.to_string(),
+        mosque_id: mosque.id.to_sql(),
     };
 
     // The user that attends the event has the rsvp set
@@ -812,11 +820,11 @@ async fn test_manual_rotation_trigger() {
             title: "Past Weekly Event".to_string(),
             description: "This event should rotate".to_string(),
             category: EventCategory::Halaqah,
-            date: past_date,
+            date: surreal_date(past_date),
             mosque: mosque.id.clone(),
             speaker: None,
             recurrence_pattern: Some(EventRecurrence::Weekly),
-            recurrence_end_date: Some(past_date + Duration::days(365)),
+            recurrence_end_date: Some(surreal_date(past_date + Duration::days(365))),
         })
         .await
         .expect("Failed to create event")
@@ -840,8 +848,9 @@ async fn test_manual_rotation_trigger() {
     assert_eq!(rotated_events.len(), 1);
     let rotated_event = &rotated_events[0];
 
-    let expected_next = calculate_next_date(original_date, EventRecurrence::Weekly).unwrap();
-    assert_eq!(rotated_event.date, expected_next);
+    let expected_next = calculate_next_date(original_date.into_inner(), EventRecurrence::Weekly)
+        .unwrap();
+    assert_eq!(rotated_event.date.into_inner(), expected_next);
 }
 
 #[tokio::test]
@@ -882,11 +891,11 @@ async fn test_rsvp_persistence_across_rotation() {
             title: "RSVP Rotation Event".to_string(),
             description: "Test RSVP persistence".to_string(),
             category: EventCategory::Halaqah,
-            date: past_date,
+            date: surreal_date(past_date),
             mosque: mosque.id.clone(),
             speaker: None,
             recurrence_pattern: Some(EventRecurrence::Weekly),
-            recurrence_end_date: Some(past_date + Duration::days(365)),
+            recurrence_end_date: Some(surreal_date(past_date + Duration::days(365))),
         })
         .await
         .expect("Failed to create event")
@@ -946,11 +955,11 @@ async fn test_rotation_deletes_event_past_end_date() {
             title: "Ended Recurring Event".to_string(),
             description: "This event has ended".to_string(),
             category: EventCategory::Halaqah,
-            date: past_date,
+            date: surreal_date(past_date),
             mosque: mosque.id.clone(),
             speaker: None,
             recurrence_pattern: Some(EventRecurrence::Weekly),
-            recurrence_end_date: Some(end_date),
+            recurrence_end_date: Some(surreal_date(end_date)),
         })
         .await
         .expect("Failed to create event")
@@ -997,11 +1006,11 @@ async fn test_query_returns_correct_events_not_rotated_yet() {
             title: "Future Event".to_string(),
             description: "This event is in the future".to_string(),
             category: EventCategory::Halaqah,
-            date: future_date,
+            date: surreal_date(future_date),
             mosque: mosque.id.clone(),
             speaker: None,
             recurrence_pattern: Some(EventRecurrence::Weekly),
-            recurrence_end_date: Some(future_date + Duration::days(90)),
+            recurrence_end_date: Some(surreal_date(future_date + Duration::days(90))),
         })
         .await
         .expect("Failed to create event")
@@ -1021,7 +1030,7 @@ async fn test_query_returns_correct_events_not_rotated_yet() {
         .expect("Take failed");
 
     assert_eq!(events.len(), 1);
-    assert_eq!(events[0].date, future_date);
+    assert_eq!(events[0].date.into_inner(), future_date);
 }
 
 #[tokio::test]
@@ -1047,7 +1056,7 @@ async fn test_non_recurring_event_not_rotated() {
             title: "Past Non-recurring Event".to_string(),
             description: "This event is not recurring".to_string(),
             category: EventCategory::Halaqah,
-            date: past_date,
+            date: surreal_date(past_date),
             mosque: mosque.id.clone(),
             speaker: None,
             recurrence_pattern: None,
@@ -1075,7 +1084,7 @@ async fn test_non_recurring_event_not_rotated() {
 
     assert_eq!(events.len(), 1);
     assert_eq!(
-        events[0].date, past_date,
+        events[0].date.into_inner(), past_date,
         "Non-recurring event date should remain unchanged"
     );
 }

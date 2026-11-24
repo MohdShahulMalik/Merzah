@@ -13,7 +13,7 @@ use merzah::{
 use reqwest::Client;
 use rstest::rstest;
 use serde::Serialize;
-use surrealdb::types::{RecordId, Geometry};
+use surrealdb::types::{Geometry, RecordId, SurrealValue, ToSql};
 use surrealdb::{Surreal, engine::remote::ws::Client as SurrealClient};
 
 #[derive(Serialize)]
@@ -23,12 +23,12 @@ struct AddAdminPayload {
     mosque_id: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, SurrealValue)]
 struct Role {
     role: String,
 }
 
-#[derive(serde::Deserialize, Serialize)]
+#[derive(serde::Deserialize, Serialize, SurrealValue)]
 struct Handle {
     granted_by: RecordId,
 }
@@ -109,8 +109,8 @@ async fn test_add_admin_endpoint(
 
     let mosque_id = "mosques:test_mosque_1";
     let payload = AddAdminPayload {
-        mosque_supervisor: supervisor.id.to_string(),
-        requested_user: new_admin.id.to_string(),
+        mosque_supervisor: supervisor.id.to_sql(),
+        requested_user: new_admin.id.to_sql(),
         mosque_id: mosque_id.to_string(),
     };
 
@@ -154,8 +154,8 @@ async fn test_add_admin_endpoint(
         let relations: Vec<Handle> = res.take(0).unwrap();
         assert!(!relations.is_empty(), "Relation 'handles' was not created");
         assert_eq!(
-            relations[0].granted_by.to_string(),
-            supervisor.id.to_string().replace("⟨", "").replace("⟩", "")
+            relations[0].granted_by.to_sql(),
+            supervisor.id.to_sql().replace("⟨", "").replace("⟩", "")
         ); // Basic check, ID format might vary
     } else {
         // The API returns OK(200) with error message in body for some logic errors (based on code analysis)

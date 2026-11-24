@@ -8,7 +8,7 @@ fn test_calculate_next_date_daily() {
     let dt = Utc
         .with_ymd_and_hms(2024, 1, 1, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Daily).unwrap();
     assert_eq!(next, dt + Duration::days(1));
 }
@@ -18,7 +18,7 @@ fn test_calculate_next_date_weekly() {
     let dt = Utc
         .with_ymd_and_hms(2024, 1, 1, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Weekly).unwrap();
     assert_eq!(next, dt + Duration::weeks(1));
 }
@@ -28,7 +28,7 @@ fn test_calculate_next_date_biweekly() {
     let dt = Utc
         .with_ymd_and_hms(2024, 1, 1, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Biweekly).unwrap();
     assert_eq!(next, dt + Duration::weeks(2));
 }
@@ -51,7 +51,7 @@ fn test_calculate_next_date_weekdays(
     let dt = Utc
         .with_ymd_and_hms(year, month, day, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Weekdays).unwrap();
     assert_eq!(next, dt + Duration::days(expected_days), "{}", description);
 }
@@ -61,7 +61,7 @@ fn test_calculate_next_date_monthly() {
     let dt = Utc
         .with_ymd_and_hms(2024, 1, 31, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Monthly).unwrap();
     assert_eq!(next.date_naive().month(), 2);
     assert_eq!(next.date_naive().day(), 29); // 2024 is leap year
@@ -72,7 +72,7 @@ fn test_calculate_next_date_yearly() {
     let dt = Utc
         .with_ymd_and_hms(2024, 2, 29, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Yearly).unwrap();
     assert_eq!(next.date_naive().year(), 2025);
     assert_eq!(next.date_naive().month(), 2);
@@ -84,7 +84,7 @@ fn test_calculate_next_date_quarterly() {
     let dt = Utc
         .with_ymd_and_hms(2024, 1, 15, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Quaterly).unwrap();
     assert_eq!(next.date_naive().month(), 4);
     assert_eq!(next.date_naive().day(), 15);
@@ -103,7 +103,7 @@ fn test_calculate_next_date_quarterly_year_boundary() {
     let dt = Utc
         .with_ymd_and_hms(2024, 11, 15, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Quaterly).unwrap();
     assert_eq!(next.date_naive().year(), 2025);
     assert_eq!(next.date_naive().month(), 2);
@@ -115,7 +115,7 @@ fn test_calculate_next_date_monthly_boundary_dec_to_jan() {
     let dt = Utc
         .with_ymd_and_hms(2024, 12, 31, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Monthly).unwrap();
     assert_eq!(next.date_naive().year(), 2025);
     assert_eq!(next.date_naive().month(), 1);
@@ -127,7 +127,7 @@ fn test_calculate_next_date_monthly_non_leap_year() {
     let dt = Utc
         .with_ymd_and_hms(2023, 1, 31, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Monthly).unwrap();
     assert_eq!(next.date_naive().month(), 2);
     assert_eq!(next.date_naive().day(), 28);
@@ -138,7 +138,7 @@ fn test_calculate_next_date_yearly_leap_to_non_leap() {
     let dt = Utc
         .with_ymd_and_hms(2024, 2, 29, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Yearly).unwrap();
     assert_eq!(next.date_naive().year(), 2025);
     assert_eq!(next.date_naive().month(), 2);
@@ -154,18 +154,18 @@ fn test_calculate_next_date_yearly_leap_to_non_leap() {
 fn test_calculate_next_date_timezone_positive_offset() {
     let offset = FixedOffset::east_opt(5 * 3600).unwrap();
     let dt = offset.with_ymd_and_hms(2024, 1, 1, 10, 0, 0).unwrap();
-    let next = calculate_next_date(dt, EventRecurrence::Daily).unwrap();
+    let next = calculate_next_date(dt.with_timezone(&Utc), EventRecurrence::Daily).unwrap();
     assert_eq!(next.date_naive(), dt.date_naive() + Duration::days(1));
-    assert_eq!(next.time(), dt.time());
+    assert_eq!(next.time(), dt.with_timezone(&Utc).time());
 }
 
 #[test]
 fn test_calculate_next_date_timezone_negative_offset() {
     let offset = FixedOffset::west_opt(8 * 3600).unwrap();
     let dt = offset.with_ymd_and_hms(2024, 1, 1, 10, 0, 0).unwrap();
-    let next = calculate_next_date(dt, EventRecurrence::Daily).unwrap();
+    let next = calculate_next_date(dt.with_timezone(&Utc), EventRecurrence::Daily).unwrap();
     assert_eq!(next.date_naive(), dt.date_naive() + Duration::days(1));
-    assert_eq!(next.time(), dt.time());
+    assert_eq!(next.time(), dt.with_timezone(&Utc).time());
 }
 
 #[test]
@@ -173,7 +173,7 @@ fn test_calculate_next_date_preserves_time() {
     let dt = Utc
         .with_ymd_and_hms(2024, 1, 1, 14, 30, 45)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
 
     let next = calculate_next_date(dt, EventRecurrence::Daily).unwrap();
     assert_eq!(next.time(), dt.time());
@@ -193,7 +193,7 @@ fn test_calculate_next_date_monthly_30_day_month_to_31_day() {
     let dt = Utc
         .with_ymd_and_hms(2024, 4, 30, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Monthly).unwrap();
     assert_eq!(next.date_naive().month(), 5);
     assert_eq!(next.date_naive().day(), 30);
@@ -217,7 +217,7 @@ fn test_calculate_next_date_weekends(
     let dt = Utc
         .with_ymd_and_hms(year, month, day, 10, 0, 0)
         .unwrap()
-        .with_timezone(&FixedOffset::east_opt(0).unwrap());
+        ;
     let next = calculate_next_date(dt, EventRecurrence::Weekends).unwrap();
     assert_eq!(next, dt + Duration::days(expected_days), "{}", description);
 }
