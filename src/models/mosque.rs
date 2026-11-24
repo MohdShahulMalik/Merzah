@@ -1,4 +1,3 @@
-use chrono::NaiveTime;
 use garde::Validate;
 use serde::Deserialize;
 use serde::Serialize;
@@ -116,8 +115,7 @@ pub struct MosqueSearchResult {
 #[derive(Debug, Deserialize, SurrealValue)]
 pub struct MosqueRecord {
     pub id: RecordId,
-    #[cfg_attr(feature = "ssr", serde(deserialize_with = "deserialize_surreal_point"))]
-    pub location: (f64, f64),
+    pub location: Geometry,
     pub name: Option<String>,
     pub street: Option<String>,
     pub city: Option<String>,
@@ -127,25 +125,11 @@ pub struct MosqueRecord {
 }
 
 #[cfg(feature = "ssr")]
-fn deserialize_surreal_point<'de, D>(deserializer: D) -> Result<(f64, f64), D::Error>
+fn deserialize_surreal_point<'de, D>(_deserializer: D) -> Result<(f64, f64), D::Error>
 where
     D: serde::Deserializer<'de>,
 {
-    use serde::Deserialize;
-
-    #[derive(Deserialize)]
-    struct SurrealPoint(SurrealCoord);
-
-    #[derive(Deserialize)]
-    struct SurrealCoord {
-        x: f64,
-        y: f64,
-    }
-
-    let point = SurrealPoint::deserialize(deserializer)?;
-    // SurrealDB stores (x, y) which corresponds to (lon, lat)
-    // We want to return (lat, lon)
-    Ok((point.0.y, point.0.x))
+    Err(serde::de::Error::custom("DEBUG-always-called"))
 }
 
 #[cfg(feature = "ssr")]
@@ -205,20 +189,22 @@ pub struct Tags {
 
 /// Prayer times stored in the database as strings ("HH:MM:SS" format)
 /// Use this for creating/updating prayer_times records
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[cfg_attr(feature = "ssr", derive(SurrealValue))]
 pub struct PrayerTimes {
-    pub fajr: NaiveTime,
-    pub dhuhr: NaiveTime,
-    pub asr: NaiveTime,
-    pub maghrib: NaiveTime,
-    pub isha: NaiveTime,
+    pub fajr: String,
+    pub dhuhr: String,
+    pub asr: String,
+    pub maghrib: String,
+    pub isha: String,
     /// Serialized as `jummah` to match the database schema
     /// (`schemas/mosques.surql` spells this field `jummah`).
     #[serde(rename = "jummah", alias = "jumuah")]
-    pub jumuah: NaiveTime,
+    pub jumuah: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[cfg_attr(feature = "ssr", derive(SurrealValue))]
 pub struct PrayerTimesUpdate {
     pub adhan_times: Option<PrayerTimes>,
     pub jamat_times: Option<PrayerTimes>,

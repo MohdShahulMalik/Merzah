@@ -13,6 +13,8 @@ use reactive_stores::OptionStoreExt;
 use reactive_stores::Store;
 use wasm_bindgen::JsCast;
 
+use crate::utils::prayer::parse_prayer_time;
+
 use crate::app::AppState;
 use crate::app::AppStateStoreFields;
 use crate::components::cards::DEFAULT_MOSQUE_IMAGE;
@@ -260,7 +262,10 @@ fn MosqueInfoCard(mosque: MosqueResponse) -> impl IntoView {
     let cells = prayer_rows()
         .into_iter()
         .map(|(label, read_time)| {
-            let jamat_text = format_time(jamat_times.as_ref().map(read_time));
+            let jamat_text = match jamat_times.as_ref().map(read_time) {
+                Some(time) => time.format("%-I:%M %p").to_string(),
+                None => "—".to_string(),
+            };
             let (jamat_main, jamat_meridiem) = split_time_meridiem(&jamat_text);
             let adhan_line = adhan_times
                 .as_ref()
@@ -608,22 +613,13 @@ const PHONE_ICON: [&'static str; 1] = [
 /// that reads it off a [`PrayerTimes`].
 fn prayer_rows() -> [(&'static str, fn(&PrayerTimes) -> NaiveTime); 6] {
     [
-        ("Fajr", |times| times.fajr),
-        ("Dhuhr", |times| times.dhuhr),
-        ("Asr", |times| times.asr),
-        ("Maghrib", |times| times.maghrib),
-        ("Isha", |times| times.isha),
-        ("Jumuah", |times| times.jumuah),
+        ("Fajr", |times| parse_prayer_time(&times.fajr)),
+        ("Dhuhr", |times| parse_prayer_time(&times.dhuhr)),
+        ("Asr", |times| parse_prayer_time(&times.asr)),
+        ("Maghrib", |times| parse_prayer_time(&times.maghrib)),
+        ("Isha", |times| parse_prayer_time(&times.isha)),
+        ("Jumuah", |times| parse_prayer_time(&times.jumuah)),
     ]
-}
-
-/// Formats a prayer time, falling back to an em dash when the mosque has not
-/// published that set of times.
-fn format_time(time: Option<NaiveTime>) -> String {
-    match time {
-        Some(time) => time.format("%-I:%M %p").to_string(),
-        None => "—".to_string(),
-    }
 }
 
 /// Splits `"12:45 PM"` into `("12:45", Some("PM"))` so the large figure fits a

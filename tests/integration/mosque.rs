@@ -12,7 +12,7 @@ use merzah::{
 use reqwest::Client;
 use rstest::rstest;
 use serde::Serialize;
-use surrealdb::types::{Datetime, RecordId, Geometry};
+use surrealdb::types::{Datetime, Geometry, RecordId, SurrealValue, ToSql};
 
 #[derive(Serialize)]
 struct AddMosqueParams {
@@ -53,7 +53,7 @@ struct UpdatePersonnelParams {
     mosque_id: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, SurrealValue)]
 struct CreateMosque {
     pub location: Geometry,
     pub name: String,
@@ -64,7 +64,7 @@ struct AddFavoriteParams {
     pub mosque_id: String,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, SurrealValue)]
 struct Favorited {
     #[allow(dead_code)]
     id: RecordId,
@@ -175,8 +175,8 @@ async fn test_update_mosque_personnel(
     let update_url = format!("{}/mosques/update-personnel", addr);
     let params = UpdatePersonnelParams {
         person_type: "imam".to_string(),
-        person_id: imam_id.to_string(),
-        mosque_id: mosque.id.to_string(),
+        person_id: imam_id.to_sql(),
+        mosque_id: mosque.id.to_sql(),
     };
 
     let response = client
@@ -453,8 +453,8 @@ async fn update_mosque_prayer_times() {
     // 5. Elevate supervisor
     let elevate_supervisor_url = format!("{}/mosques/elevate-user-to-mosque-supervisor", addr);
     let elevate_params = ElevateSupervisorParams {
-        app_admin_id: app_admin.id.to_string(),
-        user_id: supervisor_user.id.to_string(),
+        app_admin_id: app_admin.id.to_sql(),
+        user_id: supervisor_user.id.to_sql(),
     };
 
     let response = client
@@ -485,8 +485,8 @@ async fn update_mosque_prayer_times() {
     // 4. Assign mosque admin
     let add_admin_url = format!("{}/mosques/add-admin", addr);
     let add_admin_params = AddAdminParam {
-        mosque_supervisor: supervisor_user.id.to_string(),
-        requested_user: mosque_admin_user.id.to_string(),
+        mosque_supervisor: supervisor_user.id.to_sql(),
+        requested_user: mosque_admin_user.id.to_sql(),
         mosque_id: mosque_id.to_string(),
     };
 
@@ -520,12 +520,12 @@ async fn update_mosque_prayer_times() {
     // 5. Update Prayer Times
     let update_url = format!("{}/mosques/update-adhan-jamat-times", addr);
 
-    let fajr = NaiveTime::from_hms_opt(5, 30, 0).unwrap();
-    let dhuhr = NaiveTime::from_hms_opt(13, 30, 0).unwrap();
-    let asr = NaiveTime::from_hms_opt(17, 0, 0).unwrap();
-    let maghrib = NaiveTime::from_hms_opt(20, 15, 0).unwrap();
-    let isha = NaiveTime::from_hms_opt(21, 45, 0).unwrap();
-    let jumuah = NaiveTime::from_hms_opt(13, 15, 0).unwrap();
+    let fajr = NaiveTime::from_hms_opt(5, 30, 0).unwrap().to_string();
+    let dhuhr = NaiveTime::from_hms_opt(13, 30, 0).unwrap().to_string();
+    let asr = NaiveTime::from_hms_opt(17, 0, 0).unwrap().to_string();
+    let maghrib = NaiveTime::from_hms_opt(20, 15, 0).unwrap().to_string();
+    let isha = NaiveTime::from_hms_opt(21, 45, 0).unwrap().to_string();
+    let jumuah = NaiveTime::from_hms_opt(13, 15, 0).unwrap().to_string();
 
     let new_times = PrayerTimes {
         fajr,
@@ -537,7 +537,7 @@ async fn update_mosque_prayer_times() {
     };
 
     let update_params = UpdatePrayerTimesParams {
-        mosque_admin: mosque_admin_user.id.to_string(),
+        mosque_admin: mosque_admin_user.id.to_sql(),
         mosque_id: mosque_id.to_string(),
         prayer_times: PrayerTimesUpdate {
             adhan_times: Some(new_times.clone()),
@@ -665,8 +665,8 @@ async fn favorite_and_unfavorite_mosques() {
 
     for mosque in mosques_to_fav {
         let params = FavoriteParams {
-            user_id: user.id.to_string(),
-            mosque_id: mosque.id.to_string(),
+            user_id: user.id.to_sql(),
+            mosque_id: mosque.id.to_sql(),
         };
         let res = client
             .post(&add_fav_url)
@@ -702,8 +702,8 @@ async fn favorite_and_unfavorite_mosques() {
     for mosque in mosques_to_remove {
         // DeleteUrl expects params in query string
         let params = [
-            ("user_id", user.id.to_string()),
-            ("mosque_id", mosque.id.to_string()),
+            ("user_id", user.id.to_sql()),
+            ("mosque_id", mosque.id.to_sql()),
         ];
 
         let res = client
@@ -863,8 +863,8 @@ async fn test_favorite_mosque_with_both_auth_methods(
     // 4. Add favorite using the specified auth method
     let add_fav_url = format!("{}/mosques/add-favorite", addr);
     let favorite_params = FavoriteParams {
-        user_id: user.id.to_string(),
-        mosque_id: mosques[0].id.to_string(),
+        user_id: user.id.to_sql(),
+        mosque_id: mosques[0].id.to_sql(),
     };
 
     let fav_req = build_auth_headers(client.clone(), &user_session, auth_method, &add_fav_url);
@@ -1008,7 +1008,8 @@ async fn test_add_mosque_is_only_allowed_for_app_admins(
         mosque_id
     );
 
-    let record_id: RecordId = mosque_id.parse().expect("The returned id is not parsable");
+    let record_id: RecordId =
+        RecordId::parse_simple(&mosque_id).expect("The returned id is not parsable");
 
     let mosques: Vec<MosqueSearchResult> = db
         .query("SELECT * FROM mosques WHERE id = $mosque_id")

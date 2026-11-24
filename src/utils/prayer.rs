@@ -7,25 +7,32 @@ use crate::models::nearby_mosque::UNNAMED_MOSQUE_NAME;
 use crate::models::prayer::NextPrayerCardData;
 use crate::models::prayer::NextPrayerInfo;
 
+/// Parses a stored `"HH:MM:SS"` string into a [`NaiveTime`].
+pub fn parse_prayer_time(value: &str) -> NaiveTime {
+    NaiveTime::parse_from_str(value.trim(), "%H:%M:%S")
+        .or_else(|_| NaiveTime::parse_from_str(value.trim(), "%H:%M"))
+        .unwrap_or_default()
+}
+
 /// First jamat strictly after `now`; wraps to tomorrow's Fajr.
 ///
 /// On Fridays `jumuah` replaces `dhuhr`.
 pub fn next_jamat(jamat: &PrayerTimes, now: NaiveTime, is_friday: bool) -> NextPrayerInfo {
     let mut ordered: Vec<(&'static str, NaiveTime)> = if is_friday {
         vec![
-            ("Fajr", jamat.fajr),
-            ("Jumu'ah", jamat.jumuah),
-            ("Asr", jamat.asr),
-            ("Maghrib", jamat.maghrib),
-            ("Isha", jamat.isha),
+            ("Fajr", parse_prayer_time(&jamat.fajr)),
+            ("Jumu'ah", parse_prayer_time(&jamat.jumuah)),
+            ("Asr", parse_prayer_time(&jamat.asr)),
+            ("Maghrib", parse_prayer_time(&jamat.maghrib)),
+            ("Isha", parse_prayer_time(&jamat.isha)),
         ]
     } else {
         vec![
-            ("Fajr", jamat.fajr),
-            ("Dhuhr", jamat.dhuhr),
-            ("Asr", jamat.asr),
-            ("Maghrib", jamat.maghrib),
-            ("Isha", jamat.isha),
+            ("Fajr", parse_prayer_time(&jamat.fajr)),
+            ("Dhuhr", parse_prayer_time(&jamat.dhuhr)),
+            ("Asr", parse_prayer_time(&jamat.asr)),
+            ("Maghrib", parse_prayer_time(&jamat.maghrib)),
+            ("Isha", parse_prayer_time(&jamat.isha)),
         ]
     };
     ordered.sort_by_key(|(_, time)| *time);

@@ -7,7 +7,7 @@ use crate::models::prayer::NextPrayerCardData;
 use crate::server_functions::mosque::{fetch_mosques_for_location, get_favorite_mosque};
 use crate::utils::prayer::format_iqamah;
 use crate::utils::prayer::next_prayer_card_data;
-use crate::utils::prayer::pad2;
+use crate::utils::prayer::parse_prayer_time;use crate::utils::prayer::pad2;
 use chrono::Datelike;
 use chrono::Local;
 use chrono::Weekday;
@@ -127,56 +127,56 @@ pub fn TopTwoDailyPrayersSections() -> impl IntoView {
 
             let fajr_jamat_time = jamat_times
                 .as_ref()
-                .map(|times| format_iqamah(times.fajr))
+                .map(|times| format_iqamah(parse_prayer_time(&times.fajr)))
                 .unwrap_or_else(|| "—".to_string());
             let fajr_adhan_time = adhan_times
                 .as_ref()
-                .map(|times| format_iqamah(times.fajr))
+                .map(|times| format_iqamah(parse_prayer_time(&times.fajr)))
                 .unwrap_or_else(|| "—".to_string());
 
             let dhuhr_jamat_time = jamat_times
                 .as_ref()
-                .map(|times| format_iqamah(times.dhuhr))
+                .map(|times| format_iqamah(parse_prayer_time(&times.dhuhr)))
                 .unwrap_or_else(|| "—".to_string());
             let dhuhr_adhan_time = adhan_times
                 .as_ref()
-                .map(|times| format_iqamah(times.dhuhr))
+                .map(|times| format_iqamah(parse_prayer_time(&times.dhuhr)))
                 .unwrap_or_else(|| "—".to_string());
 
             let asr_jamat_time = jamat_times
                 .as_ref()
-                .map(|times| format_iqamah(times.asr))
+                .map(|times| format_iqamah(parse_prayer_time(&times.asr)))
                 .unwrap_or_else(|| "—".to_string());
             let asr_adhan_time = adhan_times
                 .as_ref()
-                .map(|times| format_iqamah(times.asr))
+                .map(|times| format_iqamah(parse_prayer_time(&times.asr)))
                 .unwrap_or_else(|| "—".to_string());
 
             let maghrib_jamat_time = jamat_times
                 .as_ref()
-                .map(|times| format_iqamah(times.maghrib))
+                .map(|times| format_iqamah(parse_prayer_time(&times.maghrib)))
                 .unwrap_or_else(|| "—".to_string());
             let maghrib_adhan_time = adhan_times
                 .as_ref()
-                .map(|times| format_iqamah(times.maghrib))
+                .map(|times| format_iqamah(parse_prayer_time(&times.maghrib)))
                 .unwrap_or_else(|| "—".to_string());
 
             let isha_jamat_time = jamat_times
                 .as_ref()
-                .map(|times| format_iqamah(times.isha))
+                .map(|times| format_iqamah(parse_prayer_time(&times.isha)))
                 .unwrap_or_else(|| "—".to_string());
             let isha_adhan_time = adhan_times
                 .as_ref()
-                .map(|times| format_iqamah(times.isha))
+                .map(|times| format_iqamah(parse_prayer_time(&times.isha)))
                 .unwrap_or_else(|| "—".to_string());
 
             let jumuah_jamat_time = jamat_times
                 .as_ref()
-                .map(|times| format_iqamah(times.jumuah))
+                .map(|times| format_iqamah(parse_prayer_time(&times.jumuah)))
                 .unwrap_or_else(|| "—".to_string());
             let jumuah_adhan_time = adhan_times
                 .as_ref()
-                .map(|times| format_iqamah(times.jumuah))
+                .map(|times| format_iqamah(parse_prayer_time(&times.jumuah)))
                 .unwrap_or_else(|| "—".to_string());
 
             view! {

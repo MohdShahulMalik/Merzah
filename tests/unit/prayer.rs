@@ -6,13 +6,18 @@ use merzah::utils::prayer::remaining_hms;
 use rstest::rstest;
 
 fn sample_jamat() -> PrayerTimes {
+    let time = |hour: u32, minute: u32| {
+        NaiveTime::from_hms_opt(hour, minute, 0)
+            .unwrap()
+            .to_string()
+    };
     PrayerTimes {
-        fajr: NaiveTime::from_hms_opt(5, 30, 0).unwrap(),
-        dhuhr: NaiveTime::from_hms_opt(13, 30, 0).unwrap(),
-        asr: NaiveTime::from_hms_opt(17, 15, 0).unwrap(),
-        maghrib: NaiveTime::from_hms_opt(19, 42, 0).unwrap(),
-        isha: NaiveTime::from_hms_opt(21, 15, 0).unwrap(),
-        jumuah: NaiveTime::from_hms_opt(13, 15, 0).unwrap(),
+        fajr: time(5, 30),
+        dhuhr: time(13, 30),
+        asr: time(17, 15),
+        maghrib: time(19, 42),
+        isha: time(21, 15),
+        jumuah: time(13, 15),
     }
 }
 
