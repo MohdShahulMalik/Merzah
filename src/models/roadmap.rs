@@ -3,7 +3,9 @@ use serde::{Deserialize, Serialize};
 #[cfg(feature = "ssr")]
 use surrealdb::types::{Datetime, RecordId, SurrealValue};
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
+#[cfg_attr(feature = "ssr", derive(SurrealValue))]
+#[cfg_attr(feature = "ssr", surreal(untagged, rename_all = "lowercase"))]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum RoadmapDifficulty {
     Beginner,
@@ -12,7 +14,9 @@ pub enum RoadmapDifficulty {
     All,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
+#[cfg_attr(feature = "ssr", derive(SurrealValue))]
+#[cfg_attr(feature = "ssr", surreal(untagged, rename_all = "lowercase"))]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum RoadmapStatus {
     Draft,

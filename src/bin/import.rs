@@ -12,9 +12,7 @@ use serde::Deserialize;
 #[cfg(feature = "ssr")]
 use serde::de::DeserializeOwned;
 #[cfg(feature = "ssr")]
-use surrealdb::types::Datetime;
-#[cfg(feature = "ssr")]
-use surrealdb::types::RecordId;
+use surrealdb::types::{Datetime, RecordId, SurrealValue, ToSql};
 
 #[cfg(feature = "ssr")]
 use merzah::database::connection::init_db;
@@ -61,13 +59,13 @@ fn read_json_file<T: DeserializeOwned>(path: &PathBuf) -> anyhow::Result<T> {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct IdRow {
     pub id: RecordId,
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct EdgeRow {
     pub id: RecordId,
 }
@@ -75,7 +73,7 @@ struct EdgeRow {
 /// A relation edge with both ends, used to drop links that are no longer
 /// part of the seed data.
 #[cfg(feature = "ssr")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, SurrealValue)]
 struct EdgeRef {
     pub id: RecordId,
     pub out: RecordId,
@@ -121,7 +119,7 @@ async fn ensure_educator(
 
     let name = match display_name {
         Some(name) if !name.trim().is_empty() => name.to_string(),
-        _ => format!("Educator {}", rid),
+        _ => format!("Educator {}", rid.to_sql()),
     };
     db.query(
         "UPSERT $rid CONTENT { display_name: $name, password_hash: $hash, role: 'educator', created_at: time::now(), updated_at: time::now() }",
@@ -195,7 +193,7 @@ async fn import_tracks(base: &Path) -> anyhow::Result<()> {
     let db = init_db().await;
     for track in &tracks {
         let id = ensure_track(&db, track).await;
-        println!("  = track {} ({})", track.slug, id);
+        println!("  = track {} ({})", track.slug, id.to_sql());
     }
 
     Ok(())
@@ -230,12 +228,12 @@ async fn import_courses(base: &Path) -> anyhow::Result<()> {
             .map(|row| row.id)
             .ok_or_else(|| anyhow::anyhow!("Track not found for slug {}", course.track_slug))?;
 
-        let educator_id: RecordId = course.educator_id.parse()?;
+        let educator_id = RecordId::parse_simple(&course.educator_id)?;
         let educator_name = educator_display_names.get(&course.educator_id).cloned();
         if ensure_educator(&db, &educator_id, educator_name.as_deref()).await {
             println!(
                 "  + educator account {} created for {}",
-                educator_id, course.educator_id
+                educator_id.to_sql(), course.educator_id
             );
         }
 
@@ -455,11 +453,11 @@ async fn import_courses(base: &Path) -> anyhow::Result<()> {
 /// value used by the seed files (the creator is not part of the data).
 #[cfg(feature = "ssr")]
 fn resolve_created_by(raw: &str) -> RecordId {
-    match raw.parse::<RecordId>() {
+    match RecordId::parse_simple(raw) {
         Ok(id) => id,
         Err(_) => {
             println!("  ! placeholder creator, using {CREATED_BY_FALLBACK}");
-            CREATED_BY_FALLBACK.parse().expect("invalid fallback record id")
+            RecordId::parse_simple(CREATED_BY_FALLBACK).expect("invalid fallback record id")
         }
     }
 }
@@ -636,8 +634,8 @@ async fn import_roadmaps(base: &Path) -> anyhow::Result<()> {
             .await?.check()?;
         let edges: Vec<EdgeRef> = edge_response.take(0)?;
         for edge in edges {
-            let out = edge.out.to_string();
-            let keep = kept_course_ids.iter().any(|id| id.to_string() == out);
+            let out = edge.out.to_sql();
+            let keep = kept_course_ids.iter().any(|id| id.to_sql() == out);
             if !keep {
                 db.query("DELETE $id")
                     .bind(("id", edge.id))
@@ -799,8 +797,8 @@ async fn import_frameworks(base: &Path) -> anyhow::Result<()> {
                 .await?.check()?;
             let edges: Vec<EdgeRef> = edge_response.take(0)?;
             for edge in edges {
-                let out = edge.out.to_string();
-                let keep = kept_course_ids.iter().any(|id| id.to_string() == out);
+                let out = edge.out.to_sql();
+                let keep = kept_course_ids.iter().any(|id| id.to_sql() == out);
                 if !keep {
                     db.query("DELETE $id")
                         .bind(("id", edge.id))
