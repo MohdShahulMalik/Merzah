@@ -5,7 +5,11 @@ use surrealdb::engine::remote::ws::{Client, Ws};
 #[cfg(feature = "ssr")]
 use surrealdb::opt::auth::Root;
 #[cfg(feature = "ssr")]
+use testcontainers::core::{ContainerPort, WaitFor};
+#[cfg(feature = "ssr")]
 use testcontainers::runners::AsyncRunner;
+#[cfg(feature = "ssr")]
+use testcontainers::{ContainerAsync, core::Image};
 #[cfg(feature = "ssr")]
 use testcontainers_modules::surrealdb::SurrealDb;
 #[cfg(feature = "ssr")]
@@ -13,8 +17,47 @@ use tokio::sync::OnceCell;
 #[cfg(feature = "ssr")]
 use uuid::Uuid;
 
+/// The `SurrealDb` module shipped with `testcontainers-modules` still points at
+/// the `v2.2` image, while the Rust client here speaks the newer `v3` protocol.
+/// This wrapper reuses its env setup but starts a `v3` image instead.
 #[cfg(feature = "ssr")]
-static DB_CONTAINER: OnceCell<testcontainers::ContainerAsync<SurrealDb>> = OnceCell::const_new();
+#[derive(Debug, Clone)]
+struct SurrealDbV3(SurrealDb);
+
+#[cfg(feature = "ssr")]
+impl Image for SurrealDbV3 {
+    fn name(&self) -> &str {
+        "surrealdb/surrealdb"
+    }
+
+    fn tag(&self) -> &str {
+        "v3"
+    }
+
+    fn ready_conditions(&self) -> Vec<WaitFor> {
+        self.0.ready_conditions()
+    }
+
+    fn env_vars(
+        &self,
+    ) -> impl IntoIterator<Item = (impl Into<Cow<'_, str>>, impl Into<Cow<'_, str>>)> {
+        self.0.env_vars()
+    }
+
+    fn cmd(&self) -> impl IntoIterator<Item = impl Into<Cow<'_, str>>> {
+        self.0.cmd()
+    }
+
+    fn expose_ports(&self) -> &[ContainerPort] {
+        self.0.expose_ports()
+    }
+}
+
+#[cfg(feature = "ssr")]
+use std::borrow::Cow;
+
+#[cfg(feature = "ssr")]
+static DB_CONTAINER: OnceCell<ContainerAsync<SurrealDbV3>> = OnceCell::const_new();
 
 pub async fn get_test_db() -> Surreal<Client> {
     get_test_db_with_ns().await.0
@@ -27,7 +70,7 @@ pub async fn get_test_db() -> Surreal<Client> {
 pub async fn get_test_db_with_ns() -> (Surreal<Client>, String, String, u16) {
     let container = DB_CONTAINER
         .get_or_init(|| async {
-            SurrealDb::default()
+            SurrealDbV3(SurrealDb::default())
                 .start()
                 .await
                 .expect("Failed to start SurrealDB Docker container")
