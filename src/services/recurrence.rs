@@ -1,5 +1,5 @@
 use chrono::{
-    DateTime, Datelike, Duration, FixedOffset, LocalResult, NaiveDate, NaiveDateTime, TimeZone,
+    DateTime, Datelike, Duration, LocalResult, NaiveDate, NaiveDateTime, TimeZone, Utc,
 };
 use std::cmp::min;
 
@@ -11,9 +11,9 @@ use surrealdb::types::ToSql;
 use surrealdb::{Surreal, engine::remote::ws::Client};
 
 pub fn calculate_next_date(
-    curr_date: DateTime<FixedOffset>,
+    curr_date: DateTime<Utc>,
     pattern: EventRecurrence,
-) -> Option<DateTime<FixedOffset>> {
+) -> Option<DateTime<Utc>> {
     match pattern {
         EventRecurrence::Daily => Some(curr_date + Duration::days(1)),
 
@@ -127,13 +127,13 @@ pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, su
         return Ok(false);
     };
 
-    let Some(next_date) = calculate_next_date(event.date, pattern) else {
+    let Some(next_date) = calculate_next_date(event.date.into_inner(), pattern) else {
         error!("Failed to calculate next date for event {}", event.id.to_sql());
         return Ok(false);
     };
 
     if let Some(end_date) = event.recurrence_end_date {
-        if next_date > end_date {
+        if next_date > end_date.into_inner() {
             db.query("DELETE $event")
                 .bind(("event", event.id.clone()))
                 .await?;

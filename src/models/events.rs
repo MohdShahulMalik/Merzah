@@ -4,12 +4,14 @@ use chrono::{DateTime, FixedOffset};
 use garde::Validate;
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "ssr")]
-use surrealdb::types::{RecordId, SurrealValue};
+use surrealdb::types::{Datetime, RecordId, SurrealValue};
 
 #[cfg(feature = "ssr")]
 use crate::utils::parsing::parse_record_id;
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[cfg_attr(feature = "ssr", derive(SurrealValue))]
+#[cfg_attr(feature = "ssr", surreal(untagged, rename_all = "lowercase"))]
 #[serde(rename_all = "lowercase")]
 pub enum EventCategory {
     Halaqah,
@@ -35,27 +37,31 @@ pub struct Event {
     pub title: String,
     pub description: String,
     pub category: EventCategory,
-    pub date: DateTime<FixedOffset>,
+    pub date: Datetime,
     pub mosque: RecordId,
     pub speaker: Option<String>,
     pub recurrence_pattern: Option<EventRecurrence>,
-    pub recurrence_end_date: Option<DateTime<FixedOffset>>,
+    pub recurrence_end_date: Option<Datetime>,
 }
 
 // To be used on client side, where we don't have access to RecordId
-#[derive(Debug, Deserialize, Serialize, Clone, PartialEq, SurrealValue)]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+#[cfg_attr(feature = "ssr", derive(SurrealValue))]
 pub struct EventDetails {
     pub id: String,
     pub title: String,
     pub description: String,
     pub category: EventCategory,
+    #[cfg_attr(feature = "ssr", surreal(wrap))]
     pub date: DateTime<FixedOffset>,
     pub speaker: Option<String>,
     #[serde(default)]
     pub mosque_name: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, SurrealValue)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[cfg_attr(feature = "ssr", derive(SurrealValue))]
+#[cfg_attr(feature = "ssr", surreal(untagged, rename_all = "lowercase"))]
 #[serde(rename_all = "lowercase")]
 pub enum EventRecurrence {
     Daily,
@@ -119,11 +125,12 @@ impl TryFrom<CreateEvent> for EventRecord {
             title: create.title,
             description: create.description,
             category: create.category,
-            date: create.date,
+            date: Datetime::from(create.date.with_timezone(&chrono::Utc)),
             mosque,
             speaker: create.speaker,
             recurrence_pattern: create.recurrence_pattern,
-            recurrence_end_date,
+            recurrence_end_date: recurrence_end_date
+                .map(|d| Datetime::from(d.with_timezone(&chrono::Utc))),
         })
     }
 }
@@ -134,11 +141,11 @@ pub struct EventRecord {
     pub title: String,
     pub description: String,
     pub category: EventCategory,
-    pub date: DateTime<FixedOffset>,
+    pub date: Datetime,
     pub mosque: RecordId,
     pub speaker: Option<String>,
     pub recurrence_pattern: Option<EventRecurrence>,
-    pub recurrence_end_date: Option<DateTime<FixedOffset>>,
+    pub recurrence_end_date: Option<Datetime>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Validate, Clone)]
@@ -170,7 +177,7 @@ pub struct UpdatedEvent {
 }
 
 #[cfg(feature = "ssr")]
-#[derive(Debug, Serialize, Deserialize, Clone, SurrealValue)]
+#[derive(Debug, Deserialize, Serialize, Clone, SurrealValue)]
 pub struct UpdatedEventRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
@@ -179,7 +186,7 @@ pub struct UpdatedEventRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub category: Option<EventCategory>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub date: Option<DateTime<FixedOffset>>,
+    pub date: Option<Datetime>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mosque: Option<RecordId>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -187,7 +194,7 @@ pub struct UpdatedEventRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recurrence_pattern: Option<EventRecurrence>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub recurrence_end_date: Option<DateTime<FixedOffset>>,
+    pub recurrence_end_date: Option<Datetime>,
 }
 
 #[cfg(feature = "ssr")]
@@ -204,16 +211,19 @@ impl TryFrom<UpdatedEvent> for UpdatedEventRecord {
             title: update.title,
             description: update.description,
             category: update.category,
-            date: update.date,
+            date: update.date.map(|d| Datetime::from(d.with_timezone(&chrono::Utc))),
             mosque,
             speaker: update.speaker,
             recurrence_pattern: update.recurrence_pattern,
-            recurrence_end_date: update.recurrence_end_date,
+            recurrence_end_date: update
+                .recurrence_end_date
+                .map(|d| Datetime::from(d.with_timezone(&chrono::Utc))),
         })
     }
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone, PartialEq, SurrealValue)]
+#[cfg_attr(feature = "ssr", derive(SurrealValue))]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub struct PersonalEvent {
     pub event: EventDetails,
     pub rsvp: bool,
@@ -233,7 +243,8 @@ pub struct FavoriteAndNearbyEventsQueryResult {
     pub nearby_events: Vec<EventDetails>,
 }
 
-#[derive(Debug, Deserialize, Serialize, SurrealValue)]
+#[cfg_attr(feature = "ssr", derive(SurrealValue))]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct EventSummary {
     pub event: EventDetails,
     pub rsvp_count: usize,
