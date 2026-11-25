@@ -156,6 +156,24 @@ pub async fn get_optional_user_and_context<T>()
     Ok((response_options, db, user))
 }
 
+/// Converts a record into the object bound to a `MERGE` clause, dropping the
+/// fields that were not provided.
+///
+/// The `SurrealValue` derive serializes `Option::None` as `Value::None`, which
+/// `MERGE` would try to write into the underlying column and reject when the
+/// column is not `option<...>`.
+#[cfg(feature = "ssr")]
+pub fn merge_without_none_fields<T: surrealdb::types::SurrealValue>(record: T) -> surrealdb::types::Value {
+    let value = record.into_value();
+    match value {
+        surrealdb::types::Value::Object(mut object) => {
+            object.retain(|_, value| !matches!(value, surrealdb::types::Value::None));
+            surrealdb::types::Value::Object(object)
+        }
+        other => other,
+    }
+}
+
 #[cfg(feature = "ssr")]
 pub struct ServerResponse {
     options: ResponseOptions,
