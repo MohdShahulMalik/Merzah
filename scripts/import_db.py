@@ -195,7 +195,7 @@ def rid_expr(rid):
     real record id first.
     """
     table, _, ident = rid.partition(":")
-    return "type::thing(%s, %s)" % (esc(table), esc(ident))
+    return "type::record(%s, %s)" % (esc(table), esc(ident))
 
 
 def first_id(rows):
