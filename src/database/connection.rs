@@ -13,8 +13,6 @@ pub async fn init_db() -> Surreal<Client> {
     let db_name = env::var("SURREAL_DB").expect("SURREAL_DB must be set");
     let db_ns = env::var("SURREAL_NS").expect("SURREAL_NS must be set");
 
-    println!("Connecting to: {}", db_url);
-
     let db = Surreal::new::<Ws>(&db_url)
         .await
         .expect("Failed to connect to database");
