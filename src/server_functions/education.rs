@@ -43,7 +43,10 @@ use crate::utils::education_auth::{is_course_owner, is_educator_or_admin};
 #[cfg(feature = "ssr")]
 use crate::utils::parsing::parse_record_id;
 #[cfg(feature = "ssr")]
-use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context, get_server_context};
+use crate::utils::ssr::{
+    ServerResponse, get_authenticated_user_and_context, get_server_context,
+    merge_without_none_fields,
+};
 #[cfg(feature = "ssr")]
 use crate::utils::token_generator::generate_token;
 
@@ -915,11 +918,11 @@ pub async fn complete_lesson(lesson_id: String) -> Result<ApiResponse<String>, S
         .bind(("enrollment_id", enrolled.id.clone()))
         .bind((
             "record",
-            EnrollmentUpdate {
+            merge_without_none_fields(EnrollmentUpdate {
                 progress_percent,
                 last_accessed_at,
                 completed_at,
-            },
+            }),
         ))
         .await
     {
@@ -1220,7 +1223,7 @@ pub async fn update_course(
     let update_result = db
         .query(update_query)
         .bind(("course_id", course_id))
-        .bind(("record", record))
+        .bind(("record", merge_without_none_fields(record)))
         .await;
 
     if let Err(err) = update_result {
@@ -1442,7 +1445,7 @@ pub async fn update_module(
     match db
         .query(update_query)
         .bind(("module_id", module_id))
-        .bind(("record", record))
+        .bind(("record", merge_without_none_fields(record)))
         .await
     {
         Ok(_) => {},
@@ -1675,7 +1678,7 @@ pub async fn update_lesson(
     match db
         .query(update_query)
         .bind(("lesson_id", lesson_id))
-        .bind(("record", record))
+        .bind(("record", merge_without_none_fields(record)))
         .await
     {
         Ok(_) => {},
