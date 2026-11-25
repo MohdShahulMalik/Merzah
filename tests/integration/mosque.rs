@@ -1027,7 +1027,7 @@ async fn test_add_mosque_is_only_allowed_for_app_admins(
     );
     assert_eq!(
         mosques[0].location,
-        (28.6319, 76.9675),
+        Geometry::Point((76.9675, 28.6319).into()),
         "The mosque was created at another location"
     );
 }
