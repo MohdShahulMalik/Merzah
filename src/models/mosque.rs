@@ -99,8 +99,7 @@ impl MosqueInsert {
 #[derive(Debug, Deserialize, Serialize, SurrealValue)]
 pub struct MosqueSearchResult {
     pub id: RecordId,
-    #[cfg_attr(feature = "ssr", serde(deserialize_with = "deserialize_surreal_point"))]
-    pub location: (f64, f64),
+    pub location: Geometry,
     pub name: Option<String>,
     pub street: Option<String>,
     pub city: Option<String>,
@@ -124,12 +123,15 @@ pub struct MosqueRecord {
     pub jamat_times: Option<PrayerTimes>,
 }
 
+/// Converts a stored point geometry to the `(lat, lon)` pair the client
+/// structs expect. SurrealDB stores `(x, y)` which corresponds to
+/// `(lon, lat)`.
 #[cfg(feature = "ssr")]
-fn deserialize_surreal_point<'de, D>(_deserializer: D) -> Result<(f64, f64), D::Error>
-where
-    D: serde::Deserializer<'de>,
-{
-    Err(serde::de::Error::custom("DEBUG-always-called"))
+fn point_to_lat_lon(geometry: &Geometry) -> (f64, f64) {
+    match geometry {
+        Geometry::Point(point) => (point.y(), point.x()),
+        _ => (0.0, 0.0),
+    }
 }
 
 #[cfg(feature = "ssr")]
@@ -140,7 +142,7 @@ impl MosqueSearchResult {
 
         MosqueResponse {
             id: self.id.to_sql(),
-            location: self.location,
+            location: point_to_lat_lon(&self.location),
             name: self.name,
             street: self.street,
             city: self.city,
