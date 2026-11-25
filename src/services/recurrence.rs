@@ -7,7 +7,7 @@ use std::cmp::min;
 use crate::models::events::Event;
 use crate::models::events::EventRecurrence;
 #[cfg(feature = "ssr")]
-use surrealdb::types::ToSql;
+use surrealdb::types::{Datetime, ToSql};
 use surrealdb::{Surreal, engine::remote::ws::Client};
 
 pub fn calculate_next_date(
@@ -144,7 +144,7 @@ pub async fn rotate_event(event: Event, db: &Surreal<Client>) -> Result<bool, su
 
     db.query("UPDATE $event SET date = $next_date")
         .bind(("event", event.id.clone()))
-        .bind(("next_date", next_date.to_rfc3339()))
+        .bind(("next_date", Datetime::from(next_date)))
         .await?;
 
     info!("Rotated event {} to {}", event.id.to_sql(), next_date);
