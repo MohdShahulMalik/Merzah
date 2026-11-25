@@ -26,7 +26,7 @@ use crate::models::{
 #[cfg(feature = "ssr")]
 use crate::utils::parsing::parse_record_id;
 #[cfg(feature = "ssr")]
-use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context};
+use crate::utils::ssr::{ServerResponse, get_authenticated_user_and_context, merge_without_none_fields};
 #[cfg(feature = "ssr")]
 use crate::utils::user_elevation::is_mosque_admin;
 
@@ -164,6 +164,11 @@ pub async fn update_event(
         Err(e) => return Ok(e),
     };
 
+    // SurrealValue serializes `None` fields as `Value::None`, which would be
+    // coerced into the underlying `TYPE string`/`datetime` columns during
+    // MERGE. Drop them so only the provided fields are updated.
+    let updated_event_value = merge_without_none_fields(updated_event_record);
+
     let update_event_transaction = r#"
         BEGIN TRANSACTION;
         LET $event = (UPDATE ONLY $event_id MERGE $updated_event);
@@ -177,7 +182,7 @@ pub async fn update_event(
     let transaction_result = db
         .query(update_event_transaction)
         .bind(("event_id", event_id))
-        .bind(("updated_event", updated_event_record))
+        .bind(("updated_event", updated_event_value))
         .await;
 
     match transaction_result {
