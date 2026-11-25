@@ -196,7 +196,9 @@ pub async fn update_event(
                 }
             };
 
-            let event: Option<Event> = match result.take(2) {
+            // Statement indices count BEGIN/COMMIT in SurrealDB 3, so the
+            // final `RETURN $event` is the last statement of the transaction.
+            let event: Option<Event> = match result.take(result.num_statements() - 1) {
                 Ok(event) => event,
                 Err(err) => {
                     return Ok(responder.internal_server_error(format!(
@@ -343,8 +345,11 @@ pub async fn fetch_users_favorite_mosques_events(
         }
     };
 
+    // Statement indices count BEGIN/COMMIT in SurrealDB 3, so the final
+    // `RETURN { ... }` is the last statement of the transaction.
+    let last_statement = db_response.num_statements() - 1;
     let events_and_attendance =
-        match db_response.take::<Option<FavoriteAndNearbyEventsQueryResult>>(4) {
+        match db_response.take::<Option<FavoriteAndNearbyEventsQueryResult>>(last_statement) {
             Ok(Some(events_and_attendance)) => events_and_attendance,
             Ok(None) => {
                 return Ok(responder.internal_server_error(
@@ -501,7 +506,9 @@ pub async fn delete_event(event_id: String) -> Result<ApiResponse<String>, Serve
                 }
             };
 
-            let event: Option<Event> = match result.take(3) {
+            // Statement indices count BEGIN/COMMIT in SurrealDB 3, so the
+            // final `RETURN $deleted` is the last statement of the transaction.
+            let event: Option<Event> = match result.take(result.num_statements() - 1) {
                 Ok(event) => event,
                 Err(err) => {
                     return Ok(responder.internal_server_error(format!(
